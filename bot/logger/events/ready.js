@@ -12,9 +12,8 @@ export async function execute(client) {
   client.user.setPresence({
     activities: [
       {
-        name: `${guildCount} Guild${guildCount > 1 ? "s" : ""} - ${memberCount} Member${memberCount > 1 ? "s" : ""}`,
-        type: ActivityType.Streaming,
-        url: "https://www.twitch.tv/discord",
+        name: `${guildCount} guild - ${memberCount} users`,
+        type: ActivityType.Watching,
       },
     ],
     status: "online",

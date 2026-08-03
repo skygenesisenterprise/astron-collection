@@ -5,9 +5,10 @@ export PATH="/usr/local/go/bin:/go/bin:/root/go/bin:/root/.local/share/corepack:
 export NODE_ENV="${NODE_ENV:-development}"
 export LOG_LEVEL="${LOG_LEVEL:-info}"
 export PRISMA_SCHEMA_DEPLOY="${PRISMA_SCHEMA_DEPLOY:-true}"
+export PRISMA_SCHEMA_DEPLOY_STRATEGY="${PRISMA_SCHEMA_DEPLOY_STRATEGY:-push}"
+export ALLOW_MIGRATION_FAILURE="${ALLOW_MIGRATION_FAILURE:-false}"
 export PRISMA_MIGRATE_DEPLOY="${PRISMA_MIGRATE_DEPLOY:-true}"
-export ALLOW_MIGRATION_FAILURE="${ALLOW_MIGRATION_FAILURE:-true}"
-export PRISMA_HOT_RELOAD="${PRISMA_HOT_RELOAD:-true}"
+export PRISMA_HOT_RELOAD="${PRISMA_HOT_RELOAD:-false}"
 export PRISMA_POLL_INTERVAL="${PRISMA_POLL_INTERVAL:-5}"
 
 # ── Logging ────────────────────────────────────────────────────────────────────
@@ -59,14 +60,18 @@ configure_runtime() {
     export FRONTEND_PORT="${FRONTEND_PORT:-3000}"
     export API_PORT="${API_PORT:-8080}"
     export SERVER_PORT="${SERVER_PORT:-${API_PORT}}"
-    export GIN_MODE="${GIN_MODE:-debug}"
+    if [ "${NODE_ENV}" = "production" ]; then
+        export GIN_MODE="${GIN_MODE:-release}"
+    else
+        export GIN_MODE="${GIN_MODE:-debug}"
+    fi
 }
 
 # ── Display ───────────────────────────────────────────────────────────────────
 
 display_header() {
     echo ""
-    echo "Vaelix Bank development container"
+    echo "Astron Collection container"
     echo ""
     log_info "Node env: ${NODE_ENV}"
     log_info "Frontend: http://localhost:${FRONTEND_PORT}"
@@ -93,8 +98,22 @@ setup_pnpm() {
     log_warn "pnpm is not available; falling back to npx where possible"
 }
 
+find_backend_binary() {
+    for binary in \
+        /app/server/aether-server \
+        /app/tmp/aether-server
+    do
+        if [ -x "${binary}" ]; then
+            echo "${binary}"
+            return 0
+        fi
+    done
+
+    return 1
+}
+
 find_prisma_dir() {
-    for dir in /prisma /app/server/prisma ./server/prisma; do
+    for dir in /prisma /app/prisma /app/server/prisma ./server/prisma; do
         if [ -f "${dir}/schema.prisma" ]; then
             echo "${dir}"
             return 0
@@ -136,15 +155,15 @@ run_prisma_schema_deploy() {
         return 0
     fi
 
-    prisma_dir="$(find_prisma_dir || true)"
-    if [ -z "${prisma_dir}" ]; then
-        log_warn "server/prisma/schema.prisma not found; skipping database schema setup"
-        return 0
-    fi
-
     if [ -z "${DATABASE_URL:-}" ]; then
         log_error "DATABASE_URL is required to deploy the Prisma schema"
         return 1
+    fi
+
+    prisma_dir="$(find_prisma_dir || true)"
+    if [ -z "${prisma_dir}" ]; then
+        log_warn "Prisma schema not found; skipping database schema setup"
+        return 0
     fi
 
     cd "${prisma_dir}"
@@ -165,24 +184,39 @@ run_prisma_schema_deploy() {
         return 1
     fi
 
-    if [ "${PRISMA_MIGRATE_DEPLOY:-true}" != "true" ]; then
-        log_info "Prisma migrate deploy disabled"
-        return 0
-    fi
+    case "${PRISMA_SCHEMA_DEPLOY_STRATEGY:-push}" in
+        migrate)
+            log_info "Generating Prisma client..."
+            # shellcheck disable=SC2086
+            DATABASE_URL="${DATABASE_URL}" ${prisma_bin} generate
 
-    log_info "Generating Prisma client..."
-    # shellcheck disable=SC2086
-    DATABASE_URL="${DATABASE_URL}" ${prisma_bin} generate
+            if [ "${PRISMA_MIGRATE_DEPLOY:-true}" != "true" ]; then
+                log_info "Prisma migrate deploy disabled"
+                return 0
+            fi
 
-    log_info "Applying pending Prisma migrations..."
-    # shellcheck disable=SC2086
-    DATABASE_URL="${DATABASE_URL}" ${prisma_bin} migrate deploy
+            log_info "Deploying Prisma migrations"
+            # shellcheck disable=SC2086
+            DATABASE_URL="${DATABASE_URL}" ${prisma_bin} migrate deploy
+            ;;
+        push)
+            log_info "Pushing Prisma schema"
+            # shellcheck disable=SC2086
+            DATABASE_URL="${DATABASE_URL}" ${prisma_bin} db push --accept-data-loss
+            ;;
+        *)
+            log_error "Unknown PRISMA_SCHEMA_DEPLOY_STRATEGY: ${PRISMA_SCHEMA_DEPLOY_STRATEGY}"
+            return 1
+            ;;
+    esac
+
+    log_info "Prisma schema deployed"
 }
 
 # ── Prisma hot-reload watcher ───────────────────────────────────────────────
 
 start_prisma_watcher() {
-    schema_path="${SCHEMA_PATH:-/prisma/schema.prisma}"
+    schema_path="${SCHEMA_PATH:-/app/server/prisma/schema.prisma}"
     schema_dir="$(dirname "${schema_path}")"
     migrations_dir="${schema_dir}/migrations"
     deploy_script="${DEPLOY_SCRIPT:-/usr/local/bin/deploy-schema.sh}"
@@ -344,7 +378,26 @@ run_server() {
     configure_runtime
     setup_pnpm
 
-    log_info "Vaelix Bank frontend starting"
+    if [ "${NODE_ENV}" = "production" ]; then
+        log_info "Astron Collection frontend starting (static)"
+        log_info "Frontend listening on 0.0.0.0:${FRONTEND_PORT}"
+
+        if [ ! -d /app/out ]; then
+            log_error "Static frontend build not found at /app/out"
+            return 1
+        fi
+
+        http_server_args="/app/out -a 0.0.0.0 -p ${FRONTEND_PORT} -c-1 -e html"
+        if [ "${HTTP_ACCESS_LOGS}" != "true" ]; then
+            http_server_args="${http_server_args} --silent"
+        fi
+
+        log_info "Starting static frontend"
+        # shellcheck disable=SC2086
+        exec http-server ${http_server_args}
+    fi
+
+    log_info "Astron Collection frontend starting (development)"
     log_info "Frontend listening on 0.0.0.0:${FRONTEND_PORT}"
 
     if [ -d /app/apps ]; then
@@ -369,10 +422,40 @@ run_server() {
     return 1
 }
 
+run_worker() {
+    configure_runtime
+
+    log_info "Astron Collection API starting"
+    log_info "Backend runtime configured for 0.0.0.0:${SERVER_PORT}"
+
+    if [ -z "${DATABASE_URL:-}" ]; then
+        log_error "DATABASE_URL is required for the Go API"
+        return 1
+    fi
+
+    if ! run_prisma_schema_deploy; then
+        if [ "${ALLOW_MIGRATION_FAILURE}" = "true" ]; then
+            log_warn "Prisma schema deployment failed; continuing because ALLOW_MIGRATION_FAILURE=true"
+        else
+            log_error "Prisma schema deployment failed"
+            return 1
+        fi
+    fi
+
+    backend_binary="$(find_backend_binary || true)"
+    if [ -z "${backend_binary}" ]; then
+        log_error "Go backend binary not found at /app/server/aether-server"
+        return 1
+    fi
+
+    log_info "Starting Go backend"
+    exec "${backend_binary}" worker "$@"
+}
+
 run_air() {
     configure_runtime
 
-    log_info "Vaelix Bank API starting (hot-reload)"
+    log_info "Astron Collection API starting (hot-reload)"
 
     if ! run_prisma_schema_deploy; then
         if [ "${ALLOW_MIGRATION_FAILURE}" = "true" ]; then
@@ -396,6 +479,10 @@ case "${role}" in
     server)
         shift || true
         run_server "$@"
+        ;;
+    worker)
+        shift || true
+        run_worker "$@"
         ;;
     air)
         shift || true

@@ -1,7 +1,7 @@
 {
-  "name": "@vaelixbank/prisma",
+  "name": "@astron-collection/prisma",
   "version": "1.0.0",
-  "description": "Prisma schema and database layer for the VaelixBank Database Layer.",
+  "description": "Prisma schema and database layer for the Astron Collection Database Layer.",
   "private": true,
   "main": "schema.prisma",
   "scripts": {

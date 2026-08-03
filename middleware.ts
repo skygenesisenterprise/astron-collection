@@ -12,9 +12,9 @@ type Locale = (typeof routing.locales)[number];
 
 type DomainGroup = "sso" | "studios" | "main";
 
-const SSO_HOSTS = ["sso.kami-sama.localhost", "sso.kami-sama.lan"];
-const STUDIOS_HOSTS = ["studios.kami-sama.localhost", "studios.kami-sama.lan"];
-const MAIN_HOSTS = ["kami-sama.localhost", "kami-sama.lan", "kami-sama.tv", "www.kami-sama.tv"];
+const SSO_HOSTS = ["sso.astron-collection.localhost", "sso.astron-collection.lan"];
+const STUDIOS_HOSTS = ["studios.astron-collection.localhost", "studios.astron-collection.lan"];
+const MAIN_HOSTS = ["astron-collection.localhost", "astron-collection.lan", "astron-collection.com", "www.astron-collection.com"];
 
 const AUTH_PATHS = [
   "/login",
@@ -43,19 +43,19 @@ function getDomainForGroup(group: DomainGroup, currentUrl: URL): string {
   if (IS_DEVELOPMENT) {
     switch (group) {
       case "sso":
-        return `${protocol}//sso.kami-sama.localhost`;
+        return `${protocol}//sso.astron-collection.localhost`;
       case "studios":
-        return `${protocol}//studios.kami-sama.localhost`;
+        return `${protocol}//studios.astron-collection.localhost`;
       case "main":
-        return `${protocol}//kami-sama.localhost`;
+        return `${protocol}//astron-collection.localhost`;
     }
   }
 
   switch (group) {
     case "sso":
-      return `${protocol}//sso.kami-sama.tv`;
+      return `${protocol}//sso.astron-collection.com`;
     case "studios":
-      return `${protocol}//studios.kami-sama.tv`;
+      return `${protocol}//studios.astron-collection.com`;
     case "main":
       return `${protocol}//${hostname}`;
   }
@@ -106,8 +106,8 @@ function isValidLocale(segment: string): segment is Locale {
  * Auth helpers
  * -------------------------------------------------------------------------- */
 
-const REFRESH_COOKIE = "kami_sama_refresh";
-const ACCESS_TOKEN_COOKIE = "kami_sama_access_token";
+const REFRESH_COOKIE = "astron_collection_refresh";
+const ACCESS_TOKEN_COOKIE = "astron_collection_access_token";
 
 function isAuthCookiePresent(request: NextRequest): boolean {
   const refresh = request.cookies.get(REFRESH_COOKIE);

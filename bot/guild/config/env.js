@@ -7,10 +7,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const botRoot = path.resolve(__dirname, "..");
 const workspaceRoot = path.resolve(botRoot, "..");
-const envFile = path.join(workspaceRoot, ".env");
+const envFiles = [path.join(botRoot, ".env"), path.join(workspaceRoot, ".env")];
 
-if (fs.existsSync(envFile)) {
-  dotenv.config({ path: envFile, override: false });
+for (const envFile of envFiles) {
+  if (fs.existsSync(envFile)) {
+    dotenv.config({ path: envFile, override: false });
+  }
 }
 
 const requiredVars = ["DISCORD_TOKEN", "DISCORD_CLIENT_ID"];
