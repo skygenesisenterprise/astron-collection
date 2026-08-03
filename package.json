@@ -1,7 +1,7 @@
 {
-  "name": "vaelixbank",
+  "name": "astron-collection",
   "version": "0.1.0",
-  "description": "An open-source sovereign, privacy-first neobank designed for transparency, interoperability, and ethical finance.",
+  "description": "A modular suite of advanced, open-source Discord applications and tools designed for modern communities.",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -66,7 +66,7 @@
   "packageManager": "pnpm@9.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/skygenesisenterprise/aether-mailer.git"
+    "url": "https://github.com/skygenesisenterprise/astron-collection.git"
   },
   "keywords": [
     "mail-server",
@@ -88,9 +88,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/skygenesisenterprise/aether-mailer/issues"
+    "url": "https://github.com/skygenesisenterprise/astron-collection/issues"
   },
-  "homepage": "https://github.com/skygenesisenterprise/aether-mailer#readme",
+  "homepage": "https://github.com/skygenesisenterprise/astron-collection#readme",
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
