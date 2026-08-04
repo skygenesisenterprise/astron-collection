@@ -3,7 +3,7 @@ package services
 import (
 	"context"
 
-	"github.com/skygenesisenterprise/kami-sama/server/src/models"
+	"github.com/skygenesisenterprise/astron-collection/server/src/models"
 	"gorm.io/gorm"
 )
 

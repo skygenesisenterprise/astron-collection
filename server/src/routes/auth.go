@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"crypto/sha256"
 	"crypto/rand"
+	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
 	"net/http"
@@ -11,10 +11,10 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/skygenesisenterprise/kami-sama/server/src/interfaces"
-	"github.com/skygenesisenterprise/kami-sama/server/src/models"
-	"github.com/skygenesisenterprise/kami-sama/server/src/services"
-	"github.com/skygenesisenterprise/kami-sama/server/src/utils"
+	"github.com/skygenesisenterprise/astron-collection/server/src/interfaces"
+	"github.com/skygenesisenterprise/astron-collection/server/src/models"
+	"github.com/skygenesisenterprise/astron-collection/server/src/services"
+	"github.com/skygenesisenterprise/astron-collection/server/src/utils"
 )
 
 func (h *apiHandler) register(c *gin.Context) {
@@ -318,104 +318,6 @@ func (h *apiHandler) resendVerification(c *gin.Context) {
 	utils.Success(c, http.StatusAccepted, gin.H{"accepted": true})
 }
 
-func (h *apiHandler) oauthLogin(c *gin.Context) {
-	provider := c.Param("provider")
-	if h.deps.OAuthService == nil {
-		utils.Error(c, utils.ErrDependencyUnavailable)
-		return
-	}
-	action := c.DefaultQuery("action", "login")
-	var userID string
-	if action == "link" {
-		p, ok := h.principal(c)
-		if !ok {
-			utils.Error(c, utils.ErrUnauthorized)
-			return
-		}
-		userID = p.UserID
-	}
-	authURL, err := h.deps.OAuthService.GetAuthorizationURL(c.Request.Context(), provider, action, userID)
-	if err != nil {
-		utils.Error(c, err)
-		return
-	}
-	utils.Success(c, http.StatusOK, gin.H{"url": authURL})
-}
-
-func (h *apiHandler) oauthCallback(c *gin.Context) {
-	provider := c.Param("provider")
-	if h.deps.OAuthService == nil {
-		utils.Error(c, utils.ErrDependencyUnavailable)
-		return
-	}
-	code := c.Query("code")
-	state := c.Query("state")
-	if code == "" || state == "" {
-		utils.Error(c, utils.ErrValidationFailed)
-		return
-	}
-	result, err := h.deps.OAuthService.HandleCallback(c.Request.Context(), provider, code, state, requestMetadata(c))
-	if err != nil {
-		frontendURL := h.deps.Config.App.FrontendURL
-		c.Redirect(http.StatusFound, frontendURL+"/auth/callback?error="+err.Error())
-		return
-	}
-	h.deps.OAuthService.SetOAuthCookies(c, result)
-	frontendURL := h.deps.Config.App.FrontendURL
-	c.Redirect(http.StatusFound, frontendURL+"/auth/callback")
-}
-
-func (h *apiHandler) listOAuthAccounts(c *gin.Context) {
-	p, ok := h.principal(c)
-	if !ok {
-		utils.Error(c, utils.ErrUnauthorized)
-		return
-	}
-	if h.deps.OAuthService == nil {
-		utils.Error(c, utils.ErrDependencyUnavailable)
-		return
-	}
-	accounts, err := h.deps.OAuthService.ListLinkedAccounts(c.Request.Context(), p.UserID)
-	if err != nil {
-		utils.Error(c, err)
-		return
-	}
-	type accountDTO struct {
-		Provider          string  `json:"provider"`
-		ProviderAccountID string  `json:"providerAccountId"`
-		Scopes            *string `json:"scopes,omitempty"`
-		CreatedAt         string  `json:"createdAt"`
-	}
-	dtos := make([]accountDTO, 0, len(accounts))
-	for _, a := range accounts {
-		dtos = append(dtos, accountDTO{
-			Provider:          a.Provider,
-			ProviderAccountID: a.ProviderAccountID,
-			Scopes:            a.Scopes,
-			CreatedAt:         a.CreatedAt.Format(time.RFC3339),
-		})
-	}
-	utils.Success(c, http.StatusOK, gin.H{"accounts": dtos})
-}
-
-func (h *apiHandler) unlinkOAuthAccount(c *gin.Context) {
-	provider := c.Param("provider")
-	p, ok := h.principal(c)
-	if !ok {
-		utils.Error(c, utils.ErrUnauthorized)
-		return
-	}
-	if h.deps.OAuthService == nil {
-		utils.Error(c, utils.ErrDependencyUnavailable)
-		return
-	}
-	if err := h.deps.OAuthService.UnlinkAccount(c.Request.Context(), p.UserID, provider); err != nil {
-		utils.Error(c, err)
-		return
-	}
-	utils.Success(c, http.StatusOK, gin.H{"unlinked": true})
-}
-
 func requestMetadata(c *gin.Context) services.RequestMetadata {
 	return services.RequestMetadata{
 		UserAgent: strings.TrimSpace(c.GetHeader("User-Agent")),
@@ -478,7 +380,7 @@ func (h *apiHandler) ensureFirstUserIsAdmin(c *gin.Context) {
 		utils.Error(c, utils.ErrUnauthorized)
 		return
 	}
-	
+
 	p := principal.(interfaces.Principal)
 	isAdmin := false
 	for _, role := range p.Roles {
@@ -487,17 +389,17 @@ func (h *apiHandler) ensureFirstUserIsAdmin(c *gin.Context) {
 			break
 		}
 	}
-	
+
 	if !isAdmin {
 		utils.Error(c, utils.ErrForbidden)
 		return
 	}
-	
+
 	if err := h.deps.AuthService.EnsureFirstUserHasAdminRoles(c.Request.Context()); err != nil {
 		utils.Error(c, err)
 		return
 	}
-	
+
 	utils.Success(c, http.StatusOK, gin.H{"message": "First user has been ensured admin roles"})
 }
 
@@ -512,7 +414,7 @@ func (h *apiHandler) getFirstUserInfo(c *gin.Context) {
 		utils.Error(c, utils.NewError(http.StatusNotFound, "NOT_FOUND", "No users found", nil))
 		return
 	}
-	
+
 	userRoles, _ := h.deps.Repos.UserRoles().ListByUser(c.Request.Context(), firstUser.ID)
 	var roles []string
 	for _, ur := range userRoles {
@@ -543,14 +445,14 @@ func (h *apiHandler) ensureUserIsOwner(c *gin.Context) {
 		utils.Error(c, utils.ErrValidationFailed)
 		return
 	}
-	
+
 	// Vérifier que l'utilisateur actuel est admin
 	principal, exists := c.Get("principal")
 	if !exists {
 		utils.Error(c, utils.ErrUnauthorized)
 		return
 	}
-	
+
 	p := principal.(interfaces.Principal)
 	isAdmin := false
 	for _, role := range p.Roles {
@@ -559,12 +461,12 @@ func (h *apiHandler) ensureUserIsOwner(c *gin.Context) {
 			break
 		}
 	}
-	
+
 	if !isAdmin {
 		utils.Error(c, utils.ErrForbidden)
 		return
 	}
-	
+
 	// Trouver l'utilisateur par email
 	var user models.User
 	if err := h.deps.Database.Gorm().
@@ -574,7 +476,7 @@ func (h *apiHandler) ensureUserIsOwner(c *gin.Context) {
 		utils.Error(c, utils.NewError(http.StatusNotFound, "NOT_FOUND", "User not found", nil))
 		return
 	}
-	
+
 	// Mettre à jour les rôles via UserRoles repository
 	adminSlugs := []string{"superadmin", "admin", "owner"}
 	for _, slug := range adminSlugs {

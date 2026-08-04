@@ -5,15 +5,16 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	redisclient "github.com/skygenesisenterprise/kami-sama/server/internal/redis"
-	"github.com/skygenesisenterprise/kami-sama/server/src/config"
-	"github.com/skygenesisenterprise/kami-sama/server/src/interfaces"
-	"github.com/skygenesisenterprise/kami-sama/server/src/middleware"
-	"github.com/skygenesisenterprise/kami-sama/server/src/services"
-	"github.com/skygenesisenterprise/kami-sama/server/src/utils"
+	redisclient "github.com/skygenesisenterprise/astron-collection/server/internal/redis"
+	"github.com/skygenesisenterprise/astron-collection/server/src/config"
+	"github.com/skygenesisenterprise/astron-collection/server/src/interfaces"
+	"github.com/skygenesisenterprise/astron-collection/server/src/middleware"
+	"github.com/skygenesisenterprise/astron-collection/server/src/services"
+	"github.com/skygenesisenterprise/astron-collection/server/src/utils"
 )
 
 type Dependencies struct {
@@ -25,85 +26,26 @@ type Dependencies struct {
 	EventBus                 interfaces.EventBus
 	IdentityProvider         interfaces.IdentityProvider
 	AuthService              *services.AuthService
-	OAuthService             *services.OAuthService
 	UserService              *services.UserService
 	WorkspaceService         *services.WorkspaceService
-	Repos                    *services.Repositories
-	AnimeService             *services.AnimeService
-	EpisodeService           *services.EpisodeService
-	GenreService             *services.GenreService
-	StudioService            *services.StudioService
-	CharacterService         *services.CharacterService
-	MediaService             *services.MediaService
-	CommunityService         *services.CommunityService
-	WatchService             *services.WatchService
-	SchedulingService        *services.SchedulingService
 	NotificationService      *services.NotificationService
-	SearchService            *services.SearchService
-	SettingsService          *services.SettingsService
-	MediaSourceService       *services.MediaSourceService
-	TagService               *services.TagService
-	CategoryService          *services.CategoryService
-	CollectionService        *services.CollectionService
-	LibraryService           *services.LibraryService
-	DashboardService         *services.DashboardService
-	AnalyticsService         *services.AnalyticsService
-	AdminUserService         *services.AdminUserService
-	AdminProfileService      *services.AdminProfileService
-	AdminRoleService         *services.AdminRoleService
-	AdminPermissionService   *services.AdminPermissionService
-	CalendarService          *services.CalendarService
-	PremiereService          *services.PremiereService
-	SystemService            *services.SystemService
-	SupportService           *services.SupportService
-	ContactAdminService      *services.ContactAdminService
-	FAQService               *services.FAQService
-	ModerationService        *services.ModerationService
 	NotificationAdminService *services.NotificationAdminService
-	SettingsAdminService     *services.SettingsAdminService
-	AnilistService           *services.AnilistService
-	ProfileService           *services.ProfileService
 	MfaService               *services.MfaService
-	RecommendationService    *services.RecommendationService
+	BotService               *services.BotService
+	ApiKeyService            *services.ApiKeyService
+	LogService               *services.LogService
+	ProtectService           *services.ProtectService
+	PlayerService            *services.PlayerService
+	WebhookService           *services.WebhookService
+	BillingService           *services.BillingService
+	IntegrationService       *services.IntegrationService
+	AuditLogService          *services.AuditLogService
+	Repos                    *services.Repositories
 }
 
 func SetupRoutes(router *gin.Engine, deps Dependencies) {
 	handler := &apiHandler{deps: deps}
-	platform := NewPlatformHandler(deps)
-	anime := NewAnimeHandler(deps)
-	episode := NewEpisodeHandler(deps)
-	genre := NewGenreHandler(deps)
-	studio := NewStudioHandler(deps)
-	character := NewCharacterHandler(deps)
-	media := NewMediaHandler(deps)
-	mediaSource := NewMediaSourceHandler(deps)
-	community := NewCommunityHandler(deps)
-	watch := NewWatchHandler(deps)
-	scheduling := NewSchedulingHandler(deps)
-	notification := NewNotificationHandler(deps)
-	search := NewSearchHandler(deps)
-	settings := NewSettingsHandler(deps)
-	settingsAdmin := NewSettingsAdminHandler(deps)
-	tag := NewTagHandler(deps)
-	category := NewCategoryHandler(deps)
-	collection := NewCollectionHandler(deps)
-	library := NewLibraryHandler(deps)
-	dashboard := NewDashboardHandler(deps)
-	analytics := NewAnalyticsHandler(deps)
-	adminUser := NewAdminUserHandler(deps)
-	adminProfile := NewAdminProfileHandler(deps)
-	adminRole := NewAdminRoleHandler(deps)
-	adminPermission := NewAdminPermissionHandler(deps)
-	calendar := NewCalendarHandler(deps)
-	premiere := NewPremiereHandler(deps)
-	system := NewSystemHandler(deps)
-	support := NewSupportHandler(deps)
-	contactAdmin := NewContactAdminHandler(deps)
-	faq := NewFAQHandler(deps)
-	moderation := NewModerationHandler(deps)
-	notificationAdmin := NewNotificationAdminHandler(deps)
-
-	recommendation := NewRecommendationHandler(deps)
+	astron := NewAstronHandler(deps)
 
 	router.GET("/health/live", handler.live)
 	router.GET("/health/ready", handler.ready)
@@ -124,8 +66,7 @@ func SetupRoutes(router *gin.Engine, deps Dependencies) {
 		auth.POST("/reset-password", handler.resetPassword)
 		auth.POST("/verify-email", handler.verifyEmail)
 		auth.POST("/resend-verification", handler.resendVerification)
-		auth.GET("/oauth/:provider", handler.oauthLogin)
-		auth.GET("/oauth/:provider/callback", handler.oauthCallback)
+
 		authProtected := auth.Group("")
 		authProtected.Use(middleware.Auth(deps.IdentityProvider))
 		{
@@ -134,8 +75,6 @@ func SetupRoutes(router *gin.Engine, deps Dependencies) {
 			authProtected.GET("/me", handler.authMe)
 			authProtected.GET("/sessions", handler.listAuthSessions)
 			authProtected.DELETE("/sessions/:sessionId", handler.deleteAuthSession)
-			authProtected.GET("/oauth/accounts", handler.listOAuthAccounts)
-			authProtected.DELETE("/oauth/:provider", handler.unlinkOAuthAccount)
 			authProtected.POST("/ensure-first-user-admin", handler.ensureFirstUserIsAdmin)
 			authProtected.GET("/first-user", handler.getFirstUserInfo)
 			authProtected.POST("/ensure-user-owner", handler.ensureUserIsOwner)
@@ -159,6 +98,17 @@ func SetupRoutes(router *gin.Engine, deps Dependencies) {
 	{
 		protected.GET("/me", handler.me)
 		protected.PATCH("/me", handler.updateMe)
+		protected.GET("/me/preferences", handler.getMyPreferences)
+		protected.PUT("/me/preferences", handler.updateMyPreferences)
+
+		protected.GET("/notifications", handler.listNotifications)
+		protected.GET("/notifications/:notificationId", handler.getNotification)
+		protected.PATCH("/notifications/:notificationId/read", handler.markNotificationRead)
+		protected.POST("/notifications/read-all", handler.markAllNotificationsRead)
+		protected.DELETE("/notifications/:notificationId", handler.deleteNotification)
+		protected.GET("/notifications/unread-count", handler.unreadNotificationCount)
+		protected.GET("/notifications/preferences", handler.getNotificationPreferences)
+		protected.PUT("/notifications/preferences", handler.updateNotificationPreferences)
 
 		protected.GET("/workspaces", handler.listWorkspaces)
 		protected.POST("/workspaces", handler.createWorkspace)
@@ -171,549 +121,70 @@ func SetupRoutes(router *gin.Engine, deps Dependencies) {
 		protected.PATCH("/workspaces/:workspaceId/members/:userId", handler.updateWorkspaceMember)
 		protected.DELETE("/workspaces/:workspaceId/members/:userId", handler.deleteWorkspaceMember)
 
-		platformGroup := protected.Group("/platform")
+		workspace := protected.Group("/workspaces/:workspaceId")
 		{
-			platformGroup.GET("/home", platform.GetHomeData)
-			platformGroup.GET("/wallet", platform.GetWalletInfo)
-			platformGroup.GET("/user-info", platform.GetUserInfo)
-			platformGroup.PATCH("/user-info", platform.UpdateUserInfo)
-			platformGroup.GET("/security", platform.GetSecurityInfo)
-			platformGroup.POST("/password/change", platform.ChangePassword)
-			platformGroup.GET("/applications", platform.ListApplications)
-			platformGroup.GET("/applications/:applicationId", platform.GetApplicationDetails)
-			platformGroup.GET("/data-privacy", platform.GetDataPrivacyInfo)
-			platformGroup.PATCH("/data-privacy", platform.UpdatePrivacySettings)
-			platformGroup.GET("/contacts", platform.ListContacts)
-			platformGroup.GET("/contacts/:contactId", platform.GetContactDetails)
-			platformGroup.GET("/family", platform.ListFamilyMembers)
-			platformGroup.POST("/family/invite", platform.InviteFamilyMember)
-			platformGroup.GET("/storage", platform.GetStorageInfo)
-			platformGroup.GET("/storage/files", platform.ListFiles)
-			platformGroup.GET("/settings", platform.GetSettings)
-			platformGroup.PATCH("/settings", platform.UpdateSettings)
-		}
+			workspace.GET("/bots", astron.listBots)
+			workspace.POST("/bots", astron.createBot)
+			workspace.GET("/bots/:botId", astron.getBot)
+			workspace.PATCH("/bots/:botId", astron.updateBot)
+			workspace.DELETE("/bots/:botId", astron.deleteBot)
+			workspace.POST("/bots/:botId/rotate-secret", astron.rotateBotSecret)
+			workspace.POST("/bots/:botId/heartbeat", astron.botHeartbeat)
+			workspace.GET("/bots/:botId/heartbeats", astron.listBotHeartbeats)
 
-		animeGroup := protected.Group("/anime")
-		{
-			animeGroup.GET("", anime.List)
-			animeGroup.POST("", anime.Create)
-			animeGroup.GET("/:animeId", anime.GetByID)
-			animeGroup.GET("/slug/:slug", anime.GetBySlug)
-			animeGroup.PATCH("/:animeId", anime.Update)
-			animeGroup.DELETE("/:animeId", anime.Delete)
-		}
+			workspace.GET("/api-keys", astron.listApiKeys)
+			workspace.POST("/api-keys", astron.createApiKey)
+			workspace.GET("/api-keys/:keyId", astron.getApiKey)
+			workspace.DELETE("/api-keys/:keyId", astron.deleteApiKey)
+			workspace.POST("/api-keys/:keyId/revoke", astron.revokeApiKey)
 
-		genreGroup := protected.Group("/genres")
-		{
-			genreGroup.GET("", genre.List)
-			genreGroup.POST("", genre.Create)
-			genreGroup.GET("/:genreId", genre.GetByID)
-			genreGroup.GET("/slug/:slug", genre.GetBySlug)
-			genreGroup.PATCH("/:genreId", genre.Update)
-			genreGroup.DELETE("/:genreId", genre.Delete)
-		}
+			workspace.GET("/logs", astron.listLogs)
+			workspace.POST("/logs", astron.ingestLogs)
+			workspace.GET("/logs/stats", astron.logStats)
+			workspace.GET("/logs/:logId", astron.getLog)
 
-		studioGroup := protected.Group("/studios")
-		{
-			studioGroup.GET("", studio.List)
-			studioGroup.POST("", studio.Create)
-			studioGroup.GET("/:studioId", studio.GetByID)
-			studioGroup.GET("/slug/:slug", studio.GetBySlug)
-			studioGroup.PATCH("/:studioId", studio.Update)
-			studioGroup.DELETE("/:studioId", studio.Delete)
-		}
+			workspace.GET("/protect/rules", astron.listProtectRules)
+			workspace.POST("/protect/rules", astron.createProtectRule)
+			workspace.GET("/protect/rules/:ruleId", astron.getProtectRule)
+			workspace.PATCH("/protect/rules/:ruleId", astron.updateProtectRule)
+			workspace.POST("/protect/rules/:ruleId/enable", astron.enableProtectRule)
+			workspace.POST("/protect/rules/:ruleId/disable", astron.disableProtectRule)
+			workspace.DELETE("/protect/rules/:ruleId", astron.deleteProtectRule)
+			workspace.GET("/protect/events", astron.listProtectEvents)
+			workspace.POST("/protect/events", astron.ingestProtectEvents)
+			workspace.GET("/protect/events/:eventId", astron.getProtectEvent)
 
-		characterGroup := protected.Group("/characters")
-		{
-			characterGroup.GET("", character.List)
-			characterGroup.POST("", character.Create)
-			characterGroup.GET("/:characterId", character.GetByID)
-			characterGroup.GET("/slug/:slug", character.GetBySlug)
-			characterGroup.PATCH("/:characterId", character.Update)
-			characterGroup.DELETE("/:characterId", character.Delete)
-		}
+			workspace.GET("/player/sessions", astron.listPlayerSessions)
+			workspace.POST("/player/sessions", astron.startPlayerSession)
+			workspace.GET("/player/sessions/:sessionId", astron.getPlayerSession)
+			workspace.POST("/player/sessions/:sessionId/end", astron.endPlayerSession)
+			workspace.POST("/player/sessions/:sessionId/playback", astron.reportPlayback)
+			workspace.PUT("/player/sessions/:sessionId/state", astron.updatePlaybackState)
+			workspace.GET("/player/sessions/:sessionId/playback", astron.latestPlayback)
+			workspace.GET("/player/playbacks", astron.listPlaybacks)
 
-		episodeGroup := protected.Group("/anime/:animeId/episodes")
-		{
-			episodeGroup.GET("", episode.ListByAnime)
-			episodeGroup.POST("", episode.Create)
-			episodeGroup.GET("/:episodeId", episode.GetByID)
-			episodeGroup.GET("/number/:episodeNumber", episode.GetNumber)
-			episodeGroup.PATCH("/:episodeId", episode.Update)
-			episodeGroup.DELETE("/:episodeId", episode.Delete)
-		}
+			workspace.GET("/webhooks", astron.listWebhooks)
+			workspace.POST("/webhooks", astron.createWebhook)
+			workspace.GET("/webhooks/:webhookId", astron.getWebhook)
+			workspace.PATCH("/webhooks/:webhookId", astron.updateWebhook)
+			workspace.DELETE("/webhooks/:webhookId", astron.deleteWebhook)
+			workspace.GET("/webhooks/:webhookId/deliveries", astron.listWebhookDeliveries)
+			workspace.GET("/webhooks/:webhookId/deliveries/:deliveryId", astron.getWebhookDelivery)
 
-		mediaGroup := protected.Group("/media")
-		{
-			mediaGroup.GET("", media.List)
-			mediaGroup.POST("", media.Create)
-			mediaGroup.GET("/:mediaId", media.GetByID)
-			mediaGroup.PATCH("/:mediaId", media.Update)
-			mediaGroup.DELETE("/:mediaId", media.Delete)
-			mediaGroup.GET("/encoding-jobs", media.ListEncodingJobs)
-			mediaGroup.GET("/encoding-jobs/:jobId", media.GetEncodingJob)
-			mediaGroup.POST("/thumbnails/generate", media.GenerateThumbnail)
-			mediaGroup.POST("/encoding-jobs/:jobId/retry", media.RetryEncodingJob)
-			mediaGroup.POST("/encoding-jobs/:jobId/cancel", media.CancelEncodingJob)
-			mediaGroup.GET("/encoding/profiles", media.GetEncodingProfiles)
-			mediaGroup.GET("/uploads", media.ListUploads)
-			mediaGroup.POST("/uploads", media.InitiateUpload)
-			mediaGroup.GET("/uploads/:uploadId", media.GetUploadProgress)
-			mediaGroup.DELETE("/uploads/:uploadId", media.CancelUpload)
-			mediaGroup.POST("/uploads/:uploadId/complete", media.CompleteUpload)
-		}
+			workspace.GET("/billing/subscription", astron.getSubscription)
+			workspace.POST("/billing/subscription", astron.createSubscription)
+			workspace.POST("/billing/subscription/cancel", astron.cancelSubscription)
+			workspace.GET("/billing/info", astron.getBillingInfo)
+			workspace.PUT("/billing/info", astron.updateBillingInfo)
 
-		sourceGroup := protected.Group("/source")
-		{
-			sourceGroup.GET("/libraries", mediaSource.ListLibraries)
-			sourceGroup.GET("/libraries/:libraryId", mediaSource.GetLibrary)
-			sourceGroup.GET("/items", mediaSource.ListItems)
-			sourceGroup.GET("/items/:itemId", mediaSource.GetItem)
-			sourceGroup.GET("/items/search", mediaSource.SearchItems)
-			sourceGroup.GET("/items/:itemId/stream", mediaSource.GetStreamURL)
-			sourceGroup.GET("/items/:itemId/playback", mediaSource.GetPlaybackInfo)
-			sourceGroup.POST("/items/:itemId/progress", mediaSource.ReportProgress)
-			sourceGroup.POST("/libraries/:libraryId/sync", mediaSource.SyncLibrary)
-			sourceGroup.GET("/libraries/:libraryId/sync", mediaSource.GetSyncStatus)
-			sourceGroup.GET("/sync/logs", mediaSource.ListSyncLogs)
-		}
+			workspace.GET("/integrations", astron.listIntegrations)
+			workspace.POST("/integrations", astron.createIntegration)
+			workspace.GET("/integrations/:integrationId", astron.getIntegration)
+			workspace.PATCH("/integrations/:integrationId", astron.updateIntegration)
+			workspace.DELETE("/integrations/:integrationId", astron.deleteIntegration)
 
-		communityGroup := protected.Group("/community")
-		{
-			communityGroup.GET("/reviews", community.ListReviews)
-			communityGroup.POST("/reviews", community.CreateReview)
-			communityGroup.GET("/reviews/:reviewId", community.GetReview)
-			communityGroup.PATCH("/reviews/:reviewId", community.UpdateReview)
-			communityGroup.DELETE("/reviews/:reviewId", community.DeleteReview)
-			communityGroup.GET("/reviews/:reviewId/comments", community.ListCommentsByReview)
-			communityGroup.POST("/reviews/:reviewId/comments", community.CreateComment)
-			communityGroup.PATCH("/comments/:commentId", community.UpdateComment)
-			communityGroup.DELETE("/comments/:commentId", community.DeleteComment)
-			communityGroup.GET("/watchlists", community.ListWatchlists)
-			communityGroup.POST("/watchlists", community.CreateWatchlist)
-			communityGroup.GET("/watchlists/:watchlistId", community.GetWatchlist)
-			communityGroup.PATCH("/watchlists/:watchlistId", community.UpdateWatchlist)
-			communityGroup.DELETE("/watchlists/:watchlistId", community.DeleteWatchlist)
-			communityGroup.GET("/watchlists/:watchlistId/anime", community.ListWatchlistAnime)
-			communityGroup.POST("/watchlists/:watchlistId/anime", community.AddToWatchlist)
-			communityGroup.DELETE("/watchlists/:watchlistId/anime/:animeId", community.RemoveFromWatchlist)
-			communityGroup.GET("/reports", community.ListReports)
-			communityGroup.POST("/reports", community.CreateReport)
-			communityGroup.PATCH("/reports/:reportId", community.UpdateReport)
-		}
-
-		watchGroup := protected.Group("/watch")
-		{
-			watchGroup.GET("/progress/:episodeId", watch.GetProgress)
-			watchGroup.PUT("/progress/:episodeId", watch.UpsertProgress)
-			watchGroup.GET("/progress", watch.ListProgress)
-			watchGroup.GET("/continue", watch.ContinueWatching)
-			watchGroup.GET("/history", watch.ListHistory)
-			watchGroup.POST("/history", watch.AddHistory)
-		}
-
-		recommendationGroup := protected.Group("/recommendations")
-		{
-			recommendationGroup.GET("", recommendation.GetRecommendations)
-		}
-
-		schedulingGroup := protected.Group("/scheduling")
-		{
-			schedulingGroup.GET("/simulcasts", scheduling.ListSimulcasts)
-			schedulingGroup.POST("/simulcasts", scheduling.CreateSimulcast)
-			schedulingGroup.GET("/simulcasts/:simulcastId", scheduling.GetSimulcast)
-			schedulingGroup.PATCH("/simulcasts/:simulcastId", scheduling.UpdateSimulcast)
-			schedulingGroup.DELETE("/simulcasts/:simulcastId", scheduling.DeleteSimulcast)
-			schedulingGroup.GET("/simulcasts/week/:weekday", scheduling.GetSimulcastByWeek)
-			schedulingGroup.GET("/upcoming", scheduling.ListUpcomingReleases)
-			schedulingGroup.POST("/schedules", scheduling.CreateReleaseSchedule)
-			schedulingGroup.PATCH("/schedules/:scheduleId", scheduling.UpdateReleaseSchedule)
-			schedulingGroup.GET("/releases", scheduling.ListReleases)
-			schedulingGroup.GET("/releases/:releaseId", scheduling.GetRelease)
-			schedulingGroup.DELETE("/releases/:releaseId", scheduling.CancelRelease)
-			schedulingGroup.POST("/releases/:releaseId/publish", scheduling.PublishRelease)
-		}
-
-		schedulingGroup.GET("/calendar", calendar.ListEvents)
-		schedulingGroup.POST("/calendar", calendar.CreateEvent)
-		schedulingGroup.GET("/calendar/:eventId", calendar.GetEvent)
-		schedulingGroup.PATCH("/calendar/:eventId", calendar.UpdateEvent)
-		schedulingGroup.DELETE("/calendar/:eventId", calendar.DeleteEvent)
-
-		schedulingGroup.GET("/premieres", premiere.List)
-		schedulingGroup.POST("/premieres", premiere.Create)
-		schedulingGroup.GET("/premieres/:premiereId", premiere.GetByID)
-		schedulingGroup.PATCH("/premieres/:premiereId", premiere.Update)
-		schedulingGroup.DELETE("/premieres/:premiereId", premiere.Delete)
-
-		notificationGroup := protected.Group("/notifications")
-		{
-			notificationGroup.GET("", notification.List)
-			notificationGroup.GET("/:notificationId", notification.GetByID)
-			notificationGroup.PATCH("/:notificationId/read", notification.MarkRead)
-			notificationGroup.POST("/read-all", notification.MarkAllRead)
-			notificationGroup.DELETE("/:notificationId", notification.Delete)
-			notificationGroup.GET("/unread-count", notification.UnreadCount)
-			notificationGroup.GET("/preferences", notification.GetPreferences)
-			notificationGroup.PUT("/preferences", notification.UpdatePreferences)
-		}
-
-		searchGroup := protected.Group("/search")
-		{
-			searchGroup.GET("", search.Search)
-			searchGroup.GET("/anime", search.SearchAnime)
-			searchGroup.GET("/characters", search.SearchCharacters)
-			searchGroup.GET("/studios", search.SearchStudios)
-			searchGroup.GET("/suggestions", search.Suggestions)
-		}
-
-		profile := NewProfileHandler(deps)
-		profileGroup := protected.Group("/profiles")
-		{
-			profileGroup.GET("", profile.List)
-			profileGroup.POST("", profile.Create)
-			profileGroup.GET("/:profileId", profile.GetByID)
-			profileGroup.PATCH("/:profileId", profile.Update)
-			profileGroup.DELETE("/:profileId", profile.Delete)
-			profileGroup.POST("/:profileId/select", profile.Select)
-			profileGroup.POST("/:profileId/pin", profile.SetPin)
-			profileGroup.POST("/verify-pin", profile.VerifyPin)
-		}
-
-		anilist := NewAnilistHandler(deps)
-		anilistGroup := protected.Group("/integrations/anilist")
-		{
-			anilistGroup.GET("/search", anilist.Search)
-			anilistGroup.GET("/trending", anilist.Trending)
-			anilistGroup.GET("/popular", anilist.Popular)
-			anilistGroup.GET("/seasonal", anilist.Seasonal)
-			anilistGroup.GET("/airing-schedule", anilist.AiringSchedule)
-			anilistGroup.GET("/characters/:characterId", anilist.GetCharacter)
-			anilistGroup.GET("/staff/:staffId", anilist.GetStaff)
-			anilistGroup.GET("/:anilistId", anilist.GetMedia)
-			anilistGroup.POST("/:anilistId/import", anilist.ImportMedia)
-		}
-
-		plex := NewPlexHandler(deps)
-		plexGroup := protected.Group("/integrations/plex")
-		{
-			plexGroup.GET("/health", plex.HealthCheck)
-			plexGroup.GET("/identity", plex.GetIdentity)
-			plexGroup.GET("/libraries", plex.ListLibraries)
-			plexGroup.GET("/libraries/:libraryId", plex.GetLibrary)
-			plexGroup.GET("/libraries/:libraryId/items", plex.ListItems)
-			plexGroup.POST("/libraries/:libraryId/refresh", plex.RefreshLibrary)
-			plexGroup.GET("/metadata/:ratingKey", plex.GetMetadata)
-			plexGroup.GET("/metadata/:ratingKey/children", plex.GetChildren)
-			plexGroup.GET("/hubs", plex.GetHubs)
-			plexGroup.GET("/search", plex.Search)
-			plexGroup.POST("/import", plex.ImportItem)
-			plexGroup.GET("/image", plex.ImageProxy)
-			plexGroup.POST("/transcode", plex.TranscodeDecision)
-			plexGroup.POST("/scrobble", plex.Scrobble)
-			plexGroup.POST("/unscrobble", plex.Unscrobble)
-			plexGroup.POST("/timeline", plex.UpdateTimeline)
-		}
-
-		discover := NewDiscoverHandler(deps)
-		discoverGroup := api.Group("/discover")
-		{
-			discoverGroup.GET("", discover.GetDiscover)
-			discoverGroup.GET("/sections", discover.GetDiscoverSections)
-			discoverGroup.GET("/continue-watching", discover.GetDiscoverContinueWatching)
-			discoverGroup.GET("/content/:anilistId", discover.GetContentDetail)
-		}
-
-		settingsGroup := protected.Group("/settings")
-		{
-			settingsGroup.GET("", settings.List)
-			settingsGroup.GET("/seo", settings.GetSeoMeta)
-			settingsGroup.PUT("/seo", settings.UpsertSeoMeta)
-			settingsGroup.GET("/:key", settings.GetByKey)
-			settingsGroup.PUT("/:key", settings.Upsert)
-			settingsGroup.DELETE("/:key", settings.Delete)
-
-			settingsGroup.GET("/general", settingsAdmin.GetGeneral)
-			settingsGroup.PUT("/general", settingsAdmin.UpdateGeneral)
-
-			settingsGroup.GET("/security", settingsAdmin.GetSecurity)
-			settingsGroup.PUT("/security", settingsAdmin.UpdateSecurity)
-			settingsGroup.GET("/security/sessions", settingsAdmin.GetSessions)
-			settingsGroup.PUT("/security/sessions", settingsAdmin.UpdateSessions)
-			settingsGroup.GET("/security/rate-limit", settingsAdmin.GetRateLimit)
-			settingsGroup.PUT("/security/rate-limit", settingsAdmin.UpdateRateLimit)
-			settingsGroup.GET("/security/2fa", settingsAdmin.Get2FA)
-			settingsGroup.PUT("/security/2fa", settingsAdmin.Update2FA)
-
-			settingsGroup.GET("/branding", settingsAdmin.GetBranding)
-			settingsGroup.PUT("/branding", settingsAdmin.UpdateBranding)
-			settingsGroup.POST("/branding/logo", settingsAdmin.UploadLogo)
-			settingsGroup.POST("/branding/favicon", settingsAdmin.UploadFavicon)
-			settingsGroup.POST("/branding/preview", settingsAdmin.PreviewBranding)
-
-			settingsGroup.GET("/email", settingsAdmin.GetEmail)
-			settingsGroup.PUT("/email", settingsAdmin.UpdateEmail)
-			settingsGroup.POST("/email/test", settingsAdmin.SendTestEmail)
-			settingsGroup.GET("/email/templates", settingsAdmin.ListEmailTemplates)
-			settingsGroup.PATCH("/email/templates/:templateId", settingsAdmin.UpdateEmailTemplate)
-			settingsGroup.GET("/email/logs", settingsAdmin.ListEmailLogs)
-
-			settingsGroup.GET("/seo/pages", settingsAdmin.ListSEOPages)
-			settingsGroup.PUT("/seo/pages/:pagePath", settingsAdmin.UpdateSEOPage)
-			settingsGroup.GET("/seo/sitemap", settingsAdmin.GetSitemap)
-			settingsGroup.GET("/seo/robots", settingsAdmin.GetRobots)
-
-			settingsGroup.GET("/storage", settingsAdmin.GetStorage)
-			settingsGroup.PUT("/storage", settingsAdmin.UpdateStorage)
-			settingsGroup.POST("/storage/test", settingsAdmin.TestStorage)
-			settingsGroup.GET("/storage/usage", settingsAdmin.GetStorageUsage)
-			settingsGroup.GET("/storage/buckets", settingsAdmin.ListBuckets)
-
-			settingsGroup.GET("/cdn", settingsAdmin.GetCDN)
-			settingsGroup.PUT("/cdn", settingsAdmin.UpdateCDN)
-			settingsGroup.POST("/cdn/purge", settingsAdmin.PurgeCDN)
-			settingsGroup.GET("/cdn/stats", settingsAdmin.GetCDNStats)
-
-			settingsGroup.GET("/domains", settingsAdmin.ListDomains)
-			settingsGroup.POST("/domains", settingsAdmin.CreateDomain)
-			settingsGroup.GET("/domains/:domainId", settingsAdmin.GetDomain)
-			settingsGroup.DELETE("/domains/:domainId", settingsAdmin.DeleteDomain)
-			settingsGroup.POST("/domains/:domainId/verify", settingsAdmin.VerifyDomain)
-			settingsGroup.POST("/domains/:domainId/ssl", settingsAdmin.GenerateSSL)
-
-			settingsGroup.GET("/apis", settingsAdmin.ListAPIKeys)
-			settingsGroup.POST("/apis", settingsAdmin.CreateAPIKey)
-			settingsGroup.GET("/apis/:keyId", settingsAdmin.GetAPIKey)
-			settingsGroup.PATCH("/apis/:keyId", settingsAdmin.UpdateAPIKey)
-			settingsGroup.DELETE("/apis/:keyId", settingsAdmin.DeleteAPIKey)
-			settingsGroup.GET("/apis/:keyId/usage", settingsAdmin.GetAPIKeyUsage)
-
-			settingsGroup.PUT("/oauth/:provider", settingsAdmin.UpdateOAuth)
-			settingsGroup.POST("/oauth/:provider/test", settingsAdmin.TestOAuth)
-			settingsGroup.GET("/oauth/:provider/callback-url", settingsAdmin.GetCallbackURL)
-
-			settingsGroup.GET("/integrations", settingsAdmin.ListIntegrations)
-			settingsGroup.POST("/integrations", settingsAdmin.CreateIntegration)
-			settingsGroup.GET("/integrations/:integrationId", settingsAdmin.GetIntegration)
-			settingsGroup.PATCH("/integrations/:integrationId", settingsAdmin.UpdateIntegration)
-			settingsGroup.DELETE("/integrations/:integrationId", settingsAdmin.DeleteIntegration)
-			settingsGroup.POST("/integrations/:integrationId/test", settingsAdmin.TestIntegration)
-			settingsGroup.GET("/integrations/:integrationId/logs", settingsAdmin.GetIntegrationLogs)
-
-			settingsGroup.GET("/maintenance", settingsAdmin.GetMaintenance)
-			settingsGroup.PUT("/maintenance", settingsAdmin.UpdateMaintenance)
-			settingsGroup.POST("/maintenance/cache-clear", settingsAdmin.ClearCache)
-			settingsGroup.POST("/maintenance/db-optimize", settingsAdmin.OptimizeDB)
-			settingsGroup.GET("/maintenance/jobs", settingsAdmin.ListMaintenanceJobs)
-		}
-
-		tagGroup := protected.Group("/tags")
-		{
-			tagGroup.GET("", tag.List)
-			tagGroup.POST("", tag.Create)
-			tagGroup.GET("/:tagId", tag.GetByID)
-			tagGroup.GET("/slug/:slug", tag.GetBySlug)
-			tagGroup.PATCH("/:tagId", tag.Update)
-			tagGroup.DELETE("/:tagId", tag.Delete)
-		}
-
-		categoryGroup := protected.Group("/categories")
-		{
-			categoryGroup.GET("", category.List)
-			categoryGroup.POST("", category.Create)
-			categoryGroup.GET("/:categoryId", category.GetByID)
-			categoryGroup.GET("/slug/:slug", category.GetBySlug)
-			categoryGroup.PATCH("/:categoryId", category.Update)
-			categoryGroup.DELETE("/:categoryId", category.Delete)
-		}
-
-		collectionGroup := protected.Group("/collections")
-		{
-			collectionGroup.GET("", collection.List)
-			collectionGroup.POST("", collection.Create)
-			collectionGroup.GET("/:collectionId", collection.GetByID)
-			collectionGroup.GET("/slug/:slug", collection.GetBySlug)
-			collectionGroup.PATCH("/:collectionId", collection.Update)
-			collectionGroup.DELETE("/:collectionId", collection.Delete)
-		}
-
-		libraryGroup := protected.Group("/libraries")
-		{
-			libraryGroup.GET("", library.List)
-			libraryGroup.POST("", library.Create)
-			libraryGroup.GET("/:libraryId", library.GetByID)
-			libraryGroup.PATCH("/:libraryId", library.Update)
-			libraryGroup.DELETE("/:libraryId", library.Delete)
-		}
-
-		dashboardGroup := protected.Group("/dashboard")
-		{
-			dashboardGroup.GET("/stats", dashboard.GetStats)
-			dashboardGroup.GET("/weekly-views", dashboard.GetWeeklyViews)
-			dashboardGroup.GET("/subscription-distribution", dashboard.GetSubscriptionDistribution)
-			dashboardGroup.GET("/top-anime", dashboard.GetTopAnime)
-			dashboardGroup.GET("/recent-uploads", dashboard.GetRecentUploads)
-		}
-
-		analyticsGroup := protected.Group("/analytics")
-		{
-			analyticsGroup.GET("/overview", analytics.GetOverview)
-			analyticsGroup.GET("/overview/period", analytics.GetOverviewByPeriod)
-			analyticsGroup.GET("/watch-time", analytics.GetWatchTime)
-			analyticsGroup.GET("/watch-time/by-anime", analytics.GetWatchTimeByAnime)
-			analyticsGroup.GET("/watch-time/by-episode", analytics.GetWatchTimeByEpisode)
-			analyticsGroup.GET("/watch-time/histogram", analytics.GetWatchTimeHistogram)
-			analyticsGroup.GET("/devices", analytics.GetDevices)
-			analyticsGroup.GET("/devices/browsers", analytics.GetDevicesBrowsers)
-			analyticsGroup.GET("/devices/os", analytics.GetDevicesOS)
-			analyticsGroup.GET("/popular", analytics.GetPopular)
-			analyticsGroup.GET("/popular/trending", analytics.GetPopularTrending)
-			analyticsGroup.GET("/popular/new", analytics.GetPopularNew)
-			analyticsGroup.GET("/geography", analytics.GetGeography)
-			analyticsGroup.GET("/geography/top-countries", analytics.GetGeographyTopCountries)
-			analyticsGroup.GET("/active-users", analytics.GetActiveUsers)
-			analyticsGroup.GET("/active-users/retention", analytics.GetActiveUsersRetention)
-			analyticsGroup.GET("/active-users/sessions", analytics.GetActiveUsersSessions)
-		}
-
-		systemHealthGroup := protected.Group("/system/health")
-		{
-			systemHealthGroup.GET("/services", system.HealthServices)
-			systemHealthGroup.GET("/uptime", system.HealthUptime)
-			systemHealthGroup.GET("/metrics", system.HealthMetrics)
-		}
-
-		systemLogsGroup := protected.Group("/system/logs")
-		{
-			systemLogsGroup.GET("", system.ListLogs)
-			systemLogsGroup.GET("/search", system.SearchLogs)
-			systemLogsGroup.GET("/:logId", system.GetLogByID)
-		}
-
-		systemQueueGroup := protected.Group("/system/queue")
-		{
-			systemQueueGroup.GET("", system.GetQueueStatus)
-			systemQueueGroup.GET("/jobs", system.ListQueueJobs)
-			systemQueueGroup.POST("/jobs/:jobId/retry", system.RetryQueueJob)
-			systemQueueGroup.POST("/jobs/:jobId/cancel", system.CancelQueueJob)
-			systemQueueGroup.POST("/flush", system.FlushQueue)
-		}
-
-		systemCacheGroup := protected.Group("/system/cache")
-		{
-			systemCacheGroup.GET("", system.GetCacheStatus)
-			systemCacheGroup.POST("/flush", system.FlushCache)
-			systemCacheGroup.POST("/flush/:pattern", system.FlushCacheByPattern)
-			systemCacheGroup.GET("/keys", system.ListCacheKeys)
-			systemCacheGroup.DELETE("/keys/:key", system.DeleteCacheKey)
-		}
-
-		systemSearchGroup := protected.Group("/system/search")
-		{
-			systemSearchGroup.GET("", system.GetSearchStatus)
-			systemSearchGroup.POST("/reindex", system.TriggerReindex)
-			systemSearchGroup.GET("/indexes", system.ListSearchIndexes)
-			systemSearchGroup.GET("/indexes/:indexName", system.GetSearchIndexStats)
-			systemSearchGroup.POST("/indexes/:indexName/update", system.UpdateSearchIndex)
-		}
-
-		systemBgJobsGroup := protected.Group("/system/background-jobs")
-		{
-			systemBgJobsGroup.GET("", system.ListBackgroundJobs)
-			systemBgJobsGroup.POST("/:jobId/run", system.RunBackgroundJob)
-			systemBgJobsGroup.POST("/:jobId/pause", system.PauseBackgroundJob)
-			systemBgJobsGroup.POST("/:jobId/resume", system.ResumeBackgroundJob)
-			systemBgJobsGroup.GET("/history", system.GetBackgroundJobHistory)
-		}
-
-		adminGroup := protected.Group("/admin")
-		{
-			adminGroup.GET("/users", adminUser.List)
-			adminGroup.GET("/users/:userId", adminUser.GetByID)
-			adminGroup.PATCH("/users/:userId", adminUser.Update)
-			adminGroup.DELETE("/users/:userId", adminUser.Delete)
-			adminGroup.POST("/users/:userId/disable", adminUser.Disable)
-			adminGroup.POST("/users/:userId/enable", adminUser.Enable)
-			adminGroup.GET("/users/:userId/sessions", adminUser.ListSessions)
-			adminGroup.DELETE("/users/:userId/sessions/:sessionId", adminUser.RevokeSession)
-
-			adminGroup.GET("/profiles", adminProfile.List)
-			adminGroup.GET("/profiles/:userId", adminProfile.GetByUserID)
-			adminGroup.PATCH("/profiles/:userId", adminProfile.Update)
-			adminGroup.DELETE("/profiles/:userId", adminProfile.Delete)
-
-			adminGroup.GET("/roles", adminRole.List)
-			adminGroup.POST("/roles", adminRole.Create)
-			adminGroup.GET("/roles/:roleId", adminRole.GetByID)
-			adminGroup.PATCH("/roles/:roleId", adminRole.Update)
-			adminGroup.DELETE("/roles/:roleId", adminRole.Delete)
-			adminGroup.POST("/roles/:roleId/assign", adminRole.Assign)
-			adminGroup.DELETE("/roles/:roleId/assign/:userId", adminRole.Unassign)
-
-			adminGroup.GET("/permissions", adminPermission.GetMatrix)
-			adminGroup.PATCH("/permissions", adminPermission.UpdateRolePermissions)
-			adminGroup.GET("/permissions/effective/:userId", adminPermission.GetEffectivePermissions)
-
-			adminGroup.GET("/comments", community.AdminListComments)
-			adminGroup.GET("/comments/:commentId", community.AdminGetComment)
-			adminGroup.PATCH("/comments/:commentId", community.AdminModerateComment)
-			adminGroup.DELETE("/comments/:commentId", community.AdminDeleteComment)
-			adminGroup.POST("/comments/:commentId/approve", community.AdminApproveComment)
-			adminGroup.POST("/comments/:commentId/flag", community.AdminFlagComment)
-
-			adminGroup.GET("/reviews", community.AdminListReviews)
-			adminGroup.POST("/reviews/:reviewId/feature", community.AdminFeatureReview)
-
-			adminGroup.GET("/reports", community.AdminListReports)
-			adminGroup.GET("/reports/:reportId", community.AdminGetReport)
-			adminGroup.PATCH("/reports/:reportId", community.AdminProcessReport)
-			adminGroup.POST("/reports/:reportId/resolve", community.AdminResolveReport)
-			adminGroup.POST("/reports/:reportId/dismiss", community.AdminDismissReport)
-
-			adminGroup.GET("/moderations", moderation.GetQueue)
-			adminGroup.GET("/moderations/:moderationId", moderation.GetItem)
-			adminGroup.POST("/moderations/:moderationId/approve", moderation.Approve)
-			adminGroup.POST("/moderations/:moderationId/reject", moderation.Reject)
-			adminGroup.POST("/moderations/:moderationId/escalate", moderation.Escalate)
-
-			adminGroup.GET("/watchlists/stats", community.AdminWatchlistStats)
-
-			adminGroup.GET("/notifications/templates", notificationAdmin.ListTemplates)
-			adminGroup.POST("/notifications/templates", notificationAdmin.CreateTemplate)
-			adminGroup.PATCH("/notifications/templates/:templateId", notificationAdmin.UpdateTemplate)
-			adminGroup.DELETE("/notifications/templates/:templateId", notificationAdmin.DeleteTemplate)
-			adminGroup.POST("/notifications/send", notificationAdmin.Send)
-			adminGroup.GET("/notifications/history", notificationAdmin.GetHistory)
-		}
-
-		supportGroup := protected.Group("/support")
-		{
-			supportGroup.GET("/tickets", support.ListTickets)
-			supportGroup.POST("/tickets", support.CreateTicket)
-			supportGroup.GET("/tickets/:ticketId", support.GetTicket)
-			supportGroup.PATCH("/tickets/:ticketId", support.UpdateTicket)
-			supportGroup.POST("/tickets/:ticketId/reply", support.ReplyToTicket)
-			supportGroup.POST("/tickets/:ticketId/close", support.CloseTicket)
-			supportGroup.POST("/tickets/:ticketId/escalate", support.EscalateTicket)
-
-			supportGroup.GET("/contact", contactAdmin.List)
-			supportGroup.GET("/contact/:messageId", contactAdmin.GetByID)
-			supportGroup.PATCH("/contact/:messageId", contactAdmin.Update)
-			supportGroup.POST("/contact/:messageId/reply", contactAdmin.Reply)
-			supportGroup.DELETE("/contact/:messageId", contactAdmin.Delete)
-
-			supportGroup.GET("/logs", support.SupportLogs)
-			supportGroup.GET("/logs/export", support.ExportLogs)
-		}
-
-		adminFaqGroup := protected.Group("/support/faq")
-		{
-			adminFaqGroup.GET("", faq.List)
-			adminFaqGroup.POST("", faq.Create)
-			adminFaqGroup.GET("/:faqId", faq.GetByID)
-			adminFaqGroup.PATCH("/:faqId", faq.Update)
-			adminFaqGroup.DELETE("/:faqId", faq.Delete)
-			adminFaqGroup.PUT("/reorder", faq.Reorder)
+			workspace.GET("/audit-logs", astron.listAuditLogs)
+			workspace.GET("/audit-logs/:entryId", astron.getAuditLog)
 		}
 	}
 }
@@ -852,6 +323,113 @@ func (h *apiHandler) updateMe(c *gin.Context) {
 		"emailVerifiedAt":   user.EmailVerifiedAt,
 		"passwordChangedAt": user.PasswordChangedAt,
 	})
+}
+
+func (h *apiHandler) getMyPreferences(c *gin.Context) {
+	principal, _ := h.principal(c)
+	preferences, err := h.deps.UserService.GetPreferences(c.Request.Context(), principal)
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, preferences)
+}
+
+func (h *apiHandler) updateMyPreferences(c *gin.Context) {
+	var req services.UserPreferencesDTO
+	if c.ShouldBindJSON(&req) != nil {
+		utils.Error(c, utils.ErrValidationFailed)
+		return
+	}
+	principal, _ := h.principal(c)
+	preferences, err := h.deps.UserService.UpdatePreferences(c.Request.Context(), principal, req)
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, preferences)
+}
+
+func (h *apiHandler) listNotifications(c *gin.Context) {
+	principal, _ := h.principal(c)
+	limit, offset := paginationParams(c)
+	unreadOnly := c.Query("unread") == "true"
+	items, total, err := h.deps.NotificationService.List(c.Request.Context(), principal.UserID, unreadOnly, limit, offset)
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	hasMore := int64(offset+len(items)) < total
+	utils.List(c, items, "", hasMore)
+}
+
+func (h *apiHandler) getNotification(c *gin.Context) {
+	item, err := h.deps.NotificationService.GetByID(c.Request.Context(), c.Param("notificationId"))
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, item)
+}
+
+func (h *apiHandler) markNotificationRead(c *gin.Context) {
+	if err := h.deps.NotificationService.MarkRead(c.Request.Context(), c.Param("notificationId")); err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, gin.H{"updated": true})
+}
+
+func (h *apiHandler) markAllNotificationsRead(c *gin.Context) {
+	principal, _ := h.principal(c)
+	if err := h.deps.NotificationService.MarkAllRead(c.Request.Context(), principal.UserID); err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, gin.H{"updated": true})
+}
+
+func (h *apiHandler) deleteNotification(c *gin.Context) {
+	if err := h.deps.NotificationService.Delete(c.Request.Context(), c.Param("notificationId")); err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, gin.H{"deleted": true})
+}
+
+func (h *apiHandler) unreadNotificationCount(c *gin.Context) {
+	principal, _ := h.principal(c)
+	count, err := h.deps.NotificationService.UnreadCount(c.Request.Context(), principal.UserID)
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, gin.H{"count": count})
+}
+
+func (h *apiHandler) getNotificationPreferences(c *gin.Context) {
+	principal, _ := h.principal(c)
+	preferences, err := h.deps.UserService.GetNotificationPreferences(c.Request.Context(), principal)
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, preferences)
+}
+
+func (h *apiHandler) updateNotificationPreferences(c *gin.Context) {
+	var req services.NotificationPreferencesDTO
+	if c.ShouldBindJSON(&req) != nil {
+		utils.Error(c, utils.ErrValidationFailed)
+		return
+	}
+	principal, _ := h.principal(c)
+	preferences, err := h.deps.UserService.UpdateNotificationPreferences(c.Request.Context(), principal, req)
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, preferences)
 }
 
 func (h *apiHandler) listWorkspaces(c *gin.Context) {
@@ -1008,4 +586,28 @@ func (h *apiHandler) webhook(c *gin.Context) {
 	payload, _ := io.ReadAll(io.LimitReader(c.Request.Body, 1<<20))
 	_ = payload
 	utils.Success(c, http.StatusAccepted, gin.H{"accepted": true})
+}
+
+func paginationParams(c *gin.Context) (int, int) {
+	limit := intQuery(c, "limit", 20)
+	if limit < 1 || limit > 100 {
+		limit = 20
+	}
+	offset := intQuery(c, "offset", 0)
+	if offset < 0 {
+		offset = 0
+	}
+	return limit, offset
+}
+
+func intQuery(c *gin.Context, key string, fallback int) int {
+	value := c.Query(key)
+	if value == "" {
+		return fallback
+	}
+	parsed, err := strconv.Atoi(value)
+	if err != nil {
+		return fallback
+	}
+	return parsed
 }

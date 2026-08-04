@@ -7,8 +7,8 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
-	"github.com/skygenesisenterprise/kami-sama/server/src/config"
-	"github.com/skygenesisenterprise/kami-sama/server/src/interfaces"
+	"github.com/skygenesisenterprise/astron-collection/server/src/config"
+	"github.com/skygenesisenterprise/astron-collection/server/src/interfaces"
 	"gorm.io/gorm"
 )
 
@@ -78,17 +78,23 @@ func TestProtectedRoutesRequireAuthentication(t *testing.T) {
 	})
 
 	protected := []string{
-		"/api/v1/platform/home",
-		"/api/v1/platform/wallet",
-		"/api/v1/platform/user-info",
-		"/api/v1/platform/security",
-		"/api/v1/platform/applications",
-		"/api/v1/platform/data-privacy",
-		"/api/v1/platform/contacts",
-		"/api/v1/platform/family",
-		"/api/v1/platform/storage",
-		"/api/v1/platform/settings",
+		"/api/v1/me",
+		"/api/v1/me/preferences",
 		"/api/v1/workspaces",
+		"/api/v1/workspaces/w-1",
+		"/api/v1/workspaces/w-1/members",
+		"/api/v1/workspaces/w-1/bots",
+		"/api/v1/workspaces/w-1/api-keys",
+		"/api/v1/workspaces/w-1/logs",
+		"/api/v1/workspaces/w-1/protect/rules",
+		"/api/v1/workspaces/w-1/protect/events",
+		"/api/v1/workspaces/w-1/player/sessions",
+		"/api/v1/workspaces/w-1/player/playbacks",
+		"/api/v1/workspaces/w-1/webhooks",
+		"/api/v1/workspaces/w-1/billing/subscription",
+		"/api/v1/workspaces/w-1/integrations",
+		"/api/v1/workspaces/w-1/audit-logs",
+		"/api/v1/notifications",
 	}
 
 	for _, target := range protected {

@@ -10,10 +10,10 @@ type Locale = (typeof routing.locales)[number];
  * Domain ↔ route group mapping
  * -------------------------------------------------------------------------- */
 
-type DomainGroup = "sso" | "studios" | "main";
+type DomainGroup = "sso" | "manager" | "main";
 
 const SSO_HOSTS = ["sso.astron-collection.localhost", "sso.astron-collection.lan"];
-const STUDIOS_HOSTS = ["studios.astron-collection.localhost", "studios.astron-collection.lan"];
+const MANAGER_HOSTS = ["manager.astron-collection.localhost", "manager.astron-collection.lan"];
 const MAIN_HOSTS = ["astron-collection.localhost", "astron-collection.lan", "astron-collection.com", "www.astron-collection.com"];
 
 const AUTH_PATHS = [
@@ -32,7 +32,8 @@ const PLATFORM_PATHS = ["/dash"];
 function detectGroup(host: string): DomainGroup {
   const hostname = host.split(":")[0];
   if (SSO_HOSTS.includes(hostname)) return "sso";
-  if (STUDIOS_HOSTS.includes(hostname)) return "studios";
+  if (MANAGER_HOSTS.includes(hostname)) return "manager";
+  if (MAIN_HOSTS.includes(hostname)) return "main";
   return "main";
 }
 
@@ -44,8 +45,8 @@ function getDomainForGroup(group: DomainGroup, currentUrl: URL): string {
     switch (group) {
       case "sso":
         return `${protocol}//sso.astron-collection.localhost`;
-      case "studios":
-        return `${protocol}//studios.astron-collection.localhost`;
+      case "manager":
+        return `${protocol}//manager.astron-collection.localhost`;
       case "main":
         return `${protocol}//astron-collection.localhost`;
     }
@@ -54,27 +55,16 @@ function getDomainForGroup(group: DomainGroup, currentUrl: URL): string {
   switch (group) {
     case "sso":
       return `${protocol}//sso.astron-collection.com`;
-    case "studios":
-      return `${protocol}//studios.astron-collection.com`;
+    case "manager":
+      return `${protocol}//manager.astron-collection.com`;
     case "main":
       return `${protocol}//${hostname}`;
   }
 }
 
-function belongsToGroup(pathname: string, group: DomainGroup): boolean {
-  switch (group) {
-    case "sso":
-      return AUTH_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"));
-    case "studios":
-      return PLATFORM_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"));
-    case "main":
-      return true;
-  }
-}
-
 function getTargetGroup(pathname: string): DomainGroup | null {
   if (AUTH_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"))) return "sso";
-  if (PLATFORM_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"))) return "studios";
+  if (PLATFORM_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"))) return "manager";
   return null;
 }
 
@@ -147,7 +137,7 @@ export default function proxy(request: NextRequest) {
     switch (currentGroup) {
       case "sso":
         return NextResponse.redirect(new URL("/login", request.url));
-      case "studios":
+      case "manager":
         return NextResponse.redirect(new URL("/dash", request.url));
       case "main":
       default: {
@@ -173,8 +163,8 @@ export default function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  /* ---- Studios domain: only platform routes ---- */
-  if (currentGroup === "studios") {
+  /* ---- Manager domain: only platform routes ---- */
+  if (currentGroup === "manager") {
     if (PLATFORM_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"))) {
       if (IS_DEVELOPMENT) return NextResponse.next();
       if (isAuthCookiePresent(request) && hasAdminAccess(request)) return NextResponse.next();

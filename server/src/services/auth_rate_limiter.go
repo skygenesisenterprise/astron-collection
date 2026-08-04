@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	redisclient "github.com/skygenesisenterprise/kami-sama/server/internal/redis"
+	redisclient "github.com/skygenesisenterprise/astron-collection/server/internal/redis"
 )
 
 type AuthRateLimiter struct {

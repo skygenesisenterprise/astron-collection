@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/skygenesisenterprise/kami-sama/server/src/models"
-	"github.com/skygenesisenterprise/kami-sama/server/src/utils"
+	"github.com/skygenesisenterprise/astron-collection/server/src/models"
+	"github.com/skygenesisenterprise/astron-collection/server/src/utils"
 )
 
 type NotificationService struct {

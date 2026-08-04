@@ -12,11 +12,11 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	redisclient "github.com/skygenesisenterprise/kami-sama/server/internal/redis"
-	"github.com/skygenesisenterprise/kami-sama/server/src/config"
-	"github.com/skygenesisenterprise/kami-sama/server/src/middleware"
-	"github.com/skygenesisenterprise/kami-sama/server/src/routes"
-	"github.com/skygenesisenterprise/kami-sama/server/src/services"
+	redisclient "github.com/skygenesisenterprise/astron-collection/server/internal/redis"
+	"github.com/skygenesisenterprise/astron-collection/server/src/config"
+	"github.com/skygenesisenterprise/astron-collection/server/src/middleware"
+	"github.com/skygenesisenterprise/astron-collection/server/src/routes"
+	"github.com/skygenesisenterprise/astron-collection/server/src/services"
 )
 
 type runtimeMode string
@@ -153,42 +153,19 @@ func main() {
 		logger.Warn("failed to ensure first user has admin roles", "error", err)
 	}
 
-	oauthService := services.NewOAuthService(cfg.OAuth, repos, authService, identityProvider, workspaceService, nil)
-
-	animeService := services.NewAnimeService(repos)
-	_episodeService := services.NewEpisodeService(repos)
-	genreService := services.NewGenreService(repos)
-	studioService := services.NewStudioService(repos)
-	characterService := services.NewCharacterService(repos)
-	mediaService := services.NewMediaService(repos)
-	communityService := services.NewCommunityService(repos)
-	watchService := services.NewWatchService(repos)
-	schedulingService := services.NewSchedulingService(repos)
 	notificationService := services.NewNotificationService(repos)
-	searchService := services.NewSearchService(repos)
-	settingsService := services.NewSettingsService(repos)
-	mediaSourceService := services.NewMediaSourceService(db.Gorm(), cfg.MediaSource)
-	libraryService := services.NewLibraryService(repos)
-	dashboardService := services.NewDashboardService(db.Gorm())
-	collectionService := services.NewCollectionService(db.Gorm())
-	analyticsService := services.NewAnalyticsService(db.Gorm())
-	adminUserService := services.NewAdminUserService(repos)
-	adminProfileService := services.NewAdminProfileService(repos)
-	adminRoleService := services.NewAdminRoleService(repos)
-	adminPermissionService := services.NewAdminPermissionService(repos)
-	supportService := services.NewSupportService(repos)
-	contactAdminService := services.NewContactAdminService(repos)
-	faqService := services.NewFAQService(repos)
-	moderationService := services.NewModerationService(repos)
 	notificationAdminService := services.NewNotificationAdminService(repos)
-	calendarService := services.NewCalendarService(repos)
-	premiereService := services.NewPremiereService(repos)
-	systemService := services.NewSystemService(db.Gorm(), redis)
-	settingsAdminService := services.NewSettingsAdminService(db.Gorm(), repos)
-	profileService := services.NewProfileService(db, repos)
-	anilistService := services.NewAnilistService(cfg.Anilist, repos, logger)
 	mfaService := services.NewMfaService(cfg.Auth, db, repos)
-	recommendationService := services.NewRecommendationService(db.Gorm())
+
+	botService := services.NewBotService(repos)
+	apiKeyService := services.NewApiKeyService(repos)
+	logService := services.NewLogService(repos)
+	protectService := services.NewProtectService(repos)
+	playerService := services.NewPlayerService(repos)
+	webhookService := services.NewWebhookService(repos)
+	billingService := services.NewBillingService(repos)
+	integrationService := services.NewIntegrationService(repos)
+	auditLogService := services.NewAuditLogService(repos)
 
 	mode, err := parseRuntimeMode(os.Args[1:])
 	if err != nil {
@@ -212,44 +189,21 @@ func main() {
 		EventBus:                 eventBus,
 		IdentityProvider:         identityProvider,
 		AuthService:              authService,
-		OAuthService:             oauthService,
 		UserService:              userService,
 		WorkspaceService:         workspaceService,
-		Repos:                    repos,
-		AnimeService:             animeService,
-		EpisodeService:           _episodeService,
-		GenreService:             genreService,
-		StudioService:            studioService,
-		CharacterService:         characterService,
-		MediaService:             mediaService,
-		CommunityService:         communityService,
-		WatchService:             watchService,
-		SchedulingService:        schedulingService,
 		NotificationService:      notificationService,
-		SearchService:            searchService,
-		SettingsService:          settingsService,
-		MediaSourceService:       mediaSourceService,
-		LibraryService:           libraryService,
-		DashboardService:         dashboardService,
-		CollectionService:        collectionService,
-		AnalyticsService:         analyticsService,
-		AdminUserService:         adminUserService,
-		AdminProfileService:      adminProfileService,
-		AdminRoleService:         adminRoleService,
-		AdminPermissionService:   adminPermissionService,
-		CalendarService:          calendarService,
-		PremiereService:          premiereService,
-		SystemService:            systemService,
-		SupportService:           supportService,
-		ContactAdminService:      contactAdminService,
-		FAQService:               faqService,
-		ModerationService:        moderationService,
 		NotificationAdminService: notificationAdminService,
-		SettingsAdminService:     settingsAdminService,
-		AnilistService:           anilistService,
-		ProfileService:           profileService,
 		MfaService:               mfaService,
-		RecommendationService:    recommendationService,
+		BotService:               botService,
+		ApiKeyService:            apiKeyService,
+		LogService:               logService,
+		ProtectService:           protectService,
+		PlayerService:            playerService,
+		WebhookService:           webhookService,
+		BillingService:           billingService,
+		IntegrationService:       integrationService,
+		AuditLogService:          auditLogService,
+		Repos:                    repos,
 		RuntimeRole:              string(mode),
 	})
 

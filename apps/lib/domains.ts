@@ -2,22 +2,22 @@ export type Environment = 'production' | 'localhost'
 
 export interface DomainConfig {
   main: string
-  studios: string
+  manager: string
   sso: string
   protocol: string
 }
 
 const DOMAINS: Record<Environment, DomainConfig> = {
   production: {
-    main: 'vaelixbank.com',
-    studios: 'console.vaelixbank.com',
-    sso: 'sso.vaelixbank.com',
+    main: 'astron-collection.com',
+    manager: 'manager.astron-collection.com',
+    sso: 'sso.astron-collection.com',
     protocol: 'https',
   },
   localhost: {
-    main: 'vaelixbank.localhost',
-    studios: 'console.vaelixbank.localhost',
-    sso: 'sso.vaelixbank.localhost',
+    main: 'astron-collection.localhost',
+    manager: 'manager.astron-collection.localhost',
+    sso: 'sso.astron-collection.localhost',
     protocol: 'http',
   },
 }
@@ -31,11 +31,11 @@ export function getDomainConfig(): DomainConfig {
   return DOMAINS[detectEnvironment()]
 }
 
-export function getDomainUrl(service: 'main' | 'studios' | 'sso', path: string = ''): string {
+export function getDomainUrl(service: 'main' | 'manager' | 'sso', path: string = ''): string {
   const config = getDomainConfig()
   return `${config.protocol}://${config[service]}${path}`
 }
 
-export function switchDomain(target: 'main' | 'studios' | 'sso', path: string): string {
+export function switchDomain(target: 'main' | 'manager' | 'sso', path: string): string {
   return getDomainUrl(target, path)
 }

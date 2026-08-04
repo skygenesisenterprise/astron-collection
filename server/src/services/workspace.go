@@ -5,10 +5,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/skygenesisenterprise/kami-sama/server/src/config"
-	"github.com/skygenesisenterprise/kami-sama/server/src/interfaces"
-	"github.com/skygenesisenterprise/kami-sama/server/src/models"
-	"github.com/skygenesisenterprise/kami-sama/server/src/utils"
+	"github.com/skygenesisenterprise/astron-collection/server/src/config"
+	"github.com/skygenesisenterprise/astron-collection/server/src/interfaces"
+	"github.com/skygenesisenterprise/astron-collection/server/src/models"
+	"github.com/skygenesisenterprise/astron-collection/server/src/utils"
 	"gorm.io/gorm"
 )
 

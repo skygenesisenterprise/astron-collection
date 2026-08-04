@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: "../",
   },
-  allowedDevOrigins: ["vaelixbank.com", "api.vaelixbank.com", "sso.vaelixbank.com", "vaelixbank.localhost", "api.vaelixbank.localhost", "sso.vaelixbank.localhost", "studios.vaelixbank.localhost"],
+  allowedDevOrigins: ["astron-collection.localhost", "api.astron-collection.localhost", "sso.astron-collection.localhost", "manager.astron-collection.localhost", "astron-collection.lan", "api.astron-collection.lan", "sso.astron-collection.lan", "manager.astron-collection.lan", "astron-collection.com", "api.astron-collection.com", "sso.astron-collection.com", "manager.astron-collection.com"],
   outputFileTracingExcludes: {
     "*": ["test/**"],
   },

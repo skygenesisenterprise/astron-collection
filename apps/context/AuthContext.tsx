@@ -75,7 +75,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Subscribe to session changes from other tabs.
   // IMPORTANT: skip the initial synchronous callback when status is still
   // "loading" — the bootstrap effect handles the first auth decision.
-  // Without this guard, navigating to a new subdomain (e.g. studios)
+  // Without this guard, navigating to a new subdomain (e.g. manager)
   // would immediately set "unauthenticated" (localStorage is per-origin)
   // before the cookie-based refresh has a chance to succeed.
   React.useEffect(() => {

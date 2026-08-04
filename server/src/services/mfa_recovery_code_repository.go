@@ -2,11 +2,9 @@ package services
 
 import (
 	"context"
-
 	"time"
 
-	"github.com/skygenesisenterprise/kami-sama/server/src/models"
-	"github.com/skygenesisenterprise/kami-sama/server/src/utils"
+	"github.com/skygenesisenterprise/astron-collection/server/src/models"
 	"gorm.io/gorm"
 )
 
@@ -32,7 +30,7 @@ func (r *mfaRecoveryCodeRepository) GetByUserID(ctx context.Context, userID stri
 func (r *mfaRecoveryCodeRepository) GetByID(ctx context.Context, id string) (*models.MfaRecoveryCode, error) {
 	var item models.MfaRecoveryCode
 	err := r.db.WithContext(ctx).First(&item, "id = ?", id).Error
-	return &item, normalizeNotFound(err, utils.NewError(404, "MFA_RECOVERY_CODE_NOT_FOUND", "The requested MFA recovery code was not found.", nil))
+	return &item, normalizeNotFound(err, "MFA_RECOVERY_CODE_NOT_FOUND")
 }
 
 func (r *mfaRecoveryCodeRepository) MarkUsed(ctx context.Context, id string) error {

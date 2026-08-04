@@ -33,8 +33,8 @@ export function useDomainSwitcher() {
         environment: 'localhost',
       },
       {
-        label: 'Studios',
-        href: getDomainUrl('studios', pathname),
+        label: 'Manager',
+        href: getDomainUrl('manager', pathname),
         isCurrent: false,
         environment: currentEnvironment,
       },
