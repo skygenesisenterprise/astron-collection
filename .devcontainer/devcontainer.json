@@ -1,77 +1,46 @@
 {
-  "name": "aether-vault",
-  "dockerComposeFile": "docker-compose.yml",
-  "service": "app",
-  "workspaceFolder": "/app",
+  "name": "Gitea DevContainer",
+  "image": "mcr.microsoft.com/devcontainers/go:1.25-trixie",
+  "containerEnv": {
+    // override "local" from packaged version
+    "GOTOOLCHAIN": "auto"
+  },
   "features": {
-    "ghcr.io/devcontainers/features/go:1": {
+    // installs nodejs into container
+    "ghcr.io/devcontainers/features/node:1": {
       "version": "latest"
     },
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "18",
-      "nodeGypDependencies": true
+    "ghcr.io/devcontainers/features/git-lfs:1.2.5": {},
+    "ghcr.io/jsburckhardt/devcontainer-features/uv:1": {},
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.13"
     },
-    "ghcr.io/devcontainers-contrib/features/pnpm:2": {}
+    "ghcr.io/warrenbuckley/codespace-features/sqlite:1": {}
   },
   "customizations": {
     "vscode": {
+      "settings": {},
+      // same extensions as Gitpod, should match /.gitpod.yml
       "extensions": [
-        "ms-vscode.vscode-typescript-next",
-        "esbenp.prettier-vscode",
+        "editorconfig.editorconfig",
         "dbaeumer.vscode-eslint",
-        "ms-vscode.vscode-json",
         "golang.go",
-        "Prisma.prisma",
-        "ms-vscode.vscode-eslint",
-        "bradlc.vscode-tailwindcss",
-        "ms-vscode.vscode-thunder-client"
-      ],
-      "settings": {
-        "editor.formatOnSave": true,
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.codeActionsOnSave": {
-          "source.fixAll.eslint": "explicit",
-          "source.organizeImports": true
-        },
-        "typescript.tsdk": "node_modules/typescript/lib",
-        "typescript.enablePromptUseWorkspaceTsdk": true,
-        "typescript.preferences.importModuleSpecifier": "relative",
-        "files.exclude": {
-          "**/node_modules": true,
-          "**/dist": true,
-          "**/.next": true,
-          "**/build": true
-        },
-        "search.exclude": {
-          "**/node_modules": true,
-          "**/dist": true,
-          "**/.next": true,
-          "**/build": true
-        },
-        "go.useLanguageServer": true,
-        "go.formatTool": "goimports",
-        "go.lintTool": "golangci-lint",
-        "go.buildOnSave": "package",
-        "go.lintOnSave": "package",
-        "go.vetOnSave": "package"
-      }
+        "stylelint.vscode-stylelint",
+        "DavidAnson.vscode-markdownlint",
+        "Vue.volar",
+        "ms-azuretools.vscode-docker",
+        "vitest.explorer",
+        "cweijan.vscode-database-client2",
+        "GitHub.vscode-pull-request-github",
+        "Azurite.azurite"
+      ]
     }
   },
-  "postCreateCommand": "pnpm install && corepack enable",
-  "forwardPorts": [3000, 5173, 8080, 9090],
   "portsAttributes": {
     "3000": {
-      "label": "Frontend",
-      "onAutoForward": "notify"
-    },
-    "8080": {
-      "label": "Backend API",
-      "onAutoForward": "notify"
-    },
-    "9090": {
-      "label": "API Documentation",
+      "label": "Gitea Web",
       "onAutoForward": "notify"
     }
   },
-  "remoteUser": "node"
+  "postCreateCommand": "make deps"
 }
