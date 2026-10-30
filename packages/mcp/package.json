@@ -1,5 +1,5 @@
 {
-  "name": "@notploy/mcp",
+  "name": "@astron-collection/mcp",
   "version": "1.0.0",
   "description": "MCP Server for Notploy API",
   "main": "build/index.js",

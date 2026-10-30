@@ -103,11 +103,11 @@ COPY apps/notploy/.env.production.example ./.env.production
 # round-trip from every CI build without changing the produced artifacts.
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN pnpm --filter=@notploy/server build
-RUN pnpm --filter=@notploy/status build
-RUN pnpm --filter=./apps/notploy run build
+RUN pnpm --filter=@astron-collection/server build
+RUN pnpm --filter=@astron-collection/status build
+RUN pnpm --filter=./apps/astron run build
 
-RUN pnpm --filter=./apps/notploy --prod deploy --legacy /prod/notploy
+RUN pnpm --filter=./apps/astron --prod deploy --legacy /prod/astron
 
 RUN cp -R /usr/src/app/apps/notploy/.next /prod/notploy/.next
 RUN cp -R /usr/src/app/apps/notploy/dist /prod/notploy/dist

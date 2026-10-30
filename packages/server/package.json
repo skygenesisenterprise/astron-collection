@@ -1,9 +1,9 @@
 {
-  "name": "@notploy/server",
+  "name": "@astron-collection/server",
   "version": "1.2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/skygenesisenterprise/notploy.git",
+    "url": "https://github.com/skygenesisenterprise/astron-collection.git",
     "directory": "packages/server"
   },
   "main": "./src/index.ts",
