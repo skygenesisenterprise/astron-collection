@@ -1,4 +1,4 @@
-import type { desecDnsConfigSchema } from "@notploy/server/db/schema";
+import type { desecDnsConfigSchema } from "@astron-collection/server/db/schema";
 import type { z } from "zod";
 import { createDnsHttp, stripTrailingDot, toSubdomain } from "../http";
 import type { DnsClient } from "../types";

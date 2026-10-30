@@ -18,13 +18,13 @@ import {
 	stopService,
 	stopServiceRemote,
 	updateLibsqlById,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import {
 	addNewService,
 	checkServiceAccess,
 	checkServicePermissionAndAccess,
-} from "@notploy/server/services/permission";
-import { assertServiceMoveAllowed } from "@notploy/server/services/service-move";
+} from "@astron-collection/server/services/permission";
+import { assertServiceMoveAllowed } from "@astron-collection/server/services/service-move";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";

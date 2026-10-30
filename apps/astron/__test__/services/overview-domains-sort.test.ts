@@ -1,5 +1,5 @@
-import type { OverviewDomain } from "@notploy/server/services/overview";
-import { sortOverviewDomains } from "@notploy/server/services/overview";
+import type { OverviewDomain } from "@astron-collection/server/services/overview";
+import { sortOverviewDomains } from "@astron-collection/server/services/overview";
 import { describe, expect, test } from "vitest";
 
 const makeDomain = (overrides: Partial<OverviewDomain>): OverviewDomain => ({

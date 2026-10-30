@@ -20,7 +20,7 @@ import { organization } from "./account";
  * The Traffic Manager keeps three concerns apart, because they answer different
  * questions and come from different collectors:
  *
- * - **Web properties** (`webProperties`): the domains Notploy watches, grouped
+ * - **Web properties** (`webProperties`): the domains Astron Collection watches, grouped
  *   by the platform (website, docs, app, api, ...) they belong to.
  * - **Collection sources** (`trafficSources`): where the numbers come from. A
  *   property may be observed by a reverse proxy (Traefik access logs) and/or by
@@ -80,7 +80,7 @@ export const trafficDeviceType = pgEnum("trafficDeviceType", [
 
 /**
  * A watched domain, attached to a platform label. Several domains may share a
- * platform (`notploy.com`, `www.notploy.com`), and several platforms may live in
+ * platform (`astron-collection.com`, `www.astron-collection.com`), and several platforms may live in
  * the same organization.
  */
 export const webProperties = pgTable(

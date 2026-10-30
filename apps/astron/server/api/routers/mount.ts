@@ -13,12 +13,12 @@ import {
 	findRedisById,
 	getServiceContainer,
 	updateMount,
-} from "@notploy/server";
-import type { ServiceType } from "@notploy/server/db/schema/mount";
+} from "@astron-collection/server";
+import type { ServiceType } from "@astron-collection/server/db/schema/mount";
 import {
 	checkServiceAccess,
 	checkServicePermissionAndAccess,
-} from "@notploy/server/services/permission";
+} from "@astron-collection/server/services/permission";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { audit } from "@/server/api/utils/audit";

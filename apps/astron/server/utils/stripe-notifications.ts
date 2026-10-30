@@ -1,6 +1,6 @@
-import InvoiceNotificationEmail from "@notploy/server/emails/emails/invoice-notification";
-import PaymentFailedEmail from "@notploy/server/emails/emails/payment-failed";
-import { sendEmail } from "@notploy/server/verification/send-verification-email";
+import InvoiceNotificationEmail from "@astron-collection/server/emails/emails/invoice-notification";
+import PaymentFailedEmail from "@astron-collection/server/emails/emails/payment-failed";
+import { sendEmail } from "@astron-collection/server/verification/send-verification-email";
 import { render } from "@react-email/components";
 import { format } from "date-fns";
 import type Stripe from "stripe";
@@ -51,7 +51,7 @@ export const sendInvoiceEmail = async (
 			const pdfBuffer = await downloadPdf(invoice.invoice_pdf);
 			if (pdfBuffer) {
 				attachments.push({
-					filename: `notploy-invoice-${invoice.number || invoice.id}.pdf`,
+					filename: `astron-collection-invoice-${invoice.number || invoice.id}.pdf`,
 					content: pdfBuffer,
 				});
 			}
@@ -59,7 +59,7 @@ export const sendInvoiceEmail = async (
 
 		await sendEmail({
 			email: admin.email,
-			subject: `Notploy Invoice ${invoice.number || ""} - ${amountFormatted}`,
+			subject: `Astron Collection Invoice ${invoice.number || ""} - ${amountFormatted}`,
 			text: htmlContent,
 			attachments,
 		});
@@ -97,7 +97,7 @@ export const sendPaymentFailedEmail = async (
 
 		await sendEmail({
 			email: admin.email,
-			subject: `Action required: Notploy payment failed - ${amountFormatted}`,
+			subject: `Action required: Astron Collection payment failed - ${amountFormatted}`,
 			text: htmlContent,
 		});
 

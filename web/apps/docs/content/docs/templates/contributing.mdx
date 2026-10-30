@@ -5,7 +5,7 @@ description: "Add or fix a blueprint, validate it, and get it into the gallery."
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-**Purpose** — Every blueprint lives in `templates/blueprints/` of the Notploy repository. Adding one is a normal pull request: create the folder, validate it locally, preview it in the gallery and open the PR. Missing a blueprint? The gallery's **Add Template** button opens a GitHub issue, and each template's **Edit Template** link points at its folder.
+**Purpose** — Every blueprint lives in `templates/blueprints/` of the Astron Collection repository. Adding one is a normal pull request: create the folder, validate it locally, preview it in the gallery and open the PR. Missing a blueprint? The gallery's **Add Template** button opens a GitHub issue, and each template's **Edit Template** link points at its folder.
 
 ## Repository layout
 
@@ -82,18 +82,18 @@ gallery serves, and both `pnpm dev` and `pnpm build` of the gallery app run it a
 ## Preview the gallery
 
 ```bash
-pnpm --filter=@notploy/templates-app dev
+pnpm --filter=@astron-collection/templates-app dev
 ```
 
 The dev server regenerates the catalogue, copies the blueprints into the bundle and serves the
-gallery locally. Because a local Notploy checkout reads `templates/blueprints` directly, the same
-blueprint can be deployed from the panel right away — set `NOTPLOY_TEMPLATES_DIR` if your blueprints
+gallery locally. Because a local Astron Collection checkout reads `templates/blueprints` directly, the same
+blueprint can be deployed from the panel right away — set `ASTRON_COLLECTION_TEMPLATES_DIR` if your blueprints
 live outside the checkout.
 
 ## Publish
 
-- The gallery is built from the **repository root** with `templates/Dockerfile` (the pnpm workspace lives there): a multi-stage build that runs `pnpm --filter=@notploy/templates-app build`, then serves the output with nginx on port `80`.
-- Release tags of the form `vX.Y.Z-templates` publish the `notploy-templates` image, which is how [templates.notploy.com](https://templates.notploy.com) is updated.
+- The gallery is built from the **repository root** with `templates/Dockerfile` (the pnpm workspace lives there): a multi-stage build that runs `pnpm --filter=@astron-collection/templates-app build`, then serves the output with nginx on port `80`.
+- Release tags of the form `vX.Y.Z-templates` publish the `astron-collection-templates` image, which is how [templates.astron-collection.com](https://templates.astron-collection.com) is updated.
 
 ## Checklist before opening a pull request
 
@@ -108,5 +108,5 @@ live outside the checkout.
 
 - [Blueprint anatomy](/docs/templates/blueprint)
 - [Template configuration](/docs/templates/configuration)
-- [Contributing to Notploy](/docs/core/develop/contributing)
+- [Contributing to Astron Collection](/docs/core/develop/contributing)
 - [Templates gallery](/docs/templates/gallery)

@@ -1,5 +1,5 @@
-import type { AuditResourceType } from "@notploy/server/db/schema";
-import { ProjectQuotaExceededError } from "@notploy/server/services/project-quota";
+import type { AuditResourceType } from "@astron-collection/server/db/schema";
+import { ProjectQuotaExceededError } from "@astron-collection/server/services/project-quota";
 import { audit } from "./audit";
 
 interface QuotaAuditCtx {

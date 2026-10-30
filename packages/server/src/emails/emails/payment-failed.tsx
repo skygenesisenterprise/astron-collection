@@ -34,7 +34,7 @@ export const PaymentFailedEmail = ({
 	date = "2024-01-01",
 	hostedInvoiceUrl = "https://invoice.stripe.com/example",
 }: TemplateProps) => {
-	const previewText = `Action required: Your Notploy payment for ${amountDue} failed`;
+	const previewText = `Action required: Your Astron Collection payment for ${amountDue} failed`;
 	return (
 		<Html>
 			<Head />
@@ -45,10 +45,10 @@ export const PaymentFailedEmail = ({
 						{/* Header */}
 						<Section className="bg-[#09090b] rounded-t-xl px-[40px] py-[32px] text-center">
 							<Img
-								src="https://raw.githubusercontent.com/skygenesisenterprise/notploy/refs/heads/master/web/apps/docs/public/logo-notploy-blackpng.png"
+								src="https://raw.githubusercontent.com/skygenesisenterprise/astron-collection/refs/heads/master/web/apps/docs/public/logo-astron-collection-blackpng.png"
 								width="190"
 								height="120"
-								alt="Notploy"
+								alt="Astron Collection"
 								className="my-0 mx-auto"
 							/>
 						</Section>
@@ -140,10 +140,10 @@ export const PaymentFailedEmail = ({
 							<Text className="text-[#a1a1aa] text-[12px] leading-[18px] m-0">
 								This is an automated email from{" "}
 								<Link
-									href="https://notploy.com"
+									href="https://astron-collection.com"
 									className="text-[#71717a] underline"
 								>
-									Notploy Cloud
+									Astron Collection Cloud
 								</Link>
 								. If you have any questions about your billing, please contact
 								our{" "}

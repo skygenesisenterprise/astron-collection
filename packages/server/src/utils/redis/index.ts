@@ -1,7 +1,7 @@
 import { Redis } from "ioredis";
 
 /**
- * Shared Redis connection for the Notploy control plane.
+ * Shared Redis connection for the Astron Collection control plane.
  *
  * Redis is optional. When `REDIS_URL` is unset (a plain self-hosted install)
  * every helper degrades to a no-op so the app keeps running on its in-process

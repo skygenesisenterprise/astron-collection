@@ -1,4 +1,4 @@
-import type { customDnsConfigSchema } from "@notploy/server/db/schema";
+import type { customDnsConfigSchema } from "@astron-collection/server/db/schema";
 import type { z } from "zod";
 import { createDnsHttp, stripTrailingDot } from "../http";
 import type { DnsClient } from "../types";
@@ -19,7 +19,7 @@ interface CustomRecord {
 }
 
 /**
- * Contract for organizations with their own DNS platform. Notploy does not need
+ * Contract for organizations with their own DNS platform. Astron Collection does not need
  * to know the product natively — only this small documented interface:
  *
  *   GET    /zones

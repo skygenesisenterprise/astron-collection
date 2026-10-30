@@ -1,4 +1,4 @@
-import type { vultrDnsConfigSchema } from "@notploy/server/db/schema";
+import type { vultrDnsConfigSchema } from "@astron-collection/server/db/schema";
 import type { z } from "zod";
 import {
 	createDnsHttp,

@@ -1,7 +1,7 @@
 import {
 	validateBuildServer,
 	validateDeploymentTarget,
-} from "@notploy/server/services/deployment-target";
+} from "@astron-collection/server/services/deployment-target";
 import { TRPCError } from "@trpc/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -10,7 +10,7 @@ const { mockFindServerById, mockGetAccessibleServerIds } = vi.hoisted(() => ({
 	mockGetAccessibleServerIds: vi.fn(),
 }));
 
-vi.mock("@notploy/server/services/server", () => ({
+vi.mock("@astron-collection/server/services/server", () => ({
 	findServerById: mockFindServerById,
 	getAccessibleServerIds: mockGetAccessibleServerIds,
 }));

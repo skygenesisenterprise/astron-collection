@@ -1,7 +1,7 @@
 import {
 	execAsync,
 	execAsyncRemote,
-} from "@notploy/server/utils/process/execAsync";
+} from "@astron-collection/server/utils/process/execAsync";
 import { quote } from "shell-quote";
 
 export interface DockerImage {

@@ -1,4 +1,4 @@
-import { reconnectServicesToTraefik } from "@notploy/server/services/settings";
+import { reconnectServicesToTraefik } from "@astron-collection/server/services/settings";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
@@ -7,7 +7,7 @@ const mocks = vi.hoisted(() => ({
 	execAsyncRemote: vi.fn(),
 }));
 
-vi.mock("@notploy/server/db", () => ({
+vi.mock("@astron-collection/server/db", () => ({
 	db: {
 		query: {
 			compose: {
@@ -17,7 +17,7 @@ vi.mock("@notploy/server/db", () => ({
 	},
 }));
 
-vi.mock("@notploy/server/utils/process/execAsync", () => ({
+vi.mock("@astron-collection/server/utils/process/execAsync", () => ({
 	execAsync: mocks.execAsync,
 	execAsyncRemote: mocks.execAsyncRemote,
 }));
@@ -50,8 +50,8 @@ describe("reconnectServicesToTraefik", () => {
 
 		expect(mocks.execAsync).toHaveBeenCalledOnce();
 		expect(mocks.execAsync).toHaveBeenCalledWith(
-			'docker network connect first-compose $(docker ps --filter "name=notploy-traefik" -q) >/dev/null 2>&1\n' +
-				'docker network connect second-compose $(docker ps --filter "name=notploy-traefik" -q) >/dev/null 2>&1\n',
+			'docker network connect first-compose $(docker ps --filter "name=astron-collection-traefik" -q) >/dev/null 2>&1\n' +
+				'docker network connect second-compose $(docker ps --filter "name=astron-collection-traefik" -q) >/dev/null 2>&1\n',
 		);
 		expect(mocks.execAsyncRemote).not.toHaveBeenCalled();
 	});
@@ -64,7 +64,7 @@ describe("reconnectServicesToTraefik", () => {
 		expect(mocks.execAsyncRemote).toHaveBeenCalledOnce();
 		expect(mocks.execAsyncRemote).toHaveBeenCalledWith(
 			"server-id",
-			'docker network connect remote-compose $(docker ps --filter "name=notploy-traefik" -q) >/dev/null 2>&1\n',
+			'docker network connect remote-compose $(docker ps --filter "name=astron-collection-traefik" -q) >/dev/null 2>&1\n',
 		);
 		expect(mocks.execAsync).not.toHaveBeenCalled();
 	});

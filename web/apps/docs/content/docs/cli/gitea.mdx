@@ -1,27 +1,27 @@
 ---
 title: "Gitea"
-description: "Gitea connections, plus branch and repository lookups. Generated from the `notploy` command surface."
+description: "Gitea connections, plus branch and repository lookups. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Gitea connections, plus branch and repository lookups.
 
-`notploy gitea` exposes **8 commands**. They map one-to-one onto the `gitea.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection gitea` exposes **8 commands**. They map one-to-one onto the `gitea.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy gitea --help` to list these commands in your terminal, or
-	`notploy gitea <command> --help` for a single command.
+	Run `astron-collection gitea --help` to list these commands in your terminal, or
+	`astron-collection gitea <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy gitea create`
+### `astron-collection gitea create`
 
 Calls `POST /api/trpc/gitea.create`.
 
 ```bash
-notploy gitea create --giteaUrl <value> --name <value> [options]
+astron-collection gitea create --giteaUrl <value> --name <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -43,12 +43,12 @@ notploy gitea create --giteaUrl <value> --name <value> [options]
 | `--organizationName <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy gitea get-gitea-branches`
+### `astron-collection gitea get-gitea-branches`
 
 Calls `GET /api/trpc/gitea.getGiteaBranches`.
 
 ```bash
-notploy gitea get-gitea-branches --owner <value> --repositoryName <value> [options]
+astron-collection gitea get-gitea-branches --owner <value> --repositoryName <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -58,12 +58,12 @@ notploy gitea get-gitea-branches --owner <value> --repositoryName <value> [optio
 | `--giteaId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy gitea get-gitea-repositories`
+### `astron-collection gitea get-gitea-repositories`
 
 Calls `GET /api/trpc/gitea.getGiteaRepositories`.
 
 ```bash
-notploy gitea get-gitea-repositories --giteaId <value> [options]
+astron-collection gitea get-gitea-repositories --giteaId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -71,12 +71,12 @@ notploy gitea get-gitea-repositories --giteaId <value> [options]
 | `--giteaId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy gitea get-gitea-url`
+### `astron-collection gitea get-gitea-url`
 
 Calls `GET /api/trpc/gitea.getGiteaUrl`.
 
 ```bash
-notploy gitea get-gitea-url --giteaId <value> [options]
+astron-collection gitea get-gitea-url --giteaId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -84,24 +84,24 @@ notploy gitea get-gitea-url --giteaId <value> [options]
 | `--giteaId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy gitea gitea-providers`
+### `astron-collection gitea gitea-providers`
 
 Calls `GET /api/trpc/gitea.giteaProviders`.
 
 ```bash
-notploy gitea gitea-providers [options]
+astron-collection gitea gitea-providers [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy gitea one`
+### `astron-collection gitea one`
 
 Calls `GET /api/trpc/gitea.one`.
 
 ```bash
-notploy gitea one --giteaId <value> [options]
+astron-collection gitea one --giteaId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -109,12 +109,12 @@ notploy gitea one --giteaId <value> [options]
 | `--giteaId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy gitea test-connection`
+### `astron-collection gitea test-connection`
 
 Calls `POST /api/trpc/gitea.testConnection`.
 
 ```bash
-notploy gitea test-connection [options]
+astron-collection gitea test-connection [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -123,12 +123,12 @@ notploy gitea test-connection [options]
 | `--organizationName <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy gitea update`
+### `astron-collection gitea update`
 
 Calls `POST /api/trpc/gitea.update`.
 
 ```bash
-notploy gitea update --giteaId <value> --giteaUrl <value> --gitProviderId <value> --name <value> [options]
+astron-collection gitea update --giteaId <value> --giteaUrl <value> --gitProviderId <value> --name <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |

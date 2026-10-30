@@ -13,7 +13,7 @@ vi.mock("node:fs", async (importOriginal) => {
 	};
 });
 
-import { writeDomainsToCompose } from "@notploy/server/utils/docker/domain";
+import { writeDomainsToCompose } from "@astron-collection/server/utils/docker/domain";
 
 const baseCompose = {
 	appName: "my-app",

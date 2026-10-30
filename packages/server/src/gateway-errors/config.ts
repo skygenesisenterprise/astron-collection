@@ -34,19 +34,19 @@ export const getGatewayErrorPageConfig = (
 	env: Record<string, string | undefined> = process.env,
 ): GatewayErrorPageConfig => {
 	const brandName =
-		readString(env.NOTPLOY_GATEWAY_BRAND_NAME)?.slice(
+		readString(env.ASTRON_COLLECTION_GATEWAY_BRAND_NAME)?.slice(
 			0,
 			MAX_BRAND_NAME_LENGTH,
-		) ?? "Notploy";
-	const locale = readString(env.NOTPLOY_GATEWAY_LOCALE);
+		) ?? "Astron Collection";
+	const locale = readString(env.ASTRON_COLLECTION_GATEWAY_LOCALE);
 	const isCloud =
-		env.IS_CLOUD === "true" || env.NOTPLOY_PRODUCT === "cloud";
+		env.IS_CLOUD === "true" || env.ASTRON_COLLECTION_PRODUCT === "cloud";
 
 	return {
-		brandName: brandName || "Notploy",
-		docsUrl: safeHttpUrl(env.NOTPLOY_GATEWAY_DOCS_URL),
-		statusUrl: safeHttpUrl(env.NOTPLOY_GATEWAY_STATUS_URL),
-		supportUrl: safeHttpUrl(env.NOTPLOY_GATEWAY_SUPPORT_URL),
+		brandName: brandName || "Astron Collection",
+		docsUrl: safeHttpUrl(env.ASTRON_COLLECTION_GATEWAY_DOCS_URL),
+		statusUrl: safeHttpUrl(env.ASTRON_COLLECTION_GATEWAY_STATUS_URL),
+		supportUrl: safeHttpUrl(env.ASTRON_COLLECTION_GATEWAY_SUPPORT_URL),
 		locale: locale && LOCALE_PATTERN.test(locale) ? locale : "en",
 		isCloud,
 	};

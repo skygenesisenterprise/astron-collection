@@ -1,27 +1,27 @@
 ---
 title: "Community"
-description: "Community sources, repositories, releases and the health report of the instance's community presence. Generated from the `notploy` command surface."
+description: "Community sources, repositories, releases and the health report of the instance's community presence. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Community sources, repositories, releases and the health report of the instance's community presence.
 
-`notploy community` exposes **14 commands**. They map one-to-one onto the `community.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection community` exposes **14 commands**. They map one-to-one onto the `community.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy community --help` to list these commands in your terminal, or
-	`notploy community <command> --help` for a single command.
+	Run `astron-collection community --help` to list these commands in your terminal, or
+	`astron-collection community <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy community activity`
+### `astron-collection community activity`
 
 Calls `GET /api/trpc/community.activity`.
 
 ```bash
-notploy community activity [options]
+astron-collection community activity [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -35,12 +35,12 @@ notploy community activity [options]
 | `--offset <value>` | number | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy community attention`
+### `astron-collection community attention`
 
 Calls `GET /api/trpc/community.attention`.
 
 ```bash
-notploy community attention [options]
+astron-collection community attention [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -49,12 +49,12 @@ notploy community attention [options]
 | `--limit <value>` | number | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy community available-repositories`
+### `astron-collection community available-repositories`
 
 Calls `GET /api/trpc/community.availableRepositories`.
 
 ```bash
-notploy community available-repositories --sourceId <value> [options]
+astron-collection community available-repositories --sourceId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -62,12 +62,12 @@ notploy community available-repositories --sourceId <value> [options]
 | `--sourceId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy community create-source`
+### `astron-collection community create-source`
 
 Calls `POST /api/trpc/community.createSource`.
 
 ```bash
-notploy community create-source --gitProviderId <value> --owner <value> [options]
+astron-collection community create-source --gitProviderId <value> --owner <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -76,12 +76,12 @@ notploy community create-source --gitProviderId <value> --owner <value> [options
 | `--owner <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy community health`
+### `astron-collection community health`
 
 Calls `GET /api/trpc/community.health`.
 
 ```bash
-notploy community health [options]
+astron-collection community health [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -89,12 +89,12 @@ notploy community health [options]
 | `--repositoryIds <json>` | array | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy community overview`
+### `astron-collection community overview`
 
 Calls `GET /api/trpc/community.overview`.
 
 ```bash
-notploy community overview [options]
+astron-collection community overview [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -105,12 +105,12 @@ notploy community overview [options]
 | `--repositoryIds <json>` | array | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy community releases`
+### `astron-collection community releases`
 
 Calls `GET /api/trpc/community.releases`.
 
 ```bash
-notploy community releases [options]
+astron-collection community releases [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -119,12 +119,12 @@ notploy community releases [options]
 | `--limit <value>` | number | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy community remove-source`
+### `astron-collection community remove-source`
 
 Calls `POST /api/trpc/community.removeSource`.
 
 ```bash
-notploy community remove-source --sourceId <value> [options]
+astron-collection community remove-source --sourceId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -132,12 +132,12 @@ notploy community remove-source --sourceId <value> [options]
 | `--sourceId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy community repositories`
+### `astron-collection community repositories`
 
 Calls `GET /api/trpc/community.repositories`.
 
 ```bash
-notploy community repositories [options]
+astron-collection community repositories [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -146,24 +146,24 @@ notploy community repositories [options]
 | `--search <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy community sources`
+### `astron-collection community sources`
 
 Calls `GET /api/trpc/community.sources`.
 
 ```bash
-notploy community sources [options]
+astron-collection community sources [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy community sync-now`
+### `astron-collection community sync-now`
 
 Calls `POST /api/trpc/community.syncNow`.
 
 ```bash
-notploy community sync-now --sourceId <value> [options]
+astron-collection community sync-now --sourceId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -172,12 +172,12 @@ notploy community sync-now --sourceId <value> [options]
 | `--repositoryId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy community track-repository`
+### `astron-collection community track-repository`
 
 Calls `POST /api/trpc/community.trackRepository`.
 
 ```bash
-notploy community track-repository --sourceId <value> --fullName <value> [options]
+astron-collection community track-repository --sourceId <value> --fullName <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -186,12 +186,12 @@ notploy community track-repository --sourceId <value> --fullName <value> [option
 | `--fullName <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy community untrack-repository`
+### `astron-collection community untrack-repository`
 
 Calls `POST /api/trpc/community.untrackRepository`.
 
 ```bash
-notploy community untrack-repository --repositoryId <value> [options]
+astron-collection community untrack-repository --repositoryId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -199,12 +199,12 @@ notploy community untrack-repository --repositoryId <value> [options]
 | `--repositoryId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy community update-source`
+### `astron-collection community update-source`
 
 Calls `POST /api/trpc/community.updateSource`.
 
 ```bash
-notploy community update-source --sourceId <value> [options]
+astron-collection community update-source --sourceId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |

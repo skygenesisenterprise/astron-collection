@@ -27,7 +27,7 @@ import type { DeploymentJob } from "./queue-types";
  * concurrency is fixed when its worker is created.
  */
 
-const PREFIX = "notploy";
+const PREFIX = "astron-collection";
 const LOCK_TTL_MS = 30 * 60 * 1000;
 const LOCK_HEARTBEAT_MS = LOCK_TTL_MS / 3;
 const RETRY_DELAY_MS = 1000;

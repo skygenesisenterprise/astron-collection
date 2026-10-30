@@ -1,6 +1,6 @@
-import { db } from "@notploy/server/db";
-import { server } from "@notploy/server/db/schema";
-import { getWebServerSettings } from "@notploy/server/services/web-server-settings";
+import { db } from "@astron-collection/server/db";
+import { server } from "@astron-collection/server/db/schema";
+import { getWebServerSettings } from "@astron-collection/server/services/web-server-settings";
 import { eq } from "drizzle-orm";
 import { LOCAL_PARTITION } from "./in-memory-queue";
 
@@ -8,7 +8,7 @@ import { LOCAL_PARTITION } from "./in-memory-queue";
  * Resolve the effective builds concurrency for a queue partition.
  *
  * - `LOCAL_PARTITION` -> concurrency stored on the web server settings (the
- *   local Notploy web server).
+ *   local Astron Collection web server).
  * - any other partition -> concurrency stored on the matching `server` row.
  */
 export const resolveBuildsConcurrency = async (

@@ -11,7 +11,7 @@ const tracingRoot = path.join(import.meta.dirname, "../../..");
 // Two build targets share this config:
 //
 //   NEXT_OUTPUT=standalone (default) -> web/Dockerfile.docs, runs the docs
-//       server as a Node process behind the Notploy reverse proxy.
+//       server as a Node process behind the Astron Collection reverse proxy.
 //
 //   NEXT_OUTPUT=export              -> emits web/apps/docs/out for static hosting.
 //
@@ -47,7 +47,7 @@ const config = {
 		remotePatterns: [
 			{
 				protocol: "https",
-				hostname: "templates.notploy.com",
+				hostname: "templates.astron-collection.com",
 			},
 		],
 	},

@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { memoryAdapter } from "better-auth/adapters/memory";
 import { twoFactor } from "better-auth/plugins";
-import { webauthnTwoFactor } from "@notploy/server/lib/plugins/webauthn-two-factor";
+import { webauthnTwoFactor } from "@astron-collection/server/lib/plugins/webauthn-two-factor";
 import { beforeEach, describe, expect, it } from "vitest";
 
 const BASE_URL = "http://localhost:3000";

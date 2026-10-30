@@ -1,7 +1,7 @@
-import { db } from "@notploy/server/db";
-import { scimProvider } from "@notploy/server/db/schema";
-import { requestToHeaders } from "@notploy/server/index";
-import { auth } from "@notploy/server/lib/auth";
+import { db } from "@astron-collection/server/db";
+import { scimProvider } from "@astron-collection/server/db/schema";
+import { requestToHeaders } from "@astron-collection/server/index";
+import { auth } from "@astron-collection/server/lib/auth";
 import { TRPCError } from "@trpc/server";
 import { and, asc, eq } from "drizzle-orm";
 import { z } from "zod";

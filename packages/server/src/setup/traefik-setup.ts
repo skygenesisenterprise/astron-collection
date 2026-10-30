@@ -41,7 +41,7 @@ export const initializeStandaloneTraefik = async ({
 }: TraefikOptions = {}) => {
 	const { MAIN_TRAEFIK_PATH, DYNAMIC_TRAEFIK_PATH } = paths(!!serverId);
 	const imageName = `traefik:v${TRAEFIK_VERSION}`;
-	const containerName = "notploy-traefik";
+	const containerName = "astron-collection-traefik";
 
 	const exposedPorts: Record<string, {}> = {
 		[`${TRAEFIK_PORT}/tcp`]: {},
@@ -77,7 +77,7 @@ export const initializeStandaloneTraefik = async ({
 		Image: imageName,
 		NetworkingConfig: {
 			EndpointsConfig: {
-				"notploy-network": {},
+				"astron-collection-network": {},
 			},
 		},
 		ExposedPorts: exposedPorts,
@@ -87,7 +87,7 @@ export const initializeStandaloneTraefik = async ({
 			},
 			Binds: [
 				`${MAIN_TRAEFIK_PATH}/traefik.yml:/etc/traefik/traefik.yml`,
-				`${DYNAMIC_TRAEFIK_PATH}:/etc/notploy/traefik/dynamic`,
+				`${DYNAMIC_TRAEFIK_PATH}:/etc/astron-collection/traefik/dynamic`,
 				"/var/run/docker.sock:/var/run/docker.sock",
 			],
 			PortBindings: portBindings,
@@ -129,7 +129,7 @@ export const initializeTraefikService = async ({
 }: TraefikOptions) => {
 	const { MAIN_TRAEFIK_PATH, DYNAMIC_TRAEFIK_PATH } = paths(!!serverId);
 	const imageName = `traefik:v${TRAEFIK_VERSION}`;
-	const appName = "notploy-traefik";
+	const appName = "astron-collection-traefik";
 
 	const settings: CreateServiceOptions = {
 		Name: appName,
@@ -146,7 +146,7 @@ export const initializeTraefikService = async ({
 					{
 						Type: "bind",
 						Source: DYNAMIC_TRAEFIK_PATH,
-						Target: "/etc/notploy/traefik/dynamic",
+						Target: "/etc/astron-collection/traefik/dynamic",
 					},
 					{
 						Type: "bind",
@@ -155,7 +155,7 @@ export const initializeTraefikService = async ({
 					},
 				],
 			},
-			Networks: [{ Target: "notploy-network" }],
+			Networks: [{ Target: "astron-collection-network" }],
 			Placement: {
 				Constraints: ["node.role==manager"],
 			},
@@ -220,14 +220,14 @@ export const initializeTraefikService = async ({
 
 export const createDefaultServerTraefikConfig = () => {
 	const { DYNAMIC_TRAEFIK_PATH } = paths();
-	const configFilePath = path.join(DYNAMIC_TRAEFIK_PATH, "notploy.yml");
+	const configFilePath = path.join(DYNAMIC_TRAEFIK_PATH, "astron-collection.yml");
 
 	if (existsSync(configFilePath)) {
 		console.log("Default traefik config already exists");
 		return;
 	}
 
-	const appName = "notploy";
+	const appName = "astron-collection";
 	const serviceURLDefault = `http://${appName}:${process.env.PORT || 3000}`;
 	const config: FileConfig = {
 		http: {
@@ -279,11 +279,11 @@ export const getDefaultTraefikConfig = () => {
 						docker: {
 							exposedByDefault: false,
 							watch: true,
-							network: "notploy-network",
+							network: "astron-collection-network",
 						},
 					}),
 			file: {
-				directory: "/etc/notploy/traefik/dynamic",
+				directory: "/etc/astron-collection/traefik/dynamic",
 				watch: true,
 			},
 		},
@@ -313,7 +313,7 @@ export const getDefaultTraefikConfig = () => {
 				letsencrypt: {
 					acme: {
 						email: "test@localhost.com",
-						storage: "/etc/notploy/traefik/dynamic/acme.json",
+						storage: "/etc/astron-collection/traefik/dynamic/acme.json",
 						httpChallenge: {
 							entryPoint: "web",
 						},
@@ -338,10 +338,10 @@ export const getDefaultServerTraefikConfig = () => {
 			docker: {
 				exposedByDefault: false,
 				watch: true,
-				network: "notploy-network",
+				network: "astron-collection-network",
 			},
 			file: {
-				directory: "/etc/notploy/traefik/dynamic",
+				directory: "/etc/astron-collection/traefik/dynamic",
 				watch: true,
 			},
 		},
@@ -368,7 +368,7 @@ export const getDefaultServerTraefikConfig = () => {
 			letsencrypt: {
 				acme: {
 					email: "test@localhost.com",
-					storage: "/etc/notploy/traefik/dynamic/acme.json",
+					storage: "/etc/astron-collection/traefik/dynamic/acme.json",
 					httpChallenge: {
 						entryPoint: "web",
 					},

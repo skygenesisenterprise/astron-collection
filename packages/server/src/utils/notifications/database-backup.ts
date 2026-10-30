@@ -1,7 +1,7 @@
-import { db } from "@notploy/server/db";
-import { notifications } from "@notploy/server/db/schema";
-import DatabaseBackupEmail from "@notploy/server/emails/emails/database-backup";
-import { redactSecrets } from "@notploy/server/utils/security/redact";
+import { db } from "@astron-collection/server/db";
+import { notifications } from "@astron-collection/server/db/schema";
+import DatabaseBackupEmail from "@astron-collection/server/emails/emails/database-backup";
+import { redactSecrets } from "@astron-collection/server/utils/security/redact";
 import { render } from "@react-email/components";
 import { format } from "date-fns";
 import { and, eq } from "drizzle-orm";
@@ -96,7 +96,7 @@ export const sendDatabaseBackupNotifications = async ({
 				if (email) {
 					await sendEmailNotification(
 						email,
-						"Database backup for notploy",
+						"Database backup for astron-collection",
 						template,
 					);
 				}
@@ -104,7 +104,7 @@ export const sendDatabaseBackupNotifications = async ({
 				if (resend) {
 					await sendResendNotification(
 						resend,
-						"Database backup for notploy",
+						"Database backup for astron-collection",
 						template,
 					);
 				}
@@ -169,7 +169,7 @@ export const sendDatabaseBackupNotifications = async ({
 					],
 					timestamp: date.toISOString(),
 					footer: {
-						text: "Notploy Database Backup Notification",
+						text: "Astron Collection Database Backup Notification",
 					},
 				});
 			}
@@ -292,7 +292,7 @@ export const sendDatabaseBackupNotifications = async ({
 				await sendMattermostNotification(mattermost, {
 					text: `**${statusEmoji} Database Backup ${typeStatus}**\n\n**Project:** ${projectName}\n**Application:** ${applicationName}\n**Type:** ${databaseType}\n**Database Name:** ${databaseName}\n**Date:** ${format(date, "PP")}\n**Time:** ${format(date, "pp")}${errorMsg}`,
 					channel: mattermost.channel,
-					username: mattermost.username || "Notploy",
+					username: mattermost.username || "Astron Collection",
 				});
 			}
 

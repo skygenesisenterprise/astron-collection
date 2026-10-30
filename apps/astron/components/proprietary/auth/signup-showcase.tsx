@@ -82,7 +82,7 @@ const SLIDES: ShowcaseItem[][] = [
 			icon: Database,
 			title: "Managed databases",
 			description:
-				"Manage and back up MySQL, PostgreSQL, MongoDB, MariaDB, and Redis directly from Notploy.",
+				"Manage and back up MySQL, PostgreSQL, MongoDB, MariaDB, and Redis directly from Astron Collection.",
 		},
 		{
 			icon: Terminal,
@@ -99,7 +99,7 @@ const SLIDES: ShowcaseItem[][] = [
 			icon: Unlock,
 			title: "No lock-in",
 			description:
-				"Modify, scale, and customize Notploy however your project needs.",
+				"Modify, scale, and customize Astron Collection however your project needs.",
 		},
 	],
 ];

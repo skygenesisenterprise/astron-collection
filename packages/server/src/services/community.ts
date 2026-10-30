@@ -6,7 +6,7 @@ import {
 	communitySources,
 	db,
 	github,
-} from "@notploy/server/db";
+} from "@astron-collection/server/db";
 import {
 	and,
 	count,
@@ -19,7 +19,7 @@ import {
 	or,
 	sql,
 } from "drizzle-orm";
-import { findGitProviderById } from "@notploy/server/services/git-provider";
+import { findGitProviderById } from "@astron-collection/server/services/git-provider";
 import {
 	classifyGithubFailure,
 	describeGithubFailure,
@@ -35,9 +35,9 @@ import {
 	mapGithubRepository,
 	resolveAttentionThresholds,
 	summarizeCommunityHealth,
-} from "@notploy/server/utils/community/mappers";
-import type { Github } from "@notploy/server/services/github";
-import { authGithub } from "@notploy/server/utils/providers/github";
+} from "@astron-collection/server/utils/community/mappers";
+import type { Github } from "@astron-collection/server/services/github";
+import { authGithub } from "@astron-collection/server/utils/providers/github";
 import type { Octokit } from "octokit";
 
 /**

@@ -1,7 +1,7 @@
 import { source } from "@/lib/source";
 import type { MetadataRoute } from "next";
 
-const baseUrl = "https://docs.notploy.com";
+const baseUrl = "https://docs.astron-collection.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
 	const pages = source.getPages().map((page) => ({

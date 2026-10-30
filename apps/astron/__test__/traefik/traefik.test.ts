@@ -1,5 +1,5 @@
-import type { ApplicationNested, Domain, Redirect } from "@notploy/server";
-import { createRouterConfig } from "@notploy/server";
+import type { ApplicationNested, Domain, Redirect } from "@astron-collection/server";
+import { createRouterConfig } from "@astron-collection/server";
 import { expect, test } from "vitest";
 
 const baseApp: ApplicationNested = {
@@ -8,7 +8,7 @@ const baseApp: ApplicationNested = {
 	applicationId: "",
 	previewLabels: [],
 	networkIds: [],
-	detachNotployNetwork: false,
+	detachAstronCollectionNetwork: false,
 	isolatedNetwork: false,
 	createEnvFile: true,
 	bitbucketRepositorySlug: "",

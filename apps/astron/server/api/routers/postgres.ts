@@ -23,15 +23,15 @@ import {
 	stopService,
 	stopServiceRemote,
 	updatePostgresById,
-} from "@notploy/server";
-import { db } from "@notploy/server/db";
+} from "@astron-collection/server";
+import { db } from "@astron-collection/server/db";
 import {
 	addNewService,
 	checkServiceAccess,
 	checkServicePermissionAndAccess,
 	findMemberByUserId,
-} from "@notploy/server/services/permission";
-import { assertServiceMoveAllowed } from "@notploy/server/services/service-move";
+} from "@astron-collection/server/services/permission";
+import { assertServiceMoveAllowed } from "@astron-collection/server/services/service-move";
 import { TRPCError } from "@trpc/server";
 import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
 import { z } from "zod";

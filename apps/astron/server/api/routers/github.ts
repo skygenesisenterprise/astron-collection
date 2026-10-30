@@ -8,8 +8,8 @@ import {
 	haveGithubRequirements,
 	updateGithub,
 	updateGitProvider,
-} from "@notploy/server";
-import { db } from "@notploy/server/db";
+} from "@astron-collection/server";
+import { db } from "@astron-collection/server/db";
 import { TRPCError } from "@trpc/server";
 import {
 	createTRPCRouter,

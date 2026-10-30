@@ -30,13 +30,13 @@ export const TrialExpiringEmail = ({
 	planName = "Hobby",
 	daysRemaining = 3,
 	endsOn = "2024-01-01",
-	billingUrl = "https://app.notploy.com/dashboard/settings/billing",
+	billingUrl = "https://app.astron-collection.com/dashboard/settings/billing",
 }: TemplateProps) => {
 	const dayLabel = daysRemaining === 1 ? "day" : "days";
 	const previewText =
 		daysRemaining === 1
-			? "Your Notploy trial ends tomorrow"
-			: `Your Notploy trial ends in ${daysRemaining} ${dayLabel}`;
+			? "Your Astron Collection trial ends tomorrow"
+			: `Your Astron Collection trial ends in ${daysRemaining} ${dayLabel}`;
 
 	return (
 		<Html>
@@ -47,10 +47,10 @@ export const TrialExpiringEmail = ({
 					<Container className="my-[40px] mx-auto max-w-[520px]">
 						<Section className="bg-[#09090b] rounded-t-xl px-[40px] py-[32px] text-center">
 							<Img
-								src="https://raw.githubusercontent.com/skygenesisenterprise/notploy/refs/heads/master/web/apps/docs/public/logo-notploy-blackpng.png"
+								src="https://raw.githubusercontent.com/skygenesisenterprise/astron-collection/refs/heads/master/web/apps/docs/public/logo-astron-collection-blackpng.png"
 								width="190"
 								height="120"
-								alt="Notploy"
+								alt="Astron Collection"
 								className="my-0 mx-auto"
 							/>
 						</Section>
@@ -115,10 +115,10 @@ export const TrialExpiringEmail = ({
 							<Text className="text-[#a1a1aa] text-[12px] leading-[18px] m-0">
 								This is an automated email from{" "}
 								<Link
-									href="https://notploy.com"
+									href="https://astron-collection.com"
 									className="text-[#71717a] underline"
 								>
-									Notploy Cloud
+									Astron Collection Cloud
 								</Link>
 								. If you have any questions about your billing, please contact
 								our{" "}

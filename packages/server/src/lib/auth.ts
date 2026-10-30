@@ -152,7 +152,7 @@ const createBetterAuth = () =>
 				allowDifferentEmails: true,
 			},
 		},
-		appName: "Notploy",
+		appName: "Astron Collection",
 		// Only register a social provider when its credentials are configured:
 		// an entry with missing env vars makes better-auth warn on every boot
 		// and offers a sign-in path that can never succeed.
@@ -253,12 +253,12 @@ const createBetterAuth = () =>
 							return { data: { emailVerified: true } };
 						}
 						if (!IS_CLOUD) {
-							const xNotployToken =
-								context?.request?.headers?.get("x-notploy-token");
-							if (xNotployToken) {
+							const xAstronCollectionToken =
+								context?.request?.headers?.get("x-astron-collection-token");
+							if (xAstronCollectionToken) {
 								let invitation: Awaited<ReturnType<typeof getUserByToken>>;
 								try {
-									invitation = await getUserByToken(xNotployToken);
+									invitation = await getUserByToken(xAstronCollectionToken);
 								} catch {
 									throw new APIError("BAD_REQUEST", {
 										message: "Invalid invitation token",
@@ -594,7 +594,7 @@ export interface RequestApiKey {
 /**
  * Reads the API key from a request.
  *
- * `x-api-key` is Notploy's own header and stays the documented one, but CI
+ * `x-api-key` is Astron Collection's own header and stays the documented one, but CI
  * clients (GitHub Actions included) speak `Authorization: Bearer <token>`, so
  * both are accepted rather than forcing every action to build a custom header.
  */

@@ -1,5 +1,5 @@
-import type { unboundDnsConfigSchema } from "@notploy/server/db/schema";
-import { execAsyncRemote } from "@notploy/server/utils/process/execAsync";
+import type { unboundDnsConfigSchema } from "@astron-collection/server/db/schema";
+import { execAsyncRemote } from "@astron-collection/server/utils/process/execAsync";
 import type { z } from "zod";
 import { stripTrailingDot, toSubdomain } from "../http";
 import type { DnsClient, DnsRecord, DnsZone } from "../types";

@@ -17,10 +17,10 @@ const RESERVED_CUSTOM_HEADER_NAMES = new Set([
 const HEADER_NAME_PATTERN = /^[!#$%&'*+.^_`|~0-9A-Za-z-]+$/;
 
 /**
- * Parses NOTPLOY_CUSTOM_HEADERS.
+ * Parses ASTRON_COLLECTION_CUSTOM_HEADERS.
  *
  * Authentication, content and transport headers are reserved: the API key must
- * come from NOTPLOY_API_KEY, and a custom header must not be able to replace
+ * come from ASTRON_COLLECTION_API_KEY, and a custom header must not be able to replace
  * the credential, the session id or the request encoding.
  */
 export function parseCustomHeaders(rawHeaders: string | undefined): Record<string, string> {
@@ -33,38 +33,38 @@ export function parseCustomHeaders(rawHeaders: string | undefined): Record<strin
     parsed = JSON.parse(rawHeaders);
   } catch (error) {
     throw new Error(
-      "Environment variable NOTPLOY_CUSTOM_HEADERS must be valid JSON containing an object of string header names to string values",
+      "Environment variable ASTRON_COLLECTION_CUSTOM_HEADERS must be valid JSON containing an object of string header names to string values",
       { cause: error },
     );
   }
 
   if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) {
     throw new Error(
-      "Environment variable NOTPLOY_CUSTOM_HEADERS must be a JSON object of string header names to string values",
+      "Environment variable ASTRON_COLLECTION_CUSTOM_HEADERS must be a JSON object of string header names to string values",
     );
   }
 
   const customHeaders: Record<string, string> = {};
   for (const [name, value] of Object.entries(parsed)) {
     if (name.trim() === "") {
-      throw new Error("Environment variable NOTPLOY_CUSTOM_HEADERS contains an empty header name");
+      throw new Error("Environment variable ASTRON_COLLECTION_CUSTOM_HEADERS contains an empty header name");
     }
 
     if (!HEADER_NAME_PATTERN.test(name)) {
       throw new Error(
-        `Environment variable NOTPLOY_CUSTOM_HEADERS contains an invalid header name: ${JSON.stringify(name)}`,
+        `Environment variable ASTRON_COLLECTION_CUSTOM_HEADERS contains an invalid header name: ${JSON.stringify(name)}`,
       );
     }
 
     if (RESERVED_CUSTOM_HEADER_NAMES.has(name.toLowerCase())) {
       throw new Error(
-        "Environment variable NOTPLOY_CUSTOM_HEADERS cannot override reserved headers (authentication, transport or content); configure Notploy authentication with NOTPLOY_API_KEY",
+        "Environment variable ASTRON_COLLECTION_CUSTOM_HEADERS cannot override reserved headers (authentication, transport or content); configure Astron Collection authentication with ASTRON_COLLECTION_API_KEY",
       );
     }
 
     if (typeof value !== "string") {
       throw new Error(
-        "Environment variable NOTPLOY_CUSTOM_HEADERS must contain only string header values",
+        "Environment variable ASTRON_COLLECTION_CUSTOM_HEADERS must contain only string header values",
       );
     }
 
@@ -72,7 +72,7 @@ export function parseCustomHeaders(rawHeaders: string | undefined): Record<strin
     // biome-ignore lint/suspicious/noControlCharactersInRegex: intentional header-injection validation
     if (/[\r\n\u0000]/.test(value)) {
       throw new Error(
-        "Environment variable NOTPLOY_CUSTOM_HEADERS must not contain control characters in header values",
+        "Environment variable ASTRON_COLLECTION_CUSTOM_HEADERS must not contain control characters in header values",
       );
     }
 

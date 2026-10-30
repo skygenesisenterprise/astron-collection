@@ -5,37 +5,37 @@ description: 'Configure your Bitbucket repositories for deployments. This includ
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-Notploy offer a way to connect your Bitbucket Repository to your Notploy panel, you can use Groups Names or personal accounts.
+Astron Collection offer a way to connect your Bitbucket Repository to your Astron Collection panel, you can use Groups Names or personal accounts.
 
 Go to `Git` and select `Bitbucket` as the source, then you can use the following options:
 
-- **Bitbucket Username**: Set the username that you want to connect to Notploy.
+- **Bitbucket Username**: Set the username that you want to connect to Astron Collection.
 - **App Password**: Set the app password you've created.
 - **Workspace(Optional)**: Assign a workspace name, this is useful if you want to connect to another workspace.
 
-Follow the steps to connect your Bitbucket account to Notploy.
+Follow the steps to connect your Bitbucket account to Astron Collection.
 
 1. Go to `https://bitbucket.org/account/settings/app-passwords/new` .
-2. Set Label: eg. `Notploy-Bitbucket-App`. you can choose any name that you want.
+2. Set Label: eg. `Astron Collection-Bitbucket-App`. you can choose any name that you want.
 3. In permissions make sure to select `Account: Read`, `Workspace membership: Read`, `Projects: Read`
 , `Repositories: Read` `Pull requests: Read` and `Webhooks: Read and write`.
 4. Click on `Create`.
-5. Copy the `App Password` and paste it in Notploy `Bitbucket` Modal section.
+5. Copy the `App Password` and paste it in Astron Collection `Bitbucket` Modal section.
 6. Set your `Bitbucket Username`.
 7. (Optional) If you want to use Workspaces, go to `https://bitbucket.org/account/workspaces/`, eg. If you have 
-`notploy-workspace` copy and paste it in Workspace Name, please make sure to use the slugified name, if you use names like Notploy Workspace in this field can cause issues.
+`astron-collection-workspace` copy and paste it in Workspace Name, please make sure to use the slugified name, if you use names like Astron Collection Workspace in this field can cause issues.
 7. Click on `Configure Bitbucket`.
 8. If everything is correct, you can update enter to the Update Icon, and click on `Test Connection` to make sure everything is working.
 9. Now you can use the repositories from your Gitlab Account in `Applications` or `Docker Compose` services.
 
 <Callout type='warn'>
-Notploy doesn't support Bitbucket Automatic deployments on each push you make to your repository.
+Astron Collection doesn't support Bitbucket Automatic deployments on each push you make to your repository.
 </Callout>
 
 
 ## Setup Automatic Deployments
 
-You can configure automatic deployments in Notploy for the Following Services:
+You can configure automatic deployments in Astron Collection for the Following Services:
 
 1. **Applications**
 2. **Docker Compose**
@@ -55,18 +55,18 @@ The steps are the same for both services.
 
 ## Clarification on Automatic Deployments
 
-By default, Notploy will automatically deploy your application on the Branch you have selected.
+By default, Astron Collection will automatically deploy your application on the Branch you have selected.
 
 eg. Let's suppose you have a `application` in this way:
 
 Repository: `my-app`
 Branch: `feature`
 
-If you try to make a push on another branch eg. `main`, Notploy will not automatically deploy your application, because 
+If you try to make a push on another branch eg. `main`, Astron Collection will not automatically deploy your application, because 
 your application have selected `feature` as the Branch.
 
 <Callout>
-In the case you want to have multiple applications in the same repository, eg. (development, staging, production), you can create 3 `Applications` in Notploy
+In the case you want to have multiple applications in the same repository, eg. (development, staging, production), you can create 3 `Applications` in Astron Collection
 and select the branch in each of them.
 
 This is very usefull if you want to have multiple environments for the same application.

@@ -9,10 +9,10 @@
 export const ENVIRONMENTS = ["self", "cloud", "console"] as const;
 
 /**
- * The Notploy product an MCP server talks to.
+ * The Astron Collection product an MCP server talks to.
  *
  * The environment is resolved from server-side configuration
- * (`NOTPLOY_MCP_ENVIRONMENT`) and is never accepted from a tool argument.
+ * (`ASTRON_COLLECTION_MCP_ENVIRONMENT`) and is never accepted from a tool argument.
  */
 export type Environment = (typeof ENVIRONMENTS)[number];
 

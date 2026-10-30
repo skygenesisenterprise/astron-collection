@@ -1,18 +1,18 @@
-import type { Compose, ComposeSpecification } from "@notploy/server";
+import type { Compose, ComposeSpecification } from "@astron-collection/server";
 import {
 	applyServiceNetworks,
 	declareUsedNetworksInRoot,
 	isolatedNetworkName,
 	resolveServiceNetworks,
-} from "@notploy/server";
-import { db } from "@notploy/server/db";
-import { getRemoteDocker } from "@notploy/server/utils/servers/remote-docker";
+} from "@astron-collection/server";
+import { db } from "@astron-collection/server/db";
+import { getRemoteDocker } from "@astron-collection/server/utils/servers/remote-docker";
 import { beforeEach, expect, test, vi } from "vitest";
 import { parse } from "yaml";
 
 // `resolveServiceNetworks` reaches the daemon to make sure a service's dedicated
 // network exists, so the Docker client is stubbed for the isolation cases.
-vi.mock("@notploy/server/utils/servers/remote-docker", () => ({
+vi.mock("@astron-collection/server/utils/servers/remote-docker", () => ({
 	getRemoteDocker: vi.fn(),
 }));
 
@@ -63,7 +63,7 @@ services:
 			{
 				serviceName: "web",
 				networkIds: ["net-1"],
-				detachNotployNetwork: false,
+				detachAstronCollectionNetwork: false,
 			},
 		]),
 	);
@@ -72,25 +72,25 @@ services:
 	expect(result.services?.web?.networks).toContain("shared-net");
 });
 
-test("applyServiceNetworks: detach removes notploy-network and default", async () => {
+test("applyServiceNetworks: detach removes astron-collection-network and default", async () => {
 	const result = parse(`
 services:
   db:
     image: postgres
     networks:
-      - notploy-network
+      - astron-collection-network
       - default
 `) as ComposeSpecification;
 
 	const injected = await applyServiceNetworks(
 		result,
 		withServiceNetworks([
-			{ serviceName: "db", networkIds: [], detachNotployNetwork: true },
+			{ serviceName: "db", networkIds: [], detachAstronCollectionNetwork: true },
 		]),
 	);
 
 	expect(injected.size).toBe(0);
-	expect(result.services?.db?.networks).not.toContain("notploy-network");
+	expect(result.services?.db?.networks).not.toContain("astron-collection-network");
 	expect(result.services?.db?.networks).not.toContain("default");
 });
 
@@ -109,7 +109,7 @@ services:
 			{
 				serviceName: "web",
 				networkIds: ["missing"],
-				detachNotployNetwork: false,
+				detachAstronCollectionNetwork: false,
 			},
 		]),
 	);
@@ -132,7 +132,7 @@ services:
 			{
 				serviceName: "ghost",
 				networkIds: ["net-1"],
-				detachNotployNetwork: false,
+				detachAstronCollectionNetwork: false,
 			},
 		]),
 	);
@@ -141,16 +141,16 @@ services:
 	expect(result.services?.web?.networks).toBeUndefined();
 });
 
-test("declareUsedNetworksInRoot: declares notploy-network only when used", () => {
+test("declareUsedNetworksInRoot: declares astron-collection-network only when used", () => {
 	const used = parse(`
 services:
   web:
     image: nginx
     networks:
-      - notploy-network
+      - astron-collection-network
 `) as ComposeSpecification;
 	declareUsedNetworksInRoot(used, new Set());
-	expect(used.networks).toHaveProperty("notploy-network");
+	expect(used.networks).toHaveProperty("astron-collection-network");
 
 	const unused = parse(`
 services:
@@ -160,7 +160,7 @@ services:
       - default
 `) as ComposeSpecification;
 	declareUsedNetworksInRoot(unused, new Set());
-	expect(unused.networks ?? {}).not.toHaveProperty("notploy-network");
+	expect(unused.networks ?? {}).not.toHaveProperty("astron-collection-network");
 });
 
 test("declareUsedNetworksInRoot: declares injected networks that are used", () => {
@@ -178,14 +178,14 @@ services:
 	expect(result.networks ?? {}).not.toHaveProperty("unused-net");
 });
 
-test("resolveServiceNetworks: returns notploy-network by default", async () => {
+test("resolveServiceNetworks: returns astron-collection-network by default", async () => {
 	const resolved = await resolveServiceNetworks({});
-	expect(resolved).toEqual([{ Target: "notploy-network" }]);
+	expect(resolved).toEqual([{ Target: "astron-collection-network" }]);
 	expect(findManyMock).not.toHaveBeenCalled();
 });
 
-test("resolveServiceNetworks: omits notploy-network when detached", async () => {
-	const resolved = await resolveServiceNetworks({ detachNotployNetwork: true });
+test("resolveServiceNetworks: omits astron-collection-network when detached", async () => {
+	const resolved = await resolveServiceNetworks({ detachAstronCollectionNetwork: true });
 	expect(resolved).toEqual([]);
 });
 
@@ -195,7 +195,7 @@ test("resolveServiceNetworks: appends overlay networks by networkId", async () =
 	const resolved = await resolveServiceNetworks({ networkIds: ["net-a"] });
 
 	expect(resolved).toEqual([
-		{ Target: "notploy-network" },
+		{ Target: "astron-collection-network" },
 		{ Target: "overlay-a" },
 	]);
 });
@@ -209,7 +209,7 @@ test("resolveServiceNetworks: networkSwarm override takes precedence", async () 
 });
 
 test("isolatedNetworkName: prefixes the app name to avoid reserved networks", () => {
-	expect(isolatedNetworkName("gitea")).toBe("notploy-iso-gitea");
+	expect(isolatedNetworkName("gitea")).toBe("astron-collection-iso-gitea");
 });
 
 test("resolveServiceNetworks: attaches a dedicated isolated network", async () => {
@@ -225,10 +225,10 @@ test("resolveServiceNetworks: attaches a dedicated isolated network", async () =
 		appName: "myapp",
 	});
 
-	// It stays on notploy-network so Traefik keeps serving the domain.
+	// It stays on astron-collection-network so Traefik keeps serving the domain.
 	expect(resolved).toEqual([
-		{ Target: "notploy-network" },
-		{ Target: "notploy-iso-myapp" },
+		{ Target: "astron-collection-network" },
+		{ Target: "astron-collection-iso-myapp" },
 	]);
 	expect(createNetwork).not.toHaveBeenCalled();
 });
@@ -251,12 +251,12 @@ test("resolveServiceNetworks: creates the isolated network when missing", async 
 	});
 
 	expect(resolved).toEqual([
-		{ Target: "notploy-network" },
-		{ Target: "notploy-iso-myapp" },
+		{ Target: "astron-collection-network" },
+		{ Target: "astron-collection-iso-myapp" },
 	]);
 	expect(createNetwork).toHaveBeenCalledWith(
 		expect.objectContaining({
-			Name: "notploy-iso-myapp",
+			Name: "astron-collection-iso-myapp",
 			Driver: "overlay",
 			Attachable: true,
 		}),
@@ -267,6 +267,6 @@ test("resolveServiceNetworks: no dedicated network when isolation is off", async
 	getRemoteDockerMock.mockReset();
 	const resolved = await resolveServiceNetworks({ appName: "myapp" });
 
-	expect(resolved).toEqual([{ Target: "notploy-network" }]);
+	expect(resolved).toEqual([{ Target: "astron-collection-network" }]);
 	expect(getRemoteDockerMock).not.toHaveBeenCalled();
 });

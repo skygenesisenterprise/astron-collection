@@ -2,7 +2,7 @@
  * Normalized Git provider contract.
  *
  * GitHub, GitLab, Bitbucket and Gitea each speak a different dialect, but the
- * rest of Notploy must not: an Application only needs to know that a source
+ * rest of Astron Collection must not: an Application only needs to know that a source
  * repository can be listed, searched, cloned and pinned to a ref. This module is
  * the single place where that translation is described, mirroring the DNS
  * provider adapters in `utils/dns`, so provider differences stay contained in
@@ -290,9 +290,9 @@ export const gitProviderAuthorizationMessages: Record<
 	string
 > = {
 	github: "Install the GitHub App on the account or organization whose repositories should be deployable.",
-	gitlab: "Authorize Notploy again to grant access to your GitLab projects.",
+	gitlab: "Authorize Astron Collection again to grant access to your GitLab projects.",
 	bitbucket: "Add an Atlassian API token (and account email) to reach the workspace repositories.",
-	gitea: "Authorize Notploy again to grant access to your Gitea instance.",
+	gitea: "Authorize Astron Collection again to grant access to your Gitea instance.",
 };
 
 /** Provider timeout for a health probe, so the page never hangs. */

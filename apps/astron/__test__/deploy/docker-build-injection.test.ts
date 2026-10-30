@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
 // Reproduces the escaping applied at the docker build/pull sinks and asserts no
 // payload can break out of the command. `docker`/`cd` are replaced by `:` so the
 // test exercises only the injection surface, not real docker.
-const MARK = `/tmp/notploy_docker_pwned_${process.pid}`;
+const MARK = `/tmp/astron_collectiondocker_pwned_${process.pid}`;
 
 const runAndCheckSafe = (command: string) => {
 	if (existsSync(MARK)) rmSync(MARK);

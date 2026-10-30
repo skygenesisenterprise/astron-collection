@@ -11,8 +11,8 @@ blank_issues_enabled: false
 contact_links:
   - name: ❓ Question or need help
     url: https://discord.gg/GUkDugVh34
-    about: Configuration help, "how do I…", deployment questions, and troubleshooting go to the Notploy Discord.
+    about: Configuration help, "how do I…", deployment questions, and troubleshooting go to the Astron Collection Discord.
 
   - name: 🔐 Report a security vulnerability
-    url: https://github.com/skygenesisenterprise/notploy/security/advisories/new
+    url: https://github.com/skygenesisenterprise/astron-collection/security/advisories/new
     about: Report privately. Do not open a public issue for a vulnerability — see SECURITY.md.

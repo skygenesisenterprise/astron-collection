@@ -1,4 +1,4 @@
-import type { azureVaultConfigSchema } from "@notploy/server/db/schema";
+import type { azureVaultConfigSchema } from "@astron-collection/server/db/schema";
 import type { z } from "zod";
 import { type VaultClient, vaultFetch } from "./types";
 

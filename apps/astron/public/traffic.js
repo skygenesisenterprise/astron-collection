@@ -2,13 +2,13 @@
 // written for evergreen browsers only (defer + fetch/sendBeacon), and it is not
 // part of the TypeScript build: tsconfig includes `*.js` with `checkJs`.
 /**
- * Notploy Traffic Manager — web instrumentation.
+ * Astron Collection Traffic Manager — web instrumentation.
  *
  * First-party, dependency-free and deliberately small. Include it on a watched
  * property with its public key:
  *
- *   <script defer src="https://<notploy-host>/traffic.js"
- *           data-property-key="pk_..." data-endpoint="https://<notploy-host>"></script>
+ *   <script defer src="https://<astron-collection-host>/traffic.js"
+ *           data-property-key="pk_..." data-endpoint="https://<astron-collection-host>"></script>
  *
  * What it sends: the current path, the referrer host, an event name when one is
  * tracked, and two random identifiers kept in the browser (session in
@@ -19,13 +19,13 @@
  * Sessions: a session ends after 30 minutes without activity.
  * Visitors: the visitor identifier is reset after 180 days.
  * Opt-out: `navigator.doNotTrack === "1"`, `window.globalPrivacyControl`, or
- * `localStorage.notploy_traffic_optout = "1"` disables everything.
+ * `localStorage.astron_collectiontraffic_optout = "1"` disables everything.
  *
- * Public API: `window.notployTraffic.track("event_name")` and
- * `window.notployTraffic.pageview()`.
+ * Public API: `window.astronCollectionTraffic.track("event_name")` and
+ * `window.astronCollectionTraffic.pageview()`.
  */
 (() => {
-	if (window.notployTraffic?.version) {
+	if (window.astronCollectionTraffic?.version) {
 		return;
 	}
 
@@ -67,7 +67,7 @@
 
 	let optedOut = false;
 	try {
-		optedOut = window.localStorage.getItem("notploy_traffic_optout") === "1";
+		optedOut = window.localStorage.getItem("astron_collectiontraffic_optout") === "1";
 	} catch {
 		// Storage denied (private mode, cookie policy): stay quiet rather than
 		// degrade into a stateless ping for every page view.
@@ -126,27 +126,27 @@
 
 	const sessionId = () => {
 		const now = Date.now();
-		const stored = readJson("notploy_traffic_session", window.sessionStorage);
+		const stored = readJson("astron_collectiontraffic_session", window.sessionStorage);
 		if (
 			stored &&
 			typeof stored.id === "string" &&
 			typeof stored.at === "number" &&
 			now - stored.at < SESSION_TIMEOUT_MS
 		) {
-			writeJson("notploy_traffic_session", window.sessionStorage, {
+			writeJson("astron_collectiontraffic_session", window.sessionStorage, {
 				id: stored.id,
 				at: now,
 			});
 			return stored.id;
 		}
 		const created = { id: randomId(24), at: now };
-		writeJson("notploy_traffic_session", window.sessionStorage, created);
+		writeJson("astron_collectiontraffic_session", window.sessionStorage, created);
 		return created.id;
 	};
 
 	const visitorId = () => {
 		const now = Date.now();
-		const stored = readJson("notploy_traffic_visitor", window.localStorage);
+		const stored = readJson("astron_collectiontraffic_visitor", window.localStorage);
 		if (
 			stored &&
 			typeof stored.id === "string" &&
@@ -156,7 +156,7 @@
 			return stored.id;
 		}
 		const created = { id: randomId(24), at: now };
-		writeJson("notploy_traffic_visitor", window.localStorage, created);
+		writeJson("astron_collectiontraffic_visitor", window.localStorage, created);
 		return created.id;
 	};
 
@@ -256,7 +256,7 @@
 	const patchHistory = () => {
 		for (const method of ["pushState", "replaceState"]) {
 			const original = window.history[method];
-			if (typeof original !== "function" || original.__notployPatched) {
+			if (typeof original !== "function" || original.__astronCollectionPatched) {
 				continue;
 			}
 			const patched = (...args) => {
@@ -264,13 +264,13 @@
 				pageview();
 				return result;
 			};
-			patched.__notployPatched = true;
+			patched.__astronCollectionPatched = true;
 			window.history[method] = patched;
 		}
 		window.addEventListener("popstate", pageview);
 	};
 
-	window.notployTraffic = {
+	window.astronCollectionTraffic = {
 		version: "1.0.0",
 		track,
 		pageview,

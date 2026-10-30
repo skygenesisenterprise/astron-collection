@@ -1,11 +1,11 @@
-import { IS_CLOUD } from "@notploy/server/constants";
-import { db } from "@notploy/server/db";
+import { IS_CLOUD } from "@astron-collection/server/constants";
+import { db } from "@astron-collection/server/db";
 import {
 	forwardAuthSettings,
 	server,
 	ssoProvider,
-} from "@notploy/server/db/schema";
-import { checkServicePermissionAndAccess } from "@notploy/server/services/permission";
+} from "@astron-collection/server/db/schema";
+import { checkServicePermissionAndAccess } from "@astron-collection/server/services/permission";
 import {
 	deriveBaseDomain,
 	deriveCookieSecret,
@@ -14,13 +14,13 @@ import {
 	isForwardAuthRunning,
 	removeForwardAuth,
 	setupForwardAuth,
-} from "@notploy/server/setup/forward-auth-setup";
-import { manageDomain } from "@notploy/server/utils/traefik/domain";
+} from "@astron-collection/server/setup/forward-auth-setup";
+import { manageDomain } from "@astron-collection/server/utils/traefik/domain";
 import {
 	manageForwardAuthDomain,
 	removeForwardAuthDomain,
 	removeForwardAuthMiddleware,
-} from "@notploy/server/utils/traefik/forward-auth";
+} from "@astron-collection/server/utils/traefik/forward-auth";
 import { TRPCError } from "@trpc/server";
 import { and, asc, desc, eq, isNotNull, isNull } from "drizzle-orm";
 import { findApplicationById } from "../application";
@@ -264,7 +264,7 @@ export const getForwardAuthServerStatus = async (organizationId: string) => {
 			: [
 					{
 						serverId: null,
-						name: "Notploy Server (local)",
+						name: "Astron Collection Server (local)",
 						ipAddress: null,
 					},
 				]),

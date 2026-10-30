@@ -2,10 +2,10 @@ import fs from "node:fs";
 import {
 	allowUnlicensedDevInstance,
 	IS_CLOUD,
-	NOTPLOY_ENTITLEMENT_PUBLIC_KEY,
-	NOTPLOY_ENTITLEMENT_PUBLIC_KEY_FILE,
-	NOTPLOY_FLAVOR,
-	NOTPLOY_PRODUCT,
+	ASTRON_COLLECTION_ENTITLEMENT_PUBLIC_KEY,
+	ASTRON_COLLECTION_ENTITLEMENT_PUBLIC_KEY_FILE,
+	ASTRON_COLLECTION_FLAVOR,
+	ASTRON_COLLECTION_PRODUCT,
 	paths,
 } from "../constants/index";
 import {
@@ -25,15 +25,15 @@ import {
 	type EntitlementPayload,
 	type IdentityDiagnostic,
 	type InstanceIdentity,
-	type NotployCapability,
-	type NotployProduct,
+	type AstronCollectionCapability,
+	type AstronCollectionProduct,
 	protectedProducts,
 } from "../utils/pki/types";
 
 /**
  * Runtime installation identity (issue #75 §1, §5, §6).
  *
- * Assembles the locally stored identity, the verified Notploy entitlement and
+ * Assembles the locally stored identity, the verified Astron Collection entitlement and
  * the centralized capability evaluation into one `Installation` object. Both the
  * runtime and the UI query capabilities through `installation.hasCapability`,
  * so product authorization has a single source of truth.
@@ -41,13 +41,13 @@ import {
 
 export interface Installation {
 	/** Effective product, derived from the identity and entitlement. */
-	product: NotployProduct;
-	/** Legacy flavour hint (NOTPLOY_FLAVOR / IS_CLOUD), never authoritative. */
-	productHint: NotployProduct;
+	product: AstronCollectionProduct;
+	/** Legacy flavour hint (ASTRON_COLLECTION_FLAVOR / IS_CLOUD), never authoritative. */
+	productHint: AstronCollectionProduct;
 	/** Effective capabilities after evaluation. */
-	capabilities: NotployCapability[];
+	capabilities: AstronCollectionCapability[];
 	/** Product capabilities that were not authorized. */
-	missingCapabilities: NotployCapability[];
+	missingCapabilities: AstronCollectionCapability[];
 	identity: InstanceIdentity | null;
 	/** Verified entitlement, if one was present and valid. */
 	entitlement: EntitlementPayload | null;
@@ -58,14 +58,14 @@ export interface Installation {
 
 /** Resolves the entitlement public key from config, file or nothing. */
 export const getEntitlementPublicKey = (): string => {
-	if (NOTPLOY_ENTITLEMENT_PUBLIC_KEY_FILE) {
+	if (ASTRON_COLLECTION_ENTITLEMENT_PUBLIC_KEY_FILE) {
 		try {
-			return fs.readFileSync(NOTPLOY_ENTITLEMENT_PUBLIC_KEY_FILE, "utf8");
+			return fs.readFileSync(ASTRON_COLLECTION_ENTITLEMENT_PUBLIC_KEY_FILE, "utf8");
 		} catch {
 			return "";
 		}
 	}
-	return NOTPLOY_ENTITLEMENT_PUBLIC_KEY;
+	return ASTRON_COLLECTION_ENTITLEMENT_PUBLIC_KEY;
 };
 
 export interface GetInstallationOptions {
@@ -80,7 +80,7 @@ export interface GetInstallationOptions {
 	allowUnlicensed?: boolean;
 }
 
-const isProtected = (product: NotployProduct) =>
+const isProtected = (product: AstronCollectionProduct) =>
 	protectedProducts.includes(product);
 
 const defaultIdentityDir = () => paths().IDENTITY_PATH;
@@ -88,17 +88,17 @@ const defaultIdentityDir = () => paths().IDENTITY_PATH;
 /**
  * Product this instance was launched as (`self`, `cloud` or `console`).
  *
- * Resolved from the launcher (`NOTPLOY_PRODUCT`, then `NOTPLOY_FLAVOR`, then
+ * Resolved from the launcher (`ASTRON_COLLECTION_PRODUCT`, then `ASTRON_COLLECTION_FLAVOR`, then
  * `IS_CLOUD`) and used for display decisions such as the UI surface and the
  * product name. It is deliberately distinct from `getInstallation().product`,
  * which is authoritative for *authorization* but can differ: the persisted
  * instance identity is reused while coherent, even when the instance is started
  * under another product.
  */
-export const getConfiguredProduct = (): NotployProduct =>
+export const getConfiguredProduct = (): AstronCollectionProduct =>
 	resolveProductHint({
-		product: NOTPLOY_PRODUCT,
-		flavor: NOTPLOY_FLAVOR,
+		product: ASTRON_COLLECTION_PRODUCT,
+		flavor: ASTRON_COLLECTION_FLAVOR,
 		isCloud: IS_CLOUD,
 	});
 
@@ -150,9 +150,9 @@ export const getInstallation = (
 				code: "entitlement.invalid",
 				severity: "error",
 				message:
-					"An entitlement token is present but no Notploy entitlement public key is configured",
+					"An entitlement token is present but no Astron Collection entitlement public key is configured",
 				remediation:
-					"Set NOTPLOY_ENTITLEMENT_PUBLIC_KEY or NOTPLOY_ENTITLEMENT_PUBLIC_KEY_FILE to Notploy's public key.",
+					"Set ASTRON_COLLECTION_ENTITLEMENT_PUBLIC_KEY or ASTRON_COLLECTION_ENTITLEMENT_PUBLIC_KEY_FILE to Astron Collection's public key.",
 			});
 		} else {
 			const verified = verifyEntitlementForInstance(
@@ -173,14 +173,14 @@ export const getInstallation = (
 					severity: "error",
 					message: verified.reason,
 					remediation:
-						"Request a new entitlement for this instance from Notploy and place it in entitlement.token.",
+						"Request a new entitlement for this instance from Astron Collection and place it in entitlement.token.",
 				});
 			}
 		}
 	}
 
 	const productHint = resolveProductHint({
-		flavor: NOTPLOY_FLAVOR,
+		flavor: ASTRON_COLLECTION_FLAVOR,
 		isCloud: IS_CLOUD,
 	});
 
@@ -231,9 +231,9 @@ export const getInstallation = (
 		diagnostics.push({
 			code: "entitlement.missing",
 			severity: allowUnlicensed ? "warning" : "error",
-			message: `Product "${product}" requires a Notploy-signed entitlement`,
+			message: `Product "${product}" requires a Astron Collection-signed entitlement`,
 			remediation: allowUnlicensed
-				? "Running unlicensed is allowed only in development (NOTPLOY_ALLOW_UNLICENSED_DEV). Enroll this instance with a signed entitlement before deploying."
+				? "Running unlicensed is allowed only in development (ASTRON_COLLECTION_ALLOW_UNLICENSED_DEV). Enroll this instance with a signed entitlement before deploying."
 				: "Enroll this instance with a signed entitlement; a local installer flag is not a security boundary.",
 		});
 	}
@@ -264,7 +264,7 @@ export const getInstallation = (
 export interface InstallationValidation {
 	/** False when any diagnostic is an error. */
 	healthy: boolean;
-	product: NotployProduct;
+	product: AstronCollectionProduct;
 	diagnostics: IdentityDiagnostic[];
 }
 
@@ -289,10 +289,10 @@ export const validateInstallation = (
 
 export interface InitializeInstallationOptions {
 	identityDir?: string;
-	product?: NotployProduct;
+	product?: AstronCollectionProduct;
 	instanceId?: string;
 	subjectAltNames?: string[];
-	/** Notploy-signed entitlement required for cloud/console. */
+	/** Astron Collection-signed entitlement required for cloud/console. */
 	entitlementToken?: string;
 	/** Overrides the configured entitlement public key (tests, tooling). */
 	entitlementPublicKey?: string;
@@ -313,7 +313,7 @@ export const initializeInstallationIdentity = (
 	const identityDir = options.identityDir ?? defaultIdentityDir();
 	const product =
 		options.product ??
-		resolveProductHint({ flavor: NOTPLOY_FLAVOR, isCloud: IS_CLOUD });
+		resolveProductHint({ flavor: ASTRON_COLLECTION_FLAVOR, isCloud: IS_CLOUD });
 
 	if (isProtected(product) && !options.entitlementToken) {
 		throw new Error(

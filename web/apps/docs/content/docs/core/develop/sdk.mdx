@@ -1,16 +1,16 @@
 ---
 title: SDK
-description: "Use the TypeScript SDK to drive Notploy programmatically."
+description: "Use the TypeScript SDK to drive Astron Collection programmatically."
 ---
 
-**Purpose** — The Notploy SDK is a TypeScript client that wraps the [API](/docs/api) with typed methods, so scripts and services can manage Notploy without hand-writing HTTP calls.
+**Purpose** — The Astron Collection SDK is a TypeScript client that wraps the [API](/docs/api) with typed methods, so scripts and services can manage Astron Collection without hand-writing HTTP calls.
 
 ## Package
 
 ```bash
-npm install @notploy/sdk
+npm install @astron-collection/sdk
 # or
-pnpm add @notploy/sdk
+pnpm add @astron-collection/sdk
 ```
 
 The SDK mirrors the API: it is generated from the same contract, so an endpoint you can call over HTTP has a corresponding method.
@@ -20,11 +20,11 @@ The SDK mirrors the API: it is generated from the same contract, so an endpoint 
 The SDK authenticates with an **API key**. Generate one in the dashboard and pass it when creating the client.
 
 ```ts
-import { createClient } from '@notploy/sdk';
+import { createClient } from '@astron-collection/sdk';
 
 const client = createClient({
   baseUrl: 'https://your-panel.example.com/api',
-  apiKey: process.env.NOTPLOY_API_KEY, // never hard-code keys
+  apiKey: process.env.ASTRON_COLLECTION_API_KEY, // never hard-code keys
 });
 ```
 
@@ -57,7 +57,7 @@ Method names follow the API's resource grouping (`project`, `application`, `comp
 
 ## Status
 
-The SDK tracks the API and is published as `@notploy/sdk`. Because it is generated, its surface follows the API's version. Check the [Changelog](/docs/core/reference/changelog) when upgrading.
+The SDK tracks the API and is published as `@astron-collection/sdk`. Because it is generated, its surface follows the API's version. Check the [Changelog](/docs/core/reference/changelog) when upgrading.
 
 ## Related
 

@@ -33,7 +33,7 @@ export function groupsForChangedFiles(files) {
 				groups.add(group);
 			}
 		}
-		if (file.startsWith("apps/notploy/server/api/")) {
+		if (file.startsWith("apps/astron-collection/server/api/")) {
 			groups.add("spec");
 			groups.add("api-reference");
 			groups.add("regions");

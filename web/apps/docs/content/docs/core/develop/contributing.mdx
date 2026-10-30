@@ -3,7 +3,7 @@ title: Contributing
 description: "Set up the development environment, understand the repository, and contribute changes."
 ---
 
-**Purpose** — Help contributors run Notploy locally, find their way around the monorepo, and land changes with the expected checks. This page is aimed at people changing Notploy itself, not at people deploying with it.
+**Purpose** — Help contributors run Astron Collection locally, find their way around the monorepo, and land changes with the expected checks. This page is aimed at people changing Astron Collection itself, not at people deploying with it.
 
 ## Requirements
 
@@ -16,8 +16,8 @@ See [Platform support](/docs/core/reference/platform-support).
 ## Getting started
 
 ```bash
-git clone https://github.com/skygenesisenterprise/notploy.git
-cd notploy
+git clone https://github.com/skygenesisenterprise/astron-collection.git
+cd astron-collection
 pnpm install --frozen-lockfile
 ```
 
@@ -35,7 +35,7 @@ For running the application directly against your own database, use the root scr
 
 | Path | Role |
 | --- | --- |
-| `apps/notploy` | Main dashboard, API and application server. |
+| `apps/astron-collection` | Main dashboard, API and application server. |
 | `packages/server` | Shared server, deployment, database and platform logic. |
 | `apps/api` | API and background-work service. |
 | `apps/schedules` | Scheduled jobs service. |
@@ -50,7 +50,7 @@ For running the application directly against your own database, use the root scr
 
 | Command | Purpose |
 | --- | --- |
-| `pnpm dev` | Run the Notploy application. |
+| `pnpm dev` | Run the Astron Collection application. |
 | `pnpm build` | Build workspace packages. |
 | `pnpm test` | Run the application test suite. |
 | `pnpm typecheck` | Type-check workspace packages. |

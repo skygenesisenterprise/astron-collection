@@ -1,4 +1,4 @@
-import { getUserByToken, IS_CLOUD } from "@notploy/server";
+import { getUserByToken, IS_CLOUD } from "@astron-collection/server";
 import { standardSchemaResolver as zodResolver } from "@hookform/resolvers/standard-schema";
 import { generateServerSideHelper } from "@/utils/create-server-helpers";
 import type { GetServerSidePropsContext } from "next";
@@ -127,7 +127,7 @@ const Invitation = ({
 				lastName: values.lastName,
 				fetchOptions: {
 					headers: {
-						"x-notploy-token": token,
+						"x-astron-collection-token": token,
 					},
 				},
 			});

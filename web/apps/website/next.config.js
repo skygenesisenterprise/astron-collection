@@ -21,7 +21,7 @@ const nextConfig = {
 					return [
 						{
 							source: "/dokploy-vs-:slug",
-							destination: "/notploy-vs-:slug",
+							destination: "/astron-collection-vs-:slug",
 							permanent: true,
 						},
 						// Retired routes from the previous information architecture.
@@ -55,7 +55,7 @@ const nextConfig = {
 				hostname: "www.gravatar.com",
 			},
 			{
-				hostname: "cms.notploy.com",
+				hostname: "cms.astron-collection.com",
 			},
 		],
 		// domains: [
@@ -63,7 +63,7 @@ const nextConfig = {
 		// 	"testing-ghost-8423be-31-220-108-27.traefik.me",
 		// 	"images.unsplash.com",
 		// 	"www.gravatar.com",
-		// 	"cms.notploy.com",
+		// 	"cms.astron-collection.com",
 		// ],
 	},
 };

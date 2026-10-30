@@ -2,8 +2,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const findMany = vi.fn();
 
-vi.mock("@notploy/server/db", () => {
-	// Notploy-managed secrets are read with the core `db.select()` builder; the
+vi.mock("@astron-collection/server/db", () => {
+	// Astron Collection-managed secrets are read with the core `db.select()` builder; the
 	// chain resolves to an empty list, matching an install with no managed secret.
 	type MockChain = {
 		from: () => MockChain;
@@ -32,17 +32,17 @@ vi.mock("@notploy/server/db", () => {
 	};
 });
 
-import { prepareEnvironmentVariables } from "@notploy/server/utils/docker/utils";
+import { prepareEnvironmentVariables } from "@astron-collection/server/utils/docker/utils";
 import {
 	resolveVaultReferences,
 	withResolvedVaultRefs,
-} from "@notploy/server/utils/vault";
-import { azureClient } from "@notploy/server/utils/vault/azure";
-import { dopplerClient } from "@notploy/server/utils/vault/doppler";
-import { hashicorpClient } from "@notploy/server/utils/vault/hashicorp";
-import { infisicalClient } from "@notploy/server/utils/vault/infisical";
-import { phaseClient } from "@notploy/server/utils/vault/phase";
-import { scalewayClient } from "@notploy/server/utils/vault/scaleway";
+} from "@astron-collection/server/utils/vault";
+import { azureClient } from "@astron-collection/server/utils/vault/azure";
+import { dopplerClient } from "@astron-collection/server/utils/vault/doppler";
+import { hashicorpClient } from "@astron-collection/server/utils/vault/hashicorp";
+import { infisicalClient } from "@astron-collection/server/utils/vault/infisical";
+import { phaseClient } from "@astron-collection/server/utils/vault/phase";
+import { scalewayClient } from "@astron-collection/server/utils/vault/scaleway";
 
 const mockFetch = vi.fn();
 global.fetch = mockFetch as typeof fetch;

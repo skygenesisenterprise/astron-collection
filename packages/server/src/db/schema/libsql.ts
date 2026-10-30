@@ -84,7 +84,7 @@ export const libsql = pgTable("libsql", {
 	endpointSpecSwarm: json("endpointSpecSwarm").$type<EndpointSpecSwarm>(),
 	replicas: integer("replicas").default(1).notNull(),
 	networkIds: text("networkIds").array().default([]),
-	detachNotployNetwork: boolean("detachNotployNetwork")
+	detachAstronCollectionNetwork: boolean("detachAstronCollectionNetwork")
 		.notNull()
 		.default(false),
 	createdAt: text("createdAt")
@@ -151,7 +151,7 @@ const createSchema = createInsertSchema(libsql, {
 	stopGracePeriodSwarm: z.number().nullable(),
 	endpointSpecSwarm: EndpointSpecSwarmSchema.nullable(),
 	networkIds: z.array(z.string()).optional(),
-	detachNotployNetwork: z.boolean().optional(),
+	detachAstronCollectionNetwork: z.boolean().optional(),
 });
 
 export const apiCreateLibsql = createSchema

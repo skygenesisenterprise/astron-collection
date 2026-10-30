@@ -1,16 +1,16 @@
 ---
 title: Editions & scope
-description: "How Notploy's editions differ: Self-Hosted, Cloud, Enterprise, and the Console boundary."
+description: "How Astron Collection's editions differ: Self-Hosted, Cloud, Enterprise, and the Console boundary."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-Every Notploy edition shares the same **deployment engine** — the same Docker/Traefik integration, the same API, the same core features. The main difference is operational: **who manages the Notploy instance itself**. On top of that, there are four editions with different limits and extras, summarized below.
+Every Astron Collection edition shares the same **deployment engine** — the same Docker/Traefik integration, the same API, the same core features. The main difference is operational: **who manages the Astron Collection instance itself**. On top of that, there are four editions with different limits and extras, summarized below.
 
 When a documentation page describes behavior that only applies to some editions, it says so. If a page has no label, it applies to every edition.
 
-<Callout type="info" title="About Notploy Console">
-**Notploy Console** is the internal operator surface used by the Notploy team to run the
+<Callout type="info" title="About Astron Collection Console">
+**Astron Collection Console** is the internal operator surface used by the Astron Collection team to run the
 managed Cloud service. It is not part of the public product, is not installed by users, and
 its operational procedures are intentionally **not documented here**. Public documentation
 covers Self-Hosted and Cloud only.
@@ -18,12 +18,12 @@ covers Self-Hosted and Cloud only.
 
 ## Editions at a glance
 
-Notploy comes in four editions: **Self-Hosted (OSS)**, **Cloud**, **Enterprise Self-Hosted**, and **Enterprise Cloud**.
+Astron Collection comes in four editions: **Self-Hosted (OSS)**, **Cloud**, **Enterprise Self-Hosted**, and **Enterprise Cloud**.
 
 | | Self-Hosted (OSS) | Cloud | Enterprise Self-Hosted | Enterprise Cloud |
 |---|:---:|:---:|:---:|:---:|
-| **Price** | Free | From $4.50/mo | License ([contact us](https://notploy.com/contact)) | Custom |
-| **Control plane** | You manage it | Managed by Notploy | You manage it | Managed by Notploy |
+| **Price** | Free | From $4.50/mo | License ([contact us](https://astron-collection.com/contact)) | Custom |
+| **Control plane** | You manage it | Managed by Astron Collection | You manage it | Managed by Astron Collection |
 | **Updates** | Manual | Automatic | Manual | Automatic |
 | **Core deployments** (apps, databases, Compose, domains, SSL, templates) | ✅ | ✅ | ✅ | ✅ |
 | **Multi-server / remote servers** | ✅ | ✅ | ✅ | ✅ |
@@ -46,8 +46,8 @@ The core deployment experience is identical in every edition — the differences
 
 There are **two ways to get Enterprise**, and they are not the same thing:
 
-- **Enterprise Self-Hosted** — you run your own Notploy instance and activate a [license key](/docs/core/enterprise/license-keys) issued by the Notploy team. You keep full control of your infrastructure (including air-gapped setups) and unlock SSO, [SCIM provisioning](/docs/core/enterprise/scim), custom roles, audit logs, [Application Authentication](/docs/core/enterprise/sso/application-authentication), and **whitelabeling**.
-- **Enterprise Cloud** — the Notploy team manages the control plane for you with a custom plan. You get the same enterprise capabilities (SSO, SCIM provisioning, custom roles, audit logs, Application Authentication) plus managed uptime, automatic updates, and priority support with SLA.
+- **Enterprise Self-Hosted** — you run your own Astron Collection instance and activate a [license key](/docs/core/enterprise/license-keys) issued by the Astron Collection team. You keep full control of your infrastructure (including air-gapped setups) and unlock SSO, [SCIM provisioning](/docs/core/enterprise/scim), custom roles, audit logs, [Application Authentication](/docs/core/enterprise/sso/application-authentication), and **whitelabeling**.
+- **Enterprise Cloud** — the Astron Collection team manages the control plane for you with a custom plan. You get the same enterprise capabilities (SSO, SCIM provisioning, custom roles, audit logs, Application Authentication) plus managed uptime, automatic updates, and priority support with SLA.
 
 <Callout type="info">
 Both Enterprise flavors include **all upcoming Enterprise features**: every new Enterprise capability we release is automatically part of your license or plan, at no extra cost.
@@ -58,7 +58,7 @@ Key differences between the two Enterprise flavors:
 | | Enterprise Self-Hosted | Enterprise Cloud |
 |---|:---:|:---:|
 | **Activation** | License key on your instance | Cloud subscription |
-| **Control plane uptime & updates** | Your responsibility | Managed by Notploy |
+| **Control plane uptime & updates** | Your responsibility | Managed by Astron Collection |
 | **Whitelabeling** | ✅ | ❌ (control plane is shared infrastructure) |
 | **Air-gapped / private networks** | ✅ | ❌ |
 | **Advanced monitoring dashboard** | Basic monitoring | ✅ |
@@ -69,13 +69,13 @@ The differences come down to three things:
 
 ### 1. Managed uptime
 
-With **Self-Hosted**, you are responsible for keeping the Notploy instance running. If your server goes down, restarts, or runs out of disk — you need to fix it yourself.
+With **Self-Hosted**, you are responsible for keeping the Astron Collection instance running. If your server goes down, restarts, or runs out of disk — you need to fix it yourself.
 
-With **Cloud**, the Notploy team manages the uptime of the control plane (the UI, database, and management layer). Your applications still run on your own servers, but the management dashboard is maintained by us.
+With **Cloud**, the Astron Collection team manages the uptime of the control plane (the UI, database, and management layer). Your applications still run on your own servers, but the management dashboard is maintained by us.
 
 ### 2. Automatic updates
 
-With **Self-Hosted**, you update Notploy manually when new versions are released.
+With **Self-Hosted**, you update Astron Collection manually when new versions are released.
 
 With **Cloud**, updates are applied automatically — you're always on the latest version without doing anything.
 
@@ -97,13 +97,13 @@ Both versions use the same architecture. The only difference is **where** the co
 
 ### Self-Hosted
 
-The Notploy UI, PostgreSQL, Redis, and your applications all run on the same server(s) that you manage.
+The Astron Collection UI, PostgreSQL, Redis, and your applications all run on the same server(s) that you manage.
 
 ```
 ┌─────────────────────────────────┐
 │     Your Server (you manage)    │
 │                                 │
-│  Notploy UI + PostgreSQL + Redis│
+│  Astron Collection UI + PostgreSQL + Redis│
 │  Traefik (reverse proxy)        │
 │  ─────────────────────────────  │
 │  Your Apps & Databases          │
@@ -112,11 +112,11 @@ The Notploy UI, PostgreSQL, Redis, and your applications all run on the same ser
 
 ### Cloud
 
-The control plane runs on Notploy's infrastructure. Your servers only run your workloads.
+The control plane runs on Astron Collection's infrastructure. Your servers only run your workloads.
 
 ```
 ┌─────────────────┐         ┌──────────────────────┐
-│  Notploy Cloud   │  SSH    │   Your Server(s)     │
+│  Astron Collection Cloud   │  SSH    │   Your Server(s)     │
 │  (managed by us) │────────►│   Apps + Databases   │
 │                  │         │   Traefik            │
 │  UI, DB, Redis   │         └──────────────────────┘
@@ -131,14 +131,14 @@ Your **applications keep running independently** even if the Cloud control plane
 
 | Choose Self-Hosted if... | Choose Cloud if... |
 |--------------------------|-------------------|
-| You want zero cost | You don't want to maintain Notploy itself |
+| You want zero cost | You don't want to maintain Astron Collection itself |
 | You want full control over everything | You want automatic updates |
 | You prefer air-gapped or private networks | You want managed uptime for the control plane |
 | You're comfortable managing servers | You want direct support (Startup/Enterprise) |
 
 ## Cloud Plans
 
-If you choose Notploy Cloud, there are several plans depending on your needs:
+If you choose Astron Collection Cloud, there are several plans depending on your needs:
 
 ### Plan comparison
 
@@ -160,7 +160,7 @@ If you choose Notploy Cloud, there are several plans depending on your needs:
 | **Support** | Community (Discord) | Email & Chat | Priority with SLA | Partner team |
 
 <Callout type="info">
-Annual billing saves **20%** on all plans. See the [Pricing](https://notploy.com/pricing) page for the latest details.
+Annual billing saves **20%** on all plans. See the [Pricing](https://astron-collection.com/pricing) page for the latest details.
 </Callout>
 
 ### Which plan do I need?

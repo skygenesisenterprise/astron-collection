@@ -14,9 +14,9 @@ import { z } from "zod";
 import { organization } from "./account";
 
 /**
- * Every provider Notploy can talk to. Notploy never assumes DNS means one SaaS
+ * Every provider Astron Collection can talk to. Astron Collection never assumes DNS means one SaaS
  * vendor: managed providers, infrastructure the user operates themselves, and
- * Notploy's own internal DNS all sit behind the same adapter contract.
+ * Astron Collection's own internal DNS all sit behind the same adapter contract.
  */
 export const dnsProviderTypes = [
 	// Managed DNS services
@@ -45,7 +45,7 @@ export const dnsProviderTypes = [
 	// Generic / custom adapter
 	"custom",
 	// First-party
-	"notploy-internal",
+	"astron-collection-internal",
 ] as const;
 
 export type DnsProviderType = (typeof dnsProviderTypes)[number];
@@ -191,7 +191,7 @@ export const bindTsigAlgorithms = [
 
 export const bindDnsConfigSchema = z.object({
 	providerType: z.literal("bind"),
-	// Notploy server used to reach the nameserver over SSH and run nsupdate.
+	// Astron Collection server used to reach the nameserver over SSH and run nsupdate.
 	serverId: z.string().trim().min(1),
 	serverAddress: z.string().trim().min(1),
 	port: z.number().int().positive().max(65535).default(53),
@@ -238,7 +238,7 @@ export const unboundDnsConfigSchema = z.object({
 // ---------------------------------------------------------------------------
 
 /**
- * Adapter for organizations with their own DNS platform. Notploy speaks a small
+ * Adapter for organizations with their own DNS platform. Astron Collection speaks a small
  * documented HTTP contract instead of natively knowing the product.
  */
 export const customDnsConfigSchema = z.object({
@@ -253,8 +253,8 @@ export const customDnsConfigSchema = z.object({
 // First-party provider
 // ---------------------------------------------------------------------------
 
-export const notployInternalDnsConfigSchema = z.object({
-	providerType: z.literal("notploy-internal"),
+export const astronCollectionInternalDnsConfigSchema = z.object({
+	providerType: z.literal("astron-collection-internal"),
 	defaultTtl: z.number().int().positive().default(300),
 });
 
@@ -281,7 +281,7 @@ export const dnsProviderConfigSchema = z.discriminatedUnion("providerType", [
 	corednsDnsConfigSchema,
 	unboundDnsConfigSchema,
 	customDnsConfigSchema,
-	notployInternalDnsConfigSchema,
+	astronCollectionInternalDnsConfigSchema,
 ]);
 
 export type DnsProviderConfig = z.infer<typeof dnsProviderConfigSchema>;
@@ -324,7 +324,7 @@ export const dnsRecordTypeEnum = pgEnum("dnsRecordType", [
 ]);
 
 /**
- * Zones and records owned by the first-party Notploy Internal DNS provider.
+ * Zones and records owned by the first-party Astron Collection Internal DNS provider.
  * They are the source of truth for the internal adapter, which is why they are
  * persisted instead of being resolved inside the web application.
  */
@@ -377,8 +377,8 @@ export const dnsRecord = pgTable(
 		// values here; they stay empty for the rest.
 		comment: text("comment"),
 		tags: jsonb("tags").$type<string[]>().notNull().default([]),
-		// managed = created by Notploy, imported = adopted from the provider,
-		// external = observed but not owned by Notploy.
+		// managed = created by Astron Collection, imported = adopted from the provider,
+		// external = observed but not owned by Astron Collection.
 		ownership: text("ownership").notNull().default("managed"),
 		createdAt: text("createdAt")
 			.notNull()

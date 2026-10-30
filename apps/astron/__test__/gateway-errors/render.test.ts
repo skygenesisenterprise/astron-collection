@@ -3,14 +3,14 @@ import {
 	getGatewayErrorPageConfig,
 	renderGatewayErrorPage,
 	safeHttpUrl,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import { describe, expect, test } from "vitest";
 
 const config = getGatewayErrorPageConfig({
-	NOTPLOY_GATEWAY_BRAND_NAME: "Acme Cloud",
-	NOTPLOY_GATEWAY_DOCS_URL: "https://docs.example.com/",
-	NOTPLOY_GATEWAY_STATUS_URL: "https://status.example.com",
-	NOTPLOY_GATEWAY_SUPPORT_URL: "https://support.example.com",
+	ASTRON_COLLECTION_GATEWAY_BRAND_NAME: "Acme Cloud",
+	ASTRON_COLLECTION_GATEWAY_DOCS_URL: "https://docs.example.com/",
+	ASTRON_COLLECTION_GATEWAY_STATUS_URL: "https://status.example.com",
+	ASTRON_COLLECTION_GATEWAY_SUPPORT_URL: "https://support.example.com",
 	IS_CLOUD: "true",
 });
 
@@ -44,7 +44,7 @@ describe("getGatewayErrorPageConfig", () => {
 
 	test("falls back to safe defaults", () => {
 		const fallback = getGatewayErrorPageConfig({});
-		expect(fallback.brandName).toBe("Notploy");
+		expect(fallback.brandName).toBe("Astron Collection");
 		expect(fallback.docsUrl).toBeNull();
 		expect(fallback.statusUrl).toBeNull();
 		expect(fallback.supportUrl).toBeNull();
@@ -54,8 +54,8 @@ describe("getGatewayErrorPageConfig", () => {
 
 	test("rejects invalid links and locales", () => {
 		const invalid = getGatewayErrorPageConfig({
-			NOTPLOY_GATEWAY_DOCS_URL: "javascript:alert(1)",
-			NOTPLOY_GATEWAY_LOCALE: "<script>",
+			ASTRON_COLLECTION_GATEWAY_DOCS_URL: "javascript:alert(1)",
+			ASTRON_COLLECTION_GATEWAY_LOCALE: "<script>",
 		});
 		expect(invalid.docsUrl).toBeNull();
 		expect(invalid.locale).toBe("en");
@@ -63,7 +63,7 @@ describe("getGatewayErrorPageConfig", () => {
 
 	test("caps the brand name length", () => {
 		const longBrand = getGatewayErrorPageConfig({
-			NOTPLOY_GATEWAY_BRAND_NAME: "a".repeat(200),
+			ASTRON_COLLECTION_GATEWAY_BRAND_NAME: "a".repeat(200),
 		});
 		expect(longBrand.brandName).toHaveLength(64);
 	});

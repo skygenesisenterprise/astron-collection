@@ -1,75 +1,75 @@
 ---
 title: "Servers"
-description: "Add remote servers over SSH, validate them and read their metrics and services. Generated from the `notploy` command surface."
+description: "Add remote servers over SSH, validate them and read their metrics and services. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Add remote servers over SSH, validate them and read their metrics and services.
 
-`notploy server` exposes **21 commands**. They map one-to-one onto the `server.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection server` exposes **21 commands**. They map one-to-one onto the `server.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy server --help` to list these commands in your terminal, or
-	`notploy server <command> --help` for a single command.
+	Run `astron-collection server --help` to list these commands in your terminal, or
+	`astron-collection server <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy server all`
+### `astron-collection server all`
 
 Calls `GET /api/trpc/server.all`.
 
 ```bash
-notploy server all [options]
+astron-collection server all [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy server all-for-permissions`
+### `astron-collection server all-for-permissions`
 
 Calls `GET /api/trpc/server.allForPermissions`.
 
 ```bash
-notploy server all-for-permissions [options]
+astron-collection server all-for-permissions [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy server build-servers`
+### `astron-collection server build-servers`
 
 Calls `GET /api/trpc/server.buildServers`.
 
 ```bash
-notploy server build-servers [options]
+astron-collection server build-servers [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy server count`
+### `astron-collection server count`
 
 Calls `GET /api/trpc/server.count`.
 
 ```bash
-notploy server count [options]
+astron-collection server count [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy server create`
+### `astron-collection server create`
 
 Calls `POST /api/trpc/server.create`.
 
 ```bash
-notploy server create --name <value> --description <value> --ipAddress <value> --port <value> --username <value> --sshKeyId <value> --serverType <value> [options]
+astron-collection server create --name <value> --description <value> --ipAddress <value> --port <value> --username <value> --sshKeyId <value> --serverType <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -85,12 +85,12 @@ notploy server create --name <value> --description <value> --ipAddress <value> -
 | `--no-enableDockerCleanup` | boolean | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy server create-with-password`
+### `astron-collection server create-with-password`
 
 Calls `POST /api/trpc/server.createWithPassword`.
 
 ```bash
-notploy server create-with-password --name <value> --description <value> --ipAddress <value> --port <value> --username <value> --serverType <value> --sshPassword <value> [options]
+astron-collection server create-with-password --name <value> --description <value> --ipAddress <value> --port <value> --username <value> --serverType <value> --sshPassword <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -106,12 +106,12 @@ notploy server create-with-password --name <value> --description <value> --ipAdd
 | `--sshPassword <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy server get-default-command`
+### `astron-collection server get-default-command`
 
 Calls `GET /api/trpc/server.getDefaultCommand`.
 
 ```bash
-notploy server get-default-command --serverId <value> [options]
+astron-collection server get-default-command --serverId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -119,24 +119,24 @@ notploy server get-default-command --serverId <value> [options]
 | `--serverId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy server get-monitoring-workspaces`
+### `astron-collection server get-monitoring-workspaces`
 
 Calls `GET /api/trpc/server.getMonitoringWorkspaces`.
 
 ```bash
-notploy server get-monitoring-workspaces [options]
+astron-collection server get-monitoring-workspaces [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy server get-server-metrics`
+### `astron-collection server get-server-metrics`
 
 Calls `GET /api/trpc/server.getServerMetrics`.
 
 ```bash
-notploy server get-server-metrics --url <value> --token <value> --dataPoints <value> [options]
+astron-collection server get-server-metrics --url <value> --token <value> --dataPoints <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -146,24 +146,24 @@ notploy server get-server-metrics --url <value> --token <value> --dataPoints <va
 | `--dataPoints <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy server get-server-time`
+### `astron-collection server get-server-time`
 
 Calls `GET /api/trpc/server.getServerTime`.
 
 ```bash
-notploy server get-server-time [options]
+astron-collection server get-server-time [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy server get-services`
+### `astron-collection server get-services`
 
 Calls `GET /api/trpc/server.getServices`.
 
 ```bash
-notploy server get-services --serverId <value> [options]
+astron-collection server get-services --serverId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -171,12 +171,12 @@ notploy server get-services --serverId <value> [options]
 | `--serverId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy server one`
+### `astron-collection server one`
 
 Calls `GET /api/trpc/server.one`.
 
 ```bash
-notploy server one --serverId <value> [options]
+astron-collection server one --serverId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -184,24 +184,24 @@ notploy server one --serverId <value> [options]
 | `--serverId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy server public-ip`
+### `astron-collection server public-ip`
 
 Calls `GET /api/trpc/server.publicIp`.
 
 ```bash
-notploy server public-ip [options]
+astron-collection server public-ip [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy server remove`
+### `astron-collection server remove`
 
 Calls `POST /api/trpc/server.remove`.
 
 ```bash
-notploy server remove --serverId <value> [options]
+astron-collection server remove --serverId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -209,12 +209,12 @@ notploy server remove --serverId <value> [options]
 | `--serverId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy server security`
+### `astron-collection server security`
 
 Calls `GET /api/trpc/server.security`.
 
 ```bash
-notploy server security --serverId <value> [options]
+astron-collection server security --serverId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -222,12 +222,12 @@ notploy server security --serverId <value> [options]
 | `--serverId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy server setup`
+### `astron-collection server setup`
 
 Calls `POST /api/trpc/server.setup`.
 
 ```bash
-notploy server setup --serverId <value> [options]
+astron-collection server setup --serverId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -235,12 +235,12 @@ notploy server setup --serverId <value> [options]
 | `--serverId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy server setup-monitoring`
+### `astron-collection server setup-monitoring`
 
 Calls `POST /api/trpc/server.setupMonitoring`.
 
 ```bash
-notploy server setup-monitoring --serverId <value> --metricsConfig <json> [options]
+astron-collection server setup-monitoring --serverId <value> --metricsConfig <json> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -249,12 +249,12 @@ notploy server setup-monitoring --serverId <value> --metricsConfig <json> [optio
 | `--metricsConfig <json>` | object | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy server update`
+### `astron-collection server update`
 
 Calls `POST /api/trpc/server.update`.
 
 ```bash
-notploy server update --name <value> --description <value> --serverId <value> --ipAddress <value> --port <value> --username <value> --sshKeyId <value> --serverType <value> [options]
+astron-collection server update --name <value> --description <value> --serverId <value> --ipAddress <value> --port <value> --username <value> --sshKeyId <value> --serverType <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -272,12 +272,12 @@ notploy server update --name <value> --description <value> --serverId <value> --
 | `--command <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy server update-builds-concurrency`
+### `astron-collection server update-builds-concurrency`
 
 Calls `POST /api/trpc/server.updateBuildsConcurrency`.
 
 ```bash
-notploy server update-builds-concurrency --serverId <value> --buildsConcurrency <value> [options]
+astron-collection server update-builds-concurrency --serverId <value> --buildsConcurrency <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -286,12 +286,12 @@ notploy server update-builds-concurrency --serverId <value> --buildsConcurrency 
 | `--buildsConcurrency <value>` | number | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy server validate`
+### `astron-collection server validate`
 
 Calls `GET /api/trpc/server.validate`.
 
 ```bash
-notploy server validate --serverId <value> [options]
+astron-collection server validate --serverId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -299,12 +299,12 @@ notploy server validate --serverId <value> [options]
 | `--serverId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy server with-sshkey`
+### `astron-collection server with-sshkey`
 
 Calls `GET /api/trpc/server.withSSHKey`.
 
 ```bash
-notploy server with-sshkey [options]
+astron-collection server with-sshkey [options]
 ```
 
 | Option | Type | Required | Allowed values |

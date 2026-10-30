@@ -1,4 +1,4 @@
-import type { ServiceType } from "@notploy/server/db/schema";
+import type { ServiceType } from "@astron-collection/server/db/schema";
 import {
 	Check,
 	ChevronDown,

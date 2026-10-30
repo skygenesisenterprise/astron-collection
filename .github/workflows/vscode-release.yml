@@ -1,6 +1,6 @@
 name: VS Code Release
 
-# Publishes the official Notploy extension to the Visual Studio Marketplace.
+# Publishes the official Astron Collection extension to the Visual Studio Marketplace.
 #
 #   git tag v0.2.0-vscode
 #   git push origin v0.2.0-vscode      -> verify, package, publish, GitHub Release
@@ -21,10 +21,10 @@ name: VS Code Release
 # `v1.2.3-vscode` reaches the registry and npm nowhere and only this file acts
 # on it.
 #
-# Prerequisites, configured once by whoever owns the `notploy` publisher:
+# Prerequisites, configured once by whoever owns the `astron-collection` publisher:
 #
 #   * An Entra ID app registration with a federated credential trusting
-#     `repo:skygenesisenterprise/notploy:ref:refs/tags/v*.*.*-vscode`
+#     `repo:skygenesisenterprise/astron-collection:ref:refs/tags/v*.*.*-vscode`
 #     (or `...:environment:` if a GitHub environment is added later), and that
 #     identity added to the Marketplace publisher with the Contributor role.
 #     Marketplace access does not require an Azure subscription.
@@ -51,7 +51,7 @@ env:
   NODE_VERSION: "24.4.0"
   PNPM_VERSION: "10.22.0"
   EXTENSION_DIR: packages/vscode
-  # The workspace directory holding the extension is `notploy`, the same name as
+  # The workspace directory holding the extension is `astron-collection`, the same name as
   # the repository root package, so every pnpm command targets it by path
   # instead of by name.
   EXTENSION_FILTER: ./packages/vscode
@@ -93,7 +93,7 @@ jobs:
         # slow the release down.
         env:
           EXTENSION_FILTER: ${{ env.EXTENSION_FILTER }}
-        run: pnpm install --frozen-lockfile --filter "$EXTENSION_FILTER" --filter "@notploy/sdk..."
+        run: pnpm install --frozen-lockfile --filter "$EXTENSION_FILTER" --filter "@astron-collection/sdk..."
 
       - name: Resolve the release version
         id: release
@@ -148,10 +148,10 @@ jobs:
           done
 
       - name: Build the SDK
-        # The extension imports @notploy/sdk, whose export map points at dist/:
+        # The extension imports @astron-collection/sdk, whose export map points at dist/:
         # with no compiled SDK the typecheck cannot even resolve the module, so
         # this has to run before anything that reads the extension's source.
-        run: pnpm --filter "@notploy/sdk" run build
+        run: pnpm --filter "@astron-collection/sdk" run build
 
       - name: Verify the extension
         id: verify
@@ -263,7 +263,7 @@ jobs:
         if: ${{ !cancelled() && steps.package.outcome == 'success' }}
         uses: actions/upload-artifact@v7
         with:
-          name: notploy-vscode-${{ steps.release.outputs.version }}
+          name: astron-collection-vscode-${{ steps.release.outputs.version }}
           path: ${{ steps.package.outputs.vsix }}
           if-no-files-found: error
           retention-days: 90
@@ -273,26 +273,26 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          name: Notploy for VS Code ${{ steps.release.outputs.version }}
+          name: Astron Collection for VS Code ${{ steps.release.outputs.version }}
           generate_release_notes: true
           fail_on_unmatched_files: true
           files: ${{ steps.package.outputs.vsix }}
           body: |
-            ## Notploy for VS Code
+            ## Astron Collection for VS Code
 
             Version `${{ steps.release.outputs.version }}` is published to the
-            Visual Studio Marketplace as `notploy.notploy`, and installed from
+            Visual Studio Marketplace as `astron-collection.astron-collection`, and installed from
             there with:
 
             ```bash
-            code --install-extension notploy.notploy
+            code --install-extension astron-collection.astron-collection
             ```
 
             The `.vsix` attached below is the exact artifact that was published,
             for air-gapped machines or a pinned install:
 
             ```bash
-            code --install-extension notploy-vscode.vsix
+            code --install-extension astron-collection-vscode.vsix
             ```
 
       - name: Summarize the release
@@ -322,7 +322,7 @@ jobs:
           esac
 
           {
-            echo "### Notploy for VS Code ${VERSION:-unresolved}"
+            echo "### Astron Collection for VS Code ${VERSION:-unresolved}"
             echo
             echo "| Step | Result |"
             echo "| --- | --- |"

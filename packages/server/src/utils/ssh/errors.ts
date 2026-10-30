@@ -29,7 +29,7 @@ const CATEGORY_MESSAGES: Record<SshFailureCategory, string> = {
 	"host-key":
 		"The server presented a different SSH host key than the one previously trusted. Verify the server's identity before connecting again.",
 	authorization:
-		"The SSH account is not allowed to install Notploy's key. Use root or a non-root account with passwordless sudo access.",
+		"The SSH account is not allowed to install Astron Collection's key. Use root or a non-root account with passwordless sudo access.",
 	command:
 		"The remote command failed on the server. See the server logs for more details.",
 	unknown:

@@ -1,39 +1,39 @@
 ---
 title: "Network providers"
-description: "External network providers (overlay networks and peers) plus their health checks. Generated from the `notploy` command surface."
+description: "External network providers (overlay networks and peers) plus their health checks. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 External network providers (overlay networks and peers) plus their health checks.
 
-`notploy network-provider` exposes **9 commands**. They map one-to-one onto the `network-provider.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection network-provider` exposes **9 commands**. They map one-to-one onto the `network-provider.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy network-provider --help` to list these commands in your terminal, or
-	`notploy network-provider <command> --help` for a single command.
+	Run `astron-collection network-provider --help` to list these commands in your terminal, or
+	`astron-collection network-provider <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy network-provider all`
+### `astron-collection network-provider all`
 
 Calls `GET /api/trpc/networkProvider.all`.
 
 ```bash
-notploy network-provider all [options]
+astron-collection network-provider all [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy network-provider create`
+### `astron-collection network-provider create`
 
 Calls `POST /api/trpc/networkProvider.create`.
 
 ```bash
-notploy network-provider create --name <value> --config <json> [options]
+astron-collection network-provider create --name <value> --config <json> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -43,24 +43,24 @@ notploy network-provider create --name <value> --config <json> [options]
 | `--peers <json>` | array | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy network-provider descriptors`
+### `astron-collection network-provider descriptors`
 
 Calls `GET /api/trpc/networkProvider.descriptors`.
 
 ```bash
-notploy network-provider descriptors [options]
+astron-collection network-provider descriptors [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy network-provider health`
+### `astron-collection network-provider health`
 
 Calls `GET /api/trpc/networkProvider.health`.
 
 ```bash
-notploy network-provider health --networkProviderId <value> [options]
+astron-collection network-provider health --networkProviderId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -68,12 +68,12 @@ notploy network-provider health --networkProviderId <value> [options]
 | `--networkProviderId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy network-provider one`
+### `astron-collection network-provider one`
 
 Calls `GET /api/trpc/networkProvider.one`.
 
 ```bash
-notploy network-provider one --networkProviderId <value> [options]
+astron-collection network-provider one --networkProviderId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -81,12 +81,12 @@ notploy network-provider one --networkProviderId <value> [options]
 | `--networkProviderId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy network-provider peers`
+### `astron-collection network-provider peers`
 
 Calls `GET /api/trpc/networkProvider.peers`.
 
 ```bash
-notploy network-provider peers --networkProviderId <value> [options]
+astron-collection network-provider peers --networkProviderId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -94,12 +94,12 @@ notploy network-provider peers --networkProviderId <value> [options]
 | `--networkProviderId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy network-provider remove`
+### `astron-collection network-provider remove`
 
 Calls `POST /api/trpc/networkProvider.remove`.
 
 ```bash
-notploy network-provider remove --networkProviderId <value> [options]
+astron-collection network-provider remove --networkProviderId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -107,12 +107,12 @@ notploy network-provider remove --networkProviderId <value> [options]
 | `--networkProviderId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy network-provider test-connection`
+### `astron-collection network-provider test-connection`
 
 Calls `POST /api/trpc/networkProvider.testConnection`.
 
 ```bash
-notploy network-provider test-connection [options]
+astron-collection network-provider test-connection [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -122,12 +122,12 @@ notploy network-provider test-connection [options]
 | `--peers <json>` | array | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy network-provider update`
+### `astron-collection network-provider update`
 
 Calls `POST /api/trpc/networkProvider.update`.
 
 ```bash
-notploy network-provider update --networkProviderId <value> --name <value> --config <json> [options]
+astron-collection network-provider update --networkProviderId <value> --name <value> --config <json> [options]
 ```
 
 | Option | Type | Required | Allowed values |

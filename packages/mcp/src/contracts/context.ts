@@ -1,7 +1,7 @@
 import type { Environment, ResolvedPermissions } from "./core.js";
 
 export interface AuthenticatedIdentity {
-  /** Stable user identifier returned by the Notploy API. */
+  /** Stable user identifier returned by the Astron Collection API. */
   id: string;
   /** Active organization/workspace of the credential. */
   organizationId: string;

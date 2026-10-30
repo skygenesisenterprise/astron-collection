@@ -3,8 +3,8 @@ import {
 	getWebServerSettings,
 	IS_CLOUD,
 	isAdminPresent,
-} from "@notploy/server";
-import { validateRequest } from "@notploy/server/lib/auth";
+} from "@astron-collection/server";
+import { validateRequest } from "@astron-collection/server/lib/auth";
 import {
 	browserSupportsWebAuthn,
 	startAuthentication,
@@ -749,7 +749,7 @@ export default function Home({ IS_CLOUD, enforceSSO }: Props) {
 						) : (
 							<Link
 								className="hover:underline text-muted-foreground"
-								href="https://docs.notploy.com/docs/core/reset-password"
+								href="https://docs.astron-collection.com/docs/core/reset-password"
 								target="_blank"
 							>
 								Lost your password?

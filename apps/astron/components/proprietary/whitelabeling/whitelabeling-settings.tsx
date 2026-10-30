@@ -54,7 +54,7 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>;
 
 const DEFAULT_CSS_TEMPLATE = `/* ============================================
-   Notploy Default Theme - CSS Variables
+   Astron Collection Default Theme - CSS Variables
    Modify these values to customize your instance.
 
    Theme colors use the oklch() color format
@@ -296,10 +296,10 @@ export function WhitelabelingSettings() {
 									<FormItem>
 										<FormLabel>Application Name</FormLabel>
 										<FormControl>
-											<Input placeholder="Notploy" {...field} />
+											<Input placeholder="Astron Collection" {...field} />
 										</FormControl>
 										<FormDescription>
-											Replaces "Notploy" across the entire interface.
+											Replaces "Astron Collection" across the entire interface.
 										</FormDescription>
 										<FormMessage />
 									</FormItem>
@@ -320,7 +320,7 @@ export function WhitelabelingSettings() {
 										</FormControl>
 										<FormDescription>
 											Tagline shown on the login/onboarding pages. Defaults to
-											the standard Notploy description if empty.
+											the standard Astron Collection description if empty.
 										</FormDescription>
 										<FormMessage />
 									</FormItem>

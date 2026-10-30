@@ -1,4 +1,4 @@
-# Notploy web frontends — website + docs, in dev and prod modes.
+# Astron Collection web frontends — website + docs, in dev and prod modes.
 #
 # The monorepo has a single pnpm workspace at the repository root, so:
 #   * prod images are built from the repository root context (see the
@@ -21,7 +21,7 @@
 #
 # Override ports with WEBSITE_DEV_PORT, DOCS_DEV_PORT, WEBSITE_PORT, DOCS_PORT.
 
-name: notploy-web
+name: astron-collection-web
 
 x-dev: &dev
   image: node:24.4-alpine
@@ -46,8 +46,8 @@ services:
     command: >-
       sh -lc "npm install -g pnpm@10.22.0 &&
       pnpm install
-      --filter=@notploy/website...
-      --filter=@notploy/docs...
+      --filter=@astron-collection/website...
+      --filter=@astron-collection/docs...
       --frozen-lockfile"
     restart: "no"
 
@@ -60,7 +60,7 @@ services:
         condition: service_completed_successfully
     command: >-
       sh -lc "npm install -g pnpm@10.22.0 &&
-      pnpm --filter=@notploy/website exec next dev --port 3000 --hostname 0.0.0.0"
+      pnpm --filter=@astron-collection/website exec next dev --port 3000 --hostname 0.0.0.0"
     ports:
       - "${WEBSITE_DEV_PORT:-3000}:3000"
 
@@ -69,7 +69,7 @@ services:
     build:
       context: ..
       dockerfile: web/Dockerfile.website
-    image: notploy/website:${TAG:-latest}
+    image: astron-collection/website:${TAG:-latest}
     restart: unless-stopped
     environment:
       NODE_ENV: production
@@ -87,7 +87,7 @@ services:
         condition: service_completed_successfully
     command: >-
       sh -lc "npm install -g pnpm@10.22.0 &&
-      pnpm --filter=@notploy/docs exec next dev --port 3000 --hostname 0.0.0.0"
+      pnpm --filter=@astron-collection/docs exec next dev --port 3000 --hostname 0.0.0.0"
     ports:
       - "${DOCS_DEV_PORT:-3000}:3000"
 
@@ -96,7 +96,7 @@ services:
     build:
       context: ..
       dockerfile: web/Dockerfile.docs
-    image: notploy/docs:${TAG:-latest}
+    image: astron-collection/docs:${TAG:-latest}
     restart: unless-stopped
     environment:
       NODE_ENV: production

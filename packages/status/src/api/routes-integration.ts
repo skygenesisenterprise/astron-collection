@@ -1,7 +1,7 @@
 /**
  * Integration API (`/api/v1/integration`) — machine-to-machine.
  *
- * Used by Notploy Console, the Go monitoring agent or any probe holding a
+ * Used by Astron Collection Console, the Go monitoring agent or any probe holding a
  * token with the `ingest` scope. Publication remains an explicit decision:
  * ingesting an event never makes anything public unless the target page
  * opted into `autoIncident` **and** `autoPublish`.

@@ -1,4 +1,4 @@
-import type { ApplicationNested, Domain } from "@notploy/server";
+import type { ApplicationNested, Domain } from "@astron-collection/server";
 import {
 	buildForwardAuthEnv,
 	createRouterConfig,
@@ -6,7 +6,7 @@ import {
 	deriveCookieSecret,
 	forwardAuthCallbackUrl,
 	forwardAuthMiddlewareName,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import { beforeAll, describe, expect, test } from "vitest";
 
 const app = {

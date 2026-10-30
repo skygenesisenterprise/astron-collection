@@ -1,7 +1,7 @@
 import {
 	apiCreateNetworkProvider,
 	apiUpdateNetworkProvider,
-} from "@notploy/server/db/schema";
+} from "@astron-collection/server/db/schema";
 import { describe, expect, it } from "vitest";
 
 const wireguardConfig = {

@@ -4,7 +4,7 @@ import {
 	getDefaultGatewayError,
 	getGatewayErrorByCode,
 	resolveGatewayError,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import { describe, expect, test } from "vitest";
 
 describe("gateway error registry", () => {

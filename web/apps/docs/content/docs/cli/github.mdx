@@ -1,27 +1,27 @@
 ---
 title: "GitHub"
-description: "GitHub app connections, plus branch and repository lookups. Generated from the `notploy` command surface."
+description: "GitHub app connections, plus branch and repository lookups. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 GitHub app connections, plus branch and repository lookups.
 
-`notploy github` exposes **6 commands**. They map one-to-one onto the `github.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection github` exposes **6 commands**. They map one-to-one onto the `github.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy github --help` to list these commands in your terminal, or
-	`notploy github <command> --help` for a single command.
+	Run `astron-collection github --help` to list these commands in your terminal, or
+	`astron-collection github <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy github get-github-branches`
+### `astron-collection github get-github-branches`
 
 Calls `GET /api/trpc/github.getGithubBranches`.
 
 ```bash
-notploy github get-github-branches --repo <value> --owner <value> [options]
+astron-collection github get-github-branches --repo <value> --owner <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -31,12 +31,12 @@ notploy github get-github-branches --repo <value> --owner <value> [options]
 | `--githubId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy github get-github-repositories`
+### `astron-collection github get-github-repositories`
 
 Calls `GET /api/trpc/github.getGithubRepositories`.
 
 ```bash
-notploy github get-github-repositories --githubId <value> [options]
+astron-collection github get-github-repositories --githubId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -44,24 +44,24 @@ notploy github get-github-repositories --githubId <value> [options]
 | `--githubId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy github github-providers`
+### `astron-collection github github-providers`
 
 Calls `GET /api/trpc/github.githubProviders`.
 
 ```bash
-notploy github github-providers [options]
+astron-collection github github-providers [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy github one`
+### `astron-collection github one`
 
 Calls `GET /api/trpc/github.one`.
 
 ```bash
-notploy github one --githubId <value> [options]
+astron-collection github one --githubId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -69,12 +69,12 @@ notploy github one --githubId <value> [options]
 | `--githubId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy github test-connection`
+### `astron-collection github test-connection`
 
 Calls `POST /api/trpc/github.testConnection`.
 
 ```bash
-notploy github test-connection --githubId <value> [options]
+astron-collection github test-connection --githubId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -82,12 +82,12 @@ notploy github test-connection --githubId <value> [options]
 | `--githubId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy github update`
+### `astron-collection github update`
 
 Calls `POST /api/trpc/github.update`.
 
 ```bash
-notploy github update --githubId <value> --name <value> --gitProviderId <value> --githubAppName <value> [options]
+astron-collection github update --githubId <value> --name <value> --gitProviderId <value> --githubAppName <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |

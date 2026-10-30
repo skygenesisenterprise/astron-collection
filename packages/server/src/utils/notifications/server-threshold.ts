@@ -203,7 +203,7 @@ export const sendServerThresholdNotifications = async (
 					],
 					timestamp: date.toISOString(),
 					footer: {
-						text: "Notploy Server Monitoring Alert",
+						text: "Astron Collection Server Monitoring Alert",
 					},
 				});
 			}
@@ -271,7 +271,7 @@ export const sendServerThresholdNotifications = async (
 				await sendMattermostNotification(mattermost, {
 					text: `**⚠️ Server ${payload.Type} Alert**\n\n**Server Name:** ${payload.ServerName}\n**Type:** ${payload.Type}\n**Current Value:** ${payload.Value.toFixed(2)}%\n**Threshold:** ${payload.Threshold.toFixed(2)}%\n**Message:** ${payload.Message}\n**Time:** ${date.toLocaleString()}`,
 					channel: mattermost.channel,
-					username: mattermost.username || "Notploy",
+					username: mattermost.username || "Astron Collection",
 				});
 			}
 

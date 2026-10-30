@@ -31,7 +31,7 @@ let memberToReturn: ReturnType<typeof mockMemberData> =
 
 let serviceProjectRows: Array<{ projectId: string }> = [];
 
-vi.mock("@notploy/server/db", () => ({
+vi.mock("@astron-collection/server/db", () => ({
 	db: {
 		execute: vi.fn(() => Promise.resolve(serviceProjectRows)),
 		query: {
@@ -47,12 +47,12 @@ vi.mock("@notploy/server/db", () => ({
 	},
 }));
 
-const { db } = await import("@notploy/server/db");
+const { db } = await import("@astron-collection/server/db");
 const {
 	checkEnvironmentAccess,
 	checkServicePermissionAndAccess,
 	checkServiceAccess,
-} = await import("@notploy/server/services/permission");
+} = await import("@astron-collection/server/services/permission");
 
 const ctx = {
 	user: { id: "user-1" },

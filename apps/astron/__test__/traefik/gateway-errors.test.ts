@@ -5,7 +5,7 @@ import {
 	createRouterConfig,
 	type ApplicationNested,
 	type Domain,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import { describe, expect, test } from "vitest";
 
 const app = {
@@ -46,28 +46,28 @@ describe("buildGatewayErrorsConfig", () => {
 		expect(http?.middlewares?.[GATEWAY_ERRORS_MIDDLEWARE_NAME]).toEqual({
 			errors: {
 				status: ["500-599"],
-				service: "notploy-gateway-errors",
-				query: "/__notploy_error?status={status}",
+				service: "astron-collection-gateway-errors",
+				query: "/__astron_collectionerror?status={status}",
 			},
 		});
-		expect(http?.services?.["notploy-gateway-errors"]).toEqual({
+		expect(http?.services?.["astron-collection-gateway-errors"]).toEqual({
 			loadBalancer: {
-				servers: [{ url: "http://notploy-gateway-errors:8080" }],
+				servers: [{ url: "http://astron-collection-gateway-errors:8080" }],
 				passHostHeader: true,
 			},
 		});
-		expect(http?.routers?.["notploy-gateway-errors-web"]).toMatchObject({
+		expect(http?.routers?.["astron-collection-gateway-errors-web"]).toMatchObject({
 			rule: "PathPrefix(`/`)",
 			priority: 1,
-			service: "notploy-gateway-errors",
+			service: "astron-collection-gateway-errors",
 			entryPoints: ["web"],
 		});
 		expect(
-			http?.routers?.["notploy-gateway-errors-websecure"],
+			http?.routers?.["astron-collection-gateway-errors-websecure"],
 		).toMatchObject({
 			rule: "PathPrefix(`/`)",
 			priority: 1,
-			service: "notploy-gateway-errors",
+			service: "astron-collection-gateway-errors",
 			entryPoints: ["websecure"],
 		});
 	});

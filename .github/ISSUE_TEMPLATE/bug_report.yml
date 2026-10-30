@@ -1,5 +1,5 @@
 name: 🐛 Bug report
-description: Something in Notploy behaves incorrectly — a regression, an error, or an unexpected result.
+description: Something in Astron Collection behaves incorrectly — a regression, an error, or an unexpected result.
 title: "[Bug]: "
 labels: ["bug"]
 
@@ -9,22 +9,22 @@ body:
       value: |
         Something is broken. The more precisely you describe it, the faster it gets fixed.
 
-        - Not sure this is a bug? Check the [troubleshooting docs](https://docs.notploy.com/docs/core/troubleshooting) and the [Notploy Discord](https://discord.gg/GUkDugVh34).
+        - Not sure this is a bug? Check the [troubleshooting docs](https://docs.astron-collection.com/docs/core/troubleshooting) and the [Astron Collection Discord](https://discord.gg/GUkDugVh34).
         - Already reported? Close your issue and add a comment to the existing one — duplicates are closed.
 
         > **Do not paste secrets, tokens, API keys, database credentials, `.env` contents, private hostnames or personal data into this issue.**
         > Never include real values from a production instance. Redact hostnames, IPs, emails and paths.
         >
         > If the problem **is** a security vulnerability, do not report it here at all: open a
-        > [private security advisory](https://github.com/skygenesisenterprise/notploy/security/advisories/new)
+        > [private security advisory](https://github.com/skygenesisenterprise/astron-collection/security/advisories/new)
         > or use the private address in
-        > [SECURITY.md](https://github.com/skygenesisenterprise/notploy/blob/master/SECURITY.md).
+        > [SECURITY.md](https://github.com/skygenesisenterprise/astron-collection/blob/master/SECURITY.md).
 
   - type: dropdown
     id: area
     attributes:
       label: Affected area
-      description: Which part of Notploy is involved?
+      description: Which part of Astron Collection is involved?
       options:
         - Applications — builds, deployments, auto-deploy, sources, rollbacks, patches
         - Docker Compose / Swarm stacks
@@ -37,11 +37,11 @@ body:
         - Dashboard (web UI)
         - Authentication and access — users, sessions, organizations, roles, permissions
         - API — REST/OpenAPI surface, SDK, MCP server
-        - CLI — the `notploy` command-line client
+        - CLI — the `astron-collection` command-line client
         - Self-hosting and installation — Docker image, Compose stack, upgrades
         - Automation — monitors, schedule jobs, notifications
         - Secrets — environment variables, secret/vault providers
-        - Templates gallery — blueprints at templates.notploy.com
+        - Templates gallery — blueprints at templates.astron-collection.com
         - Something else
     validations:
       required: true
@@ -51,7 +51,7 @@ body:
     attributes:
       label: Environment
       description: >-
-        Which Notploy are you running, how is it installed, on what host? For a build
+        Which Astron Collection are you running, how is it installed, on what host? For a build
         problem, also give the build type (Dockerfile, Nixpacks, Railpack, buildpacks,
         static) and the source type.
       placeholder: >-

@@ -1,6 +1,6 @@
-import { db } from "@notploy/server/db";
-import { notifications } from "@notploy/server/db/schema";
-import NotployRestartEmail from "@notploy/server/emails/emails/notploy-restart";
+import { db } from "@astron-collection/server/db";
+import { notifications } from "@astron-collection/server/db/schema";
+import AstronCollectionRestartEmail from "@astron-collection/server/emails/emails/astron-collection-restart";
 import { render } from "@react-email/components";
 import { format } from "date-fns";
 import { eq } from "drizzle-orm";
@@ -19,12 +19,12 @@ import {
 	sendTelegramNotification,
 } from "./utils";
 
-export const sendNotployRestartNotifications = async () => {
+export const sendAstronCollectionRestartNotifications = async () => {
 	try {
 		const date = new Date();
 		const unixDate = ~~(Number(date) / 1000);
 		const notificationList = await db.query.notifications.findMany({
-			where: eq(notifications.notployRestart, true),
+			where: eq(notifications.astronCollectionRestart, true),
 			with: {
 				email: true,
 				discord: true,
@@ -60,13 +60,13 @@ export const sendNotployRestartNotifications = async () => {
 			try {
 				if (email || resend) {
 					const template = await render(
-						NotployRestartEmail({ date: date.toLocaleString() }),
+						AstronCollectionRestartEmail({ date: date.toLocaleString() }),
 					).catch();
 
 					if (email) {
 						await sendEmailNotification(
 							email,
-							"Notploy Server Restarted",
+							"Astron Collection Server Restarted",
 							template,
 						);
 					}
@@ -74,7 +74,7 @@ export const sendNotployRestartNotifications = async () => {
 					if (resend) {
 						await sendResendNotification(
 							resend,
-							"Notploy Server Restarted",
+							"Astron Collection Server Restarted",
 							template,
 						);
 					}
@@ -85,7 +85,7 @@ export const sendNotployRestartNotifications = async () => {
 						`${discord.decoration ? decoration : ""} ${text}`.trim();
 
 					await sendDiscordNotification(discord, {
-						title: decorate(">", "`✅` Notploy Server Restarted"),
+						title: decorate(">", "`✅` Astron Collection Server Restarted"),
 						color: 0x57f287,
 						fields: [
 							{
@@ -106,7 +106,7 @@ export const sendNotployRestartNotifications = async () => {
 						],
 						timestamp: date.toISOString(),
 						footer: {
-							text: "Notploy Restart Notification",
+							text: "Astron Collection Restart Notification",
 						},
 					});
 				}
@@ -116,7 +116,7 @@ export const sendNotployRestartNotifications = async () => {
 						`${gotify.decoration ? decoration : ""} ${text}\n`;
 					await sendGotifyNotification(
 						gotify,
-						decorate("✅", "Notploy Server Restarted"),
+						decorate("✅", "Astron Collection Server Restarted"),
 						`${decorate("🕒", `Date: ${date.toLocaleString()}`)}`,
 					);
 				}
@@ -124,7 +124,7 @@ export const sendNotployRestartNotifications = async () => {
 				if (ntfy) {
 					await sendNtfyNotification(
 						ntfy,
-						"Notploy Server Restarted",
+						"Astron Collection Server Restarted",
 						"white_check_mark",
 						"",
 						`🕒Date: ${date.toLocaleString()}`,
@@ -134,7 +134,7 @@ export const sendNotployRestartNotifications = async () => {
 				if (telegram) {
 					await sendTelegramNotification(
 						telegram,
-						`<b>✅ Notploy Server Restarted</b>\n\n<b>Date:</b> ${format(
+						`<b>✅ Astron Collection Server Restarted</b>\n\n<b>Date:</b> ${format(
 							date,
 							"PP",
 						)}\n<b>Time:</b> ${format(date, "pp")}`,
@@ -148,7 +148,7 @@ export const sendNotployRestartNotifications = async () => {
 						attachments: [
 							{
 								color: "#00FF00",
-								pretext: ":white_check_mark: *Notploy Server Restarted*",
+								pretext: ":white_check_mark: *Astron Collection Server Restarted*",
 								fields: [
 									{
 										title: "Time",
@@ -163,21 +163,21 @@ export const sendNotployRestartNotifications = async () => {
 
 				if (mattermost) {
 					await sendMattermostNotification(mattermost, {
-						text: `**✅ Notploy Server Restarted**\n\n**Date:** ${format(date, "PP")}\n**Time:** ${format(date, "pp")}`,
+						text: `**✅ Astron Collection Server Restarted**\n\n**Date:** ${format(date, "PP")}\n**Time:** ${format(date, "pp")}`,
 						channel: mattermost.channel,
-						username: mattermost.username || "Notploy",
+						username: mattermost.username || "Astron Collection",
 					});
 				}
 
 				if (custom) {
 					try {
 						await sendCustomNotification(custom, {
-							title: "Notploy Server Restarted",
-							message: "Notploy server has been restarted successfully",
+							title: "Astron Collection Server Restarted",
+							message: "Astron Collection server has been restarted successfully",
 							timestamp: date.toISOString(),
 							date: date.toLocaleString(),
 							status: "success",
-							type: "notploy-restart",
+							type: "astron-collection-restart",
 						});
 					} catch (error) {
 						console.log(error);
@@ -204,7 +204,7 @@ export const sendNotployRestartNotifications = async () => {
 							header: {
 								title: {
 									tag: "plain_text",
-									content: "✅ Notploy Server Restarted",
+									content: "✅ Astron Collection Server Restarted",
 								},
 								subtitle: {
 									tag: "plain_text",
@@ -262,14 +262,14 @@ export const sendNotployRestartNotifications = async () => {
 				if (pushover) {
 					await sendPushoverNotification(
 						pushover,
-						"Notploy Server Restarted",
+						"Astron Collection Server Restarted",
 						`Date: ${date.toLocaleString()}`,
 					);
 				}
 
 				if (teams) {
 					await sendTeamsNotification(teams, {
-						title: "✅ Notploy Server Restarted",
+						title: "✅ Astron Collection Server Restarted",
 						facts: [
 							{ name: "Status", value: "Successful" },
 							{ name: "Restart Time", value: format(date, "PP pp") },
@@ -281,6 +281,6 @@ export const sendNotployRestartNotifications = async () => {
 			}
 		}
 	} catch (error) {
-		console.error("[Notploy] Restart notifications failed:", error);
+		console.error("[Astron Collection] Restart notifications failed:", error);
 	}
 };

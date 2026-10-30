@@ -1,5 +1,5 @@
-import type { Domain } from "@notploy/server";
-import { createDomainLabels } from "@notploy/server";
+import type { Domain } from "@astron-collection/server";
+import { createDomainLabels } from "@astron-collection/server";
 import { describe, expect, it } from "vitest";
 
 describe("createDomainLabels", () => {

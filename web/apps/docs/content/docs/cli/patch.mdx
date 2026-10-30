@@ -1,27 +1,27 @@
 ---
 title: "Patches"
-description: "Versioned file overrides applied to an application at deploy time. Generated from the `notploy` command surface."
+description: "Versioned file overrides applied to an application at deploy time. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Versioned file overrides applied to an application at deploy time.
 
-`notploy patch` exposes **12 commands**. They map one-to-one onto the `patch.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection patch` exposes **12 commands**. They map one-to-one onto the `patch.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy patch --help` to list these commands in your terminal, or
-	`notploy patch <command> --help` for a single command.
+	Run `astron-collection patch --help` to list these commands in your terminal, or
+	`astron-collection patch <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy patch by-entity-id`
+### `astron-collection patch by-entity-id`
 
 Calls `GET /api/trpc/patch.byEntityId`.
 
 ```bash
-notploy patch by-entity-id --id <value> --type <value> [options]
+astron-collection patch by-entity-id --id <value> --type <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -30,12 +30,12 @@ notploy patch by-entity-id --id <value> --type <value> [options]
 | `--type <value>` | string | Yes | `application`, `compose` |
 | `--profile <name>` | string | No | — |
 
-### `notploy patch clean-patch-repos`
+### `astron-collection patch clean-patch-repos`
 
 Calls `POST /api/trpc/patch.cleanPatchRepos`.
 
 ```bash
-notploy patch clean-patch-repos [options]
+astron-collection patch clean-patch-repos [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -43,12 +43,12 @@ notploy patch clean-patch-repos [options]
 | `--serverId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy patch create`
+### `astron-collection patch create`
 
 Calls `POST /api/trpc/patch.create`.
 
 ```bash
-notploy patch create --filePath <value> --content <value> [options]
+astron-collection patch create --filePath <value> --content <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -62,12 +62,12 @@ notploy patch create --filePath <value> --content <value> [options]
 | `--composeId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy patch delete`
+### `astron-collection patch delete`
 
 Calls `POST /api/trpc/patch.delete`.
 
 ```bash
-notploy patch delete --patchId <value> [options]
+astron-collection patch delete --patchId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -75,12 +75,12 @@ notploy patch delete --patchId <value> [options]
 | `--patchId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy patch ensure-repo`
+### `astron-collection patch ensure-repo`
 
 Calls `POST /api/trpc/patch.ensureRepo`.
 
 ```bash
-notploy patch ensure-repo --id <value> --type <value> [options]
+astron-collection patch ensure-repo --id <value> --type <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -89,12 +89,12 @@ notploy patch ensure-repo --id <value> --type <value> [options]
 | `--type <value>` | string | Yes | `application`, `compose` |
 | `--profile <name>` | string | No | — |
 
-### `notploy patch mark-file-for-deletion`
+### `astron-collection patch mark-file-for-deletion`
 
 Calls `POST /api/trpc/patch.markFileForDeletion`.
 
 ```bash
-notploy patch mark-file-for-deletion --id <value> --type <value> --filePath <value> [options]
+astron-collection patch mark-file-for-deletion --id <value> --type <value> --filePath <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -104,12 +104,12 @@ notploy patch mark-file-for-deletion --id <value> --type <value> --filePath <val
 | `--filePath <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy patch one`
+### `astron-collection patch one`
 
 Calls `GET /api/trpc/patch.one`.
 
 ```bash
-notploy patch one --patchId <value> [options]
+astron-collection patch one --patchId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -117,12 +117,12 @@ notploy patch one --patchId <value> [options]
 | `--patchId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy patch read-repo-directories`
+### `astron-collection patch read-repo-directories`
 
 Calls `GET /api/trpc/patch.readRepoDirectories`.
 
 ```bash
-notploy patch read-repo-directories --id <value> --type <value> --repoPath <value> [options]
+astron-collection patch read-repo-directories --id <value> --type <value> --repoPath <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -132,12 +132,12 @@ notploy patch read-repo-directories --id <value> --type <value> --repoPath <valu
 | `--repoPath <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy patch read-repo-file`
+### `astron-collection patch read-repo-file`
 
 Calls `GET /api/trpc/patch.readRepoFile`.
 
 ```bash
-notploy patch read-repo-file --id <value> --type <value> --filePath <value> [options]
+astron-collection patch read-repo-file --id <value> --type <value> --filePath <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -147,12 +147,12 @@ notploy patch read-repo-file --id <value> --type <value> --filePath <value> [opt
 | `--filePath <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy patch save-file-as-patch`
+### `astron-collection patch save-file-as-patch`
 
 Calls `POST /api/trpc/patch.saveFileAsPatch`.
 
 ```bash
-notploy patch save-file-as-patch --id <value> --type <value> --filePath <value> --content <value> [options]
+astron-collection patch save-file-as-patch --id <value> --type <value> --filePath <value> --content <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -164,12 +164,12 @@ notploy patch save-file-as-patch --id <value> --type <value> --filePath <value> 
 | `--patchType <value>` | string | No | `create`, `update` |
 | `--profile <name>` | string | No | — |
 
-### `notploy patch toggle-enabled`
+### `astron-collection patch toggle-enabled`
 
 Calls `POST /api/trpc/patch.toggleEnabled`.
 
 ```bash
-notploy patch toggle-enabled --patchId <value> --enabled [options]
+astron-collection patch toggle-enabled --patchId <value> --enabled [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -178,12 +178,12 @@ notploy patch toggle-enabled --patchId <value> --enabled [options]
 | `--enabled [boolean]` | boolean | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy patch update`
+### `astron-collection patch update`
 
 Calls `POST /api/trpc/patch.update`.
 
 ```bash
-notploy patch update --patchId <value> [options]
+astron-collection patch update --patchId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |

@@ -26,7 +26,7 @@ export default function CustomSearchDialog(props: SharedProps) {
 	// prebuilt index at /api/search is downloaded and searched in
 	// the browser. See app/api/search/route.ts for the matching route handler.
 	const { search, setSearch, query } = useDocsSearch(
-		process.env.NEXT_PUBLIC_NOTPLOY_OUTPUT === "export"
+		process.env.NEXT_PUBLIC_ASTRON_COLLECTION_OUTPUT === "export"
 			? {
 					type: "static",
 					tag: tagFilter,

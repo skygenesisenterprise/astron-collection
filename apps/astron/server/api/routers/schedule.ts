@@ -3,28 +3,28 @@ import {
 	isExternalJobsEnabled,
 	removeScheduleJob,
 	scheduleJob,
-} from "@notploy/server";
-import { db } from "@notploy/server/db";
-import { deployments } from "@notploy/server/db/schema/deployment";
+} from "@astron-collection/server";
+import { db } from "@astron-collection/server/db";
+import { deployments } from "@astron-collection/server/db/schema/deployment";
 import {
 	createScheduleSchema,
 	schedules,
 	updateScheduleSchema,
-} from "@notploy/server/db/schema/schedule";
-import { runCommand } from "@notploy/server/index";
+} from "@astron-collection/server/db/schema/schedule";
+import { runCommand } from "@astron-collection/server/index";
 import {
 	checkPermission,
 	checkServicePermissionAndAccess,
 	findMemberByUserId,
-} from "@notploy/server/services/permission";
+} from "@astron-collection/server/services/permission";
 import {
 	assertHostScheduleAccess,
 	createSchedule,
 	deleteSchedule,
 	findScheduleById,
 	updateSchedule,
-} from "@notploy/server/services/schedule";
-import { findServerById } from "@notploy/server/services/server";
+} from "@astron-collection/server/services/schedule";
+import { findServerById } from "@astron-collection/server/services/server";
 import { TRPCError } from "@trpc/server";
 import { asc, desc, eq } from "drizzle-orm";
 import { z } from "zod";
@@ -64,7 +64,7 @@ export const scheduleRouter = createTRPCRouter({
 			}
 			const newSchedule = await createSchedule({
 				...input,
-				...(input.scheduleType === "notploy-server" && {
+				...(input.scheduleType === "astron-collection-server" && {
 					organizationId: ctx.session.activeOrganizationId,
 				}),
 			});
@@ -213,7 +213,7 @@ export const scheduleRouter = createTRPCRouter({
 					"application",
 					"compose",
 					"server",
-					"notploy-server",
+					"astron-collection-server",
 				]),
 			}),
 		)
@@ -240,7 +240,7 @@ export const scheduleRouter = createTRPCRouter({
 					}
 				}
 
-				if (input.scheduleType === "notploy-server") {
+				if (input.scheduleType === "astron-collection-server") {
 					const member = await findMemberByUserId(
 						ctx.user.id,
 						ctx.session.activeOrganizationId,
@@ -257,7 +257,7 @@ export const scheduleRouter = createTRPCRouter({
 				application: eq(schedules.applicationId, input.id),
 				compose: eq(schedules.composeId, input.id),
 				server: eq(schedules.serverId, input.id),
-				"notploy-server": eq(
+				"astron-collection-server": eq(
 					schedules.organizationId,
 					ctx.session.activeOrganizationId,
 				),

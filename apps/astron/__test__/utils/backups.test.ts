@@ -1,4 +1,4 @@
-import { normalizeS3Path } from "@notploy/server/utils/backups/utils";
+import { normalizeS3Path } from "@astron-collection/server/utils/backups/utils";
 import { describe, expect, test } from "vitest";
 
 describe("normalizeS3Path", () => {

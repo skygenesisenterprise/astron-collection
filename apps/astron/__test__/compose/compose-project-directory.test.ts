@@ -1,4 +1,4 @@
-import { createCommand } from "@notploy/server/utils/builders/compose";
+import { createCommand } from "@astron-collection/server/utils/builders/compose";
 import { describe, expect, it } from "vitest";
 
 const base = {
@@ -12,11 +12,11 @@ describe("compose createCommand --project-directory", () => {
 	it("pins --project-directory to the code dir when composePath is nested", () => {
 		const cmd = createCommand(
 			{ ...base, composePath: "./deploy/docker-compose.yml" } as any,
-			"/etc/notploy/compose/compose-app/code",
+			"/etc/astron-collection/compose/compose-app/code",
 		);
 
 		expect(cmd).toContain(
-			"--project-directory /etc/notploy/compose/compose-app/code",
+			"--project-directory /etc/astron-collection/compose/compose-app/code",
 		);
 		expect(cmd).toContain("-f ./deploy/docker-compose.yml");
 	});
@@ -37,7 +37,7 @@ describe("compose createCommand --project-directory", () => {
 				composeType: "stack",
 				composePath: "./deploy/docker-compose.yml",
 			} as any,
-			"/etc/notploy/compose/compose-app/code",
+			"/etc/astron-collection/compose/compose-app/code",
 		);
 
 		expect(cmd).not.toContain("--project-directory");
@@ -47,11 +47,11 @@ describe("compose createCommand --project-directory", () => {
 	it("keeps raw sourceType resolving from the code dir (root docker-compose.yml)", () => {
 		const cmd = createCommand(
 			{ ...base, sourceType: "raw", composePath: "docker-compose.yml" } as any,
-			"/etc/notploy/compose/compose-app/code",
+			"/etc/astron-collection/compose/compose-app/code",
 		);
 
 		expect(cmd).toContain(
-			"--project-directory /etc/notploy/compose/compose-app/code",
+			"--project-directory /etc/astron-collection/compose/compose-app/code",
 		);
 		expect(cmd).toContain("-f docker-compose.yml");
 	});
@@ -75,19 +75,19 @@ describe("compose createCommand --env-file", () => {
 				composePath: "./deploy/docker-compose.yml",
 				createEnvFile: true,
 			} as any,
-			"/etc/notploy/compose/compose-app/code",
+			"/etc/astron-collection/compose/compose-app/code",
 		);
 
 		expect(cmd).toContain("--env-file deploy/.env");
 		expect(cmd).toContain(
-			"--project-directory /etc/notploy/compose/compose-app/code",
+			"--project-directory /etc/astron-collection/compose/compose-app/code",
 		);
 	});
 
 	it("omits --env-file when createEnvFile is disabled", () => {
 		const cmd = createCommand(
 			{ ...base, composePath: "./deploy/docker-compose.yml" } as any,
-			"/etc/notploy/compose/compose-app/code",
+			"/etc/astron-collection/compose/compose-app/code",
 		);
 
 		expect(cmd).not.toContain("--env-file");
@@ -101,7 +101,7 @@ describe("compose createCommand --env-file", () => {
 				composePath: "docker-compose.yml",
 				createEnvFile: true,
 			} as any,
-			"/etc/notploy/compose/compose-app/code",
+			"/etc/astron-collection/compose/compose-app/code",
 		);
 
 		expect(cmd).toContain("--env-file .env");
@@ -115,7 +115,7 @@ describe("compose createCommand --env-file", () => {
 				composePath: "./deploy/docker-compose.yml",
 				createEnvFile: true,
 			} as any,
-			"/etc/notploy/compose/compose-app/code",
+			"/etc/astron-collection/compose/compose-app/code",
 		);
 
 		expect(cmd).not.toContain("--env-file");

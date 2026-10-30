@@ -15,7 +15,7 @@ import { environments } from "./environment";
 import { projects } from "./project";
 
 /**
- * Lifecycle of a Notploy Cloud managed hostname.
+ * Lifecycle of a Astron Collection Cloud managed hostname.
  *
  * `released` rows are kept on purpose: the unique hostname index then prevents a
  * later tenant from receiving a hostname that previously served someone else's

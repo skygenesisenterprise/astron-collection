@@ -1,18 +1,18 @@
 ---
 title: Connect a source
-description: "Connect a Git provider, a repository, or a container image so Notploy can deploy it."
+description: "Connect a Git provider, a repository, or a container image so Astron Collection can deploy it."
 ---
 
-Before you can deploy, Notploy needs somewhere to get your code or image from. This step connects that **source**. You can skip it entirely if you intend to deploy a prebuilt container image or upload an archive.
+Before you can deploy, Astron Collection needs somewhere to get your code or image from. This step connects that **source**. You can skip it entirely if you intend to deploy a prebuilt container image or upload an archive.
 
 ## Option 1 — Connect a Git provider (recommended)
 
-A provider integration gives Notploy repository access, branch selection and webhooks for [auto-deploy](/docs/core/auto-deploy).
+A provider integration gives Astron Collection repository access, branch selection and webhooks for [auto-deploy](/docs/core/auto-deploy).
 
 1. Open **Settings → Git Providers**.
 2. Select your provider: **GitHub**, **GitLab**, **Bitbucket** or **Gitea**.
 3. Complete the provider setup (OAuth/git app or a token, depending on the provider).
-4. Authorise the repositories you want Notploy to see.
+4. Authorise the repositories you want Astron Collection to see.
 
 **Expected result:** the provider appears as connected and its repositories are selectable when you create an application.
 
@@ -27,7 +27,7 @@ individual provider pages under [Sources & providers](/docs/core/providers).
 
 For repositories outside a supported provider, including private repositories over SSH:
 
-1. Create an **[SSH key](/docs/core/ssh-keys)** in Notploy (or generate an RSA key).
+1. Create an **[SSH key](/docs/core/ssh-keys)** in Astron Collection (or generate an RSA key).
 2. Add the **public key** to your Git host (Settings → SSH keys).
 3. When creating a source, provide the repository URL, the branch, and the SSH key.
 
@@ -35,8 +35,8 @@ Use the **SSH URL** (`git@host:user/repo.git`), not the HTTPS URL, for private r
 
 ## Option 3 — Deploy an image or archive
 
-- **Container image** — provide the image reference (for example `ghcr.io/org/app:tag`). If the registry is private, add it under [Registries](/docs/core/registry) so Notploy can authenticate.
-- **Uploaded archive** — upload a `.zip` from your machine; Notploy deploys it directly.
+- **Container image** — provide the image reference (for example `ghcr.io/org/app:tag`). If the registry is private, add it under [Registries](/docs/core/registry) so Astron Collection can authenticate.
+- **Uploaded archive** — upload a `.zip` from your machine; Astron Collection deploys it directly.
 
 ## Which did I need?
 

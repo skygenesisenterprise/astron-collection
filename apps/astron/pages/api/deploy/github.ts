@@ -8,8 +8,8 @@ import {
 	IS_CLOUD,
 	removePreviewDeployment,
 	shouldDeploy,
-} from "@notploy/server";
-import { db } from "@notploy/server/db";
+} from "@astron-collection/server";
+import { db } from "@astron-collection/server/db";
 import { and, eq } from "drizzle-orm";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { applications, compose, github } from "@/server/db/schema";

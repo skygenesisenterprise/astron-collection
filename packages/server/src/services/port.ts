@@ -1,6 +1,6 @@
-import { db } from "@notploy/server/db";
-import { type apiCreatePort, ports } from "@notploy/server/db/schema";
-import { findPortConflict } from "@notploy/server/utils/network/ports";
+import { db } from "@astron-collection/server/db";
+import { type apiCreatePort, ports } from "@astron-collection/server/db/schema";
+import { findPortConflict } from "@astron-collection/server/utils/network/ports";
 import { TRPCError } from "@trpc/server";
 import { eq, sql } from "drizzle-orm";
 import type { z } from "zod";

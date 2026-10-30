@@ -1,4 +1,4 @@
-import type { PublicMaintenanceDto } from "@notploy/status";
+import type { PublicMaintenanceDto } from "@astron-collection/status";
 import { cn } from "@/lib/utils";
 import { formatDateTime, maintenanceStateLabel } from "@/lib/view-model";
 import { RelativeTime } from "./relative-time";

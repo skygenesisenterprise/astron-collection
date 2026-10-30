@@ -12,7 +12,7 @@
 import {
 	type IdentityOauthConfig,
 	identityOauthConfigSchema,
-} from "@notploy/server/db/schema/sso";
+} from "@astron-collection/server/db/schema/sso";
 
 export type { IdentityOauthConfig };
 

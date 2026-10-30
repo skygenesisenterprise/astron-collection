@@ -1,4 +1,4 @@
-import { ApiError } from "../adapters/notployApi.js";
+import { ApiError } from "../adapters/astronCollectionApi.js";
 import type { CapabilityExecutionContext } from "../contracts/capability.js";
 
 export type JsonRecord = Record<string, unknown>;
@@ -89,7 +89,7 @@ export async function fetchApplication(
   if (!application) {
     throw new ApiError({
       code: "api_error",
-      message: "The Notploy API returned an unexpected application payload",
+      message: "The Astron Collection API returned an unexpected application payload",
     });
   }
   return application;

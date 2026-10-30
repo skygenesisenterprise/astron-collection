@@ -3,11 +3,11 @@ import {
 	findServerById,
 	isManagedCloud,
 	validateRequest,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import {
 	createRedactingLineBuffer,
 	safeErrorMessage,
-} from "@notploy/server/utils/security/redact";
+} from "@astron-collection/server/utils/security/redact";
 import { spawn } from "node-pty";
 import { Client, type ClientChannel } from "ssh2";
 import { WebSocketServer } from "ws";

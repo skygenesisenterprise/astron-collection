@@ -4,7 +4,7 @@ export const SiteFooter = ({ name }: { name: string }) => (
 			© {new Date().getFullYear()} {name}. All rights reserved.
 		</p>
 		<p>
-			Powered by Notploy Status —{" "}
+			Powered by Astron Collection Status —{" "}
 			<a
 				href="/api/v1/openapi.json"
 				className="underline decoration-dotted underline-offset-2 hover:text-foreground"

@@ -1,12 +1,12 @@
-import { db } from "@notploy/server/db";
-import { projects } from "@notploy/server/db/schema";
+import { db } from "@astron-collection/server/db";
+import { projects } from "@astron-collection/server/db/schema";
 import { TRPCError } from "@trpc/server";
 import { eq, sql } from "drizzle-orm";
 
 /**
  * Project resource quotas.
  *
- * Quotas are a **logical Notploy guardrail**: they cap the per-service Docker
+ * Quotas are a **logical Astron Collection guardrail**: they cap the per-service Docker
  * limits that services *declare* inside a project. They do not create an
  * additional runtime isolation layer — Docker/Swarm still enforce each
  * service's own `cpuLimit`/`memoryLimit`. Services with no declared limit

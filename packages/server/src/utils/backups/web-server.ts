@@ -2,18 +2,18 @@ import { createWriteStream } from "node:fs";
 import { mkdtemp, rm, stat, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { IS_CLOUD, paths } from "@notploy/server/constants";
+import { IS_CLOUD, paths } from "@astron-collection/server/constants";
 import {
 	ENCRYPTION_KEY_BACKUP_FILE,
 	exportEncryptionKeys,
-} from "@notploy/server/lib/encryption";
-import type { BackupSchedule } from "@notploy/server/services/backup";
+} from "@astron-collection/server/lib/encryption";
+import type { BackupSchedule } from "@astron-collection/server/services/backup";
 import {
 	createDeploymentBackup,
 	updateDeploymentStatus,
-} from "@notploy/server/services/deployment";
-import { findDestinationById } from "@notploy/server/services/destination";
-import { sendNotployBackupNotifications } from "../notifications/notploy-backup";
+} from "@astron-collection/server/services/deployment";
+import { findDestinationById } from "@astron-collection/server/services/destination";
+import { sendAstronCollectionBackupNotifications } from "../notifications/astron-collection-backup";
 import { execAsync } from "../process/execAsync";
 import { redactRcloneCredentials } from "./redact";
 import { getBackupTimestamp, getS3Credentials, normalizeS3Path } from "./utils";
@@ -44,7 +44,7 @@ export const runWebServerBackup = async (backup: BackupSchedule) => {
 		const rcloneFlags = getS3Credentials(destination);
 		const timestamp = getBackupTimestamp();
 		const { BASE_PATH } = paths();
-		const tempDir = await mkdtemp(join(tmpdir(), "notploy-backup-"));
+		const tempDir = await mkdtemp(join(tmpdir(), "astron-collection-backup-"));
 		const backupFileName = `webserver-backup-${timestamp}.zip`;
 		const s3Path = `:s3:${destination.bucket}/${backup.appName}/${normalizeS3Path(backup.prefix)}${backupFileName}`;
 
@@ -53,21 +53,21 @@ export const runWebServerBackup = async (backup: BackupSchedule) => {
 
 			// First get the container ID
 			const { stdout: containerId } = await execAsync(
-				`docker ps --filter "name=notploy-postgres" --filter "status=running" -q | head -n 1`,
+				`docker ps --filter "name=astron-collection-postgres" --filter "status=running" -q | head -n 1`,
 			);
 
 			if (!containerId) {
-				writeStream.write("Notploy postgres container not found❌\n");
+				writeStream.write("Astron Collection postgres container not found❌\n");
 				writeStream.end();
-				throw new Error("Notploy postgres container not found");
+				throw new Error("Astron Collection postgres container not found");
 			}
 
-			writeStream.write(`Notploy postgres container ID: ${containerId}\n`);
+			writeStream.write(`Astron Collection postgres container ID: ${containerId}\n`);
 
 			const postgresContainerId = containerId.trim();
 
 			// First dump the database inside the container
-			const dumpCommand = `docker exec ${postgresContainerId} pg_dump -v -Fc -U notploy -d notploy -f /tmp/database.sql`;
+			const dumpCommand = `docker exec ${postgresContainerId} pg_dump -v -Fc -U astron-collection -d astron-collection -f /tmp/database.sql`;
 			writeStream.write(`Running dump command: ${dumpCommand}\n`);
 			await execAsync(dumpCommand);
 
@@ -119,7 +119,7 @@ export const runWebServerBackup = async (backup: BackupSchedule) => {
 			await execAsync(uploadCommand);
 			writeStream.write("Uploaded backup to S3 ✅\n");
 			writeStream.end();
-			await sendNotployBackupNotifications({
+			await sendAstronCollectionBackupNotifications({
 				type: "success",
 				backupSize: formatBytes(computedBackupSize),
 			});
@@ -143,7 +143,7 @@ export const runWebServerBackup = async (backup: BackupSchedule) => {
 		writeStream.write("Backup error❌\n");
 		writeStream.write(`${safeErrorMessage}\n`);
 		writeStream.end();
-		await sendNotployBackupNotifications({
+		await sendAstronCollectionBackupNotifications({
 			type: "error",
 			errorMessage: safeErrorMessage || "Error message not provided",
 			backupSize: formatBytes(computedBackupSize),

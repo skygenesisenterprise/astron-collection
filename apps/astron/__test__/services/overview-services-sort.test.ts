@@ -1,5 +1,5 @@
-import type { OverviewService } from "@notploy/server/services/overview";
-import { sortOverviewServices } from "@notploy/server/services/overview";
+import type { OverviewService } from "@astron-collection/server/services/overview";
+import { sortOverviewServices } from "@astron-collection/server/services/overview";
 import { describe, expect, test } from "vitest";
 
 const makeService = (overrides: Partial<OverviewService>): OverviewService => ({

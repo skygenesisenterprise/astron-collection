@@ -1,6 +1,6 @@
 ---
 title: Traffic Manager
-description: "Measure the traffic and the audience of the websites Notploy operates"
+description: "Measure the traffic and the audience of the websites Astron Collection operates"
 ---
 
 The Traffic Manager (`/dashboard/website/traffic`) answers two different questions about the
@@ -41,19 +41,19 @@ of file (it does not claim traffic from before it existed).
 
 ## Installing the web instrumentation
 
-The instrumentation is a single static script served by the Notploy instance itself
+The instrumentation is a single static script served by the Astron Collection instance itself
 (`/traffic.js`), so every property shares the same implementation:
 
 ```html
-<script defer src="https://<your-notploy-host>/traffic.js"
+<script defer src="https://<your-astron-collection-host>/traffic.js"
         data-property-key="pk_..."
-        data-endpoint="https://<your-notploy-host>"></script>
+        data-endpoint="https://<your-astron-collection-host>"></script>
 ```
 
 Explicit events:
 
 ```js
-window.notployTraffic.track("signup_completed");
+window.astronCollectionTraffic.track("signup_completed");
 ```
 
 The key shown in the sources panel is the public key of that domain's instrumentation source.
@@ -72,7 +72,7 @@ properties, request bodies, request or response headers. There is no fingerprint
 WebGL, font or screen probing is performed, and no identifier is derived from a device.
 
 Opt-out: `navigator.doNotTrack`, `window.globalPrivacyControl`, or
-`localStorage.setItem("notploy_traffic_optout", "1")` disables the script entirely.
+`localStorage.setItem("astron_collectiontraffic_optout", "1")` disables the script entirely.
 
 ## Configuration
 
@@ -91,8 +91,8 @@ Opt-out: `navigator.doNotTrack`, `window.globalPrivacyControl`, or
 On the website and documentation applications, the instrumentation is enabled with:
 
 ```bash
-NEXT_PUBLIC_NOTPLOY_TRAFFIC_KEY=pk_...
-NEXT_PUBLIC_NOTPLOY_TRAFFIC_ENDPOINT=https://<your-notploy-host>
+NEXT_PUBLIC_ASTRON_COLLECTION_TRAFFIC_KEY=pk_...
+NEXT_PUBLIC_ASTRON_COLLECTION_TRAFFIC_ENDPOINT=https://<your-astron-collection-host>
 ```
 
 ## Data model and retention

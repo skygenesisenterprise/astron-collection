@@ -1,5 +1,5 @@
 /**
- * Notploy Cloud plan catalogue and pricing helpers.
+ * Astron Collection Cloud plan catalogue and pricing helpers.
  *
  * This module is the single source of truth for the plans we market (Hobby,
  * Startup, Enterprise) and for the price maths used by both the billing page

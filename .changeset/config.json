@@ -2,7 +2,7 @@
 	"$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
 	"changelog": [
 		"@changesets/changelog-github",
-		{ "repo": "skygenesisenterprise/notploy" }
+		{ "repo": "skygenesisenterprise/astron-collection" }
 	],
 	"commit": false,
 	"fixed": [],
@@ -11,8 +11,8 @@
 	"baseBranch": "master",
 	"updateInternalDependencies": "patch",
 	"ignore": [
-		"@notploy/api",
-		"@notploy/schedules"
+		"@astron-collection/api",
+		"@astron-collection/schedules"
 	],
 	"privatePackages": {
 		"version": true,

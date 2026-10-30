@@ -1,4 +1,4 @@
-import type { Redirect } from "@notploy/server/services/redirect";
+import type { Redirect } from "@astron-collection/server/services/redirect";
 import type { ApplicationNested } from "../builders";
 import {
 	loadOrCreateConfig,

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One-shot restructure of content/docs into the Notploy-native taxonomy.
+# One-shot restructure of content/docs into the Astron Collection-native taxonomy.
 # Safe to inspect; uses `git mv` so history is preserved.
 set -euo pipefail
 cd "$(dirname "$0")/.."

@@ -13,11 +13,11 @@ Create a DNS record for your hostname:
 - Name: your hostname (for example `app` for `app.example.com`)
 - Value: your server's public IP address
 
-If you use a [supported DNS provider](/docs/core/dns-providers), Notploy can manage records for you; otherwise add the record at your provider's control panel.
+If you use a [supported DNS provider](/docs/core/dns-providers), Astron Collection can manage records for you; otherwise add the record at your provider's control panel.
 
 **Expected result:** the hostname resolves to your server's IP (`dig app.example.com`).
 
-## 2. Add the domain in Notploy
+## 2. Add the domain in Astron Collection
 
 1. Open the service and go to the **Domains** tab.
 2. Add a domain:
@@ -27,9 +27,9 @@ If you use a [supported DNS provider](/docs/core/dns-providers), Notploy can man
    - **Certificate** — Let's Encrypt
 3. Save.
 
-For Applications, Notploy writes a Traefik routing rule and applies it immediately — no redeploy needed. For Compose, the route is defined by Docker labels, so you must **redeploy** for a domain change to take effect. See [Domains](/docs/core/domains) for the differences.
+For Applications, Astron Collection writes a Traefik routing rule and applies it immediately — no redeploy needed. For Compose, the route is defined by Docker labels, so you must **redeploy** for a domain change to take effect. See [Domains](/docs/core/domains) for the differences.
 
-**Expected result:** Notploy requests a certificate and reports it issued.
+**Expected result:** Astron Collection requests a certificate and reports it issued.
 
 ## 3. Verify HTTPS
 
@@ -44,7 +44,7 @@ blocked, or a redirect prevents the challenge. Fix DNS first, then retry. See
 
 ## Generated domains (testing only)
 
-For quick tests without DNS setup, Notploy can generate a free `traefik.me` hostname. These are **HTTP-only**; enabling HTTPS on them requires an additional step described in [Certificates](/docs/core/certificates).
+For quick tests without DNS setup, Astron Collection can generate a free `traefik.me` hostname. These are **HTTP-only**; enabling HTTPS on them requires an additional step described in [Certificates](/docs/core/certificates).
 
 ## Related
 

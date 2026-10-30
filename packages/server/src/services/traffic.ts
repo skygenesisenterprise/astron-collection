@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-import { paths } from "@notploy/server/constants";
-import { db } from "@notploy/server/db";
+import { paths } from "@astron-collection/server/constants";
+import { db } from "@astron-collection/server/db";
 import {
 	type NewTrafficHttpAggregate,
 	type TrafficSource,
@@ -17,17 +17,17 @@ import {
 	trafficSources,
 	type WebProperty,
 	webProperties,
-} from "@notploy/server/db/schema";
+} from "@astron-collection/server/db/schema";
 import {
 	aggregateHttpEvents,
 	emptyLatencyHistogram,
 	type HttpAggregateRow,
 	LATENCY_BUCKET_COUNT,
-} from "@notploy/server/utils/traffic/aggregate";
+} from "@astron-collection/server/utils/traffic/aggregate";
 import {
 	type AudienceIngestPayload,
 	normalizeAudienceEvents,
-} from "@notploy/server/utils/traffic/audience";
+} from "@astron-collection/server/utils/traffic/audience";
 import {
 	bucketStartFor,
 	DEFAULT_BUCKET_SECONDS,
@@ -37,7 +37,7 @@ import {
 	parseTraefikAccessLog,
 	resolvePropertyId,
 	type TrafficHttpEvent,
-} from "@notploy/server/utils/traffic/parse";
+} from "@astron-collection/server/utils/traffic/parse";
 import {
 	and,
 	asc,
@@ -474,16 +474,16 @@ export const upsertTrafficSource = async (
 };
 
 /**
- * The four web properties of an SGE instance, declared with the sources Notploy
+ * The four web properties of an SGE instance, declared with the sources Astron Collection
  * knows how to feed. Declaring a property only says "we watch this domain":
  * every source starts in `not-configured`, and the dashboard keeps showing the
  * absence of data until a collector actually receives something.
  */
 export const RECOMMENDED_SGE_PROPERTIES = [
-	{ platform: "website", domain: "notploy.com", name: "Notploy Website" },
-	{ platform: "docs", domain: "docs.notploy.com", name: "Notploy Docs" },
-	{ platform: "app", domain: "app.notploy.com", name: "Notploy Cloud" },
-	{ platform: "api", domain: "api.notploy.com", name: "Notploy API" },
+	{ platform: "website", domain: "astron-collection.com", name: "Astron Collection Website" },
+	{ platform: "docs", domain: "docs.astron-collection.com", name: "Astron Collection Docs" },
+	{ platform: "app", domain: "app.astron-collection.com", name: "Astron Collection Cloud" },
+	{ platform: "api", domain: "api.astron-collection.com", name: "Astron Collection API" },
 ] as const;
 
 export const declareRecommendedProperties = async (

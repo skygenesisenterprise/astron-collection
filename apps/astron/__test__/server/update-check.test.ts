@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-/** Mirrors the payload of https://api.github.com/repos/skygenesisenterprise/notploy/releases */
+/** Mirrors the payload of https://api.github.com/repos/skygenesisenterprise/astron-collection/releases */
 const release = (tagName: string, extra: Record<string, unknown> = {}) => ({
 	tag_name: tagName,
 	draft: false,
@@ -14,9 +14,9 @@ const completeRelease = (
 	extra: Record<string, unknown> = {},
 ) =>
 	release(tagName, {
-		html_url: `https://github.com/skygenesisenterprise/notploy/releases/tag/${tagName}`,
+		html_url: `https://github.com/skygenesisenterprise/astron-collection/releases/tag/${tagName}`,
 		published_at: "2026-01-01T00:00:00Z",
-		assets: [{ name: "install.sh" }, { name: "install-notploy.sh" }],
+		assets: [{ name: "install.sh" }, { name: "install-astron-collection.sh" }],
 		...extra,
 	});
 
@@ -33,7 +33,7 @@ const okResponse = (releases: unknown[]) =>
  */
 const importFresh = async () => {
 	vi.resetModules();
-	return await import("@notploy/server/services/settings");
+	return await import("@astron-collection/server/services/settings");
 };
 
 describe("update check", () => {
@@ -47,7 +47,7 @@ describe("update check", () => {
 
 	afterEach(() => {
 		vi.useRealTimers();
-		vi.doUnmock("@notploy/server/utils/process/execAsync");
+		vi.doUnmock("@astron-collection/server/utils/process/execAsync");
 		vi.unstubAllGlobals();
 		vi.restoreAllMocks();
 	});
@@ -94,7 +94,7 @@ describe("update check", () => {
 				updateAvailable: true,
 			});
 			expect(fetchMock).toHaveBeenCalledWith(
-				"https://api.github.com/repos/skygenesisenterprise/notploy/releases?per_page=100",
+				"https://api.github.com/repos/skygenesisenterprise/astron-collection/releases?per_page=100",
 				expect.objectContaining({ method: "GET" }),
 			);
 		});
@@ -254,7 +254,7 @@ describe("update check", () => {
 
 			const result = checkReleaseAssets([
 				{ name: "install.sh" },
-				{ name: "install-notploy.sh" },
+				{ name: "install-astron-collection.sh" },
 			]);
 			expect(result.available).toBe(true);
 			expect(result.reason).toBeNull();
@@ -496,27 +496,27 @@ describe("update check", () => {
 				.fn()
 				.mockResolvedValueOnce({ stdout: "service\n", stderr: "" })
 				.mockResolvedValueOnce({ stdout: "", stderr: "" });
-			vi.doMock("@notploy/server/utils/process/execAsync", () => ({
+			vi.doMock("@astron-collection/server/utils/process/execAsync", () => ({
 				execAsync,
 				execAsyncRemote: vi.fn(),
 			}));
 
 			vi.resetModules();
 			const { reloadDockerResource } = await import(
-				"@notploy/server/services/settings"
+				"@astron-collection/server/services/settings"
 			);
 
-			await reloadDockerResource("notploy", undefined, "0.30.7");
+			await reloadDockerResource("astron-collection", undefined, "0.30.7");
 
 			expect(execAsync).toHaveBeenLastCalledWith(
-				"docker service update --force --image ghcr.io/skygenesisenterprise/notploy:v0.30.7-app notploy",
+				"docker service update --force --image ghcr.io/skygenesisenterprise/astron-collection:v0.30.7-app astron-collection",
 			);
 		});
 	});
 
 	it("publishes the self-hosted image on the GitHub Container Registry", async () => {
-		const { NOTPLOY_IMAGE } = await importFresh();
+		const { ASTRON_COLLECTION_IMAGE } = await importFresh();
 
-		expect(NOTPLOY_IMAGE).toBe("ghcr.io/skygenesisenterprise/notploy");
+		expect(ASTRON_COLLECTION_IMAGE).toBe("ghcr.io/skygenesisenterprise/astron-collection");
 	});
 });

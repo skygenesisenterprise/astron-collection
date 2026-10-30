@@ -1,18 +1,18 @@
-import { db } from "@notploy/server/db";
+import { db } from "@astron-collection/server/db";
 import {
 	type apiCreateDnsProvider,
 	type DnsProviderConfig,
 	dnsProvider,
 	dnsProviderTypes,
-} from "@notploy/server/db/schema";
-import type { DnsRecordInput } from "@notploy/server/utils/dns";
+} from "@astron-collection/server/db/schema";
+import type { DnsRecordInput } from "@astron-collection/server/utils/dns";
 import {
 	getDnsCapabilities,
 	getDnsClient,
 	getDnsProviderCategory,
 	parseZoneFile,
 	serializeZoneFile,
-} from "@notploy/server/utils/dns";
+} from "@astron-collection/server/utils/dns";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import type { z } from "zod";
@@ -44,7 +44,7 @@ const SENSITIVE_FIELDS: Record<DnsProviderConfig["providerType"], string[]> = {
 	coredns: ["password"],
 	unbound: [],
 	custom: ["apiToken"],
-	"notploy-internal": [],
+	"astron-collection-internal": [],
 };
 
 export const maskDnsProviderConfig = (
@@ -215,7 +215,7 @@ const withAdapterScope = (
 	config: DnsProviderConfig,
 	provider?: Pick<DnsProvider, "dnsProviderId" | "organizationId">,
 ) =>
-	config.providerType === "notploy-internal"
+	config.providerType === "astron-collection-internal"
 		? {
 				...config,
 				dnsProviderId: provider?.dnsProviderId ?? "",

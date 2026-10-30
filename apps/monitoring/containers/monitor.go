@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/skygenesisenterprise/notploy/apps/monitoring/config"
-	"github.com/skygenesisenterprise/notploy/apps/monitoring/database"
+	"github.com/skygenesisenterprise/astron-collection/apps/monitoring/config"
+	"github.com/skygenesisenterprise/astron-collection/apps/monitoring/database"
 )
 
 type ContainerMonitor struct {

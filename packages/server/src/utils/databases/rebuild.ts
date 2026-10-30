@@ -1,4 +1,4 @@
-import { db } from "@notploy/server/db";
+import { db } from "@astron-collection/server/db";
 import {
 	libsql,
 	mariadb,
@@ -6,13 +6,13 @@ import {
 	mysql,
 	postgres,
 	redis,
-} from "@notploy/server/db/schema";
-import { deployLibsql } from "@notploy/server/services/libsql";
-import { deployMariadb } from "@notploy/server/services/mariadb";
-import { deployMongo } from "@notploy/server/services/mongo";
-import { deployMySql } from "@notploy/server/services/mysql";
-import { deployPostgres } from "@notploy/server/services/postgres";
-import { deployRedis } from "@notploy/server/services/redis";
+} from "@astron-collection/server/db/schema";
+import { deployLibsql } from "@astron-collection/server/services/libsql";
+import { deployMariadb } from "@astron-collection/server/services/mariadb";
+import { deployMongo } from "@astron-collection/server/services/mongo";
+import { deployMySql } from "@astron-collection/server/services/mysql";
+import { deployPostgres } from "@astron-collection/server/services/postgres";
+import { deployRedis } from "@astron-collection/server/services/redis";
 import { eq } from "drizzle-orm";
 import { quote } from "shell-quote";
 import { removeService } from "../docker/utils";

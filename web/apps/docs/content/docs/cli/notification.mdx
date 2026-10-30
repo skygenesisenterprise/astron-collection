@@ -1,39 +1,39 @@
 ---
 title: "Notifications"
-description: "Notification channels — Slack, Discord, Telegram, email and others — plus test deliveries. Generated from the `notploy` command surface."
+description: "Notification channels — Slack, Discord, Telegram, email and others — plus test deliveries. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Notification channels — Slack, Discord, Telegram, email and others — plus test deliveries.
 
-`notploy notification` exposes **41 commands**. They map one-to-one onto the `notification.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection notification` exposes **41 commands**. They map one-to-one onto the `notification.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy notification --help` to list these commands in your terminal, or
-	`notploy notification <command> --help` for a single command.
+	Run `astron-collection notification --help` to list these commands in your terminal, or
+	`astron-collection notification <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy notification all`
+### `astron-collection notification all`
 
 Calls `GET /api/trpc/notification.all`.
 
 ```bash
-notploy notification all [options]
+astron-collection notification all [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification create-custom`
+### `astron-collection notification create-custom`
 
 Calls `POST /api/trpc/notification.createCustom`.
 
 ```bash
-notploy notification create-custom --name <value> --endpoint <value> [options]
+astron-collection notification create-custom --name <value> --endpoint <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -42,12 +42,12 @@ notploy notification create-custom --name <value> --endpoint <value> [options]
 | `--no-appBuildError` | boolean | No | — |
 | `--databaseBackup [boolean]` | boolean | No | — |
 | `--no-databaseBackup` | boolean | No | — |
-| `--notployBackup [boolean]` | boolean | No | — |
-| `--no-notployBackup` | boolean | No | — |
+| `--astronCollectionBackup [boolean]` | boolean | No | — |
+| `--no-astronCollectionBackup` | boolean | No | — |
 | `--volumeBackup [boolean]` | boolean | No | — |
 | `--no-volumeBackup` | boolean | No | — |
-| `--notployRestart [boolean]` | boolean | No | — |
-| `--no-notployRestart` | boolean | No | — |
+| `--astronCollectionRestart [boolean]` | boolean | No | — |
+| `--no-astronCollectionRestart` | boolean | No | — |
 | `--name <value>` | string | Yes | — |
 | `--appDeploy [boolean]` | boolean | No | — |
 | `--no-appDeploy` | boolean | No | — |
@@ -59,21 +59,21 @@ notploy notification create-custom --name <value> --endpoint <value> [options]
 | `--headers <json>` | object | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification create-discord`
+### `astron-collection notification create-discord`
 
 Calls `POST /api/trpc/notification.createDiscord`.
 
 ```bash
-notploy notification create-discord --appBuildError --databaseBackup --notployBackup --volumeBackup --notployRestart --name <value> --appDeploy --dockerCleanup --serverThreshold --webhookUrl <value> --decoration [options]
+astron-collection notification create-discord --appBuildError --databaseBackup --astronCollectionBackup --volumeBackup --astronCollectionRestart --name <value> --appDeploy --dockerCleanup --serverThreshold --webhookUrl <value> --decoration [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--appBuildError [boolean]` | boolean | Yes | — |
 | `--databaseBackup [boolean]` | boolean | Yes | — |
-| `--notployBackup [boolean]` | boolean | Yes | — |
+| `--astronCollectionBackup [boolean]` | boolean | Yes | — |
 | `--volumeBackup [boolean]` | boolean | Yes | — |
-| `--notployRestart [boolean]` | boolean | Yes | — |
+| `--astronCollectionRestart [boolean]` | boolean | Yes | — |
 | `--name <value>` | string | Yes | — |
 | `--appDeploy [boolean]` | boolean | Yes | — |
 | `--dockerCleanup [boolean]` | boolean | Yes | — |
@@ -82,21 +82,21 @@ notploy notification create-discord --appBuildError --databaseBackup --notployBa
 | `--decoration [boolean]` | boolean | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification create-email`
+### `astron-collection notification create-email`
 
 Calls `POST /api/trpc/notification.createEmail`.
 
 ```bash
-notploy notification create-email --appBuildError --databaseBackup --notployBackup --volumeBackup --notployRestart --name <value> --appDeploy --dockerCleanup --serverThreshold --smtpServer <value> --smtpPort <value> --username <value> --password <value> --fromAddress <value> --toAddresses <json> [options]
+astron-collection notification create-email --appBuildError --databaseBackup --astronCollectionBackup --volumeBackup --astronCollectionRestart --name <value> --appDeploy --dockerCleanup --serverThreshold --smtpServer <value> --smtpPort <value> --username <value> --password <value> --fromAddress <value> --toAddresses <json> [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--appBuildError [boolean]` | boolean | Yes | — |
 | `--databaseBackup [boolean]` | boolean | Yes | — |
-| `--notployBackup [boolean]` | boolean | Yes | — |
+| `--astronCollectionBackup [boolean]` | boolean | Yes | — |
 | `--volumeBackup [boolean]` | boolean | Yes | — |
-| `--notployRestart [boolean]` | boolean | Yes | — |
+| `--astronCollectionRestart [boolean]` | boolean | Yes | — |
 | `--name <value>` | string | Yes | — |
 | `--appDeploy [boolean]` | boolean | Yes | — |
 | `--dockerCleanup [boolean]` | boolean | Yes | — |
@@ -109,21 +109,21 @@ notploy notification create-email --appBuildError --databaseBackup --notployBack
 | `--toAddresses <json>` | array | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification create-gotify`
+### `astron-collection notification create-gotify`
 
 Calls `POST /api/trpc/notification.createGotify`.
 
 ```bash
-notploy notification create-gotify --appBuildError --databaseBackup --notployBackup --volumeBackup --notployRestart --name <value> --appDeploy --dockerCleanup --serverThreshold --serverUrl <value> --appToken <value> --priority <value> --decoration [options]
+astron-collection notification create-gotify --appBuildError --databaseBackup --astronCollectionBackup --volumeBackup --astronCollectionRestart --name <value> --appDeploy --dockerCleanup --serverThreshold --serverUrl <value> --appToken <value> --priority <value> --decoration [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--appBuildError [boolean]` | boolean | Yes | — |
 | `--databaseBackup [boolean]` | boolean | Yes | — |
-| `--notployBackup [boolean]` | boolean | Yes | — |
+| `--astronCollectionBackup [boolean]` | boolean | Yes | — |
 | `--volumeBackup [boolean]` | boolean | Yes | — |
-| `--notployRestart [boolean]` | boolean | Yes | — |
+| `--astronCollectionRestart [boolean]` | boolean | Yes | — |
 | `--name <value>` | string | Yes | — |
 | `--appDeploy [boolean]` | boolean | Yes | — |
 | `--dockerCleanup [boolean]` | boolean | Yes | — |
@@ -134,21 +134,21 @@ notploy notification create-gotify --appBuildError --databaseBackup --notployBac
 | `--decoration [boolean]` | boolean | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification create-lark`
+### `astron-collection notification create-lark`
 
 Calls `POST /api/trpc/notification.createLark`.
 
 ```bash
-notploy notification create-lark --appBuildError --databaseBackup --notployBackup --volumeBackup --notployRestart --name <value> --appDeploy --dockerCleanup --serverThreshold --webhookUrl <value> [options]
+astron-collection notification create-lark --appBuildError --databaseBackup --astronCollectionBackup --volumeBackup --astronCollectionRestart --name <value> --appDeploy --dockerCleanup --serverThreshold --webhookUrl <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--appBuildError [boolean]` | boolean | Yes | — |
 | `--databaseBackup [boolean]` | boolean | Yes | — |
-| `--notployBackup [boolean]` | boolean | Yes | — |
+| `--astronCollectionBackup [boolean]` | boolean | Yes | — |
 | `--volumeBackup [boolean]` | boolean | Yes | — |
-| `--notployRestart [boolean]` | boolean | Yes | — |
+| `--astronCollectionRestart [boolean]` | boolean | Yes | — |
 | `--name <value>` | string | Yes | — |
 | `--appDeploy [boolean]` | boolean | Yes | — |
 | `--dockerCleanup [boolean]` | boolean | Yes | — |
@@ -156,21 +156,21 @@ notploy notification create-lark --appBuildError --databaseBackup --notployBacku
 | `--webhookUrl <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification create-mattermost`
+### `astron-collection notification create-mattermost`
 
 Calls `POST /api/trpc/notification.createMattermost`.
 
 ```bash
-notploy notification create-mattermost --appBuildError --databaseBackup --notployBackup --volumeBackup --notployRestart --name <value> --appDeploy --dockerCleanup --serverThreshold --webhookUrl <value> [options]
+astron-collection notification create-mattermost --appBuildError --databaseBackup --astronCollectionBackup --volumeBackup --astronCollectionRestart --name <value> --appDeploy --dockerCleanup --serverThreshold --webhookUrl <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--appBuildError [boolean]` | boolean | Yes | — |
 | `--databaseBackup [boolean]` | boolean | Yes | — |
-| `--notployBackup [boolean]` | boolean | Yes | — |
+| `--astronCollectionBackup [boolean]` | boolean | Yes | — |
 | `--volumeBackup [boolean]` | boolean | Yes | — |
-| `--notployRestart [boolean]` | boolean | Yes | — |
+| `--astronCollectionRestart [boolean]` | boolean | Yes | — |
 | `--name <value>` | string | Yes | — |
 | `--appDeploy [boolean]` | boolean | Yes | — |
 | `--dockerCleanup [boolean]` | boolean | Yes | — |
@@ -180,21 +180,21 @@ notploy notification create-mattermost --appBuildError --databaseBackup --notplo
 | `--username <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification create-ntfy`
+### `astron-collection notification create-ntfy`
 
 Calls `POST /api/trpc/notification.createNtfy`.
 
 ```bash
-notploy notification create-ntfy --appBuildError --databaseBackup --notployBackup --volumeBackup --notployRestart --name <value> --appDeploy --dockerCleanup --serverThreshold --serverUrl <value> --topic <value> --accessToken <value> --priority <value> [options]
+astron-collection notification create-ntfy --appBuildError --databaseBackup --astronCollectionBackup --volumeBackup --astronCollectionRestart --name <value> --appDeploy --dockerCleanup --serverThreshold --serverUrl <value> --topic <value> --accessToken <value> --priority <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--appBuildError [boolean]` | boolean | Yes | — |
 | `--databaseBackup [boolean]` | boolean | Yes | — |
-| `--notployBackup [boolean]` | boolean | Yes | — |
+| `--astronCollectionBackup [boolean]` | boolean | Yes | — |
 | `--volumeBackup [boolean]` | boolean | Yes | — |
-| `--notployRestart [boolean]` | boolean | Yes | — |
+| `--astronCollectionRestart [boolean]` | boolean | Yes | — |
 | `--name <value>` | string | Yes | — |
 | `--appDeploy [boolean]` | boolean | Yes | — |
 | `--dockerCleanup [boolean]` | boolean | Yes | — |
@@ -205,12 +205,12 @@ notploy notification create-ntfy --appBuildError --databaseBackup --notployBacku
 | `--priority <value>` | number | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification create-pushover`
+### `astron-collection notification create-pushover`
 
 Calls `POST /api/trpc/notification.createPushover`.
 
 ```bash
-notploy notification create-pushover --name <value> --userKey <value> --apiToken <value> [options]
+astron-collection notification create-pushover --name <value> --userKey <value> --apiToken <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -219,12 +219,12 @@ notploy notification create-pushover --name <value> --userKey <value> --apiToken
 | `--no-appBuildError` | boolean | No | — |
 | `--databaseBackup [boolean]` | boolean | No | — |
 | `--no-databaseBackup` | boolean | No | — |
-| `--notployBackup [boolean]` | boolean | No | — |
-| `--no-notployBackup` | boolean | No | — |
+| `--astronCollectionBackup [boolean]` | boolean | No | — |
+| `--no-astronCollectionBackup` | boolean | No | — |
 | `--volumeBackup [boolean]` | boolean | No | — |
 | `--no-volumeBackup` | boolean | No | — |
-| `--notployRestart [boolean]` | boolean | No | — |
-| `--no-notployRestart` | boolean | No | — |
+| `--astronCollectionRestart [boolean]` | boolean | No | — |
+| `--no-astronCollectionRestart` | boolean | No | — |
 | `--name <value>` | string | Yes | — |
 | `--appDeploy [boolean]` | boolean | No | — |
 | `--no-appDeploy` | boolean | No | — |
@@ -239,21 +239,21 @@ notploy notification create-pushover --name <value> --userKey <value> --apiToken
 | `--expire <value>` | number | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification create-resend`
+### `astron-collection notification create-resend`
 
 Calls `POST /api/trpc/notification.createResend`.
 
 ```bash
-notploy notification create-resend --appBuildError --databaseBackup --notployBackup --volumeBackup --notployRestart --name <value> --appDeploy --dockerCleanup --serverThreshold --apiKey <value> --fromAddress <value> --toAddresses <json> [options]
+astron-collection notification create-resend --appBuildError --databaseBackup --astronCollectionBackup --volumeBackup --astronCollectionRestart --name <value> --appDeploy --dockerCleanup --serverThreshold --apiKey <value> --fromAddress <value> --toAddresses <json> [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--appBuildError [boolean]` | boolean | Yes | — |
 | `--databaseBackup [boolean]` | boolean | Yes | — |
-| `--notployBackup [boolean]` | boolean | Yes | — |
+| `--astronCollectionBackup [boolean]` | boolean | Yes | — |
 | `--volumeBackup [boolean]` | boolean | Yes | — |
-| `--notployRestart [boolean]` | boolean | Yes | — |
+| `--astronCollectionRestart [boolean]` | boolean | Yes | — |
 | `--name <value>` | string | Yes | — |
 | `--appDeploy [boolean]` | boolean | Yes | — |
 | `--dockerCleanup [boolean]` | boolean | Yes | — |
@@ -263,21 +263,21 @@ notploy notification create-resend --appBuildError --databaseBackup --notployBac
 | `--toAddresses <json>` | array | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification create-slack`
+### `astron-collection notification create-slack`
 
 Calls `POST /api/trpc/notification.createSlack`.
 
 ```bash
-notploy notification create-slack --appBuildError --databaseBackup --notployBackup --volumeBackup --notployRestart --name <value> --appDeploy --dockerCleanup --serverThreshold --webhookUrl <value> --channel <value> [options]
+astron-collection notification create-slack --appBuildError --databaseBackup --astronCollectionBackup --volumeBackup --astronCollectionRestart --name <value> --appDeploy --dockerCleanup --serverThreshold --webhookUrl <value> --channel <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--appBuildError [boolean]` | boolean | Yes | — |
 | `--databaseBackup [boolean]` | boolean | Yes | — |
-| `--notployBackup [boolean]` | boolean | Yes | — |
+| `--astronCollectionBackup [boolean]` | boolean | Yes | — |
 | `--volumeBackup [boolean]` | boolean | Yes | — |
-| `--notployRestart [boolean]` | boolean | Yes | — |
+| `--astronCollectionRestart [boolean]` | boolean | Yes | — |
 | `--name <value>` | string | Yes | — |
 | `--appDeploy [boolean]` | boolean | Yes | — |
 | `--dockerCleanup [boolean]` | boolean | Yes | — |
@@ -286,21 +286,21 @@ notploy notification create-slack --appBuildError --databaseBackup --notployBack
 | `--channel <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification create-teams`
+### `astron-collection notification create-teams`
 
 Calls `POST /api/trpc/notification.createTeams`.
 
 ```bash
-notploy notification create-teams --appBuildError --databaseBackup --notployBackup --volumeBackup --notployRestart --name <value> --appDeploy --dockerCleanup --serverThreshold --webhookUrl <value> [options]
+astron-collection notification create-teams --appBuildError --databaseBackup --astronCollectionBackup --volumeBackup --astronCollectionRestart --name <value> --appDeploy --dockerCleanup --serverThreshold --webhookUrl <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--appBuildError [boolean]` | boolean | Yes | — |
 | `--databaseBackup [boolean]` | boolean | Yes | — |
-| `--notployBackup [boolean]` | boolean | Yes | — |
+| `--astronCollectionBackup [boolean]` | boolean | Yes | — |
 | `--volumeBackup [boolean]` | boolean | Yes | — |
-| `--notployRestart [boolean]` | boolean | Yes | — |
+| `--astronCollectionRestart [boolean]` | boolean | Yes | — |
 | `--name <value>` | string | Yes | — |
 | `--appDeploy [boolean]` | boolean | Yes | — |
 | `--dockerCleanup [boolean]` | boolean | Yes | — |
@@ -308,21 +308,21 @@ notploy notification create-teams --appBuildError --databaseBackup --notployBack
 | `--webhookUrl <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification create-telegram`
+### `astron-collection notification create-telegram`
 
 Calls `POST /api/trpc/notification.createTelegram`.
 
 ```bash
-notploy notification create-telegram --appBuildError --databaseBackup --notployBackup --volumeBackup --notployRestart --name <value> --appDeploy --dockerCleanup --serverThreshold --botToken <value> --chatId <value> --messageThreadId <value> [options]
+astron-collection notification create-telegram --appBuildError --databaseBackup --astronCollectionBackup --volumeBackup --astronCollectionRestart --name <value> --appDeploy --dockerCleanup --serverThreshold --botToken <value> --chatId <value> --messageThreadId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--appBuildError [boolean]` | boolean | Yes | — |
 | `--databaseBackup [boolean]` | boolean | Yes | — |
-| `--notployBackup [boolean]` | boolean | Yes | — |
+| `--astronCollectionBackup [boolean]` | boolean | Yes | — |
 | `--volumeBackup [boolean]` | boolean | Yes | — |
-| `--notployRestart [boolean]` | boolean | Yes | — |
+| `--astronCollectionRestart [boolean]` | boolean | Yes | — |
 | `--name <value>` | string | Yes | — |
 | `--appDeploy [boolean]` | boolean | Yes | — |
 | `--dockerCleanup [boolean]` | boolean | Yes | — |
@@ -332,24 +332,24 @@ notploy notification create-telegram --appBuildError --databaseBackup --notployB
 | `--messageThreadId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification get-email-providers`
+### `astron-collection notification get-email-providers`
 
 Calls `GET /api/trpc/notification.getEmailProviders`.
 
 ```bash
-notploy notification get-email-providers [options]
+astron-collection notification get-email-providers [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification one`
+### `astron-collection notification one`
 
 Calls `GET /api/trpc/notification.one`.
 
 ```bash
-notploy notification one --notificationId <value> [options]
+astron-collection notification one --notificationId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -357,17 +357,17 @@ notploy notification one --notificationId <value> [options]
 | `--notificationId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification receive-notification`
+### `astron-collection notification receive-notification`
 
 Calls `POST /api/trpc/notification.receiveNotification`.
 
 ```bash
-notploy notification receive-notification --Type <value> --Value <value> --Threshold <value> --Message <value> --Timestamp <value> --Token <value> [options]
+astron-collection notification receive-notification --Type <value> --Value <value> --Threshold <value> --Message <value> --Timestamp <value> --Token <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
-| `--ServerType <value>` | string | No | `Notploy`, `Remote` |
+| `--ServerType <value>` | string | No | `Astron Collection`, `Remote` |
 | `--Type <value>` | string | Yes | `Memory`, `CPU` |
 | `--Value <value>` | number | Yes | — |
 | `--Threshold <value>` | number | Yes | — |
@@ -376,12 +376,12 @@ notploy notification receive-notification --Type <value> --Value <value> --Thres
 | `--Token <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification remove`
+### `astron-collection notification remove`
 
 Calls `POST /api/trpc/notification.remove`.
 
 ```bash
-notploy notification remove --notificationId <value> [options]
+astron-collection notification remove --notificationId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -389,12 +389,12 @@ notploy notification remove --notificationId <value> [options]
 | `--notificationId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification test-custom-connection`
+### `astron-collection notification test-custom-connection`
 
 Calls `POST /api/trpc/notification.testCustomConnection`.
 
 ```bash
-notploy notification test-custom-connection --endpoint <value> [options]
+astron-collection notification test-custom-connection --endpoint <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -403,12 +403,12 @@ notploy notification test-custom-connection --endpoint <value> [options]
 | `--headers <json>` | object | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification test-discord-connection`
+### `astron-collection notification test-discord-connection`
 
 Calls `POST /api/trpc/notification.testDiscordConnection`.
 
 ```bash
-notploy notification test-discord-connection --webhookUrl <value> [options]
+astron-collection notification test-discord-connection --webhookUrl <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -418,12 +418,12 @@ notploy notification test-discord-connection --webhookUrl <value> [options]
 | `--no-decoration` | boolean | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification test-email-connection`
+### `astron-collection notification test-email-connection`
 
 Calls `POST /api/trpc/notification.testEmailConnection`.
 
 ```bash
-notploy notification test-email-connection --smtpServer <value> --smtpPort <value> --username <value> --password <value> --toAddresses <json> --fromAddress <value> [options]
+astron-collection notification test-email-connection --smtpServer <value> --smtpPort <value> --username <value> --password <value> --toAddresses <json> --fromAddress <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -436,12 +436,12 @@ notploy notification test-email-connection --smtpServer <value> --smtpPort <valu
 | `--fromAddress <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification test-gotify-connection`
+### `astron-collection notification test-gotify-connection`
 
 Calls `POST /api/trpc/notification.testGotifyConnection`.
 
 ```bash
-notploy notification test-gotify-connection --serverUrl <value> --appToken <value> --priority <value> [options]
+astron-collection notification test-gotify-connection --serverUrl <value> --appToken <value> --priority <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -453,12 +453,12 @@ notploy notification test-gotify-connection --serverUrl <value> --appToken <valu
 | `--no-decoration` | boolean | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification test-lark-connection`
+### `astron-collection notification test-lark-connection`
 
 Calls `POST /api/trpc/notification.testLarkConnection`.
 
 ```bash
-notploy notification test-lark-connection --webhookUrl <value> [options]
+astron-collection notification test-lark-connection --webhookUrl <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -466,12 +466,12 @@ notploy notification test-lark-connection --webhookUrl <value> [options]
 | `--webhookUrl <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification test-mattermost-connection`
+### `astron-collection notification test-mattermost-connection`
 
 Calls `POST /api/trpc/notification.testMattermostConnection`.
 
 ```bash
-notploy notification test-mattermost-connection --webhookUrl <value> [options]
+astron-collection notification test-mattermost-connection --webhookUrl <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -481,12 +481,12 @@ notploy notification test-mattermost-connection --webhookUrl <value> [options]
 | `--username <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification test-ntfy-connection`
+### `astron-collection notification test-ntfy-connection`
 
 Calls `POST /api/trpc/notification.testNtfyConnection`.
 
 ```bash
-notploy notification test-ntfy-connection --serverUrl <value> --topic <value> --accessToken <value> --priority <value> [options]
+astron-collection notification test-ntfy-connection --serverUrl <value> --topic <value> --accessToken <value> --priority <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -497,12 +497,12 @@ notploy notification test-ntfy-connection --serverUrl <value> --topic <value> --
 | `--priority <value>` | number | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification test-pushover-connection`
+### `astron-collection notification test-pushover-connection`
 
 Calls `POST /api/trpc/notification.testPushoverConnection`.
 
 ```bash
-notploy notification test-pushover-connection --userKey <value> --apiToken <value> --priority <value> [options]
+astron-collection notification test-pushover-connection --userKey <value> --apiToken <value> --priority <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -514,12 +514,12 @@ notploy notification test-pushover-connection --userKey <value> --apiToken <valu
 | `--expire <value>` | number | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification test-resend-connection`
+### `astron-collection notification test-resend-connection`
 
 Calls `POST /api/trpc/notification.testResendConnection`.
 
 ```bash
-notploy notification test-resend-connection --apiKey <value> --fromAddress <value> --toAddresses <json> [options]
+astron-collection notification test-resend-connection --apiKey <value> --fromAddress <value> --toAddresses <json> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -529,12 +529,12 @@ notploy notification test-resend-connection --apiKey <value> --fromAddress <valu
 | `--toAddresses <json>` | array | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification test-slack-connection`
+### `astron-collection notification test-slack-connection`
 
 Calls `POST /api/trpc/notification.testSlackConnection`.
 
 ```bash
-notploy notification test-slack-connection --webhookUrl <value> --channel <value> [options]
+astron-collection notification test-slack-connection --webhookUrl <value> --channel <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -543,12 +543,12 @@ notploy notification test-slack-connection --webhookUrl <value> --channel <value
 | `--channel <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification test-teams-connection`
+### `astron-collection notification test-teams-connection`
 
 Calls `POST /api/trpc/notification.testTeamsConnection`.
 
 ```bash
-notploy notification test-teams-connection --webhookUrl <value> [options]
+astron-collection notification test-teams-connection --webhookUrl <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -556,12 +556,12 @@ notploy notification test-teams-connection --webhookUrl <value> [options]
 | `--webhookUrl <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification test-telegram-connection`
+### `astron-collection notification test-telegram-connection`
 
 Calls `POST /api/trpc/notification.testTelegramConnection`.
 
 ```bash
-notploy notification test-telegram-connection --botToken <value> --chatId <value> --messageThreadId <value> [options]
+astron-collection notification test-telegram-connection --botToken <value> --chatId <value> --messageThreadId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -571,12 +571,12 @@ notploy notification test-telegram-connection --botToken <value> --chatId <value
 | `--messageThreadId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification update-custom`
+### `astron-collection notification update-custom`
 
 Calls `POST /api/trpc/notification.updateCustom`.
 
 ```bash
-notploy notification update-custom --notificationId <value> --customId <value> [options]
+astron-collection notification update-custom --notificationId <value> --customId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -585,12 +585,12 @@ notploy notification update-custom --notificationId <value> --customId <value> [
 | `--no-appBuildError` | boolean | No | — |
 | `--databaseBackup [boolean]` | boolean | No | — |
 | `--no-databaseBackup` | boolean | No | — |
-| `--notployBackup [boolean]` | boolean | No | — |
-| `--no-notployBackup` | boolean | No | — |
+| `--astronCollectionBackup [boolean]` | boolean | No | — |
+| `--no-astronCollectionBackup` | boolean | No | — |
 | `--volumeBackup [boolean]` | boolean | No | — |
 | `--no-volumeBackup` | boolean | No | — |
-| `--notployRestart [boolean]` | boolean | No | — |
-| `--no-notployRestart` | boolean | No | — |
+| `--astronCollectionRestart [boolean]` | boolean | No | — |
+| `--no-astronCollectionRestart` | boolean | No | — |
 | `--name <value>` | string | No | — |
 | `--appDeploy [boolean]` | boolean | No | — |
 | `--no-appDeploy` | boolean | No | — |
@@ -605,12 +605,12 @@ notploy notification update-custom --notificationId <value> --customId <value> [
 | `--organizationId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification update-discord`
+### `astron-collection notification update-discord`
 
 Calls `POST /api/trpc/notification.updateDiscord`.
 
 ```bash
-notploy notification update-discord --notificationId <value> --discordId <value> [options]
+astron-collection notification update-discord --notificationId <value> --discordId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -619,12 +619,12 @@ notploy notification update-discord --notificationId <value> --discordId <value>
 | `--no-appBuildError` | boolean | No | — |
 | `--databaseBackup [boolean]` | boolean | No | — |
 | `--no-databaseBackup` | boolean | No | — |
-| `--notployBackup [boolean]` | boolean | No | — |
-| `--no-notployBackup` | boolean | No | — |
+| `--astronCollectionBackup [boolean]` | boolean | No | — |
+| `--no-astronCollectionBackup` | boolean | No | — |
 | `--volumeBackup [boolean]` | boolean | No | — |
 | `--no-volumeBackup` | boolean | No | — |
-| `--notployRestart [boolean]` | boolean | No | — |
-| `--no-notployRestart` | boolean | No | — |
+| `--astronCollectionRestart [boolean]` | boolean | No | — |
+| `--no-astronCollectionRestart` | boolean | No | — |
 | `--name <value>` | string | No | — |
 | `--appDeploy [boolean]` | boolean | No | — |
 | `--no-appDeploy` | boolean | No | — |
@@ -640,12 +640,12 @@ notploy notification update-discord --notificationId <value> --discordId <value>
 | `--organizationId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification update-email`
+### `astron-collection notification update-email`
 
 Calls `POST /api/trpc/notification.updateEmail`.
 
 ```bash
-notploy notification update-email --notificationId <value> --emailId <value> [options]
+astron-collection notification update-email --notificationId <value> --emailId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -654,12 +654,12 @@ notploy notification update-email --notificationId <value> --emailId <value> [op
 | `--no-appBuildError` | boolean | No | — |
 | `--databaseBackup [boolean]` | boolean | No | — |
 | `--no-databaseBackup` | boolean | No | — |
-| `--notployBackup [boolean]` | boolean | No | — |
-| `--no-notployBackup` | boolean | No | — |
+| `--astronCollectionBackup [boolean]` | boolean | No | — |
+| `--no-astronCollectionBackup` | boolean | No | — |
 | `--volumeBackup [boolean]` | boolean | No | — |
 | `--no-volumeBackup` | boolean | No | — |
-| `--notployRestart [boolean]` | boolean | No | — |
-| `--no-notployRestart` | boolean | No | — |
+| `--astronCollectionRestart [boolean]` | boolean | No | — |
+| `--no-astronCollectionRestart` | boolean | No | — |
 | `--name <value>` | string | No | — |
 | `--appDeploy [boolean]` | boolean | No | — |
 | `--no-appDeploy` | boolean | No | — |
@@ -678,12 +678,12 @@ notploy notification update-email --notificationId <value> --emailId <value> [op
 | `--organizationId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification update-gotify`
+### `astron-collection notification update-gotify`
 
 Calls `POST /api/trpc/notification.updateGotify`.
 
 ```bash
-notploy notification update-gotify --notificationId <value> --gotifyId <value> [options]
+astron-collection notification update-gotify --notificationId <value> --gotifyId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -692,12 +692,12 @@ notploy notification update-gotify --notificationId <value> --gotifyId <value> [
 | `--no-appBuildError` | boolean | No | — |
 | `--databaseBackup [boolean]` | boolean | No | — |
 | `--no-databaseBackup` | boolean | No | — |
-| `--notployBackup [boolean]` | boolean | No | — |
-| `--no-notployBackup` | boolean | No | — |
+| `--astronCollectionBackup [boolean]` | boolean | No | — |
+| `--no-astronCollectionBackup` | boolean | No | — |
 | `--volumeBackup [boolean]` | boolean | No | — |
 | `--no-volumeBackup` | boolean | No | — |
-| `--notployRestart [boolean]` | boolean | No | — |
-| `--no-notployRestart` | boolean | No | — |
+| `--astronCollectionRestart [boolean]` | boolean | No | — |
+| `--no-astronCollectionRestart` | boolean | No | — |
 | `--name <value>` | string | No | — |
 | `--appDeploy [boolean]` | boolean | No | — |
 | `--no-appDeploy` | boolean | No | — |
@@ -715,12 +715,12 @@ notploy notification update-gotify --notificationId <value> --gotifyId <value> [
 | `--organizationId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification update-lark`
+### `astron-collection notification update-lark`
 
 Calls `POST /api/trpc/notification.updateLark`.
 
 ```bash
-notploy notification update-lark --notificationId <value> --larkId <value> [options]
+astron-collection notification update-lark --notificationId <value> --larkId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -729,12 +729,12 @@ notploy notification update-lark --notificationId <value> --larkId <value> [opti
 | `--no-appBuildError` | boolean | No | — |
 | `--databaseBackup [boolean]` | boolean | No | — |
 | `--no-databaseBackup` | boolean | No | — |
-| `--notployBackup [boolean]` | boolean | No | — |
-| `--no-notployBackup` | boolean | No | — |
+| `--astronCollectionBackup [boolean]` | boolean | No | — |
+| `--no-astronCollectionBackup` | boolean | No | — |
 | `--volumeBackup [boolean]` | boolean | No | — |
 | `--no-volumeBackup` | boolean | No | — |
-| `--notployRestart [boolean]` | boolean | No | — |
-| `--no-notployRestart` | boolean | No | — |
+| `--astronCollectionRestart [boolean]` | boolean | No | — |
+| `--no-astronCollectionRestart` | boolean | No | — |
 | `--name <value>` | string | No | — |
 | `--appDeploy [boolean]` | boolean | No | — |
 | `--no-appDeploy` | boolean | No | — |
@@ -748,12 +748,12 @@ notploy notification update-lark --notificationId <value> --larkId <value> [opti
 | `--organizationId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification update-mattermost`
+### `astron-collection notification update-mattermost`
 
 Calls `POST /api/trpc/notification.updateMattermost`.
 
 ```bash
-notploy notification update-mattermost --notificationId <value> --mattermostId <value> [options]
+astron-collection notification update-mattermost --notificationId <value> --mattermostId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -762,12 +762,12 @@ notploy notification update-mattermost --notificationId <value> --mattermostId <
 | `--no-appBuildError` | boolean | No | — |
 | `--databaseBackup [boolean]` | boolean | No | — |
 | `--no-databaseBackup` | boolean | No | — |
-| `--notployBackup [boolean]` | boolean | No | — |
-| `--no-notployBackup` | boolean | No | — |
+| `--astronCollectionBackup [boolean]` | boolean | No | — |
+| `--no-astronCollectionBackup` | boolean | No | — |
 | `--volumeBackup [boolean]` | boolean | No | — |
 | `--no-volumeBackup` | boolean | No | — |
-| `--notployRestart [boolean]` | boolean | No | — |
-| `--no-notployRestart` | boolean | No | — |
+| `--astronCollectionRestart [boolean]` | boolean | No | — |
+| `--no-astronCollectionRestart` | boolean | No | — |
 | `--name <value>` | string | No | — |
 | `--appDeploy [boolean]` | boolean | No | — |
 | `--no-appDeploy` | boolean | No | — |
@@ -783,12 +783,12 @@ notploy notification update-mattermost --notificationId <value> --mattermostId <
 | `--organizationId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification update-ntfy`
+### `astron-collection notification update-ntfy`
 
 Calls `POST /api/trpc/notification.updateNtfy`.
 
 ```bash
-notploy notification update-ntfy --notificationId <value> --ntfyId <value> [options]
+astron-collection notification update-ntfy --notificationId <value> --ntfyId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -797,12 +797,12 @@ notploy notification update-ntfy --notificationId <value> --ntfyId <value> [opti
 | `--no-appBuildError` | boolean | No | — |
 | `--databaseBackup [boolean]` | boolean | No | — |
 | `--no-databaseBackup` | boolean | No | — |
-| `--notployBackup [boolean]` | boolean | No | — |
-| `--no-notployBackup` | boolean | No | — |
+| `--astronCollectionBackup [boolean]` | boolean | No | — |
+| `--no-astronCollectionBackup` | boolean | No | — |
 | `--volumeBackup [boolean]` | boolean | No | — |
 | `--no-volumeBackup` | boolean | No | — |
-| `--notployRestart [boolean]` | boolean | No | — |
-| `--no-notployRestart` | boolean | No | — |
+| `--astronCollectionRestart [boolean]` | boolean | No | — |
+| `--no-astronCollectionRestart` | boolean | No | — |
 | `--name <value>` | string | No | — |
 | `--appDeploy [boolean]` | boolean | No | — |
 | `--no-appDeploy` | boolean | No | — |
@@ -819,12 +819,12 @@ notploy notification update-ntfy --notificationId <value> --ntfyId <value> [opti
 | `--organizationId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification update-pushover`
+### `astron-collection notification update-pushover`
 
 Calls `POST /api/trpc/notification.updatePushover`.
 
 ```bash
-notploy notification update-pushover --notificationId <value> --pushoverId <value> [options]
+astron-collection notification update-pushover --notificationId <value> --pushoverId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -841,12 +841,12 @@ notploy notification update-pushover --notificationId <value> --pushoverId <valu
 | `--no-appBuildError` | boolean | No | — |
 | `--databaseBackup [boolean]` | boolean | No | — |
 | `--no-databaseBackup` | boolean | No | — |
-| `--notployBackup [boolean]` | boolean | No | — |
-| `--no-notployBackup` | boolean | No | — |
+| `--astronCollectionBackup [boolean]` | boolean | No | — |
+| `--no-astronCollectionBackup` | boolean | No | — |
 | `--volumeBackup [boolean]` | boolean | No | — |
 | `--no-volumeBackup` | boolean | No | — |
-| `--notployRestart [boolean]` | boolean | No | — |
-| `--no-notployRestart` | boolean | No | — |
+| `--astronCollectionRestart [boolean]` | boolean | No | — |
+| `--no-astronCollectionRestart` | boolean | No | — |
 | `--name <value>` | string | No | — |
 | `--appDeploy [boolean]` | boolean | No | — |
 | `--no-appDeploy` | boolean | No | — |
@@ -856,12 +856,12 @@ notploy notification update-pushover --notificationId <value> --pushoverId <valu
 | `--no-serverThreshold` | boolean | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification update-resend`
+### `astron-collection notification update-resend`
 
 Calls `POST /api/trpc/notification.updateResend`.
 
 ```bash
-notploy notification update-resend --notificationId <value> --resendId <value> [options]
+astron-collection notification update-resend --notificationId <value> --resendId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -870,12 +870,12 @@ notploy notification update-resend --notificationId <value> --resendId <value> [
 | `--no-appBuildError` | boolean | No | — |
 | `--databaseBackup [boolean]` | boolean | No | — |
 | `--no-databaseBackup` | boolean | No | — |
-| `--notployBackup [boolean]` | boolean | No | — |
-| `--no-notployBackup` | boolean | No | — |
+| `--astronCollectionBackup [boolean]` | boolean | No | — |
+| `--no-astronCollectionBackup` | boolean | No | — |
 | `--volumeBackup [boolean]` | boolean | No | — |
 | `--no-volumeBackup` | boolean | No | — |
-| `--notployRestart [boolean]` | boolean | No | — |
-| `--no-notployRestart` | boolean | No | — |
+| `--astronCollectionRestart [boolean]` | boolean | No | — |
+| `--no-astronCollectionRestart` | boolean | No | — |
 | `--name <value>` | string | No | — |
 | `--appDeploy [boolean]` | boolean | No | — |
 | `--no-appDeploy` | boolean | No | — |
@@ -891,12 +891,12 @@ notploy notification update-resend --notificationId <value> --resendId <value> [
 | `--organizationId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification update-slack`
+### `astron-collection notification update-slack`
 
 Calls `POST /api/trpc/notification.updateSlack`.
 
 ```bash
-notploy notification update-slack --notificationId <value> --slackId <value> [options]
+astron-collection notification update-slack --notificationId <value> --slackId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -905,12 +905,12 @@ notploy notification update-slack --notificationId <value> --slackId <value> [op
 | `--no-appBuildError` | boolean | No | — |
 | `--databaseBackup [boolean]` | boolean | No | — |
 | `--no-databaseBackup` | boolean | No | — |
-| `--notployBackup [boolean]` | boolean | No | — |
-| `--no-notployBackup` | boolean | No | — |
+| `--astronCollectionBackup [boolean]` | boolean | No | — |
+| `--no-astronCollectionBackup` | boolean | No | — |
 | `--volumeBackup [boolean]` | boolean | No | — |
 | `--no-volumeBackup` | boolean | No | — |
-| `--notployRestart [boolean]` | boolean | No | — |
-| `--no-notployRestart` | boolean | No | — |
+| `--astronCollectionRestart [boolean]` | boolean | No | — |
+| `--no-astronCollectionRestart` | boolean | No | — |
 | `--name <value>` | string | No | — |
 | `--appDeploy [boolean]` | boolean | No | — |
 | `--no-appDeploy` | boolean | No | — |
@@ -925,12 +925,12 @@ notploy notification update-slack --notificationId <value> --slackId <value> [op
 | `--organizationId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification update-teams`
+### `astron-collection notification update-teams`
 
 Calls `POST /api/trpc/notification.updateTeams`.
 
 ```bash
-notploy notification update-teams --notificationId <value> --teamsId <value> [options]
+astron-collection notification update-teams --notificationId <value> --teamsId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -939,12 +939,12 @@ notploy notification update-teams --notificationId <value> --teamsId <value> [op
 | `--no-appBuildError` | boolean | No | — |
 | `--databaseBackup [boolean]` | boolean | No | — |
 | `--no-databaseBackup` | boolean | No | — |
-| `--notployBackup [boolean]` | boolean | No | — |
-| `--no-notployBackup` | boolean | No | — |
+| `--astronCollectionBackup [boolean]` | boolean | No | — |
+| `--no-astronCollectionBackup` | boolean | No | — |
 | `--volumeBackup [boolean]` | boolean | No | — |
 | `--no-volumeBackup` | boolean | No | — |
-| `--notployRestart [boolean]` | boolean | No | — |
-| `--no-notployRestart` | boolean | No | — |
+| `--astronCollectionRestart [boolean]` | boolean | No | — |
+| `--no-astronCollectionRestart` | boolean | No | — |
 | `--name <value>` | string | No | — |
 | `--appDeploy [boolean]` | boolean | No | — |
 | `--no-appDeploy` | boolean | No | — |
@@ -958,12 +958,12 @@ notploy notification update-teams --notificationId <value> --teamsId <value> [op
 | `--organizationId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy notification update-telegram`
+### `astron-collection notification update-telegram`
 
 Calls `POST /api/trpc/notification.updateTelegram`.
 
 ```bash
-notploy notification update-telegram --notificationId <value> --telegramId <value> [options]
+astron-collection notification update-telegram --notificationId <value> --telegramId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -972,12 +972,12 @@ notploy notification update-telegram --notificationId <value> --telegramId <valu
 | `--no-appBuildError` | boolean | No | — |
 | `--databaseBackup [boolean]` | boolean | No | — |
 | `--no-databaseBackup` | boolean | No | — |
-| `--notployBackup [boolean]` | boolean | No | — |
-| `--no-notployBackup` | boolean | No | — |
+| `--astronCollectionBackup [boolean]` | boolean | No | — |
+| `--no-astronCollectionBackup` | boolean | No | — |
 | `--volumeBackup [boolean]` | boolean | No | — |
 | `--no-volumeBackup` | boolean | No | — |
-| `--notployRestart [boolean]` | boolean | No | — |
-| `--no-notployRestart` | boolean | No | — |
+| `--astronCollectionRestart [boolean]` | boolean | No | — |
+| `--no-astronCollectionRestart` | boolean | No | — |
 | `--name <value>` | string | No | — |
 | `--appDeploy [boolean]` | boolean | No | — |
 | `--no-appDeploy` | boolean | No | — |

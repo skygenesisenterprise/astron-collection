@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Documentation synchronization for Notploy.
+ * Documentation synchronization for Astron Collection.
  *
  *   node scripts/docs/cli.mjs check [--only <groups>] [--changed] [--base <ref>] [--json]
  *   node scripts/docs/cli.mjs generate [--only <groups>] [--json]
@@ -250,7 +250,7 @@ function loadCliGroups(config, diagnostics) {
 				"no command groups parsed from the generated CLI",
 				{
 					file: config.sources.cliCommands,
-					hint: "Run 'pnpm --filter @notploy/cli run generate'.",
+					hint: "Run 'pnpm --filter @astron-collection/cli run generate'.",
 				},
 			);
 		}
@@ -571,7 +571,7 @@ function checkCliHelp(config, groups, diagnostics) {
 	if (top.status !== 0) {
 		diagnostics.warning(
 			"cli.help-unavailable",
-			`notploy --help failed: ${(top.stderr || top.stdout || "").trim().split("\n")[0]}`,
+			`astron-collection --help failed: ${(top.stderr || top.stdout || "").trim().split("\n")[0]}`,
 		);
 		return;
 	}
@@ -579,7 +579,7 @@ function checkCliHelp(config, groups, diagnostics) {
 		if (!new RegExp(`\\b${group.name}\\b`).test(top.stdout)) {
 			diagnostics.error(
 				"cli.help-mismatch",
-				`documented group "${group.name}" does not appear in notploy --help`,
+				`documented group "${group.name}" does not appear in astron-collection --help`,
 				{ file: config.sources.cliCommands },
 			);
 		}
@@ -592,7 +592,7 @@ function checkCliHelp(config, groups, diagnostics) {
 		if (result.status !== 0) {
 			diagnostics.warning(
 				"cli.help-unavailable",
-				`notploy ${group.name} ${command.action} --help failed`,
+				`astron-collection ${group.name} ${command.action} --help failed`,
 			);
 			continue;
 		}
@@ -606,7 +606,7 @@ function checkCliHelp(config, groups, diagnostics) {
 			if (!documented.has(match[1])) {
 				diagnostics.error(
 					"cli.help-mismatch",
-					`"${match[1]}" is offered by notploy ${group.name} ${command.action} but not documented`,
+					`"${match[1]}" is offered by astron-collection ${group.name} ${command.action} but not documented`,
 					{ file: "web/apps/docs/content/docs/cli" },
 				);
 			}
@@ -1086,7 +1086,7 @@ async function runCoverage({ options, config, namespaces, groups, templates, dia
 }
 
 function printHelp() {
-	console.log(`Notploy documentation sync
+	console.log(`Astron Collection documentation sync
 
 Usage:
   node scripts/docs/cli.mjs check [options]

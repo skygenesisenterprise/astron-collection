@@ -36,11 +36,11 @@ export const cicdProvider = pgEnum("cicdProvider", CICD_PROVIDERS);
 export const cicdProviderSchema = z.enum(CICD_PROVIDERS);
 
 /**
- * External deployment metadata for a Notploy deployment.
+ * External deployment metadata for a Astron Collection deployment.
  *
  * A row exists only when the deployment was requested through the CI/CD API
  * (see `packages/server/src/services/cicd.ts`), which is what lets the dashboard
- * and the API link a Notploy deployment back to the GitHub Actions run that
+ * and the API link a Astron Collection deployment back to the GitHub Actions run that
  * created it, and the workflow back to the deployment.
  *
  * `externalId` is the idempotency key. CI clients retry requests (a workflow

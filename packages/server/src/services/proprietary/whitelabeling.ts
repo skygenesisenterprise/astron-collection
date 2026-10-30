@@ -1,5 +1,5 @@
-import { IS_CLOUD } from "@notploy/server/constants";
-import { getWebServerSettings } from "@notploy/server/services/web-server-settings";
+import { IS_CLOUD } from "@astron-collection/server/constants";
+import { getWebServerSettings } from "@astron-collection/server/services/web-server-settings";
 
 export interface PublicWhitelabelingConfig {
 	appName: string | null;
@@ -18,7 +18,7 @@ export interface PublicWhitelabelingConfig {
  * Public whitelabeling config for unauthenticated contexts (login page, SSR
  * document shell). No active organization/session is available here.
  *
- * Whitelabeling is a self-hosted-only feature; Notploy Cloud has a fixed brand
+ * Whitelabeling is a self-hosted-only feature; Astron Collection Cloud has a fixed brand
  * and therefore returns null.
  */
 export const getPublicWhitelabelingConfig =

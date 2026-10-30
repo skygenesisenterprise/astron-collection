@@ -3,8 +3,8 @@ import {
 	findRedirectById,
 	removeRedirectById,
 	updateRedirectById,
-} from "@notploy/server";
-import { checkServicePermissionAndAccess } from "@notploy/server/services/permission";
+} from "@astron-collection/server";
+import { checkServicePermissionAndAccess } from "@astron-collection/server/services/permission";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { audit } from "@/server/api/utils/audit";
 import {

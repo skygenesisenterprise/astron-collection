@@ -1,4 +1,4 @@
-import { getDomainRequirements } from "@notploy/server";
+import { getDomainRequirements } from "@astron-collection/server";
 import { describe, expect, it } from "vitest";
 
 describe("getDomainRequirements", () => {
@@ -6,8 +6,8 @@ describe("getDomainRequirements", () => {
 		["api.example.com", "public", true, true],
 		["app.localhost", "localhost", false, false],
 		["api.lan", "lan", false, false],
-		["gitlab.notploy.local", "local", false, false],
-		["notploy.local", "local", false, false],
+		["gitlab.astron-collection.local", "local", false, false],
+		["astron-collection.local", "local", false, false],
 		["app.home.arpa", "custom", false, false],
 		["service.internal.example", "custom", false, false],
 		["notlocalhost.com", "public", true, true],

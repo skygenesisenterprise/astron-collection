@@ -1,27 +1,27 @@
 ---
 title: "MongoDB"
-description: "Provision and operate MongoDB databases, including backups and external ports. Generated from the `notploy` command surface."
+description: "Provision and operate MongoDB databases, including backups and external ports. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Provision and operate MongoDB databases, including backups and external ports.
 
-`notploy mongo` exposes **16 commands**. They map one-to-one onto the `mongo.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection mongo` exposes **16 commands**. They map one-to-one onto the `mongo.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy mongo --help` to list these commands in your terminal, or
-	`notploy mongo <command> --help` for a single command.
+	Run `astron-collection mongo --help` to list these commands in your terminal, or
+	`astron-collection mongo <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy mongo change-password`
+### `astron-collection mongo change-password`
 
 Calls `POST /api/trpc/mongo.changePassword`.
 
 ```bash
-notploy mongo change-password --mongoId <value> --password <value> [options]
+astron-collection mongo change-password --mongoId <value> --password <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -30,12 +30,12 @@ notploy mongo change-password --mongoId <value> --password <value> [options]
 | `--password <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mongo change-status`
+### `astron-collection mongo change-status`
 
 Calls `POST /api/trpc/mongo.changeStatus`.
 
 ```bash
-notploy mongo change-status --mongoId <value> --applicationStatus <value> [options]
+astron-collection mongo change-status --mongoId <value> --applicationStatus <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -44,12 +44,12 @@ notploy mongo change-status --mongoId <value> --applicationStatus <value> [optio
 | `--applicationStatus <value>` | string | Yes | `idle`, `running`, `done`, `error` |
 | `--profile <name>` | string | No | — |
 
-### `notploy mongo create`
+### `astron-collection mongo create`
 
 Calls `POST /api/trpc/mongo.create`.
 
 ```bash
-notploy mongo create --name <value> --environmentId <value> --databaseUser <value> --databasePassword <value> [options]
+astron-collection mongo create --name <value> --environmentId <value> --databaseUser <value> --databasePassword <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -66,12 +66,12 @@ notploy mongo create --name <value> --environmentId <value> --databaseUser <valu
 | `--no-replicaSets` | boolean | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mongo deploy`
+### `astron-collection mongo deploy`
 
 Calls `POST /api/trpc/mongo.deploy`.
 
 ```bash
-notploy mongo deploy --mongoId <value> [options]
+astron-collection mongo deploy --mongoId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -79,12 +79,12 @@ notploy mongo deploy --mongoId <value> [options]
 | `--mongoId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mongo move`
+### `astron-collection mongo move`
 
 Calls `POST /api/trpc/mongo.move`.
 
 ```bash
-notploy mongo move --mongoId <value> --targetEnvironmentId <value> [options]
+astron-collection mongo move --mongoId <value> --targetEnvironmentId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -93,12 +93,12 @@ notploy mongo move --mongoId <value> --targetEnvironmentId <value> [options]
 | `--targetEnvironmentId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mongo one`
+### `astron-collection mongo one`
 
 Calls `GET /api/trpc/mongo.one`.
 
 ```bash
-notploy mongo one --mongoId <value> [options]
+astron-collection mongo one --mongoId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -106,12 +106,12 @@ notploy mongo one --mongoId <value> [options]
 | `--mongoId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mongo read-logs`
+### `astron-collection mongo read-logs`
 
 Calls `GET /api/trpc/mongo.readLogs`.
 
 ```bash
-notploy mongo read-logs --mongoId <value> [options]
+astron-collection mongo read-logs --mongoId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -122,12 +122,12 @@ notploy mongo read-logs --mongoId <value> [options]
 | `--search <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mongo rebuild`
+### `astron-collection mongo rebuild`
 
 Calls `POST /api/trpc/mongo.rebuild`.
 
 ```bash
-notploy mongo rebuild --mongoId <value> [options]
+astron-collection mongo rebuild --mongoId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -135,12 +135,12 @@ notploy mongo rebuild --mongoId <value> [options]
 | `--mongoId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mongo reload`
+### `astron-collection mongo reload`
 
 Calls `POST /api/trpc/mongo.reload`.
 
 ```bash
-notploy mongo reload --mongoId <value> --appName <value> [options]
+astron-collection mongo reload --mongoId <value> --appName <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -149,12 +149,12 @@ notploy mongo reload --mongoId <value> --appName <value> [options]
 | `--appName <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mongo remove`
+### `astron-collection mongo remove`
 
 Calls `POST /api/trpc/mongo.remove`.
 
 ```bash
-notploy mongo remove --mongoId <value> [options]
+astron-collection mongo remove --mongoId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -162,12 +162,12 @@ notploy mongo remove --mongoId <value> [options]
 | `--mongoId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mongo save-environment`
+### `astron-collection mongo save-environment`
 
 Calls `POST /api/trpc/mongo.saveEnvironment`.
 
 ```bash
-notploy mongo save-environment --mongoId <value> --env <value> [options]
+astron-collection mongo save-environment --mongoId <value> --env <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -176,12 +176,12 @@ notploy mongo save-environment --mongoId <value> --env <value> [options]
 | `--env <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mongo save-external-port`
+### `astron-collection mongo save-external-port`
 
 Calls `POST /api/trpc/mongo.saveExternalPort`.
 
 ```bash
-notploy mongo save-external-port --mongoId <value> --externalPort <value> [options]
+astron-collection mongo save-external-port --mongoId <value> --externalPort <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -190,12 +190,12 @@ notploy mongo save-external-port --mongoId <value> --externalPort <value> [optio
 | `--externalPort <value>` | number | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mongo search`
+### `astron-collection mongo search`
 
 Calls `GET /api/trpc/mongo.search`.
 
 ```bash
-notploy mongo search [options]
+astron-collection mongo search [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -210,12 +210,12 @@ notploy mongo search [options]
 | `--offset <value>` | number | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mongo start`
+### `astron-collection mongo start`
 
 Calls `POST /api/trpc/mongo.start`.
 
 ```bash
-notploy mongo start --mongoId <value> [options]
+astron-collection mongo start --mongoId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -223,12 +223,12 @@ notploy mongo start --mongoId <value> [options]
 | `--mongoId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mongo stop`
+### `astron-collection mongo stop`
 
 Calls `POST /api/trpc/mongo.stop`.
 
 ```bash
-notploy mongo stop --mongoId <value> [options]
+astron-collection mongo stop --mongoId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -236,12 +236,12 @@ notploy mongo stop --mongoId <value> [options]
 | `--mongoId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mongo update`
+### `astron-collection mongo update`
 
 Calls `POST /api/trpc/mongo.update`.
 
 ```bash
-notploy mongo update --mongoId <value> [options]
+astron-collection mongo update --mongoId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -279,6 +279,6 @@ notploy mongo update --mongoId <value> [options]
 | `--replicaSets [boolean]` | boolean | No | — |
 | `--no-replicaSets` | boolean | No | — |
 | `--networkIds <json>` | array | No | — |
-| `--detachNotployNetwork [boolean]` | boolean | No | — |
-| `--no-detachNotployNetwork` | boolean | No | — |
+| `--detachAstronCollectionNetwork [boolean]` | boolean | No | — |
+| `--no-detachAstronCollectionNetwork` | boolean | No | — |
 | `--profile <name>` | string | No | — |

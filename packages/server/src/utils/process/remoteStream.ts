@@ -1,5 +1,5 @@
 import { spawn } from "node:child_process";
-import { findServerById } from "@notploy/server/services/server";
+import { findServerById } from "@astron-collection/server/services/server";
 import { Client } from "ssh2";
 
 export interface ProcessStream {

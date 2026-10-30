@@ -1,5 +1,5 @@
-import type { ApplicationNested } from "@notploy/server/utils/builders";
-import { getRailpackCommand } from "@notploy/server/utils/builders/railpack";
+import type { ApplicationNested } from "@astron-collection/server/utils/builders";
+import { getRailpackCommand } from "@astron-collection/server/utils/builders/railpack";
 import { describe, expect, it } from "vitest";
 
 const createApplication = (

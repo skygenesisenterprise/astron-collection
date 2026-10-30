@@ -3,11 +3,11 @@ import os from "node:os";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("@notploy/server/services/server", () => ({
+vi.mock("@astron-collection/server/services/server", () => ({
 	findServerById: vi.fn(),
 }));
 
-import { pipeBetweenServers } from "@notploy/server/utils/process/remoteStream";
+import { pipeBetweenServers } from "@astron-collection/server/utils/process/remoteStream";
 
 describe("pipeBetweenServers", () => {
 	it("delivers a short source stream that ends before the target is ready", async () => {

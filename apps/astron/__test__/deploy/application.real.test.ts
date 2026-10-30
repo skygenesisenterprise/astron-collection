@@ -1,15 +1,15 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
-import type { ApplicationNested } from "@notploy/server";
-import { paths } from "@notploy/server/constants";
-import { execAsync } from "@notploy/server/utils/process/execAsync";
+import type { ApplicationNested } from "@astron-collection/server";
+import { paths } from "@astron-collection/server/constants";
+import { execAsync } from "@astron-collection/server/utils/process/execAsync";
 import { format } from "date-fns";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const REAL_TEST_TIMEOUT = 180000; // 3 minutes
 
 // Mock ONLY database and notifications
-vi.mock("@notploy/server/db", () => {
+vi.mock("@astron-collection/server/db", () => {
 	const createChainableMock = (): any => {
 		const chain: any = {
 			set: vi.fn(() => chain),
@@ -45,10 +45,10 @@ vi.mock("@notploy/server/db", () => {
 	};
 });
 
-vi.mock("@notploy/server/services/application", async () => {
+vi.mock("@astron-collection/server/services/application", async () => {
 	const actual = await vi.importActual<
-		typeof import("@notploy/server/services/application")
-	>("@notploy/server/services/application");
+		typeof import("@astron-collection/server/services/application")
+	>("@astron-collection/server/services/application");
 	return {
 		...actual,
 		findApplicationById: vi.fn(),
@@ -56,25 +56,25 @@ vi.mock("@notploy/server/services/application", async () => {
 	};
 });
 
-vi.mock("@notploy/server/services/admin", () => ({
-	getNotployUrl: vi.fn().mockResolvedValue("http://localhost:3000"),
+vi.mock("@astron-collection/server/services/admin", () => ({
+	getAstronCollectionUrl: vi.fn().mockResolvedValue("http://localhost:3000"),
 }));
 
-vi.mock("@notploy/server/services/deployment", () => ({
+vi.mock("@astron-collection/server/services/deployment", () => ({
 	createDeployment: vi.fn(),
 	updateDeploymentStatus: vi.fn(),
 	updateDeployment: vi.fn(),
 }));
 
-vi.mock("@notploy/server/utils/notifications/build-success", () => ({
+vi.mock("@astron-collection/server/utils/notifications/build-success", () => ({
 	sendBuildSuccessNotifications: vi.fn(),
 }));
 
-vi.mock("@notploy/server/utils/notifications/build-error", () => ({
+vi.mock("@astron-collection/server/utils/notifications/build-error", () => ({
 	sendBuildErrorNotifications: vi.fn(),
 }));
 
-vi.mock("@notploy/server/services/rollbacks", () => ({
+vi.mock("@astron-collection/server/services/rollbacks", () => ({
 	createRollback: vi.fn(),
 }));
 
@@ -84,11 +84,11 @@ vi.mock("@notploy/server/services/rollbacks", () => ({
 // - getBuildCommand
 // - mechanizeDockerContainer (requires Docker Swarm)
 
-import { db } from "@notploy/server/db";
-import * as adminService from "@notploy/server/services/admin";
-import * as applicationService from "@notploy/server/services/application";
-import { deployApplication } from "@notploy/server/services/application";
-import * as deploymentService from "@notploy/server/services/deployment";
+import { db } from "@astron-collection/server/db";
+import * as adminService from "@astron-collection/server/services/admin";
+import * as applicationService from "@astron-collection/server/services/application";
+import { deployApplication } from "@astron-collection/server/services/application";
+import * as deploymentService from "@astron-collection/server/services/deployment";
 
 const createMockApplication = (
 	overrides: Partial<ApplicationNested> = {},
@@ -98,7 +98,7 @@ const createMockApplication = (
 		name: "Real Test App",
 		appName: `real-test-${Date.now()}`,
 		sourceType: "git" as const,
-		customGitUrl: "https://github.com/skygenesisenterprise/notploy.git",
+		customGitUrl: "https://github.com/skygenesisenterprise/astron-collection.git",
 		customGitBranch: "main",
 		customGitSSHKeyId: null,
 		customGitBuildPath: "/astro",
@@ -192,7 +192,7 @@ describe(
 			vi.mocked(applicationService.findApplicationById).mockResolvedValue(
 				mockApp as any,
 			);
-			vi.mocked(adminService.getNotployUrl).mockResolvedValue(
+			vi.mocked(adminService.getAstronCollectionUrl).mockResolvedValue(
 				"http://localhost:3000",
 			);
 			vi.mocked(deploymentService.createDeployment).mockResolvedValue(

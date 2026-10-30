@@ -3,8 +3,8 @@ import {
 	finPortById,
 	removePortById,
 	updatePortChecked,
-} from "@notploy/server";
-import { checkServicePermissionAndAccess } from "@notploy/server/services/permission";
+} from "@astron-collection/server";
+import { checkServicePermissionAndAccess } from "@astron-collection/server/services/permission";
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { audit } from "@/server/api/utils/audit";

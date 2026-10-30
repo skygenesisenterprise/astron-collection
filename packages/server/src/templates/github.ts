@@ -36,7 +36,7 @@ export interface CompleteTemplate {
 	};
 }
 
-export const TEMPLATES_BASE_URL = "https://templates.notploy.com";
+export const TEMPLATES_BASE_URL = "https://templates.astron-collection.com";
 
 export interface TemplateMetadata {
 	id: string;

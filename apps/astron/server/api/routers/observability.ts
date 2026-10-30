@@ -18,7 +18,7 @@ import {
 	ObservabilityError,
 	PROMETHEUS_STALE_THRESHOLD_SECONDS,
 	validateObservabilityBackendUrl,
-} from "@notploy/server/services/observability/index";
+} from "@astron-collection/server/services/observability/index";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createTRPCRouter, withPermission } from "@/server/api/trpc";
@@ -231,7 +231,7 @@ export const observabilityRouter = createTRPCRouter({
 			z.object({
 				url: backendUrl,
 				token: z.string().min(1).max(2000).optional(),
-				query: z.string().max(200).default("notploy"),
+				query: z.string().max(200).default("astron-collection"),
 			}),
 		)
 		.query(async ({ input }) => {

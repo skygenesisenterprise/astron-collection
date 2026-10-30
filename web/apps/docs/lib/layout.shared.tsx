@@ -8,12 +8,12 @@ export function baseOptions(): BaseLayoutProps {
 			title: (
 				<div className="flex items-center gap-2">
 					<Logo />
-					<span>Notploy</span>
+					<span>Astron Collection</span>
 				</div>
 			),
-			url: "https://notploy.com",
+			url: "https://astron-collection.com",
 			children: <NavLinks />,
 		},
-		githubUrl: "https://github.com/skygenesisenterprise/notploy",
+		githubUrl: "https://github.com/skygenesisenterprise/astron-collection",
 	};
 }

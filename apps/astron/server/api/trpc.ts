@@ -8,17 +8,17 @@
  */
 
 // import { getServerAuthSession } from "@/server/auth";
-import { db } from "@notploy/server/db";
-import type { statements } from "@notploy/server/lib/access-control";
+import { db } from "@astron-collection/server/db";
+import type { statements } from "@astron-collection/server/lib/access-control";
 import {
 	type CicdAction,
 	type CicdTokenScope,
 	cicdScopeAllows,
 	parseCicdTokenScope,
-} from "@notploy/server/lib/cicd-scope";
-import { validateRequest, type RequestApiKey } from "@notploy/server/lib/auth";
-import { checkPermission } from "@notploy/server/services/permission";
-import type { OpenApiMeta } from "@notploy/trpc-openapi";
+} from "@astron-collection/server/lib/cicd-scope";
+import { validateRequest, type RequestApiKey } from "@astron-collection/server/lib/auth";
+import { checkPermission } from "@astron-collection/server/services/permission";
+import type { OpenApiMeta } from "@astron-collection/trpc-openapi";
 import { initTRPC, TRPCError } from "@trpc/server";
 import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
 import type { Session, User } from "better-auth";
@@ -272,7 +272,7 @@ export const cicdProcedure = t.procedure.use(({ ctx, next }) => {
 		throw new TRPCError({
 			code: "UNAUTHORIZED",
 			message:
-				"This endpoint requires a Notploy CI/CD API token. Send it as `x-api-key` or `Authorization: Bearer <token>`.",
+				"This endpoint requires a Astron Collection CI/CD API token. Send it as `x-api-key` or `Authorization: Bearer <token>`.",
 		});
 	}
 

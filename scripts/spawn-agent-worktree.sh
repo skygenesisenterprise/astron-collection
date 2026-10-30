@@ -34,11 +34,11 @@ cd "$WORKTREE_PATH"
 pnpm install --prefer-offline >&2
 
 FREE_PORT=$(node "$REPO_ROOT/scripts/find-free-port.mjs")
-sed -i.bak "s/^PORT=.*/PORT=$FREE_PORT/" apps/notploy/.env
-sed -i.bak -E "s#^(BETTER_AUTH_URL=https?://[^:/]+):[0-9]+#\1:$FREE_PORT#" apps/notploy/.env
-rm -f apps/notploy/.env.bak
+sed -i.bak "s/^PORT=.*/PORT=$FREE_PORT/" apps/astron-collection/.env
+sed -i.bak -E "s#^(BETTER_AUTH_URL=https?://[^:/]+):[0-9]+#\1:$FREE_PORT#" apps/astron-collection/.env
+rm -f apps/astron-collection/.env.bak
 
-pnpm --filter=@notploy/app run dev > "$WORKTREE_PATH/dev-server.log" 2>&1 &
+pnpm --filter=@astron-collection/app run dev > "$WORKTREE_PATH/dev-server.log" 2>&1 &
 echo $! > "$WORKTREE_PATH/dev-server.pid"
 
 BASE_URL="http://localhost:$FREE_PORT"
@@ -51,5 +51,5 @@ for _ in $(seq 1 30); do
 done
 
 echo "export WORKTREE_PATH=$WORKTREE_PATH"
-echo "export NOTPLOY_BASE_URL=$BASE_URL"
+echo "export ASTRON_COLLECTION_BASE_URL=$BASE_URL"
 echo "export PORT=$FREE_PORT"

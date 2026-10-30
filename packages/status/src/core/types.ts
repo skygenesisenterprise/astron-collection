@@ -3,7 +3,7 @@
  *
  * This module is intentionally free of any framework, storage or transport
  * dependency: the same vocabulary is consumed by the persistence layer, the
- * HTTP API, the server-rendered UI, the tests and the Notploy integration
+ * HTTP API, the server-rendered UI, the tests and the Astron Collection integration
  * client.
  *
  * Three distinct state notions exist and must never be conflated:

@@ -10,13 +10,13 @@ import {
 	latencyBucketIndex,
 	mergeHistograms,
 	percentileFromHistogram,
-} from "@notploy/server/utils/traffic/aggregate";
-import type { TrafficHttpEvent } from "@notploy/server/utils/traffic/parse";
+} from "@astron-collection/server/utils/traffic/aggregate";
+import type { TrafficHttpEvent } from "@astron-collection/server/utils/traffic/parse";
 import { describe, expect, it } from "vitest";
 
 const event = (overrides: Partial<TrafficHttpEvent> = {}): TrafficHttpEvent => ({
 	timestamp: new Date("2026-10-12T09:04:05.000Z"),
-	host: "notploy.com",
+	host: "astron-collection.com",
 	route: "/pricing",
 	method: "GET",
 	status: 200,

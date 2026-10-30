@@ -1,4 +1,4 @@
-import type { TrafficStatusClass } from "@notploy/server/db/schema/traffic";
+import type { TrafficStatusClass } from "@astron-collection/server/db/schema/traffic";
 import {
 	bucketStartFor,
 	DEFAULT_BUCKET_SECONDS,

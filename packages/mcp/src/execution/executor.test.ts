@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 import { IdentityResolver } from "../adapters/identity.js";
-import { ApiError } from "../adapters/notployApi.js";
+import { ApiError } from "../adapters/astronCollectionApi.js";
 import { getOperationStatusCapability } from "../capabilities/operations.js";
 import type { McpConfig } from "../config.js";
 import { loadConfig } from "../config.js";
@@ -66,8 +66,8 @@ function testConfig(
   overrides: { policy?: Partial<McpConfig["policy"]>; limits?: Partial<McpConfig["limits"]> } = {},
 ): McpConfig {
   const base = loadConfig({
-    NOTPLOY_URL: "https://notploy.example.com",
-    NOTPLOY_API_KEY: API_KEY,
+    ASTRON_COLLECTION_URL: "https://astron-collection.example.com",
+    ASTRON_COLLECTION_API_KEY: API_KEY,
   } as NodeJS.ProcessEnv);
 
   return {
@@ -310,7 +310,7 @@ describe("ToolExecutor", () => {
       { requestId: "req-6" },
     );
     expect(result.error?.code).toBe("policy_denied");
-    expect(result.error?.message).toContain("NOTPLOY_MCP_ALLOW_DESTRUCTIVE");
+    expect(result.error?.message).toContain("ASTRON_COLLECTION_MCP_ALLOW_DESTRUCTIVE");
   });
 
   it("enforces the per-identity rate limit", async () => {

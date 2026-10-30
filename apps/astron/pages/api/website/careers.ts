@@ -1,4 +1,4 @@
-import { validateRequest } from "@notploy/server";
+import { validateRequest } from "@astron-collection/server";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { createJob } from "@/lib/ghost-admin";
 

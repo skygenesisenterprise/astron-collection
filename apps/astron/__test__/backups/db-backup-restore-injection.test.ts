@@ -6,13 +6,13 @@ import {
 	getMongoBackupCommand,
 	getMysqlBackupCommand,
 	getPostgresBackupCommand,
-} from "@notploy/server/utils/backups/utils";
+} from "@astron-collection/server/utils/backups/utils";
 import {
 	getMariadbRestoreCommand,
 	getMongoRestoreCommand,
 	getMysqlRestoreCommand,
 	getPostgresRestoreCommand,
-} from "@notploy/server/utils/restore/utils";
+} from "@astron-collection/server/utils/restore/utils";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 // A stub replacing the real `docker` binary. It ignores exec/-i/$CONTAINER_ID,
@@ -20,7 +20,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 // or the structured argv directly. Production no longer needs a shell inside
 // the container, so both shapes are exercised.
 const stub = `/tmp/docker_stub_${process.pid}`;
-const MARK = `/tmp/notploy_dbbk_pwned_${process.pid}`;
+const MARK = `/tmp/astron_collectiondbbk_pwned_${process.pid}`;
 
 beforeAll(() => {
 	writeFileSync(

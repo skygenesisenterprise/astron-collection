@@ -1,27 +1,27 @@
 ---
 title: "AI"
-description: "AI providers and models, plus log analysis and configuration suggestions. Generated from the `notploy` command surface."
+description: "AI providers and models, plus log analysis and configuration suggestions. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 AI providers and models, plus log analysis and configuration suggestions.
 
-`notploy ai` exposes **14 commands**. They map one-to-one onto the `ai.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection ai` exposes **14 commands**. They map one-to-one onto the `ai.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy ai --help` to list these commands in your terminal, or
-	`notploy ai <command> --help` for a single command.
+	Run `astron-collection ai --help` to list these commands in your terminal, or
+	`astron-collection ai <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy ai analyze-logs`
+### `astron-collection ai analyze-logs`
 
 Calls `POST /api/trpc/ai.analyzeLogs`.
 
 ```bash
-notploy ai analyze-logs --aiId <value> --logs <value> --context <value> [options]
+astron-collection ai analyze-logs --aiId <value> --logs <value> --context <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -31,12 +31,12 @@ notploy ai analyze-logs --aiId <value> --logs <value> --context <value> [options
 | `--context <value>` | string | Yes | `build`, `runtime` |
 | `--profile <name>` | string | No | — |
 
-### `notploy ai create`
+### `astron-collection ai create`
 
 Calls `POST /api/trpc/ai.create`.
 
 ```bash
-notploy ai create --name <value> --apiUrl <value> --apiKey <value> --model <value> --isEnabled [options]
+astron-collection ai create --name <value> --apiUrl <value> --apiKey <value> --model <value> --isEnabled [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -48,12 +48,12 @@ notploy ai create --name <value> --apiUrl <value> --apiKey <value> --model <valu
 | `--isEnabled [boolean]` | boolean | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy ai delete`
+### `astron-collection ai delete`
 
 Calls `POST /api/trpc/ai.delete`.
 
 ```bash
-notploy ai delete --aiId <value> [options]
+astron-collection ai delete --aiId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -61,12 +61,12 @@ notploy ai delete --aiId <value> [options]
 | `--aiId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy ai deploy`
+### `astron-collection ai deploy`
 
 Calls `POST /api/trpc/ai.deploy`.
 
 ```bash
-notploy ai deploy --environmentId <value> --id <value> --dockerCompose <value> --envVariables <value> --name <value> --description <value> [options]
+astron-collection ai deploy --environmentId <value> --id <value> --dockerCompose <value> --envVariables <value> --name <value> --description <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -82,12 +82,12 @@ notploy ai deploy --environmentId <value> --id <value> --dockerCompose <value> -
 | `--configFiles <json>` | array | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy ai get`
+### `astron-collection ai get`
 
 Calls `GET /api/trpc/ai.get`.
 
 ```bash
-notploy ai get --aiId <value> [options]
+astron-collection ai get --aiId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -95,48 +95,48 @@ notploy ai get --aiId <value> [options]
 | `--aiId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy ai get-all`
+### `astron-collection ai get-all`
 
 Calls `GET /api/trpc/ai.getAll`.
 
 ```bash
-notploy ai get-all [options]
+astron-collection ai get-all [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy ai get-custom-providers`
+### `astron-collection ai get-custom-providers`
 
 Calls `GET /api/trpc/ai.getCustomProviders`.
 
 ```bash
-notploy ai get-custom-providers [options]
+astron-collection ai get-custom-providers [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy ai get-enabled-providers`
+### `astron-collection ai get-enabled-providers`
 
 Calls `GET /api/trpc/ai.getEnabledProviders`.
 
 ```bash
-notploy ai get-enabled-providers [options]
+astron-collection ai get-enabled-providers [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy ai get-models`
+### `astron-collection ai get-models`
 
 Calls `GET /api/trpc/ai.getModels`.
 
 ```bash
-notploy ai get-models [options]
+astron-collection ai get-models [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -146,12 +146,12 @@ notploy ai get-models [options]
 | `--aiId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy ai one`
+### `astron-collection ai one`
 
 Calls `GET /api/trpc/ai.one`.
 
 ```bash
-notploy ai one --aiId <value> [options]
+astron-collection ai one --aiId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -159,12 +159,12 @@ notploy ai one --aiId <value> [options]
 | `--aiId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy ai save-custom-providers`
+### `astron-collection ai save-custom-providers`
 
 Calls `POST /api/trpc/ai.saveCustomProviders`.
 
 ```bash
-notploy ai save-custom-providers --providers <json> [options]
+astron-collection ai save-custom-providers --providers <json> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -172,12 +172,12 @@ notploy ai save-custom-providers --providers <json> [options]
 | `--providers <json>` | array | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy ai suggest`
+### `astron-collection ai suggest`
 
 Calls `POST /api/trpc/ai.suggest`.
 
 ```bash
-notploy ai suggest --aiId <value> --input <value> [options]
+astron-collection ai suggest --aiId <value> --input <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -187,12 +187,12 @@ notploy ai suggest --aiId <value> --input <value> [options]
 | `--serverId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy ai test-connection`
+### `astron-collection ai test-connection`
 
 Calls `POST /api/trpc/ai.testConnection`.
 
 ```bash
-notploy ai test-connection --model <value> [options]
+astron-collection ai test-connection --model <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -203,12 +203,12 @@ notploy ai test-connection --model <value> [options]
 | `--model <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy ai update`
+### `astron-collection ai update`
 
 Calls `POST /api/trpc/ai.update`.
 
 ```bash
-notploy ai update --aiId <value> [options]
+astron-collection ai update --aiId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |

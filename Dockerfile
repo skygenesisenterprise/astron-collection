@@ -1,29 +1,29 @@
 # syntax=docker/dockerfile:1
 #
-# Notploy — single canonical Dockerfile for the main product.
+# Astron Collection — single canonical Dockerfile for the main product.
 #
 # Built from the repository root: the whole monorepo is one pnpm workspace with
 # a single `pnpm-lock.yaml`, so only the root context is ever used.
 #
-#   docker build -t notploy .                      # self-hosted (default target)
-#   docker build --target cloud -t notploy-cloud . # cloud (no build tooling)
-#   docker build --target dev -t notploy-dev .     # development image
+#   docker build -t astron-collection .                      # self-hosted (default target)
+#   docker build --target cloud -t astron-collection-cloud . # cloud (no build tooling)
+#   docker build --target dev -t astron-collection-dev .     # development image
 #   docker buildx build --target selfhosted .
 #
 # Stages / targets
 #   base        Node + pnpm toolchain
 #   dev         dependencies only, runs `pnpm dev` (hot-reload via compose)
-#   builder     installs + compiles the app, deploys a pruned /prod/notploy
+#   builder     installs + compiles the app, deploys a pruned /prod/astron-collection
 #   runtime     shared production runtime (artifacts, healthcheck, entrypoint)
-#   cloud       FROM runtime; Notploy Cloud (same app, no self-hosted tooling)
+#   cloud       FROM runtime; Astron Collection Cloud (same app, no self-hosted tooling)
 #   selfhosted  FROM runtime + Docker/nixpacks/railpack/pack (LAST => default)
 #
 # The deployment tooling (docker CLI, nixpacks, railpack, git-lfs, ...) is
 # installed by docker/install-deploy-tooling.sh, shared by the `dev` and
 # `selfhosted` stages so a dev container drives Docker exactly like production.
 #
-# Runtime note: Notploy manages the host Docker Engine through the mounted
-# /var/run/docker.sock and writes state to /etc/notploy and /root/.docker, both
+# Runtime note: Astron Collection manages the host Docker Engine through the mounted
+# /var/run/docker.sock and writes state to /etc/astron-collection and /root/.docker, both
 # of which require root inside the container. This is socket access to the host
 # engine, NOT Docker-in-Docker.
 
@@ -47,7 +47,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends openssl ca-cert
 
 # ---------------------------------------------------------------------------
 # Development image (dependencies + the deployment tooling; never runs Next's
-# production build). The `dev` compose service bind-mounts apps/notploy and
+# production build). The `dev` compose service bind-mounts apps/astron-collection and
 # packages over this stage's sources, so the server always runs the code on
 # the host and hot-reloads it.
 # ---------------------------------------------------------------------------
@@ -71,9 +71,9 @@ ENV NODE_ENV=development
 
 # All launch logic (wait for DB, migrations, server) lives in entrypoint.sh.
 COPY --chmod=0755 entrypoint.sh /usr/local/bin/entrypoint.sh
-# install.sh doubles as a library (NOTPLOY_SOURCE_ONLY=1): the entrypoint sources
+# install.sh doubles as a library (ASTRON_COLLECTION_SOURCE_ONLY=1): the entrypoint sources
 # it to bootstrap the instance identity with a single source of truth.
-COPY --chmod=0755 install.sh /usr/local/bin/notploy-install.sh
+COPY --chmod=0755 install.sh /usr/local/bin/astron-collection-install.sh
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 # ---------------------------------------------------------------------------
@@ -96,7 +96,7 @@ ENV NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=$NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 # defines, and the file becomes /app/.env at runtime). The committed example
 # only carries safe defaults (PORT, NODE_ENV), which keeps this stage
 # reproducible and lets `docker build .` work with an unprepared context.
-COPY apps/notploy/.env.production.example ./.env.production
+COPY apps/astron-collection/.env.production.example ./.env.production
 
 # Next.js otherwise phones home (telemetry) and tries to enable its own
 # anonymous usage reporting during the build; disabling it removes a network
@@ -109,8 +109,8 @@ RUN pnpm --filter=./apps/astron run build
 
 RUN pnpm --filter=./apps/astron --prod deploy --legacy /prod/astron
 
-RUN cp -R /usr/src/app/apps/notploy/.next /prod/notploy/.next
-RUN cp -R /usr/src/app/apps/notploy/dist /prod/notploy/dist
+RUN cp -R /usr/src/app/apps/astron-collection/.next /prod/astron-collection/.next
+RUN cp -R /usr/src/app/apps/astron-collection/dist /prod/astron-collection/dist
 
 # ---------------------------------------------------------------------------
 # Shared production runtime
@@ -123,26 +123,26 @@ ENV NODE_ENV=production
 RUN apt-get update && apt-get install -y tini curl unzip zip apache2-utils && rm -rf /var/lib/apt/lists/*
 
 # Copy only what the runtime needs
-COPY --from=builder /prod/notploy/.next ./.next
-COPY --from=builder /prod/notploy/dist ./dist
-COPY --from=builder /prod/notploy/next.config.mjs ./next.config.mjs
-COPY --from=builder /prod/notploy/public ./public
-COPY --from=builder /prod/notploy/package.json ./package.json
-COPY --from=builder /prod/notploy/drizzle ./drizzle
-COPY --from=builder /prod/notploy/components.json ./components.json
-COPY --from=builder /prod/notploy/node_modules ./node_modules
+COPY --from=builder /prod/astron-collection/.next ./.next
+COPY --from=builder /prod/astron-collection/dist ./dist
+COPY --from=builder /prod/astron-collection/next.config.mjs ./next.config.mjs
+COPY --from=builder /prod/astron-collection/public ./public
+COPY --from=builder /prod/astron-collection/package.json ./package.json
+COPY --from=builder /prod/astron-collection/drizzle ./drizzle
+COPY --from=builder /prod/astron-collection/components.json ./components.json
+COPY --from=builder /prod/astron-collection/node_modules ./node_modules
 # Safe defaults only (PORT, NODE_ENV); real configuration is injected at runtime.
-COPY apps/notploy/.env.production.example ./.env
+COPY apps/astron-collection/.env.production.example ./.env
 
 # rclone (backup destinations) and tsx (runtime scripts) are shared by both
 # cloud and self-hosted.
 RUN curl https://rclone.org/install.sh | bash && pnpm install -g tsx
 
-ARG NOTPLOY_VERSION=dev
-LABEL org.opencontainers.image.title="notploy" \
-      org.opencontainers.image.description="Notploy (dashboard, server and build tooling)" \
-      org.opencontainers.image.source="https://github.com/skygenesisenterprise/notploy" \
-      org.opencontainers.image.version="${NOTPLOY_VERSION}" \
+ARG ASTRON_COLLECTION_VERSION=dev
+LABEL org.opencontainers.image.title="astron-collection" \
+      org.opencontainers.image.description="Astron Collection (dashboard, server and build tooling)" \
+      org.opencontainers.image.source="https://github.com/skygenesisenterprise/astron-collection" \
+      org.opencontainers.image.version="${ASTRON_COLLECTION_VERSION}" \
       org.opencontainers.image.licenses="Apache-2.0"
 
 EXPOSE 3000
@@ -153,18 +153,18 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=5 \
 # All launch logic (wait for DB, migrations, server) lives in entrypoint.sh.
 COPY --chmod=0755 entrypoint.sh /usr/local/bin/entrypoint.sh
 # Same identity bootstrap as install.sh (see the dev stage above).
-COPY --chmod=0755 install.sh /usr/local/bin/notploy-install.sh
+COPY --chmod=0755 install.sh /usr/local/bin/astron-collection-install.sh
 
 # tini reaps child processes that the entrypoint/server leave defunct.
 ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]
 
 # ---------------------------------------------------------------------------
-# Notploy Cloud — same application without the self-hosted build tooling.
+# Astron Collection Cloud — same application without the self-hosted build tooling.
 # ---------------------------------------------------------------------------
 FROM runtime AS cloud
 
 # ---------------------------------------------------------------------------
-# Notploy Console — the instance/fleet management plane. Same runtime as Cloud;
+# Astron Collection Console — the instance/fleet management plane. Same runtime as Cloud;
 # what it may do is decided by its `console` product entitlement at runtime, not
 # by the image contents. Kept before `selfhosted` so `selfhosted` stays the
 # default target (the last stage in the file).
@@ -172,14 +172,14 @@ FROM runtime AS cloud
 FROM runtime AS console
 
 # ---------------------------------------------------------------------------
-# Notploy Status — the standalone status page (apps/status + the packages/status
+# Astron Collection Status — the standalone status page (apps/status + the packages/status
 # engine). Deliberately independent from the control plane: no PostgreSQL, no
 # Redis, no Docker socket, no instance identity. The engine owns a dedicated
 # SQLite file under STATUS_DATA_DIR, so the whole product is one container and
 # one volume.
 #
-#   docker build --target status     -t notploy-status .      # production
-#   docker build --target status-dev -t notploy-status-dev .  # development
+#   docker build --target status     -t astron-collection-status .      # production
+#   docker build --target status-dev -t astron-collection-status-dev .  # development
 #
 # The production image ships Next's `output: "standalone"` bundle, so it does
 # not carry the monorepo or its pnpm store.
@@ -194,7 +194,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN pnpm --filter=./apps/status run build
 # Engine bundle: packs the seed CLI so the runtime image can bootstrap its
 # catalog without a TypeScript runner.
-RUN pnpm --filter=@notploy/status run build
+RUN pnpm --filter=@astron-collection/status run build
 
 FROM base AS status
 WORKDIR /app
@@ -210,11 +210,11 @@ COPY --from=status-builder /usr/src/app/apps/status/.next/static ./apps/status/.
 # Seed CLI (bundled): resolves `zod`/`hono` from the traced node_modules above.
 COPY --from=status-builder /usr/src/app/packages/status/dist ./engine-dist
 
-ARG NOTPLOY_VERSION=dev
-LABEL org.opencontainers.image.title="notploy-status" \
-      org.opencontainers.image.description="Notploy Status — status page, incidents and uptime history" \
-      org.opencontainers.image.source="https://github.com/skygenesisenterprise/notploy" \
-      org.opencontainers.image.version="${NOTPLOY_VERSION}" \
+ARG ASTRON_COLLECTION_VERSION=dev
+LABEL org.opencontainers.image.title="astron-collection-status" \
+      org.opencontainers.image.description="Astron Collection Status — status page, incidents and uptime history" \
+      org.opencontainers.image.source="https://github.com/skygenesisenterprise/astron-collection" \
+      org.opencontainers.image.version="${ASTRON_COLLECTION_VERSION}" \
       org.opencontainers.image.licenses="Apache-2.0"
 
 EXPOSE 4100
@@ -223,21 +223,21 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=5 \
   CMD curl -fs http://localhost:4100/api/v1/pages || exit 1
 
 # Same entrypoint as every other image: it detects the status application
-# (NOTPLOY_APP=status) and execs the standalone server.
+# (ASTRON_COLLECTION_APP=status) and execs the standalone server.
 COPY --chmod=0755 entrypoint.sh /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]
 
 # ---------------------------------------------------------------------------
-# Notploy Status (development) — reuses the `dev` stage (workspace sources +
+# Astron Collection Status (development) — reuses the `dev` stage (workspace sources +
 # dependencies + entrypoint) and only selects the status application. Compose
 # bind-mounts apps/status and packages/status over it for hot reload.
 # ---------------------------------------------------------------------------
 FROM dev AS status-dev
-ENV NOTPLOY_APP=status
+ENV ASTRON_COLLECTION_APP=status
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # ---------------------------------------------------------------------------
-# Notploy self-hosted — Cloud plus the tooling deployments need on the host.
+# Astron Collection self-hosted — Cloud plus the tooling deployments need on the host.
 # This is the default target (last stage in the file).
 # ---------------------------------------------------------------------------
 FROM runtime AS selfhosted

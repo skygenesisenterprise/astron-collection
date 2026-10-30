@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Installs the tooling Notploy needs at runtime to drive the host Docker Engine
+# Installs the tooling Astron Collection needs at runtime to drive the host Docker Engine
 # and to build/deploy applications (docker CLI, nixpacks, railpack, plus the few
 # system utilities the deployment pipeline shells out to).
 #

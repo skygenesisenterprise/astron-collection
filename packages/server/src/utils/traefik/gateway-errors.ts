@@ -2,22 +2,22 @@ import { writeTraefikConfig, writeTraefikConfigRemote } from "./application";
 import type { FileConfig } from "./file-types";
 
 export const GATEWAY_ERRORS_CONFIG_NAME = "gateway-errors";
-export const GATEWAY_ERRORS_MIDDLEWARE_NAME = "notploy-gateway-errors";
-export const GATEWAY_ERRORS_SERVICE_NAME = "notploy-gateway-errors";
-export const GATEWAY_ERRORS_ERROR_PATH = "/__notploy_error";
+export const GATEWAY_ERRORS_MIDDLEWARE_NAME = "astron-collection-gateway-errors";
+export const GATEWAY_ERRORS_SERVICE_NAME = "astron-collection-gateway-errors";
+export const GATEWAY_ERRORS_ERROR_PATH = "/__astron_collectionerror";
 
 const GATEWAY_ERRORS_PORT = 8080;
 
 export const buildGatewayErrorsConfig = (): FileConfig => ({
 	http: {
 		routers: {
-			"notploy-gateway-errors-web": {
+			"astron-collection-gateway-errors-web": {
 				rule: "PathPrefix(`/`)",
 				priority: 1,
 				service: GATEWAY_ERRORS_SERVICE_NAME,
 				entryPoints: ["web"],
 			},
-			"notploy-gateway-errors-websecure": {
+			"astron-collection-gateway-errors-websecure": {
 				rule: "PathPrefix(`/`)",
 				priority: 1,
 				service: GATEWAY_ERRORS_SERVICE_NAME,

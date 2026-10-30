@@ -8,7 +8,7 @@ import {
 	updateApplicationStatus,
 	updateCompose,
 	updatePreviewDeployment,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import type { DeployJob } from "./schema.js";
 
 export const deploy = async (job: DeployJob) => {

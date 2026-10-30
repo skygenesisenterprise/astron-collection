@@ -1,4 +1,4 @@
-import { parseRawConfig, processLogs } from "@notploy/server";
+import { parseRawConfig, processLogs } from "@astron-collection/server";
 import { describe, expect, it } from "vitest";
 
 const sampleLogEntry = `{"ClientAddr":"172.19.0.1:56732","ClientHost":"172.19.0.1","ClientPort":"56732","ClientUsername":"-","DownstreamContentSize":0,"DownstreamStatus":304,"Duration":14729375,"OriginContentSize":0,"OriginDuration":14051833,"OriginStatus":304,"Overhead":677542,"RequestAddr":"s222-umami-c381af.traefik.me","RequestContentSize":0,"RequestCount":122,"RequestHost":"s222-umami-c381af.traefik.me","RequestMethod":"GET","RequestPath":"/dashboard?_rsc=1rugv","RequestPort":"-","RequestProtocol":"HTTP/1.1","RequestScheme":"http","RetryAttempts":0,"RouterName":"s222-umami-60e104-47-web@docker","ServiceAddr":"10.0.1.15:3000","ServiceName":"s222-umami-60e104-47-web@docker","ServiceURL":{"Scheme":"http","Opaque":"","User":null,"Host":"10.0.1.15:3000","Path":"","RawPath":"","ForceQuery":false,"RawQuery":"","Fragment":"","RawFragment":""},"StartLocal":"2024-08-25T04:34:37.306691884Z","StartUTC":"2024-08-25T04:34:37.306691884Z","entryPointName":"web","level":"info","msg":"","time":"2024-08-25T04:34:37Z"}`;
@@ -77,21 +77,21 @@ describe("processLogs", () => {
 		expect(result.data[0]?.RequestHost).toBe("s222-umami-c381af.traefik.me");
 	});
 
-	it("should filter out Notploy dashboard requests", () => {
-		const notployDashboardEntry = `{"ClientAddr":"172.71.187.131:9485","ClientHost":"172.71.187.131","ClientPort":"9485","ClientUsername":"-","DownstreamContentSize":14550,"DownstreamStatus":200,"Duration":57681682,"OriginContentSize":14550,"OriginDuration":57612242,"OriginStatus":200,"Overhead":69440,"RequestAddr":"hostinger.notploy.com","RequestContentSize":0,"RequestCount":20142,"RequestHost":"hostinger.notploy.com","RequestMethod":"GET","RequestPath":"/_next/data/cb_zzI4Rp9G7Q7djrFKh0/en/dashboard/traefik.json","RequestPort":"-","RequestProtocol":"HTTP/2.0","RequestScheme":"https","RetryAttempts":0,"RouterName":"notploy-router-app-secure@file","ServiceAddr":"notploy:3000","ServiceName":"notploy-service-app@file","ServiceURL":"http://notploy:3000","StartLocal":"2025-12-10T05:10:41.957755949Z","StartUTC":"2025-12-10T05:10:41.957755949Z","TLSCipher":"TLS_AES_128_GCM_SHA256","TLSVersion":"1.3","entryPointName":"websecure","level":"info","msg":"","time":"2025-12-10T05:10:42Z"}`;
+	it("should filter out Astron Collection dashboard requests", () => {
+		const astronCollectionDashboardEntry = `{"ClientAddr":"172.71.187.131:9485","ClientHost":"172.71.187.131","ClientPort":"9485","ClientUsername":"-","DownstreamContentSize":14550,"DownstreamStatus":200,"Duration":57681682,"OriginContentSize":14550,"OriginDuration":57612242,"OriginStatus":200,"Overhead":69440,"RequestAddr":"hostinger.astron-collection.com","RequestContentSize":0,"RequestCount":20142,"RequestHost":"hostinger.astron-collection.com","RequestMethod":"GET","RequestPath":"/_next/data/cb_zzI4Rp9G7Q7djrFKh0/en/dashboard/traefik.json","RequestPort":"-","RequestProtocol":"HTTP/2.0","RequestScheme":"https","RetryAttempts":0,"RouterName":"astron-collection-router-app-secure@file","ServiceAddr":"astron-collection:3000","ServiceName":"astron-collection-service-app@file","ServiceURL":"http://astron-collection:3000","StartLocal":"2025-12-10T05:10:41.957755949Z","StartUTC":"2025-12-10T05:10:41.957755949Z","TLSCipher":"TLS_AES_128_GCM_SHA256","TLSVersion":"1.3","entryPointName":"websecure","level":"info","msg":"","time":"2025-12-10T05:10:42Z"}`;
 
-		// Test with only Notploy dashboard entry - should be filtered out
-		const resultOnlyNotploy = parseRawConfig(notployDashboardEntry);
-		expect(resultOnlyNotploy.data).toHaveLength(0);
-		expect(resultOnlyNotploy.totalCount).toBe(0);
+		// Test with only Astron Collection dashboard entry - should be filtered out
+		const resultOnlyAstronCollection = parseRawConfig(astronCollectionDashboardEntry);
+		expect(resultOnlyAstronCollection.data).toHaveLength(0);
+		expect(resultOnlyAstronCollection.totalCount).toBe(0);
 
-		// Test with mixed entries - Notploy should be filtered, others should remain
-		const mixedEntries = `${notployDashboardEntry}\n${sampleLogEntry}`;
+		// Test with mixed entries - Astron Collection should be filtered, others should remain
+		const mixedEntries = `${astronCollectionDashboardEntry}\n${sampleLogEntry}`;
 		const resultMixed = parseRawConfig(mixedEntries);
 		expect(resultMixed.data).toHaveLength(1);
 		expect(resultMixed.totalCount).toBe(1);
 		expect(resultMixed.data[0]?.ServiceName).not.toBe(
-			"notploy-service-app@file",
+			"astron-collection-service-app@file",
 		);
 	});
 });

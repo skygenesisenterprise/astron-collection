@@ -14,7 +14,7 @@ JSON
 w core/meta.json <<'JSON'
 {
 	"title": "Core",
-	"description": "Everything about deploying and operating Notploy.",
+	"description": "Everything about deploying and operating Astron Collection.",
 	"icon": "Package",
 	"root": true,
 	"pages": [
@@ -243,7 +243,7 @@ JSON
 w cli/meta.json <<'JSON'
 {
 	"title": "CLI",
-	"description": "Command-line interface for managing Notploy from your terminal.",
+	"description": "Command-line interface for managing Astron Collection from your terminal.",
 	"icon": "SquareTerminal",
 	"root": true,
 	"pages": ["---Get started---", "index", "authentication", "---Commands---", "project", "application", "databases", "enviroment"]
@@ -253,7 +253,7 @@ JSON
 w api/meta.json <<'JSON'
 {
 	"title": "API",
-	"description": "RESTful API reference for programmatic access to Notploy.",
+	"description": "RESTful API reference for programmatic access to Astron Collection.",
 	"icon": "Code",
 	"root": true,
 	"pages": ["---Get started---", "index", "---Reference---", "..."]
@@ -263,7 +263,7 @@ JSON
 w templates/meta.json <<'JSON'
 {
 	"title": "Templates",
-	"description": "Blueprints and application examples you can deploy on Notploy.",
+	"description": "Blueprints and application examples you can deploy on Astron Collection.",
 	"icon": "LayoutTemplate",
 	"root": true,
 	"pages": ["index", "---Examples---", "examples"]

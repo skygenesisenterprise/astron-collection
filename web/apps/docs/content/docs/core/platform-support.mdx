@@ -1,13 +1,13 @@
 ---
 title: Supported platforms & versions
-description: "Operating systems, container runtimes and toolchain versions Notploy supports."
+description: "Operating systems, container runtimes and toolchain versions Astron Collection supports."
 ---
 
-**Purpose** — State precisely what Notploy runs on, so you can plan an installation or a development environment without guessing.
+**Purpose** — State precisely what Astron Collection runs on, so you can plan an installation or a development environment without guessing.
 
 ## Server operating systems
 
-Notploy targets **Linux hosts with Docker**. The install script has been tested on:
+Astron Collection targets **Linux hosts with Docker**. The install script has been tested on:
 
 | Distribution | Versions |
 | --- | --- |
@@ -23,7 +23,7 @@ Some minimal or appliance-style distributions ship kernels without IPVS support;
 ## Container runtime
 
 - **Docker Engine** with the **Compose plugin**. The installer provides them if missing.
-- **Docker Swarm** is initialised by the installer; Notploy runs workloads as Swarm services.
+- **Docker Swarm** is initialised by the installer; Astron Collection runs workloads as Swarm services.
 
 ## Client and API
 
@@ -37,11 +37,11 @@ Some minimal or appliance-style distributions ship kernels without IPVS support;
 | **Node.js** | 24.4 or later in the 24.x line |
 | **pnpm** | 10.22 or later |
 
-See the repository [README](https://github.com/skygenesisenterprise/notploy#development) and [Contributing](/docs/core/develop/contributing) for development setup.
+See the repository [README](https://github.com/skygenesisenterprise/astron-collection#development) and [Contributing](/docs/core/develop/contributing) for development setup.
 
 ## Architectures
 
-Notploy runs on the architectures your host and Docker support (commonly `x86_64` and `arm64`). Within a Docker Swarm, nodes must share the architecture of images they run.
+Astron Collection runs on the architectures your host and Docker support (commonly `x86_64` and `arm64`). Within a Docker Swarm, nodes must share the architecture of images they run.
 
 ## Related
 

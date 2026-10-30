@@ -1,16 +1,16 @@
 ---
 title: Architecture
-description: "How the Notploy control plane and the infrastructure it manages fit together."
+description: "How the Astron Collection control plane and the infrastructure it manages fit together."
 ---
 
-Notploy is a control plane that sits in front of a data plane. The **control plane** is Notploy itself — the dashboard, the API and the database that store your configuration. The **data plane** is where your workloads actually run: containers, proxy routes, volumes and networks on one or more servers.
+Astron Collection is a control plane that sits in front of a data plane. The **control plane** is Astron Collection itself — the dashboard, the API and the database that store your configuration. The **data plane** is where your workloads actually run: containers, proxy routes, volumes and networks on one or more servers.
 
-Understanding the boundary between the two is the key to predicting how Notploy behaves — especially when the control plane is updated, restarted or temporarily unavailable.
+Understanding the boundary between the two is the key to predicting how Astron Collection behaves — especially when the control plane is updated, restarted or temporarily unavailable.
 
 ## Components
 
 ```text
-┌───────────────────────── Notploy control plane ─────────────────────────┐
+┌───────────────────────── Astron Collection control plane ─────────────────────────┐
 │                                                                          │
 │   Dashboard (web UI)          API + background workers                    │
 │   ─────────────────           ─────────────────────                       │
@@ -40,7 +40,7 @@ Understanding the boundary between the two is the key to predicting how Notploy 
 | **Traefik** | The reverse proxy and load balancer. It reads routes and terminates TLS for your services. |
 
 <Callout type="info" title="The control plane is not in the request path">
-Your **applications keep serving traffic** even if the Notploy control plane is down or being
+Your **applications keep serving traffic** even if the Astron Collection control plane is down or being
 updated. Traefik routes requests to running containers independently. The control plane is
 required for *management* operations — deploying, changing configuration or reading metrics —
 not for serving your users.
@@ -51,7 +51,7 @@ not for serving your users.
 | | Control plane | Data plane |
 | --- | --- | --- |
 | **What runs** | Dashboard, API, workers, PostgreSQL, Redis | Your applications, Compose stacks, databases, Traefik |
-| **Who manages it** | You (Self-Hosted) or Notploy (Cloud) | You, always |
+| **Who manages it** | You (Self-Hosted) or Astron Collection (Cloud) | You, always |
 | **Stores** | Configuration and state | Your application code and data |
 | **If it goes down** | Management stops; apps keep running | Your users are affected |
 
@@ -65,25 +65,25 @@ A deployment is a short-lived pipeline that the control plane runs against the d
 4. Traefik discovers the new container — via Docker labels for Compose, or a generated file for Applications — and routes traffic to it.
 5. The control plane records the [deployment](/docs/core/concepts#deployment), its logs and its status.
 
-Because the control plane drives Docker and Traefik through their normal interfaces, everything it creates is standard Docker and Traefik configuration. Nothing proprietary runs on your servers beyond the Notploy containers themselves.
+Because the control plane drives Docker and Traefik through their normal interfaces, everything it creates is standard Docker and Traefik configuration. Nothing proprietary runs on your servers beyond the Astron Collection containers themselves.
 
-## Where Notploy itself runs
+## Where Astron Collection itself runs
 
-By default, Notploy is installed on a single server: the dashboard, PostgreSQL, Redis, Traefik and your workloads all live on the same machine. This is the simplest topology and the recommended starting point.
+By default, Astron Collection is installed on a single server: the dashboard, PostgreSQL, Redis, Traefik and your workloads all live on the same machine. This is the simplest topology and the recommended starting point.
 
 As you grow you can separate concerns:
 
 - **Remote servers** — run workloads on independent machines reached over SSH, keeping the control plane on a small host. See [Servers](/docs/core/remote-servers).
 - **Swarm cluster** — join machines to a Docker Swarm to replicate the same application across nodes with load balancing. See [Swarm](/docs/core/cluster).
-- **Notploy Cloud** — let Notploy host the control plane while your workloads stay on your own servers. See [Notploy Cloud](/docs/core/cloud).
+- **Astron Collection Cloud** — let Astron Collection host the control plane while your workloads stay on your own servers. See [Astron Collection Cloud](/docs/core/cloud).
 
 ## Repository architecture
 
-Notploy is a pnpm monorepo. For contributors, the main pieces are:
+Astron Collection is a pnpm monorepo. For contributors, the main pieces are:
 
 | Path | Role |
 | --- | --- |
-| `apps/notploy` | Main dashboard, API and application server. |
+| `apps/astron-collection` | Main dashboard, API and application server. |
 | `packages/server` | Shared server, deployment, database and platform logic. |
 | `apps/api` | API and background-work service. |
 | `apps/schedules` | Scheduled jobs service. |

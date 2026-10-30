@@ -1,4 +1,4 @@
-import { redactServerSshKey } from "@notploy/server/services/server";
+import { redactServerSshKey } from "@astron-collection/server/services/server";
 import { describe, expect, it } from "vitest";
 
 describe("redactServerSshKey (server SSH private key disclosure guard)", () => {

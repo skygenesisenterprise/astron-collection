@@ -1,5 +1,5 @@
 /**
- * Status Publisher — the integration client any Notploy backend (Console, the
+ * Status Publisher — the integration client any Astron Collection backend (Console, the
  * monitoring agent, CI) uses to talk to a Status instance.
  *
  * Characteristics:
@@ -24,8 +24,8 @@ import type {
 } from "../core/dto";
 
 /**
- * DTO shapes re-exported for consumers (the Notploy Console imports them from
- * `@notploy/status/client` so it never has to pull the whole engine just for
+ * DTO shapes re-exported for consumers (the Astron Collection Console imports them from
+ * `@astron-collection/status/client` so it never has to pull the whole engine just for
  * types).
  */
 export type {
@@ -43,7 +43,7 @@ export type {
 } from "../core/types";
 
 export interface StatusPublisherOptions {
-	/** Base URL of the status instance, e.g. `https://status.notploy.com`. */
+	/** Base URL of the status instance, e.g. `https://status.astron-collection.com`. */
 	baseUrl: string;
 	/** Bearer token with the appropriate scopes. */
 	token: string;
@@ -335,7 +335,7 @@ export class StatusPublisher {
 	}
 
 	/* ---------------------------------------------------------------------- *
-	 * Administration reads — let a control plane (Notploy Console) present a *
+	 * Administration reads — let a control plane (Astron Collection Console) present a *
 	 * unified view of everything that happened, whoever introduced it: an    *
 	 * incident created here, on the admin UI or by the monitoring agent all  *
 	 * lives in the same platform and answers the same endpoints.             *

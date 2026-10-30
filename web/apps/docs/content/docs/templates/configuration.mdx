@@ -3,7 +3,7 @@ title: Template configuration
 description: "Reference for template.toml: generated variables, environment, domains and file mounts."
 ---
 
-**Purpose** — `template.toml` tells Notploy what to generate when someone creates a service from the blueprint: which secrets to mint, which environment variables to set, which domains to route and which files to write. It is processed once, at creation time, and the result lands in the normal service settings.
+**Purpose** — `template.toml` tells Astron Collection what to generate when someone creates a service from the blueprint: which secrets to mint, which environment variables to set, which domains to route and which files to write. It is processed once, at creation time, and the result lands in the normal service settings.
 
 ## [variables]
 
@@ -37,7 +37,7 @@ timezone = "UTC"
 | `${jwt:secret_var:payload_json}` | Token with a JSON payload — either a literal object or the name of a variable that holds one. |
 | `${username}`, `${email}` | A generated identity. |
 
-Notploy also injects `APP_NAME`, the unique name of the service being created, so a blueprint can reference `${APP_NAME}` in any value.
+Astron Collection also injects `APP_NAME`, the unique name of the service being created, so a blueprint can reference `${APP_NAME}` in any value.
 
 **References between variables** are resolved in a second pass, so a generated secret can be reused everywhere:
 
@@ -102,7 +102,7 @@ The domains are created with the service, exactly as if you had added them on th
 
 ## [[config.mounts]]
 
-Files Notploy writes into the deployment before it starts — configuration files, init scripts, gateway configuration. `content` is a string, so TOML multi-line strings are the natural fit, and variables are substituted like everywhere else.
+Files Astron Collection writes into the deployment before it starts — configuration files, init scripts, gateway configuration. `content` is a string, so TOML multi-line strings are the natural fit, and variables are substituted like everywhere else.
 
 ```toml
 [[config.mounts]]
@@ -145,7 +145,7 @@ port = 3000
 host = "${main_domain}"
 ```
 
-When someone creates a service from this blueprint, Notploy:
+When someone creates a service from this blueprint, Astron Collection:
 
 1. Resolves `main_domain` and `db_password` once.
 2. Writes the two environment variables with their final values.

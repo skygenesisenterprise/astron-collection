@@ -19,13 +19,13 @@ export type TemplateProps = {
 	backupSize?: string;
 };
 
-export const NotployBackupEmail = ({
+export const AstronCollectionBackupEmail = ({
 	type = "success",
 	errorMessage,
 	date = "2023-05-01T00:00:00.000Z",
 	backupSize,
 }: TemplateProps) => {
-	const previewText = `Notploy instance backup was ${type === "success" ? "successful ✅" : "failed ❌"}`;
+	const previewText = `Astron Collection instance backup was ${type === "success" ? "successful ✅" : "failed ❌"}`;
 
 	return (
 		<Html>
@@ -37,22 +37,22 @@ export const NotployBackupEmail = ({
 						<Section className="mt-[32px]">
 							<Img
 								src={
-									"https://raw.githubusercontent.com/skygenesisenterprise/notploy/refs/heads/master/apps/notploy/logo.png"
+									"https://raw.githubusercontent.com/skygenesisenterprise/astron-collection/refs/heads/master/apps/astron-collection/logo.png"
 								}
 								width="100"
 								height="50"
-								alt="Notploy"
+								alt="Astron Collection"
 								className="my-0 mx-auto"
 							/>
 						</Section>
 						<Heading className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
-							Notploy Instance Backup
+							Astron Collection Instance Backup
 						</Heading>
 						<Text className="text-black text-[14px] leading-[24px]">
 							Hello,
 						</Text>
 						<Text className="text-black text-[14px] leading-[24px]">
-							Your Notploy instance backup was{" "}
+							Your Astron Collection instance backup was{" "}
 							{type === "success"
 								? "successful ✅"
 								: "failed. Please check the error message below. ❌"}
@@ -61,10 +61,10 @@ export const NotployBackupEmail = ({
 						<Section className="flex text-black text-[14px] leading-[24px] bg-[#F4F4F5] rounded-lg p-2">
 							<Text className="!leading-3 font-bold">Details: </Text>
 							<Text className="!leading-3">
-								Backup Type: <strong>Complete Notploy Instance</strong>
+								Backup Type: <strong>Complete Astron Collection Instance</strong>
 							</Text>
 							<Text className="!leading-3">
-								Content: <strong>/etc/notploy + PostgreSQL Database</strong>
+								Content: <strong>/etc/astron-collection + PostgreSQL Database</strong>
 							</Text>
 							{backupSize && (
 								<Text className="!leading-3">
@@ -94,4 +94,4 @@ export const NotployBackupEmail = ({
 	);
 };
 
-export default NotployBackupEmail;
+export default AstronCollectionBackupEmail;

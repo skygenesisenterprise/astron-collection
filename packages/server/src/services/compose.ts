@@ -1,43 +1,43 @@
 import { join } from "node:path";
-import { paths } from "@notploy/server/constants";
-import { db } from "@notploy/server/db";
+import { paths } from "@astron-collection/server/constants";
+import { db } from "@astron-collection/server/db";
 import {
 	type apiCreateCompose,
 	buildAppName,
 	cleanAppName,
 	compose,
-} from "@notploy/server/db/schema";
-import { getBuildComposeCommand } from "@notploy/server/utils/builders/compose";
-import { randomizeSpecificationFile } from "@notploy/server/utils/docker/compose";
+} from "@astron-collection/server/db/schema";
+import { getBuildComposeCommand } from "@astron-collection/server/utils/builders/compose";
+import { randomizeSpecificationFile } from "@astron-collection/server/utils/docker/compose";
 import {
 	cloneCompose,
 	loadDockerCompose,
 	loadDockerComposeRemote,
-} from "@notploy/server/utils/docker/domain";
-import type { ComposeSpecification } from "@notploy/server/utils/docker/types";
-import { sendBuildErrorNotifications } from "@notploy/server/utils/notifications/build-error";
-import { sendBuildSuccessNotifications } from "@notploy/server/utils/notifications/build-success";
+} from "@astron-collection/server/utils/docker/domain";
+import type { ComposeSpecification } from "@astron-collection/server/utils/docker/types";
+import { sendBuildErrorNotifications } from "@astron-collection/server/utils/notifications/build-error";
+import { sendBuildSuccessNotifications } from "@astron-collection/server/utils/notifications/build-success";
 import {
 	ExecError,
 	execAsync,
 	execAsyncRemote,
-} from "@notploy/server/utils/process/execAsync";
-import { cloneBitbucketRepository } from "@notploy/server/utils/providers/bitbucket";
+} from "@astron-collection/server/utils/process/execAsync";
+import { cloneBitbucketRepository } from "@astron-collection/server/utils/providers/bitbucket";
 import {
 	cloneGitRepository,
 	getGitCommitInfo,
-} from "@notploy/server/utils/providers/git";
-import { cloneGiteaRepository } from "@notploy/server/utils/providers/gitea";
-import { cloneGithubRepository } from "@notploy/server/utils/providers/github";
-import { cloneGitlabRepository } from "@notploy/server/utils/providers/gitlab";
-import { getCreateComposeFileCommand } from "@notploy/server/utils/providers/raw";
-import { redactSecrets } from "@notploy/server/utils/security/redact";
+} from "@astron-collection/server/utils/providers/git";
+import { cloneGiteaRepository } from "@astron-collection/server/utils/providers/gitea";
+import { cloneGithubRepository } from "@astron-collection/server/utils/providers/github";
+import { cloneGitlabRepository } from "@astron-collection/server/utils/providers/gitlab";
+import { getCreateComposeFileCommand } from "@astron-collection/server/utils/providers/raw";
+import { redactSecrets } from "@astron-collection/server/utils/security/redact";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import { quote } from "shell-quote";
 import type { z } from "zod";
 import { encodeBase64 } from "../utils/docker/utils";
-import { getNotployUrl } from "./admin";
+import { getAstronCollectionUrl } from "./admin";
 import {
 	createDeploymentCompose,
 	updateDeployment,
@@ -239,7 +239,7 @@ export const deployCompose = async ({
 }) => {
 	const compose = await findComposeById(composeId);
 
-	const buildLink = `${await getNotployUrl()}/dashboard/project/${
+	const buildLink = `${await getAstronCollectionUrl()}/dashboard/project/${
 		compose.environment.projectId
 	}/environment/${compose.environmentId}/services/compose/${compose.composeId}?tab=deployments`;
 	const deployment = await createDeploymentCompose({
@@ -474,7 +474,7 @@ export const removeCompose = async (
 
 		if (compose.composeType === "stack") {
 			const command = `
-			docker network disconnect ${compose.appName} notploy-traefik;
+			docker network disconnect ${compose.appName} astron-collection-traefik;
 			docker stack rm ${compose.appName};
 			rm -rf ${projectPath}`;
 
@@ -485,7 +485,7 @@ export const removeCompose = async (
 			}
 		} else {
 			const command = `
-			docker network disconnect ${compose.appName} notploy-traefik;
+			docker network disconnect ${compose.appName} astron-collection-traefik;
 			env -i PATH="$PATH" docker compose -p ${compose.appName} down ${
 				deleteVolumes ? "--volumes" : ""
 			};

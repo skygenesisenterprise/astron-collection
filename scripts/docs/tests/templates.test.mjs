@@ -83,7 +83,7 @@ test("rejects a container_name without the opt-out marker", () => {
 test("accepts container_name when the documented marker is present", () => {
 	blueprint("marked", {
 		compose: [
-			"# notploy: allow-container-names — legacy DNS dependency",
+			"# astron-collection: allow-container-names — legacy DNS dependency",
 			"services:",
 			"  web:",
 			"    image: nginx:alpine",

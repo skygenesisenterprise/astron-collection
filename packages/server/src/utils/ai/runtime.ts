@@ -281,7 +281,7 @@ const isPrivateHostname = (hostname: string) => {
 };
 
 /**
- * Validate an endpoint before Notploy stores it or sends a request.
+ * Validate an endpoint before Astron Collection stores it or sends a request.
  *
  * Self-hosted installations legitimately target private networks and local
  * Ollama instances, so private ranges are allowed by default. Cloud must pass

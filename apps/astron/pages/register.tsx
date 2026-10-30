@@ -1,4 +1,4 @@
-import { IS_CLOUD, isAdminPresent, validateRequest } from "@notploy/server";
+import { IS_CLOUD, isAdminPresent, validateRequest } from "@astron-collection/server";
 import { standardSchemaResolver as zodResolver } from "@hookform/resolvers/standard-schema";
 import { generateServerSideHelper } from "@/utils/create-server-helpers";
 import { AlertTriangle } from "lucide-react";
@@ -214,7 +214,7 @@ const Register = ({ isCloud }: Props) => {
 												<FormItem>
 													<FormLabel>Email</FormLabel>
 													<FormControl>
-														<Input placeholder="email@notploy.com" {...field} />
+														<Input placeholder="email@astron-collection.com" {...field} />
 													</FormControl>
 													<FormMessage />
 												</FormItem>
@@ -280,7 +280,7 @@ const Register = ({ isCloud }: Props) => {
 									Need help?
 									<Link
 										className="underline"
-										href="https://notploy.com"
+										href="https://astron-collection.com"
 										target="_blank"
 									>
 										Contact us

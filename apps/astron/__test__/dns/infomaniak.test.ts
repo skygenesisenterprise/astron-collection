@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const mockFetch = vi.fn();
 global.fetch = mockFetch as typeof fetch;
 
-import { infomaniakClient } from "@notploy/server/utils/dns/infomaniak";
+import { infomaniakClient } from "@astron-collection/server/utils/dns/infomaniak";
 
 const jsonResponse = (body: unknown, ok = true, status = 200) =>
 	({

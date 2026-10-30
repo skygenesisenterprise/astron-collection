@@ -1,4 +1,4 @@
-import type { DnsProviderConfig } from "@notploy/server/db/schema";
+import type { DnsProviderConfig } from "@astron-collection/server/db/schema";
 import { bindClient } from "./bind";
 import { cloudflareClient } from "./cloudflare";
 import {
@@ -55,7 +55,7 @@ const clients: Record<DnsProviderConfig["providerType"], DnsClient> = {
 	coredns: corednsClient as DnsClient,
 	unbound: unboundClient as DnsClient,
 	custom: customClient as DnsClient,
-	"notploy-internal": internalDnsClient as unknown as DnsClient,
+	"astron-collection-internal": internalDnsClient as unknown as DnsClient,
 };
 
 export const getDnsClient = (providerType: DnsProviderConfig["providerType"]) =>
@@ -103,7 +103,7 @@ const capabilityMatrix: Record<
 	coredns: { ...selfHostedCapabilities },
 	unbound: { ...selfHostedCapabilities },
 	custom: { ...managedCapabilities },
-	"notploy-internal": {
+	"astron-collection-internal": {
 		...fullDnsCapabilities,
 		// Internal DNS cannot satisfy a public ACME challenge, but the
 		// abstraction still supports DNS-01 for private/internal issuers.

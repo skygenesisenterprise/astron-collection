@@ -1,4 +1,4 @@
-import { validateRequest } from "@notploy/server";
+import { validateRequest } from "@astron-collection/server";
 import type { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import type { ReactElement } from "react";
@@ -47,7 +47,7 @@ const ApproveSignIn = () => {
 					Approve sign-in
 				</h1>
 				<p className="text-sm text-muted-foreground">
-					Another device is signing in to your Notploy account. Approve it only
+					Another device is signing in to your Astron Collection account. Approve it only
 					if you started that sign-in.
 				</p>
 			</div>

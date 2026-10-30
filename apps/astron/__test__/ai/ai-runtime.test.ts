@@ -4,13 +4,13 @@ import {
 	getCapabilityWarnings,
 	getModelCapabilities,
 	resolveAiProviderId,
-} from "@notploy/server/utils/ai/contracts";
-import { toAiSettingView } from "@notploy/server/services/ai";
+} from "@astron-collection/server/utils/ai/contracts";
+import { toAiSettingView } from "@astron-collection/server/services/ai";
 import {
 	AiRuntimeError,
 	normalizeAiError,
 	validateAiEndpointUrl,
-} from "@notploy/server/utils/ai/runtime";
+} from "@astron-collection/server/utils/ai/runtime";
 
 describe("resolveAiProviderId", () => {
 	it("resolves known provider hostnames", () => {

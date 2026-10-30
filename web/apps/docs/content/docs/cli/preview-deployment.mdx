@@ -1,27 +1,27 @@
 ---
 title: "Preview deployments"
-description: "Per-branch deployments created when preview deployments are enabled. Generated from the `notploy` command surface."
+description: "Per-branch deployments created when preview deployments are enabled. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Per-branch deployments created when preview deployments are enabled.
 
-`notploy preview-deployment` exposes **4 commands**. They map one-to-one onto the `preview-deployment.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection preview-deployment` exposes **4 commands**. They map one-to-one onto the `preview-deployment.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy preview-deployment --help` to list these commands in your terminal, or
-	`notploy preview-deployment <command> --help` for a single command.
+	Run `astron-collection preview-deployment --help` to list these commands in your terminal, or
+	`astron-collection preview-deployment <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy preview-deployment all`
+### `astron-collection preview-deployment all`
 
 Calls `GET /api/trpc/previewDeployment.all`.
 
 ```bash
-notploy preview-deployment all --applicationId <value> [options]
+astron-collection preview-deployment all --applicationId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -29,12 +29,12 @@ notploy preview-deployment all --applicationId <value> [options]
 | `--applicationId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy preview-deployment delete`
+### `astron-collection preview-deployment delete`
 
 Calls `POST /api/trpc/previewDeployment.delete`.
 
 ```bash
-notploy preview-deployment delete --previewDeploymentId <value> [options]
+astron-collection preview-deployment delete --previewDeploymentId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -42,12 +42,12 @@ notploy preview-deployment delete --previewDeploymentId <value> [options]
 | `--previewDeploymentId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy preview-deployment one`
+### `astron-collection preview-deployment one`
 
 Calls `GET /api/trpc/previewDeployment.one`.
 
 ```bash
-notploy preview-deployment one --previewDeploymentId <value> [options]
+astron-collection preview-deployment one --previewDeploymentId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -55,12 +55,12 @@ notploy preview-deployment one --previewDeploymentId <value> [options]
 | `--previewDeploymentId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy preview-deployment redeploy`
+### `astron-collection preview-deployment redeploy`
 
 Calls `POST /api/trpc/previewDeployment.redeploy`.
 
 ```bash
-notploy preview-deployment redeploy --previewDeploymentId <value> [options]
+astron-collection preview-deployment redeploy --previewDeploymentId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |

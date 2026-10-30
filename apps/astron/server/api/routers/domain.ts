@@ -17,9 +17,9 @@ import {
 	syncDomainToInternalDns,
 	updateDomainById,
 	validateDomain,
-} from "@notploy/server";
-import { checkServicePermissionAndAccess } from "@notploy/server/services/permission";
-import { getDomainRequirements } from "@notploy/server/utils/domain-scope";
+} from "@astron-collection/server";
+import { checkServicePermissionAndAccess } from "@astron-collection/server/services/permission";
+import { getDomainRequirements } from "@astron-collection/server/utils/domain-scope";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import {
@@ -37,7 +37,7 @@ import {
 } from "@/server/db/schema";
 
 /**
- * Generated Notploy Cloud hostnames are provisioned by `cloudDomain`, so the
+ * Generated Astron Collection Cloud hostnames are provisioned by `cloudDomain`, so the
  * generic domain mutations must not let a user rename, disable or delete them.
  */
 const assertNotCloudManaged = (domain: { cloudManaged: boolean }) => {
@@ -45,7 +45,7 @@ const assertNotCloudManaged = (domain: { cloudManaged: boolean }) => {
 		throw new TRPCError({
 			code: "BAD_REQUEST",
 			message:
-				"This hostname is managed by Notploy Cloud. Release or retry it from the cloud domain controls.",
+				"This hostname is managed by Astron Collection Cloud. Release or retry it from the cloud domain controls.",
 		});
 	}
 };
@@ -79,7 +79,7 @@ const resolveDomainServerId = async (domain: {
 
 export const domainRouter = createTRPCRouter({
 	/**
-	 * Whether the organization has a Notploy Internal DNS provider, so the domain
+	 * Whether the organization has a Astron Collection Internal DNS provider, so the domain
 	 * dialog can tell the user their LAN host will resolve automatically (or
 	 * point them at the DNS settings page when it will not).
 	 */

@@ -13,14 +13,14 @@ const nextConfig = {
 	typescript: {
 		ignoreBuildErrors: true,
 	},
-	transpilePackages: ["@notploy/server", "@notploy/status"],
+	transpilePackages: ["@astron-collection/server", "@astron-collection/status"],
 	webpack: (config) => {
 		// Resolve monorepo packages for transpilation
-		config.resolve.alias["@notploy/status"] = path.resolve(
+		config.resolve.alias["@astron-collection/status"] = path.resolve(
 			__dirname,
 			"../../packages/status/src"
 		);
-		config.resolve.alias["@notploy/server"] = path.resolve(
+		config.resolve.alias["@astron-collection/server"] = path.resolve(
 			__dirname,
 			"../../packages/server/src"
 		);

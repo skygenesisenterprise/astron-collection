@@ -1,6 +1,6 @@
-# Notploy Documentation (New)
+# Astron Collection Documentation (New)
 
-This is a fresh Fumadocs project with the complete Notploy documentation migrated from the old docs project.
+This is a fresh Fumadocs project with the complete Astron Collection documentation migrated from the old docs project.
 
 ## Features
 

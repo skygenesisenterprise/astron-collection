@@ -4,7 +4,7 @@ import {
 	deriveGithubApiUrl,
 	normalizeGithubUrl,
 	parseGithubBaseUrl,
-} from "@notploy/server/utils/providers/github";
+} from "@astron-collection/server/utils/providers/github";
 import { describe, expect, it } from "vitest";
 
 const urlOf = (result: ReturnType<typeof parseGithubBaseUrl>) =>

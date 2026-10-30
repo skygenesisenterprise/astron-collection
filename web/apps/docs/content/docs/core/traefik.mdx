@@ -1,15 +1,15 @@
 ---
 title: Traefik
-description: "How Notploy uses Traefik as its reverse proxy to route traffic and terminate TLS."
+description: "How Astron Collection uses Traefik as its reverse proxy to route traffic and terminate TLS."
 ---
 
-**Purpose** — Traefik is the reverse proxy and load balancer that sits in front of your services. It receives all HTTP/HTTPS traffic on the server and forwards each request to the right container based on routing rules that Notploy configures. It also terminates TLS.
+**Purpose** — Traefik is the reverse proxy and load balancer that sits in front of your services. It receives all HTTP/HTTPS traffic on the server and forwards each request to the right container based on routing rules that Astron Collection configures. It also terminates TLS.
 
-## How it fits into Notploy
+## How it fits into Astron Collection
 
-Traefik listens on ports **80** and **443**. For every service you expose with a [domain](/docs/core/domains), Notploy creates a routing rule — a *router* (matches the hostname), a *service* (points at the container) and any *middlewares* (redirects, path handling, forward auth). Traefik then load-balances across the healthy replicas of that service.
+Traefik listens on ports **80** and **443**. For every service you expose with a [domain](/docs/core/domains), Astron Collection creates a routing rule — a *router* (matches the hostname), a *service* (points at the container) and any *middlewares* (redirects, path handling, forward auth). Traefik then load-balances across the healthy replicas of that service.
 
-How Notploy feeds Traefik depends on the service type:
+How Astron Collection feeds Traefik depends on the service type:
 
 | Service type | Mechanism | Apply changes by |
 | --- | --- | --- |

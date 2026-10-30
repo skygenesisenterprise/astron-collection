@@ -1,4 +1,4 @@
-import { shouldDeploy } from "@notploy/server";
+import { shouldDeploy } from "@astron-collection/server";
 import { describe, expect, it } from "vitest";
 
 describe("shouldDeploy", () => {

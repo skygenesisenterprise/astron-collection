@@ -22,7 +22,7 @@ export type TemplateProps = {
 };
 
 export const DatabaseBackupEmail = ({
-	projectName = "notploy",
+	projectName = "astron-collection",
 	applicationName = "frontend",
 	databaseType = "postgres",
 	type = "success",
@@ -41,11 +41,11 @@ export const DatabaseBackupEmail = ({
 						<Section className="mt-[32px]">
 							<Img
 								src={
-									"https://raw.githubusercontent.com/skygenesisenterprise/notploy/refs/heads/master/apps/notploy/logo.png"
+									"https://raw.githubusercontent.com/skygenesisenterprise/astron-collection/refs/heads/master/apps/astron-collection/logo.png"
 								}
 								width="100"
 								height="50"
-								alt="Notploy"
+								alt="Astron Collection"
 								className="my-0 mx-auto"
 							/>
 						</Section>

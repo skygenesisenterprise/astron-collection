@@ -4,7 +4,7 @@ providers:
   docker:
     defaultRule: Host(`{{ trimPrefix `/` .Name }}.docker.localhost`)
   file:
-    directory: /etc/notploy/traefik/dynamic
+    directory: /etc/astron-collection/traefik/dynamic
     watch: true
 entryPoints:
   web:

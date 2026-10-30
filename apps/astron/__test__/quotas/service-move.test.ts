@@ -50,11 +50,11 @@ let quota = {
 	memoryReservation: null as string | null,
 };
 
-vi.mock("@notploy/server/services/permission", () => ({
+vi.mock("@astron-collection/server/services/permission", () => ({
 	checkServiceAccess: vi.fn(() => Promise.resolve()),
 }));
 
-vi.mock("@notploy/server/db", () => ({
+vi.mock("@astron-collection/server/db", () => ({
 	db: {
 		execute: vi.fn(),
 		query: {
@@ -65,16 +65,16 @@ vi.mock("@notploy/server/db", () => ({
 	},
 }));
 
-const { db } = await import("@notploy/server/db");
+const { db } = await import("@astron-collection/server/db");
 const { checkServiceAccess } = await import(
-	"@notploy/server/services/permission"
+	"@astron-collection/server/services/permission"
 );
 const {
 	assertServiceMoveAllowed,
 	previewServiceMove,
-} = await import("@notploy/server/services/service-move");
+} = await import("@astron-collection/server/services/service-move");
 const { ProjectQuotaExceededError } = await import(
-	"@notploy/server/services/project-quota"
+	"@astron-collection/server/services/project-quota"
 );
 
 const ctx = {

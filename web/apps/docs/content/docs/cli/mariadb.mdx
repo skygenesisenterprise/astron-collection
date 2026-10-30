@@ -1,27 +1,27 @@
 ---
 title: "MariaDB"
-description: "Provision and operate MariaDB databases, including backups and external ports. Generated from the `notploy` command surface."
+description: "Provision and operate MariaDB databases, including backups and external ports. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Provision and operate MariaDB databases, including backups and external ports.
 
-`notploy mariadb` exposes **16 commands**. They map one-to-one onto the `mariadb.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection mariadb` exposes **16 commands**. They map one-to-one onto the `mariadb.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy mariadb --help` to list these commands in your terminal, or
-	`notploy mariadb <command> --help` for a single command.
+	Run `astron-collection mariadb --help` to list these commands in your terminal, or
+	`astron-collection mariadb <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy mariadb change-password`
+### `astron-collection mariadb change-password`
 
 Calls `POST /api/trpc/mariadb.changePassword`.
 
 ```bash
-notploy mariadb change-password --mariadbId <value> --password <value> [options]
+astron-collection mariadb change-password --mariadbId <value> --password <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -31,12 +31,12 @@ notploy mariadb change-password --mariadbId <value> --password <value> [options]
 | `--type <value>` | string | No | `user`, `root` |
 | `--profile <name>` | string | No | — |
 
-### `notploy mariadb change-status`
+### `astron-collection mariadb change-status`
 
 Calls `POST /api/trpc/mariadb.changeStatus`.
 
 ```bash
-notploy mariadb change-status --mariadbId <value> --applicationStatus <value> [options]
+astron-collection mariadb change-status --mariadbId <value> --applicationStatus <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -45,12 +45,12 @@ notploy mariadb change-status --mariadbId <value> --applicationStatus <value> [o
 | `--applicationStatus <value>` | string | Yes | `idle`, `running`, `done`, `error` |
 | `--profile <name>` | string | No | — |
 
-### `notploy mariadb create`
+### `astron-collection mariadb create`
 
 Calls `POST /api/trpc/mariadb.create`.
 
 ```bash
-notploy mariadb create --name <value> --environmentId <value> --databaseName <value> --databaseUser <value> --databasePassword <value> [options]
+astron-collection mariadb create --name <value> --environmentId <value> --databaseName <value> --databaseUser <value> --databasePassword <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -67,12 +67,12 @@ notploy mariadb create --name <value> --environmentId <value> --databaseName <va
 | `--serverId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mariadb deploy`
+### `astron-collection mariadb deploy`
 
 Calls `POST /api/trpc/mariadb.deploy`.
 
 ```bash
-notploy mariadb deploy --mariadbId <value> [options]
+astron-collection mariadb deploy --mariadbId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -80,12 +80,12 @@ notploy mariadb deploy --mariadbId <value> [options]
 | `--mariadbId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mariadb move`
+### `astron-collection mariadb move`
 
 Calls `POST /api/trpc/mariadb.move`.
 
 ```bash
-notploy mariadb move --mariadbId <value> --targetEnvironmentId <value> [options]
+astron-collection mariadb move --mariadbId <value> --targetEnvironmentId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -94,12 +94,12 @@ notploy mariadb move --mariadbId <value> --targetEnvironmentId <value> [options]
 | `--targetEnvironmentId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mariadb one`
+### `astron-collection mariadb one`
 
 Calls `GET /api/trpc/mariadb.one`.
 
 ```bash
-notploy mariadb one --mariadbId <value> [options]
+astron-collection mariadb one --mariadbId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -107,12 +107,12 @@ notploy mariadb one --mariadbId <value> [options]
 | `--mariadbId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mariadb read-logs`
+### `astron-collection mariadb read-logs`
 
 Calls `GET /api/trpc/mariadb.readLogs`.
 
 ```bash
-notploy mariadb read-logs --mariadbId <value> [options]
+astron-collection mariadb read-logs --mariadbId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -123,12 +123,12 @@ notploy mariadb read-logs --mariadbId <value> [options]
 | `--search <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mariadb rebuild`
+### `astron-collection mariadb rebuild`
 
 Calls `POST /api/trpc/mariadb.rebuild`.
 
 ```bash
-notploy mariadb rebuild --mariadbId <value> [options]
+astron-collection mariadb rebuild --mariadbId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -136,12 +136,12 @@ notploy mariadb rebuild --mariadbId <value> [options]
 | `--mariadbId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mariadb reload`
+### `astron-collection mariadb reload`
 
 Calls `POST /api/trpc/mariadb.reload`.
 
 ```bash
-notploy mariadb reload --mariadbId <value> --appName <value> [options]
+astron-collection mariadb reload --mariadbId <value> --appName <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -150,12 +150,12 @@ notploy mariadb reload --mariadbId <value> --appName <value> [options]
 | `--appName <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mariadb remove`
+### `astron-collection mariadb remove`
 
 Calls `POST /api/trpc/mariadb.remove`.
 
 ```bash
-notploy mariadb remove --mariadbId <value> [options]
+astron-collection mariadb remove --mariadbId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -163,12 +163,12 @@ notploy mariadb remove --mariadbId <value> [options]
 | `--mariadbId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mariadb save-environment`
+### `astron-collection mariadb save-environment`
 
 Calls `POST /api/trpc/mariadb.saveEnvironment`.
 
 ```bash
-notploy mariadb save-environment --mariadbId <value> --env <value> [options]
+astron-collection mariadb save-environment --mariadbId <value> --env <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -177,12 +177,12 @@ notploy mariadb save-environment --mariadbId <value> --env <value> [options]
 | `--env <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mariadb save-external-port`
+### `astron-collection mariadb save-external-port`
 
 Calls `POST /api/trpc/mariadb.saveExternalPort`.
 
 ```bash
-notploy mariadb save-external-port --mariadbId <value> --externalPort <value> [options]
+astron-collection mariadb save-external-port --mariadbId <value> --externalPort <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -191,12 +191,12 @@ notploy mariadb save-external-port --mariadbId <value> --externalPort <value> [o
 | `--externalPort <value>` | number | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mariadb search`
+### `astron-collection mariadb search`
 
 Calls `GET /api/trpc/mariadb.search`.
 
 ```bash
-notploy mariadb search [options]
+astron-collection mariadb search [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -211,12 +211,12 @@ notploy mariadb search [options]
 | `--offset <value>` | number | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mariadb start`
+### `astron-collection mariadb start`
 
 Calls `POST /api/trpc/mariadb.start`.
 
 ```bash
-notploy mariadb start --mariadbId <value> [options]
+astron-collection mariadb start --mariadbId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -224,12 +224,12 @@ notploy mariadb start --mariadbId <value> [options]
 | `--mariadbId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mariadb stop`
+### `astron-collection mariadb stop`
 
 Calls `POST /api/trpc/mariadb.stop`.
 
 ```bash
-notploy mariadb stop --mariadbId <value> [options]
+astron-collection mariadb stop --mariadbId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -237,12 +237,12 @@ notploy mariadb stop --mariadbId <value> [options]
 | `--mariadbId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mariadb update`
+### `astron-collection mariadb update`
 
 Calls `POST /api/trpc/mariadb.update`.
 
 ```bash
-notploy mariadb update --mariadbId <value> [options]
+astron-collection mariadb update --mariadbId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -280,6 +280,6 @@ notploy mariadb update --mariadbId <value> [options]
 | `--createdAt <value>` | string | No | — |
 | `--environmentId <value>` | string | No | — |
 | `--networkIds <json>` | array | No | — |
-| `--detachNotployNetwork [boolean]` | boolean | No | — |
-| `--no-detachNotployNetwork` | boolean | No | — |
+| `--detachAstronCollectionNetwork [boolean]` | boolean | No | — |
+| `--no-detachAstronCollectionNetwork` | boolean | No | — |
 | `--profile <name>` | string | No | — |

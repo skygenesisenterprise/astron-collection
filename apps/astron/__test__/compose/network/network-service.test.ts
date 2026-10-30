@@ -1,8 +1,8 @@
-import type { ComposeSpecification } from "@notploy/server";
+import type { ComposeSpecification } from "@astron-collection/server";
 import {
 	addSuffixToServiceNetworks,
 	generateRandomHash,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import { expect, test } from "vitest";
 import { parse } from "yaml";
 
@@ -192,10 +192,10 @@ services:
   web:
     image: nginx:latest
     networks:
-      - notploy-network
+      - astron-collection-network
 `;
 
-test("It shouldn't add suffix to notploy-network in services", () => {
+test("It shouldn't add suffix to astron-collection-network in services", () => {
 	const composeData = parse(composeFile7) as ComposeSpecification;
 
 	const suffix = generateRandomHash();
@@ -207,7 +207,7 @@ test("It shouldn't add suffix to notploy-network in services", () => {
 	const service = networks.web;
 
 	expect(service).toBeDefined();
-	expect(service?.networks).toContain("notploy-network");
+	expect(service?.networks).toContain("astron-collection-network");
 });
 
 const composeFile8 = `
@@ -219,7 +219,7 @@ services:
     networks:
       - frontend
       - backend
-      - notploy-network
+      - astron-collection-network
 
 
   api:
@@ -228,23 +228,23 @@ services:
       frontend:
         aliases:
           - api
-      notploy-network:
+      astron-collection-network:
         aliases:
           - api
   redis:
     image: redis:alpine
     networks:
-      notploy-network:
+      astron-collection-network:
   db:
     image: myapi:latest
     networks:
-      notploy-network:
+      astron-collection-network:
         aliases:
           - apid
 
 `;
 
-test("It shouldn't add suffix to notploy-network in services multiples cases", () => {
+test("It shouldn't add suffix to astron-collection-network in services multiples cases", () => {
 	const composeData = parse(composeFile8) as ComposeSpecification;
 
 	const suffix = generateRandomHash();
@@ -267,9 +267,9 @@ test("It shouldn't add suffix to notploy-network in services multiples cases", (
 	};
 
 	expect(service).toBeDefined();
-	expect(service?.networks).toContain("notploy-network");
+	expect(service?.networks).toContain("astron-collection-network");
 
-	expect(redis?.networks).toHaveProperty("notploy-network");
-	expect(dbNetworks["notploy-network"]).toBeDefined();
-	expect(apiNetworks["notploy-network"]).toBeDefined();
+	expect(redis?.networks).toHaveProperty("astron-collection-network");
+	expect(dbNetworks["astron-collection-network"]).toBeDefined();
+	expect(apiNetworks["astron-collection-network"]).toBeDefined();
 });

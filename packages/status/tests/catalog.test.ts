@@ -1,7 +1,7 @@
 /**
  * Catalog seeding tests.
  *
- * The seed is what gives a fresh install the six Notploy offerings. Two
+ * The seed is what gives a fresh install the six Astron Collection offerings. Two
  * properties matter: it must produce exactly the catalog, and it must be safe
  * to re-run — a second run never duplicates a component nor overwrites an
  * operator edit.
@@ -9,7 +9,7 @@
 import { describe, expect, it } from "vitest";
 import {
 	buildPublicPage,
-	NOTPLOY_STATUS_CATALOG,
+	ASTRON_COLLECTION_STATUS_CATALOG,
 	resolveSettings,
 	seedCatalog,
 	updateComponent,
@@ -17,7 +17,7 @@ import {
 import { createHarness } from "./helpers";
 
 const EXPECTED = [
-	"Notploy Cloud",
+	"Astron Collection Cloud",
 	"API",
 	"MCP Server",
 	"GitHub App",
@@ -25,16 +25,16 @@ const EXPECTED = [
 	"Docs",
 ];
 
-describe("Notploy catalog", () => {
+describe("Astron Collection catalog", () => {
 	it("declares the six offerings the status page tracks", () => {
-		expect(NOTPLOY_STATUS_CATALOG.components.map((c) => c.name)).toEqual(
+		expect(ASTRON_COLLECTION_STATUS_CATALOG.components.map((c) => c.name)).toEqual(
 			EXPECTED,
 		);
 	});
 
 	it("creates the page and every component, grouped for the public page", () => {
 		const { ctx } = createHarness();
-		const result = seedCatalog(ctx, NOTPLOY_STATUS_CATALOG);
+		const result = seedCatalog(ctx, ASTRON_COLLECTION_STATUS_CATALOG);
 
 		expect(result.created).toEqual(EXPECTED);
 		expect(result.existing).toEqual([]);
@@ -56,9 +56,9 @@ describe("Notploy catalog", () => {
 
 	it("is idempotent and preserves operator edits", () => {
 		const { ctx } = createHarness();
-		seedCatalog(ctx, NOTPLOY_STATUS_CATALOG);
+		seedCatalog(ctx, ASTRON_COLLECTION_STATUS_CATALOG);
 
-		const page = ctx.repos.pages.findBySlug(NOTPLOY_STATUS_CATALOG.page.slug);
+		const page = ctx.repos.pages.findBySlug(ASTRON_COLLECTION_STATUS_CATALOG.page.slug);
 		if (!page) {
 			throw new Error("seed did not create the page");
 		}
@@ -75,7 +75,7 @@ describe("Notploy catalog", () => {
 			{ type: "system", id: null, label: "test" },
 		);
 
-		const second = seedCatalog(ctx, NOTPLOY_STATUS_CATALOG);
+		const second = seedCatalog(ctx, ASTRON_COLLECTION_STATUS_CATALOG);
 		expect(second.created).toEqual([]);
 		expect(second.existing).toEqual(EXPECTED);
 		expect(ctx.repos.components.listByPage(page.id)).toHaveLength(
@@ -89,12 +89,12 @@ describe("Notploy catalog", () => {
 
 	it("can seed an alternative page without touching the default one", () => {
 		const { ctx } = createHarness();
-		seedCatalog(ctx, NOTPLOY_STATUS_CATALOG);
-		const staging = seedCatalog(ctx, NOTPLOY_STATUS_CATALOG, {
-			slug: "notploy-staging",
-			name: "Notploy Status (staging)",
+		seedCatalog(ctx, ASTRON_COLLECTION_STATUS_CATALOG);
+		const staging = seedCatalog(ctx, ASTRON_COLLECTION_STATUS_CATALOG, {
+			slug: "astron-collection-staging",
+			name: "Astron Collection Status (staging)",
 		});
-		expect(staging.page.slug).toBe("notploy-staging");
+		expect(staging.page.slug).toBe("astron-collection-staging");
 		expect(staging.created).toEqual(EXPECTED);
 		expect(ctx.repos.pages.list()).toHaveLength(2);
 	});

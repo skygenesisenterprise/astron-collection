@@ -41,7 +41,7 @@ export interface CertificateValidationResult {
 
 const PEM_CERTIFICATE = /-----BEGIN CERTIFICATE-----[\s\S]*?-----END CERTIFICATE-----/g;
 
-/** node-forge types SAN entries loosely, so the shape Notploy relies on is declared here. */
+/** node-forge types SAN entries loosely, so the shape Astron Collection relies on is declared here. */
 type AltNameEntry = forge.pki.CertificateField & { type?: number };
 
 const firstCertificatePem = (pem: string): string => {
@@ -160,7 +160,7 @@ const fingerprint = (key: unknown) => {
 };
 
 /**
- * Parses a PEM certificate into the metadata Notploy exposes. Throws when the
+ * Parses a PEM certificate into the metadata Astron Collection exposes. Throws when the
  * input is not a parsable certificate.
  */
 export const parseCertificate = (pem: string): ParsedCertificate => {

@@ -3,7 +3,7 @@ title: First login
 description: "Complete the initial setup, create the administrator account and secure access."
 ---
 
-After the installation finishes, Notploy is running but has no administrator yet. The first visit creates one.
+After the installation finishes, Astron Collection is running but has no administrator yet. The first visit creates one.
 
 ## Complete the initial setup
 
@@ -14,8 +14,8 @@ After the installation finishes, Notploy is running but has no administrator yet
 **Expected result:** you land on the dashboard, signed in, with an empty organization ready for its first project.
 
 <Callout type="warn" title="You cannot reach the setup page">
-Confirm the server firewall allows port `3000` and that the Notploy containers are running.
-See [Notploy instance troubleshooting](/docs/core/troubleshooting/instance).
+Confirm the server firewall allows port `3000` and that the Astron Collection containers are running.
+See [Astron Collection instance troubleshooting](/docs/core/troubleshooting/instance).
 </Callout>
 
 ## What you are now
@@ -24,13 +24,13 @@ The account you created is the organization **owner**: it can manage projects, r
 
 ## Secure the installation
 
-Before you expose Notploy to the internet, do two things:
+Before you expose Astron Collection to the internet, do two things:
 
 1. **Put the dashboard behind HTTPS.** Follow [Domain and TLS](/docs/core/domain-and-tls) to point a domain at the panel and enable a certificate.
 2. **Then disable direct IP:port access** (optional but recommended). Once HTTPS for your panel domain is confirmed working, you can stop publishing port `3000` directly:
 
    ```bash
-   docker service update --publish-rm "published=3000,target=3000,mode=host" notploy
+   docker service update --publish-rm "published=3000,target=3000,mode=host" astron-collection
    ```
 
 <Callout type="warn">

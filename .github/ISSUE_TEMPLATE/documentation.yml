@@ -13,7 +13,7 @@ body:
         - `cli/` — CLI reference
         - `api/` — **generated** from the OpenAPI specification. Never hand-edit these files:
           the source of truth is the tRPC router and its `.meta` in
-          `apps/notploy/server/api/routers/`. For a problem in the API reference, pick
+          `apps/astron-collection/server/api/routers/`. For a problem in the API reference, pick
           "API reference" below and say so in the details — it routes to a different fix.
 
         Docs changes are very welcome and are reviewed like any other contribution.
@@ -42,8 +42,8 @@ body:
     id: page
     attributes:
       label: Page or file
-      description: The URL on docs.notploy.com, or the file path in the repository.
-      placeholder: ex. https://docs.notploy.com/docs/core/backups
+      description: The URL on docs.astron-collection.com, or the file path in the repository.
+      placeholder: ex. https://docs.astron-collection.com/docs/core/backups
     validations:
       required: false
 
@@ -87,7 +87,7 @@ body:
     attributes:
       label: Before submitting
       options:
-        - label: I checked the current documentation and the current Notploy version before reporting this.
+        - label: I checked the current documentation and the current Astron Collection version before reporting this.
           required: true
         - label: I searched the existing issues for the same documentation problem.
           required: true

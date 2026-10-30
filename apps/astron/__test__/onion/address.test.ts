@@ -8,7 +8,7 @@ import {
 	isOnionHostname,
 	isValidOnionAddress,
 	onionIdentityFiles,
-} from "@notploy/server/utils/onion/address";
+} from "@astron-collection/server/utils/onion/address";
 import { describe, expect, it } from "vitest";
 
 /**

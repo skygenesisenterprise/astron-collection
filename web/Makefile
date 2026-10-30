@@ -1,4 +1,4 @@
-# Notploy web frontends — website & docs, developer interface.
+# Astron Collection web frontends — website & docs, developer interface.
 #
 # A thin layer over the tools that already exist in this directory (pnpm,
 # docker, docker compose). No build logic is duplicated here: every target
@@ -64,13 +64,13 @@ endif
 ifeq ($(SELECTED_TARGET),docs)
 PROD_SERVICE := docs-prod
 DEV_SERVICE := docs-dev
-TARGET_IMAGE := notploy/docs
+TARGET_IMAGE := astron-collection/docs
 TARGET_SCRIPT := docs
 TARGET_PORT := $(DOCS_PORT)
 else
 PROD_SERVICE := website-prod
 DEV_SERVICE := website-dev
-TARGET_IMAGE := notploy/website
+TARGET_IMAGE := astron-collection/website
 TARGET_SCRIPT := website
 TARGET_PORT := $(WEBSITE_PORT)
 endif
@@ -122,7 +122,7 @@ web docs:
 # Help
 # ---------------------------------------------------------------------------
 help: ## Show this help
-	@echo "Notploy web — available commands:"
+	@echo "Astron Collection web — available commands:"
 	@echo ""
 	@grep -hE '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) \
 		| awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2}'

@@ -11,7 +11,7 @@ import type {
 	CommunityContributionKind,
 	CommunityEventType,
 	CommunityHealthProfile,
-} from "@notploy/server/db/schema";
+} from "@astron-collection/server/db/schema";
 
 /* -------------------------------------------------------------------------- */
 /* Attention rules                                                            */

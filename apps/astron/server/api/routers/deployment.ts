@@ -14,16 +14,16 @@ import {
 	removeDeployment,
 	resolveServicePath,
 	updateDeploymentStatus,
-} from "@notploy/server";
-import { db } from "@notploy/server/db";
+} from "@astron-collection/server";
+import { db } from "@astron-collection/server/db";
 import {
 	checkServicePermissionAndAccess,
 	findMemberByUserId,
-} from "@notploy/server/services/permission";
+} from "@astron-collection/server/services/permission";
 import {
 	findServerById,
 	getAccessibleServerIds,
-} from "@notploy/server/services/server";
+} from "@astron-collection/server/services/server";
 import { TRPCError } from "@trpc/server";
 import { desc, eq } from "drizzle-orm";
 import { z } from "zod";

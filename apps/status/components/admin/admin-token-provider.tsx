@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-const STORAGE_KEY = "notploy.status.adminToken";
+const STORAGE_KEY = "astron-collection.status.adminToken";
 
 interface AdminTokenContextValue {
 	token: string | null;

@@ -21,9 +21,9 @@ export type TemplateProps = {
 
 export const VerifyEmailTemplate = ({
 	userName = "User",
-	verificationUrl = "https://app.notploy.com/verify",
+	verificationUrl = "https://app.astron-collection.com/verify",
 }: TemplateProps) => {
-	const previewText = "Verify your email address to get started with Notploy";
+	const previewText = "Verify your email address to get started with Astron Collection";
 	return (
 		<Html>
 			<Head />
@@ -34,10 +34,10 @@ export const VerifyEmailTemplate = ({
 						{/* Header */}
 						<Section className="bg-[#09090b] rounded-t-xl px-[40px] py-[32px] text-center">
 							<Img
-								src="https://raw.githubusercontent.com/skygenesisenterprise/notploy/refs/heads/master/web/apps/docs/public/logo-notploy-blackpng.png"
+								src="https://raw.githubusercontent.com/skygenesisenterprise/astron-collection/refs/heads/master/web/apps/docs/public/logo-astron-collection-blackpng.png"
 								width="190"
 								height="120"
-								alt="Notploy"
+								alt="Astron Collection"
 								className="my-0 mx-auto"
 							/>
 						</Section>
@@ -48,7 +48,7 @@ export const VerifyEmailTemplate = ({
 								Verify Your Email
 							</Heading>
 							<Text className="text-[#71717a] text-[14px] leading-[22px] m-0 mb-[24px]">
-								Hello {userName}, thank you for signing up for Notploy. Please
+								Hello {userName}, thank you for signing up for Astron Collection. Please
 								verify your email address to activate your account.
 							</Text>
 
@@ -76,10 +76,10 @@ export const VerifyEmailTemplate = ({
 							<Text className="text-[#a1a1aa] text-[12px] leading-[18px] m-0">
 								This is an automated email from{" "}
 								<Link
-									href="https://notploy.com"
+									href="https://astron-collection.com"
 									className="text-[#71717a] underline"
 								>
-									Notploy Cloud
+									Astron Collection Cloud
 								</Link>
 								. If you didn't create an account, you can safely ignore this
 								email.

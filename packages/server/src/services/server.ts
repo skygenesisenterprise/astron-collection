@@ -1,10 +1,10 @@
-import { db } from "@notploy/server/db";
+import { db } from "@astron-collection/server/db";
 import {
 	type apiCreateServer,
 	member,
 	organization,
 	server,
-} from "@notploy/server/db/schema";
+} from "@astron-collection/server/db/schema";
 import { TRPCError } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
 import type { z } from "zod";
@@ -123,7 +123,7 @@ export const testSshConnectionWithPassword = async ({
 };
 
 /**
- * Installs Notploy's public key on the server. Delegates to the dedicated SSH
+ * Installs Astron Collection's public key on the server. Delegates to the dedicated SSH
  * provisioning layer, which validates the account can manage its own SSH
  * configuration (root or passwordless sudo) and makes the installation
  * idempotent.

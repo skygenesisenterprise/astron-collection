@@ -1,6 +1,6 @@
-import { resolveServiceNetworks } from "@notploy/server/services/network";
-import { findRegistryByIdWithCredentials } from "@notploy/server/services/registry";
-import type { InferResultType } from "@notploy/server/types/with";
+import { resolveServiceNetworks } from "@astron-collection/server/services/network";
+import { findRegistryByIdWithCredentials } from "@astron-collection/server/services/registry";
+import type { InferResultType } from "@astron-collection/server/types/with";
 import type { CreateServiceOptions } from "dockerode";
 import { getRegistryTag, uploadImageRemoteCommand } from "../cluster/upload";
 import {

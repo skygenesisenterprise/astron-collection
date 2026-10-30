@@ -61,7 +61,7 @@ test("core implementation map links public routes and real CLI groups", () => {
 		},
 		cliGroups: ["compose", "sso"],
 	});
-	assert.match(table, /\| Docker Compose \| `compose` \| `notploy compose` \| \[Docker Compose\]\(\/docs\/core\/docker-compose\) \(\+1\) \|/);
+	assert.match(table, /\| Docker Compose \| `compose` \| `astron-collection compose` \| \[Docker Compose\]\(\/docs\/core\/docker-compose\) \(\+1\) \|/);
 	assert.match(table, /\| SSO \| `sso` \|/);
 	assert.match(table, /\| Cicd \| `cicd` \| — \|/);
 });

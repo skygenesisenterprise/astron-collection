@@ -1,27 +1,27 @@
 ---
 title: "Security"
-description: "Per-application HTTP basic auth and response security headers. Generated from the `notploy` command surface."
+description: "Per-application HTTP basic auth and response security headers. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Per-application HTTP basic auth and response security headers.
 
-`notploy security` exposes **4 commands**. They map one-to-one onto the `security.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection security` exposes **4 commands**. They map one-to-one onto the `security.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy security --help` to list these commands in your terminal, or
-	`notploy security <command> --help` for a single command.
+	Run `astron-collection security --help` to list these commands in your terminal, or
+	`astron-collection security <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy security create`
+### `astron-collection security create`
 
 Calls `POST /api/trpc/security.create`.
 
 ```bash
-notploy security create --applicationId <value> --username <value> --password <value> [options]
+astron-collection security create --applicationId <value> --username <value> --password <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -31,12 +31,12 @@ notploy security create --applicationId <value> --username <value> --password <v
 | `--password <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy security delete`
+### `astron-collection security delete`
 
 Calls `POST /api/trpc/security.delete`.
 
 ```bash
-notploy security delete --securityId <value> [options]
+astron-collection security delete --securityId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -44,12 +44,12 @@ notploy security delete --securityId <value> [options]
 | `--securityId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy security one`
+### `astron-collection security one`
 
 Calls `GET /api/trpc/security.one`.
 
 ```bash
-notploy security one --securityId <value> [options]
+astron-collection security one --securityId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -57,12 +57,12 @@ notploy security one --securityId <value> [options]
 | `--securityId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy security update`
+### `astron-collection security update`
 
 Calls `POST /api/trpc/security.update`.
 
 ```bash
-notploy security update --securityId <value> --username <value> --password <value> [options]
+astron-collection security update --securityId <value> --username <value> --password <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |

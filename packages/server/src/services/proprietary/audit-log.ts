@@ -1,6 +1,6 @@
-import { db } from "@notploy/server/db";
-import type { AuditAction, AuditResourceType } from "@notploy/server/db/schema";
-import { auditLog } from "@notploy/server/db/schema";
+import { db } from "@astron-collection/server/db";
+import type { AuditAction, AuditResourceType } from "@astron-collection/server/db/schema";
+import { auditLog } from "@astron-collection/server/db/schema";
 import { and, asc, desc, eq, gte, ilike, lte, or } from "drizzle-orm";
 
 export type { AuditAction, AuditResourceType };

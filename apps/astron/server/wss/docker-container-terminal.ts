@@ -3,7 +3,7 @@ import {
 	findServerById,
 	isManagedCloud,
 	validateRequest,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import { spawn } from "node-pty";
 import { Client } from "ssh2";
 import { WebSocketServer } from "ws";

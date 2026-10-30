@@ -31,7 +31,7 @@ export const assertDockerNetworkName = (network: string): string => {
 
 /**
  * Sources to bind into the Tor container. They are the paths of the daemon's
- * filesystem, not the ones Notploy sees: the two only match when the
+ * filesystem, not the ones Astron Collection sees: the two only match when the
  * configuration tree is mounted at the same path (see `toDockerHostPath`).
  */
 export interface OnionServiceBindSources {
@@ -112,8 +112,8 @@ export const getStartOnionServiceCommand = ({
 		// would be noise. The container is a publisher, not a probe target.
 		"--no-healthcheck",
 		`--network ${quote([dockerNetwork])}`,
-		`--label ${quote([`notploy.onionServiceId=${onionServiceId}`])}`,
-		`--label ${quote([`notploy.composeId=${composeId}`])}`,
+		`--label ${quote([`astron-collection.onionServiceId=${onionServiceId}`])}`,
+		`--label ${quote([`astron-collection.composeId=${composeId}`])}`,
 		// No `--publish`: the onion address is the only ingress, the target
 		// service is never exposed on a host port by enabling an Onion Service.
 		`-v ${quote([`${bindSources.dataDir}:${paths.containerDataDir}`])}`,

@@ -14,9 +14,9 @@ const mockDb = vi.hoisted(() => ({
 		},
 	},
 }));
-vi.mock("@notploy/server/db", () => ({ db: mockDb }));
+vi.mock("@astron-collection/server/db", () => ({ db: mockDb }));
 
-import { assertGitProviderAccess } from "@notploy/server/services/git-provider";
+import { assertGitProviderAccess } from "@astron-collection/server/services/git-provider";
 
 const ORG = "org-1";
 const USER = "user-member";

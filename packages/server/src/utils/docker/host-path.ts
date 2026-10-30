@@ -1,9 +1,9 @@
 import { hostname } from "node:os";
 import { relative, resolve } from "node:path";
-import { docker, paths } from "@notploy/server/constants";
+import { docker, paths } from "@astron-collection/server/constants";
 
 /**
- * Map a path Notploy holds inside its own container onto the path the Docker
+ * Map a path Astron Collection holds inside its own container onto the path the Docker
  * daemon resolves it to on the host.
  *
  * A bind source is resolved by the daemon, not by the process that builds the
@@ -47,7 +47,7 @@ const findConfigHostPath = async (): Promise<string | undefined> => {
 };
 
 /**
- * Path to give the daemon as a bind source for something Notploy wrote inside
+ * Path to give the daemon as a bind source for something Astron Collection wrote inside
  * its own container. Paths outside the configuration tree are returned as they
  * are.
  */

@@ -1,12 +1,12 @@
-import type { BackupSchedule } from "@notploy/server/services/backup";
-import type { Compose } from "@notploy/server/services/compose";
+import type { BackupSchedule } from "@astron-collection/server/services/backup";
+import type { Compose } from "@astron-collection/server/services/compose";
 import {
 	createDeploymentBackup,
 	updateDeploymentStatus,
-} from "@notploy/server/services/deployment";
-import { findDestinationById } from "@notploy/server/services/destination";
-import { findEnvironmentById } from "@notploy/server/services/environment";
-import { findProjectById } from "@notploy/server/services/project";
+} from "@astron-collection/server/services/deployment";
+import { findDestinationById } from "@astron-collection/server/services/destination";
+import { findEnvironmentById } from "@astron-collection/server/services/environment";
+import { findProjectById } from "@astron-collection/server/services/project";
 import { sendDatabaseBackupNotifications } from "../notifications/database-backup";
 import { execAsync, execAsyncRemote } from "../process/execAsync";
 import { redactBackupError } from "./redact";

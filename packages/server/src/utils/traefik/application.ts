@@ -1,8 +1,8 @@
 import fs, { createReadStream, writeFileSync } from "node:fs";
 import path from "node:path";
 import { createInterface } from "node:readline";
-import { paths } from "@notploy/server/constants";
-import type { Domain } from "@notploy/server/services/domain";
+import { paths } from "@astron-collection/server/constants";
+import type { Domain } from "@astron-collection/server/services/domain";
 import { quote } from "shell-quote";
 import { parse, stringify } from "yaml";
 import {
@@ -175,8 +175,8 @@ export const readMonitoringConfig = async (readAll = false) => {
 						trimmed.endsWith("}")
 					) {
 						const log = JSON.parse(trimmed);
-						// Exclude Notploy service app and Dashboard requests
-						if (log.ServiceName !== "notploy-service-app@file") {
+						// Exclude Astron Collection service app and Dashboard requests
+						if (log.ServiceName !== "astron-collection-service-app@file") {
 							content += `${line}\n`;
 							validCount++;
 							if (validCount >= 500) {
@@ -240,7 +240,7 @@ export const writeConfigRemote = async (
 /**
  * Resolves a user supplied Traefik file path and rejects anything that escapes
  * the Traefik configuration directory. Without this check a `traefikFiles: write`
- * permission would allow overwriting any file the Notploy process can write
+ * permission would allow overwriting any file the Astron Collection process can write
  * (compose files, .env, authorized_keys) via `../../..` or an absolute path.
  *
  * Reads may also target the static `traefik.yml`, which the diagnostics view
@@ -248,7 +248,7 @@ export const writeConfigRemote = async (
  * directory and can never touch the static config that defines the ACME
  * resolvers.
  *
- * Remote servers get the same check against their own path under /etc/notploy.
+ * Remote servers get the same check against their own path under /etc/astron-collection.
  */
 export const resolveTraefikConfigPath = (
 	pathFile: string,

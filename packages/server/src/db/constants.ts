@@ -3,9 +3,9 @@ import fs from "node:fs";
 export const {
 	DATABASE_URL,
 	POSTGRES_PASSWORD_FILE,
-	POSTGRES_USER = "notploy",
-	POSTGRES_DB = "notploy",
-	POSTGRES_HOST = "notploy-postgres",
+	POSTGRES_USER = "astron-collection",
+	POSTGRES_DB = "astron-collection",
+	POSTGRES_HOST = "astron-collection-postgres",
 	POSTGRES_PORT = "5432",
 } = process.env;
 
@@ -33,15 +33,15 @@ if (DATABASE_URL) {
 		This mode WILL BE REMOVED in a future release.
 		
 		Please migrate to Docker Secrets using POSTGRES_PASSWORD_FILE.
-		Please execute this command in your server: curl -sSL https://notploy.com/security/0.26.6.sh | bash
+		Please execute this command in your server: curl -sSL https://astron-collection.com/security/0.26.6.sh | bash
 		`);
 	}
 
 	if (process.env.NODE_ENV === "production") {
 		dbUrl =
-			"postgres://notploy:amukds4wi9001583845717ad2@notploy-postgres:5432/notploy";
+			"postgres://astron-collection:amukds4wi9001583845717ad2@astron-collection-postgres:5432/astron-collection";
 	} else {
 		dbUrl =
-			"postgres://notploy:amukds4wi9001583845717ad2@localhost:5432/notploy";
+			"postgres://astron-collection:amukds4wi9001583845717ad2@localhost:5432/astron-collection";
 	}
 }

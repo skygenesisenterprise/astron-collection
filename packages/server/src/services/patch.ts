@@ -1,7 +1,7 @@
 import { join } from "node:path";
-import { paths } from "@notploy/server/constants";
-import { db } from "@notploy/server/db";
-import { type apiCreatePatch, patch } from "@notploy/server/db/schema";
+import { paths } from "@astron-collection/server/constants";
+import { db } from "@astron-collection/server/db";
+import { type apiCreatePatch, patch } from "@astron-collection/server/db/schema";
 import { TRPCError } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
 import type { z } from "zod";

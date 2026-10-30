@@ -11,7 +11,7 @@ import type {
 	slack,
 	teams,
 	telegram,
-} from "@notploy/server/db/schema";
+} from "@astron-collection/server/db/schema";
 import nodemailer from "nodemailer";
 import { Resend } from "resend";
 
@@ -89,7 +89,7 @@ export const sendResendNotification = async (
 		});
 	} catch (err) {
 		throw new Error(
-			`Failed to send discord notification: could not reach the webhook URL (${err instanceof Error ? err.message : "Unknown error"}). Check that the Notploy server has outbound HTTPS access and that the URL is correct.`,
+			`Failed to send discord notification: could not reach the webhook URL (${err instanceof Error ? err.message : "Unknown error"}). Check that the Astron Collection server has outbound HTTPS access and that the URL is correct.`,
 		);
 	}
 	if (!response.ok) {

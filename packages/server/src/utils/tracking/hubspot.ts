@@ -66,7 +66,7 @@ export function formatContactDataForHubSpot(
 			},
 		],
 		context: {
-			pageUri: "https://app.notploy.com/register",
+			pageUri: "https://app.astron-collection.com/register",
 			pageName: "Sign Up",
 		},
 	};

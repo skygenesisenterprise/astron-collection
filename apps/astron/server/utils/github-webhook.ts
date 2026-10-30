@@ -1,6 +1,6 @@
 import type { IncomingMessage } from "node:http";
-import { db } from "@notploy/server/db";
-import { githubWebhookDelivery } from "@notploy/server/db/schema";
+import { db } from "@astron-collection/server/db";
+import { githubWebhookDelivery } from "@astron-collection/server/db/schema";
 import { Webhooks } from "@octokit/webhooks";
 import { and, eq, lt, sql } from "drizzle-orm";
 

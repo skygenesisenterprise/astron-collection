@@ -5,11 +5,11 @@ name: Docker Publish
 #   GitHub Actions -> Buildx -> GHCR -> cosign (keyless)
 #
 # Publishing is tag-only. Each package has its own `v<major>.<minor>.<patch>`
-# tag suffix (for example, `v1.2.3-cloud` publishes only `notploy-cloud`).
+# tag suffix (for example, `v1.2.3-cloud` publishes only `astron-collection-cloud`).
 #
-# Every suffix also publishes a GitHub Release, titled `Notploy {Suffix}
-# v{major}.{minor}.{patch}` (`Notploy App v1.2.3`, `Notploy Cloud v1.2.3`,
-# `Notploy Console v1.2.3`, `Notploy Status v1.2.3`, `Notploy MCP v1.2.3`, ...),
+# Every suffix also publishes a GitHub Release, titled `Astron Collection {Suffix}
+# v{major}.{minor}.{patch}` (`Astron Collection App v1.2.3`, `Astron Collection Cloud v1.2.3`,
+# `Astron Collection Console v1.2.3`, `Astron Collection Status v1.2.3`, `Astron Collection MCP v1.2.3`, ...),
 # so a release always reads the same way whatever image it advertises. The
 # suffix label and the assets a release carries come from the catalog in
 # `select`, which is the single place to add an image.
@@ -60,7 +60,7 @@ env:
 
 jobs:
   # The pushed tag selects exactly one image (`v1.0.2-app` publishes only
-  # `notploy`). The matrix is filtered here rather than letting every job
+  # `astron-collection`). The matrix is filtered here rather than letting every job
   # disable itself, so a tag push shows a single job in the run instead of
   # seven, six of them no-ops.
   select:
@@ -94,87 +94,87 @@ jobs:
           # and adding its suffix to the tag filters above.
           #
           # `release_name` is the label the GitHub Release is titled with
-          # (`Notploy {release_name} {version}`) and `release_assets` says
+          # (`Astron Collection {release_name} {version}`) and `release_assets` says
           # whether that release carries the install scripts.
           #
           # `platforms` defaults to linux/amd64,linux/arm64 when omitted.
           read -r -d '' CATALOG <<'JSON' || true
           [
             {
-              "image": "notploy",
+              "image": "astron-collection",
               "file": "./Dockerfile",
               "target": "selfhosted",
               "platforms": "linux/amd64",
               "tag_suffix": "-app",
-              "description": "Notploy self-hosted (dashboard, server and build tooling)",
+              "description": "Astron Collection self-hosted (dashboard, server and build tooling)",
               "release_name": "App",
               "release_assets": true
             },
             {
-              "image": "notploy-cloud",
+              "image": "astron-collection-cloud",
               "file": "./Dockerfile",
               "target": "cloud",
               "tag_suffix": "-cloud",
-              "description": "Notploy Cloud (dashboard + server)",
+              "description": "Astron Collection Cloud (dashboard + server)",
               "release_name": "Cloud",
               "release_assets": true
             },
             {
-              "image": "notploy-console",
+              "image": "astron-collection-console",
               "file": "./Dockerfile",
               "target": "console",
               "tag_suffix": "-console",
-              "description": "Notploy Console (instance and fleet management)",
+              "description": "Astron Collection Console (instance and fleet management)",
               "release_name": "Console",
               "release_assets": true
             },
             {
-              "image": "notploy-status",
+              "image": "astron-collection-status",
               "file": "./Dockerfile",
               "target": "status",
               "tag_suffix": "-status",
-              "description": "Notploy Status (status page, incidents and uptime history)",
+              "description": "Astron Collection Status (status page, incidents and uptime history)",
               "release_name": "Status",
               "release_assets": false
             },
             {
-              "image": "notploy-mcp",
+              "image": "astron-collection-mcp",
               "file": "./packages/mcp/Dockerfile",
               "tag_suffix": "-mcp",
-              "description": "Notploy MCP server",
+              "description": "Astron Collection MCP server",
               "release_name": "MCP",
               "release_assets": false
             },
             {
-              "image": "notploy-github",
+              "image": "astron-collection-github",
               "file": "./packages/github/Dockerfile",
               "tag_suffix": "-github",
-              "description": "Notploy GitHub integration",
+              "description": "Astron Collection GitHub integration",
               "release_name": "GitHub",
               "release_assets": false
             },
             {
-              "image": "notploy-website",
+              "image": "astron-collection-website",
               "file": "./web/Dockerfile.website",
               "platforms": "linux/amd64",
               "tag_suffix": "-website",
-              "description": "Notploy official website",
+              "description": "Astron Collection official website",
               "release_name": "Website",
               "release_assets": false
             },
             {
-              "image": "notploy-docs",
+              "image": "astron-collection-docs",
               "file": "./web/Dockerfile.docs",
               "tag_suffix": "-docs",
-              "description": "Notploy documentation",
+              "description": "Astron Collection documentation",
               "release_name": "Docs",
               "release_assets": false
             },
             {
-              "image": "notploy-templates",
+              "image": "astron-collection-templates",
               "file": "./templates/Dockerfile",
               "tag_suffix": "-templates",
-              "description": "Notploy templates gallery",
+              "description": "Astron Collection templates gallery",
               "release_name": "Templates",
               "release_assets": false
             }
@@ -198,7 +198,7 @@ jobs:
           # The release fields are for the `release` job only: the build matrix
           # does not need them.
           echo "matrix=$(jq -c 'map(del(.release_name, .release_assets))' <<< "$selected")" >> "$GITHUB_OUTPUT"
-          echo "release_title=Notploy $release_name $version" >> "$GITHUB_OUTPUT"
+          echo "release_title=Astron Collection $release_name $version" >> "$GITHUB_OUTPUT"
           echo "release_assets=$(jq -r '.[0].release_assets' <<< "$selected")" >> "$GITHUB_OUTPUT"
 
           # The self-hosted release is the one a running server and install.sh
@@ -357,8 +357,8 @@ jobs:
             exit 0
           fi
 
-          cp install.sh install-notploy.sh
-          chmod +x install.sh install-notploy.sh install.ps1
+          cp install.sh install-astron-collection.sh
+          chmod +x install.sh install-astron-collection.sh install.ps1
           echo "enabled=true" >> "$GITHUB_OUTPUT"
 
       # Idempotent: re-running the workflow updates the existing release instead
@@ -378,5 +378,5 @@ jobs:
           # publishes no file instead of failing on an unmatched glob.
           files: |
             ${{ steps.assets.outputs.enabled == 'true' && 'install.sh' || '' }}
-            ${{ steps.assets.outputs.enabled == 'true' && 'install-notploy.sh' || '' }}
+            ${{ steps.assets.outputs.enabled == 'true' && 'install-astron-collection.sh' || '' }}
             ${{ steps.assets.outputs.enabled == 'true' && 'install.ps1' || '' }}

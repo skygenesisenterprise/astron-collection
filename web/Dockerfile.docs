@@ -11,15 +11,15 @@ COPY . /usr/src/app
 WORKDIR /usr/src/app
 
 # Install dependencies (docs + its workspace deps only)
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --filter=@notploy/docs... --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --filter=@astron-collection/docs... --frozen-lockfile
 
 # Generate OpenAPI documentation from web/apps/docs/public/openapi.json
-RUN pnpm --filter=@notploy/docs run build:docs
+RUN pnpm --filter=@astron-collection/docs run build:docs
 
 ENV NODE_ENV=production
-RUN pnpm --filter=@notploy/docs run build
+RUN pnpm --filter=@astron-collection/docs run build
 
-FROM base AS notploy
+FROM base AS astron-collection
 WORKDIR /app
 
 # Set production

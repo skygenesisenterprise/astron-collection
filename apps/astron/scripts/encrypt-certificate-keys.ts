@@ -7,13 +7,13 @@
  * rewritten. This script re-encrypts every existing row in place.
  *
  * Usage:
- *   npx tsx apps/notploy/scripts/encrypt-certificate-keys.ts [--dry-run]
+ *   npx tsx apps/astron-collection/scripts/encrypt-certificate-keys.ts [--dry-run]
  *
  * Safe to run more than once: values already prefixed with `enc:v1:` are skipped.
  */
-import { db } from "@notploy/server/db";
-import { certificates } from "@notploy/server/db/schema";
-import { isEncrypted } from "@notploy/server/lib/encryption";
+import { db } from "@astron-collection/server/db";
+import { certificates } from "@astron-collection/server/db/schema";
+import { isEncrypted } from "@astron-collection/server/lib/encryption";
 import { eq } from "drizzle-orm";
 
 const DRY_RUN = process.argv.includes("--dry-run");

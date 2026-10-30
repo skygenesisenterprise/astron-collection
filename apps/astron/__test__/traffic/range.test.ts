@@ -2,7 +2,7 @@ import {
 	MAX_TRAFFIC_RANGE_DAYS,
 	resolveTrafficRange,
 	TrafficRangeError,
-} from "@notploy/server/services/traffic-analytics";
+} from "@astron-collection/server/services/traffic-analytics";
 import { describe, expect, it } from "vitest";
 
 const now = new Date("2026-10-12T12:00:00.000Z");

@@ -1,14 +1,14 @@
 /*
- * Notploy documentation styles.
+ * Astron Collection documentation styles.
  *
- * Aligned with the official Notploy design tokens — the same palette, radii,
- * tracking, shadows and motion used by the product (`apps/notploy/styles/globals.css`)
+ * Aligned with the official Astron Collection design tokens — the same palette, radii,
+ * tracking, shadows and motion used by the product (`apps/astron-collection/styles/globals.css`)
  * and the website (`web/apps/website/styles/tailwind.css`).
  *
  * The product ships a light theme by default and an opt-in `.dark` theme, so both
  * are declared here. Fumadocs' own component tokens (`--color-fd-*`, registered by
  * the imported theme) are remapped onto these tokens so the documentation UI uses
- * Notploy colours instead of the default theme.
+ * Astron Collection colours instead of the default theme.
  */
 
 @import 'tailwindcss';
@@ -91,7 +91,7 @@
  * ------------------------------------------------------------------------- */
 
 :root {
-	/* Notploy light theme (apps/notploy/styles/globals.css — `:root`). */
+	/* Astron Collection light theme (apps/astron-collection/styles/globals.css — `:root`). */
 	--terminal-paste: rgba(0, 0, 0, 0.2);
 
 	--background: oklch(0.9195 0.0169 88.003);
@@ -131,7 +131,7 @@
 	--tracking-normal: 0.01em;
 	--overlay: rgba(0, 0, 0, 0.2);
 
-	/* Motion tokens (apps/notploy/styles/globals.css). */
+	/* Motion tokens (apps/astron-collection/styles/globals.css). */
 	--duration-quick: 150ms;
 	--duration-fast: 250ms;
 	--duration-medium: 350ms;
@@ -140,7 +140,7 @@
 }
 
 .dark {
-	/* Notploy dark theme (apps/notploy/styles/globals.css — `.dark`). */
+	/* Astron Collection dark theme (apps/astron-collection/styles/globals.css — `.dark`). */
 	--terminal-paste: rgba(255, 255, 255, 0.2);
 
 	--background: oklch(0.1913 0 0);
@@ -190,7 +190,7 @@
 }
 
 /*
- * Remap Fumadocs component tokens onto the Notploy tokens. A higher-specificity
+ * Remap Fumadocs component tokens onto the Astron Collection tokens. A higher-specificity
  * selector (`html:root` / `html.dark`) guarantees these win over the tokens
  * registered by the imported Fumadocs theme, in every colour scheme.
  */

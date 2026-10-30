@@ -1,6 +1,6 @@
 name: Desktop Release
 
-# Builds the Notploy desktop client for Windows, macOS and Linux and attaches
+# Builds the Astron Collection desktop client for Windows, macOS and Linux and attaches
 # every installer and archive to a GitHub Release.
 #
 #   git tag v0.1.0-desktop
@@ -62,7 +62,7 @@ env:
   PNPM_VERSION: "10.22.0"
   DESKTOP_DIR: apps/desktop
   # The workspace directory is selected by path, not by name, because the
-  # package name `@notploy/desktop` and the directory `apps/desktop` are two
+  # package name `@astron-collection/desktop` and the directory `apps/desktop` are two
   # different things and every command below should survive either changing.
   DESKTOP_FILTER: ./apps/desktop
   # Where the distributables are staged, per platform, before they are uploaded
@@ -99,7 +99,7 @@ jobs:
         # rather than a package with no path to one.
         env:
           DESKTOP_FILTER: ${{ env.DESKTOP_FILTER }}
-        run: pnpm install --frozen-lockfile --filter "$DESKTOP_FILTER" --filter "@notploy/sdk..."
+        run: pnpm install --frozen-lockfile --filter "$DESKTOP_FILTER" --filter "@astron-collection/sdk..."
 
       - name: Resolve the release version
         id: release
@@ -139,10 +139,10 @@ jobs:
           echo "Releasing $DESKTOP_DIR@$version (publish=$publish)"
 
       - name: Build the SDK
-        # The client imports @notploy/sdk, whose export map points at dist/: with
+        # The client imports @astron-collection/sdk, whose export map points at dist/: with
         # no compiled SDK neither the typecheck nor the esbuild step can resolve
         # the module, so this runs before anything that reads the source.
-        run: pnpm --filter "@notploy/sdk" run build
+        run: pnpm --filter "@astron-collection/sdk" run build
 
       - name: Verify the client
         id: verify
@@ -155,7 +155,7 @@ jobs:
           # cleanly: run the checks here rather than trust that they passed
           # somewhere upstream. The unit tests never touch Electron or a real
           # instance — they drive the bundled client against an in-process
-          # stand-in for the Notploy API.
+          # stand-in for the Astron Collection API.
           pnpm --filter "$DESKTOP_FILTER" run typecheck
           pnpm --filter "$DESKTOP_FILTER" run lint
           pnpm --filter "$DESKTOP_FILTER" run test
@@ -174,7 +174,7 @@ jobs:
           esac
 
           {
-            echo "### Notploy Desktop ${VERSION:-unresolved}"
+            echo "### Astron Collection Desktop ${VERSION:-unresolved}"
             echo
             echo "Verify (typecheck, lint, tests): $result"
           } >> "$GITHUB_STEP_SUMMARY"
@@ -225,13 +225,13 @@ jobs:
       - name: Install dependencies
         env:
           DESKTOP_FILTER: ${{ env.DESKTOP_FILTER }}
-        run: pnpm install --frozen-lockfile --filter "$DESKTOP_FILTER" --filter "@notploy/sdk..."
+        run: pnpm install --frozen-lockfile --filter "$DESKTOP_FILTER" --filter "@astron-collection/sdk..."
 
       - name: Build the SDK
-        run: pnpm --filter "@notploy/sdk" run build
+        run: pnpm --filter "@astron-collection/sdk" run build
 
       - name: Generate the application identity
-        # `assets/icon.png` and `assets/notploy.svg` are generated from the same
+        # `assets/icon.png` and `assets/astron-collection.svg` are generated from the same
         # geometry the VS Code extension uses. Regenerating them here keeps the
         # installers, the window icon and the extension carrying one identity
         # even if the committed files ever drift, and the generator is
@@ -316,8 +316,8 @@ jobs:
 
           # Tripwire for the failure the staging step could not see. On Linux
           # every target but AppImage builds its artifact name from `${name}`,
-          # so the scope of `@notploy/desktop` made the artifact a *path* —
-          # `release/@notploy/desktop-<version>.deb` — a directory rather than a
+          # so the scope of `@astron-collection/desktop` made the artifact a *path* —
+          # `release/@astron-collection/desktop-<version>.deb` — a directory rather than a
           # file, which a loop over `release/*` skipped without a word, and the
           # release shipped one asset out of ten. electron-builder.yml now names
           # them; this makes a regression loud instead of silent.
@@ -367,7 +367,7 @@ jobs:
         if: ${{ !cancelled() && steps.stage.outcome == 'success' }}
         uses: actions/upload-artifact@v7
         with:
-          name: notploy-desktop-${{ needs.verify.outputs.version }}-${{ matrix.platform }}
+          name: astron-collection-desktop-${{ needs.verify.outputs.version }}-${{ matrix.platform }}
           path: ${{ env.ASSET_DIR }}/*
           if-no-files-found: error
           retention-days: 90
@@ -393,7 +393,7 @@ jobs:
           }
 
           {
-            echo "### Notploy Desktop $VERSION — $PLATFORM"
+            echo "### Astron Collection Desktop $VERSION — $PLATFORM"
             echo
             echo "| Step | Result |"
             echo "| --- | --- |"
@@ -422,7 +422,7 @@ jobs:
           # Merging into one directory is safe because each platform's file
           # names carry their own platform and architecture: nothing is
           # overwritten, and a download says what it is.
-          pattern: notploy-desktop-${{ needs.verify.outputs.version }}-*
+          pattern: astron-collection-desktop-${{ needs.verify.outputs.version }}-*
           path: release-assets
           merge-multiple: true
 
@@ -434,15 +434,15 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          name: Notploy Desktop ${{ needs.verify.outputs.version }}
+          name: Astron Collection Desktop ${{ needs.verify.outputs.version }}
           generate_release_notes: true
           fail_on_unmatched_files: true
           files: release-assets/*
           body: |
-            ## Notploy Desktop
+            ## Astron Collection Desktop
 
-            Version `${{ needs.verify.outputs.version }}` of the Notploy desktop
-            client: a native control centre for one or several Notploy
+            Version `${{ needs.verify.outputs.version }}` of the Astron Collection desktop
+            client: a native control centre for one or several Astron Collection
             instances. Installers and archives are attached below, for
             Windows, macOS and Linux.
 

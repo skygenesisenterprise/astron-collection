@@ -4,7 +4,7 @@ import {
 	findNotificationById,
 	findOrganizationById,
 	findUserById,
-	getNotployUrl,
+	getAstronCollectionUrl,
 	getUserByToken,
 	getWebServerSettings,
 	IS_CLOUD,
@@ -13,8 +13,8 @@ import {
 	sendEmailNotification,
 	sendResendNotification,
 	updateUser,
-} from "@notploy/server";
-import { db } from "@notploy/server/db";
+} from "@astron-collection/server";
+import { db } from "@astron-collection/server/db";
 import {
 	account,
 	apiAssignPermissions,
@@ -25,11 +25,11 @@ import {
 	member,
 	session,
 	user,
-} from "@notploy/server/db/schema";
+} from "@astron-collection/server/db/schema";
 import {
 	hasPermission,
 	resolvePermissions,
-} from "@notploy/server/services/permission";
+} from "@astron-collection/server/services/permission";
 import { TRPCError } from "@trpc/server";
 import * as bcrypt from "bcrypt";
 import { and, asc, desc, eq, gt, ne } from "drizzle-orm";
@@ -813,7 +813,7 @@ export const userRouter = createTRPCRouter({
 			const host =
 				process.env.NODE_ENV === "development"
 					? "http://localhost:3000"
-					: await getNotployUrl();
+					: await getAstronCollectionUrl();
 			const inviteLink = `${host}/invitation?token=${input.invitationId}`;
 
 			const organization = await findOrganizationById(
@@ -823,7 +823,7 @@ export const userRouter = createTRPCRouter({
 			try {
 				const toEmail = currentInvitation?.email || "";
 				const orgName = organization?.name || "organization";
-				const subject = `You've been invited to join ${orgName} on Notploy`;
+				const subject = `You've been invited to join ${orgName} on Astron Collection`;
 				const html = await renderInvitationEmail({
 					email: toEmail,
 					inviteLink,

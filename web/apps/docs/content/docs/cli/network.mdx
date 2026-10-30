@@ -1,27 +1,27 @@
 ---
 title: "Networks"
-description: "Docker networks: create, import, inspect and resynchronise them across servers. Generated from the `notploy` command surface."
+description: "Docker networks: create, import, inspect and resynchronise them across servers. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Docker networks: create, import, inspect and resynchronise them across servers.
 
-`notploy network` exposes **10 commands**. They map one-to-one onto the `network.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection network` exposes **10 commands**. They map one-to-one onto the `network.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy network --help` to list these commands in your terminal, or
-	`notploy network <command> --help` for a single command.
+	Run `astron-collection network --help` to list these commands in your terminal, or
+	`astron-collection network <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy network all`
+### `astron-collection network all`
 
 Calls `GET /api/trpc/network.all`.
 
 ```bash
-notploy network all [options]
+astron-collection network all [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -29,12 +29,12 @@ notploy network all [options]
 | `--serverId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy network create`
+### `astron-collection network create`
 
 Calls `POST /api/trpc/network.create`.
 
 ```bash
-notploy network create --name <value> [options]
+astron-collection network create --name <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -55,12 +55,12 @@ notploy network create --name <value> [options]
 | `--networkProviderId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy network import`
+### `astron-collection network import`
 
 Calls `POST /api/trpc/network.import`.
 
 ```bash
-notploy network import --names <json> [options]
+astron-collection network import --names <json> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -69,12 +69,12 @@ notploy network import --names <json> [options]
 | `--names <json>` | array | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy network inspect`
+### `astron-collection network inspect`
 
 Calls `GET /api/trpc/network.inspect`.
 
 ```bash
-notploy network inspect --networkId <value> [options]
+astron-collection network inspect --networkId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -82,12 +82,12 @@ notploy network inspect --networkId <value> [options]
 | `--networkId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy network inventory`
+### `astron-collection network inventory`
 
 Calls `GET /api/trpc/network.inventory`.
 
 ```bash
-notploy network inventory [options]
+astron-collection network inventory [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -95,12 +95,12 @@ notploy network inventory [options]
 | `--serverId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy network networks-to-sync`
+### `astron-collection network networks-to-sync`
 
 Calls `GET /api/trpc/network.networksToSync`.
 
 ```bash
-notploy network networks-to-sync [options]
+astron-collection network networks-to-sync [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -108,12 +108,12 @@ notploy network networks-to-sync [options]
 | `--serverId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy network one`
+### `astron-collection network one`
 
 Calls `GET /api/trpc/network.one`.
 
 ```bash
-notploy network one --networkId <value> [options]
+astron-collection network one --networkId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -121,12 +121,12 @@ notploy network one --networkId <value> [options]
 | `--networkId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy network recreate`
+### `astron-collection network recreate`
 
 Calls `POST /api/trpc/network.recreate`.
 
 ```bash
-notploy network recreate --networkId <value> [options]
+astron-collection network recreate --networkId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -134,12 +134,12 @@ notploy network recreate --networkId <value> [options]
 | `--networkId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy network remove`
+### `astron-collection network remove`
 
 Calls `POST /api/trpc/network.remove`.
 
 ```bash
-notploy network remove --networkId <value> [options]
+astron-collection network remove --networkId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -147,12 +147,12 @@ notploy network remove --networkId <value> [options]
 | `--networkId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy network resync`
+### `astron-collection network resync`
 
 Calls `POST /api/trpc/network.resync`.
 
 ```bash
-notploy network resync --networkId <value> [options]
+astron-collection network resync --networkId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |

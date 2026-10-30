@@ -1,10 +1,10 @@
-import { db } from "@notploy/server/db";
-import { forwardAuthSettings } from "@notploy/server/db/schema";
-import type { Domain } from "@notploy/server/services/domain";
+import { db } from "@astron-collection/server/db";
+import { forwardAuthSettings } from "@astron-collection/server/db/schema";
+import type { Domain } from "@astron-collection/server/services/domain";
 import {
 	FORWARD_AUTH_PORT,
 	FORWARD_AUTH_SERVICE_NAME,
-} from "@notploy/server/setup/forward-auth-setup";
+} from "@astron-collection/server/setup/forward-auth-setup";
 import { eq, isNull } from "drizzle-orm";
 import type { ApplicationNested } from "../builders";
 import {

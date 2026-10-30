@@ -1,4 +1,4 @@
-import type { PublicComponentDto } from "@notploy/status";
+import type { PublicComponentDto } from "@astron-collection/status";
 import { LayoutList } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {

@@ -186,7 +186,7 @@ describe("evaluatePolicy", () => {
     });
     expect(denied.allowed).toBe(false);
     expect(denied.code).toBe("policy_denied");
-    expect(denied.reason).toContain("NOTPLOY_MCP_ALLOW_DESTRUCTIVE");
+    expect(denied.reason).toContain("ASTRON_COLLECTION_MCP_ALLOW_DESTRUCTIVE");
 
     const allowed = evaluatePolicy(policy({ allowDestructive: true }), {
       capability: destructive,

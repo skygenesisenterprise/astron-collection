@@ -4,13 +4,13 @@ import {
 	findServerById,
 	isManagedCloud,
 	validateRequest,
-} from "@notploy/server";
-import { encodeBase64 } from "@notploy/server/utils/docker/utils";
+} from "@astron-collection/server";
+import { encodeBase64 } from "@astron-collection/server/utils/docker/utils";
 import {
 	createRedactingLineBuffer,
 	safeErrorMessage,
-} from "@notploy/server/utils/security/redact";
-import { readValidDirectory } from "@notploy/server/wss/utils";
+} from "@astron-collection/server/utils/security/redact";
+import { readValidDirectory } from "@astron-collection/server/wss/utils";
 import { Client, type ClientChannel } from "ssh2";
 import { WebSocketServer } from "ws";
 import { createCleanup } from "./cleanup";

@@ -13,7 +13,7 @@
 import {
 	type IdentityLdapConfig,
 	identityLdapConfigSchema,
-} from "@notploy/server/db/schema/sso";
+} from "@astron-collection/server/db/schema/sso";
 import { Client } from "ldapts";
 
 const LDAP_CONNECT_TIMEOUT_MS = 10_000;

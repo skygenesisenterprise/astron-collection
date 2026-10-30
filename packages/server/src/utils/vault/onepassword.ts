@@ -1,4 +1,4 @@
-import type { onepasswordVaultConfigSchema } from "@notploy/server/db/schema";
+import type { onepasswordVaultConfigSchema } from "@astron-collection/server/db/schema";
 import type { z } from "zod";
 import { type VaultClient, vaultFetch } from "./types";
 

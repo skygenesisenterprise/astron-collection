@@ -1,11 +1,11 @@
 import { join } from "node:path";
-import { paths } from "@notploy/server/constants";
+import { paths } from "@astron-collection/server/constants";
 import {
 	ONION_PORT_MAX,
 	ONION_PORT_MIN,
 	ONION_SERVICE_NAME_MESSAGE,
 	ONION_SERVICE_NAME_REGEX,
-} from "@notploy/server/db/schema";
+} from "@astron-collection/server/db/schema";
 
 /**
  * Layout of a managed Onion Service on disk and inside its Tor container.
@@ -31,7 +31,7 @@ import {
 export const TOR_CONTAINER_DATA_PATH = "/var/lib/tor";
 export const TOR_CONTAINER_CONFIG_PATH = "/etc/tor/torrc";
 export const TOR_HIDDEN_SERVICE_DIR_NAME = "hidden_service";
-export const ONION_CONTAINER_PREFIX = "notploy-onion-";
+export const ONION_CONTAINER_PREFIX = "astron-collection-onion-";
 
 /**
  * Conservative Docker image reference check. The image name ends up in a
@@ -161,7 +161,7 @@ export const renderTorrc = ({
 	const virtual = assertOnionPort(virtualPort, "Virtual port");
 
 	return [
-		"# Managed by Notploy — do not edit by hand.",
+		"# Managed by Astron Collection — do not edit by hand.",
 		"# The address, the keys and this configuration are owned by the",
 		"# Onion Service resource and are rewritten on every lifecycle action.",
 		"DataDirectory /var/lib/tor",

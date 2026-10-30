@@ -1,9 +1,9 @@
-import type { ComposeSpecification } from "@notploy/server";
+import type { ComposeSpecification } from "@astron-collection/server";
 import {
 	addSuffixToAllVolumes,
 	addSuffixToVolumesRoot,
 	generateRandomHash,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import { expect, test } from "vitest";
 import { parse } from "yaml";
 

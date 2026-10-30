@@ -1,27 +1,27 @@
 ---
 title: "Backups"
-description: "Scheduled and manual backups for databases, Compose services and the web server. Generated from the `notploy` command surface."
+description: "Scheduled and manual backups for databases, Compose services and the web server. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Scheduled and manual backups for databases, Compose services and the web server.
 
-`notploy backup` exposes **12 commands**. They map one-to-one onto the `backup.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection backup` exposes **12 commands**. They map one-to-one onto the `backup.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy backup --help` to list these commands in your terminal, or
-	`notploy backup <command> --help` for a single command.
+	Run `astron-collection backup --help` to list these commands in your terminal, or
+	`astron-collection backup <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy backup create`
+### `astron-collection backup create`
 
 Calls `POST /api/trpc/backup.create`.
 
 ```bash
-notploy backup create --schedule <value> --prefix <value> --destinationId <value> --database <value> --databaseType <value> [options]
+astron-collection backup create --schedule <value> --prefix <value> --destinationId <value> --database <value> --databaseType <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -48,12 +48,12 @@ notploy backup create --schedule <value> --prefix <value> --destinationId <value
 | `--metadata <json>` | object | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy backup list-backup-files`
+### `astron-collection backup list-backup-files`
 
 Calls `GET /api/trpc/backup.listBackupFiles`.
 
 ```bash
-notploy backup list-backup-files --destinationId <value> --search <value> [options]
+astron-collection backup list-backup-files --destinationId <value> --search <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -63,12 +63,12 @@ notploy backup list-backup-files --destinationId <value> --search <value> [optio
 | `--serverId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy backup manual-backup-compose`
+### `astron-collection backup manual-backup-compose`
 
 Calls `POST /api/trpc/backup.manualBackupCompose`.
 
 ```bash
-notploy backup manual-backup-compose --backupId <value> [options]
+astron-collection backup manual-backup-compose --backupId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -76,12 +76,12 @@ notploy backup manual-backup-compose --backupId <value> [options]
 | `--backupId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy backup manual-backup-libsql`
+### `astron-collection backup manual-backup-libsql`
 
 Calls `POST /api/trpc/backup.manualBackupLibsql`.
 
 ```bash
-notploy backup manual-backup-libsql --backupId <value> [options]
+astron-collection backup manual-backup-libsql --backupId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -89,12 +89,12 @@ notploy backup manual-backup-libsql --backupId <value> [options]
 | `--backupId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy backup manual-backup-mariadb`
+### `astron-collection backup manual-backup-mariadb`
 
 Calls `POST /api/trpc/backup.manualBackupMariadb`.
 
 ```bash
-notploy backup manual-backup-mariadb --backupId <value> [options]
+astron-collection backup manual-backup-mariadb --backupId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -102,12 +102,12 @@ notploy backup manual-backup-mariadb --backupId <value> [options]
 | `--backupId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy backup manual-backup-mongo`
+### `astron-collection backup manual-backup-mongo`
 
 Calls `POST /api/trpc/backup.manualBackupMongo`.
 
 ```bash
-notploy backup manual-backup-mongo --backupId <value> [options]
+astron-collection backup manual-backup-mongo --backupId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -115,12 +115,12 @@ notploy backup manual-backup-mongo --backupId <value> [options]
 | `--backupId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy backup manual-backup-my-sql`
+### `astron-collection backup manual-backup-my-sql`
 
 Calls `POST /api/trpc/backup.manualBackupMySql`.
 
 ```bash
-notploy backup manual-backup-my-sql --backupId <value> [options]
+astron-collection backup manual-backup-my-sql --backupId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -128,12 +128,12 @@ notploy backup manual-backup-my-sql --backupId <value> [options]
 | `--backupId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy backup manual-backup-postgres`
+### `astron-collection backup manual-backup-postgres`
 
 Calls `POST /api/trpc/backup.manualBackupPostgres`.
 
 ```bash
-notploy backup manual-backup-postgres --backupId <value> [options]
+astron-collection backup manual-backup-postgres --backupId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -141,12 +141,12 @@ notploy backup manual-backup-postgres --backupId <value> [options]
 | `--backupId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy backup manual-backup-web-server`
+### `astron-collection backup manual-backup-web-server`
 
 Calls `POST /api/trpc/backup.manualBackupWebServer`.
 
 ```bash
-notploy backup manual-backup-web-server --backupId <value> [options]
+astron-collection backup manual-backup-web-server --backupId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -154,12 +154,12 @@ notploy backup manual-backup-web-server --backupId <value> [options]
 | `--backupId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy backup one`
+### `astron-collection backup one`
 
 Calls `GET /api/trpc/backup.one`.
 
 ```bash
-notploy backup one --backupId <value> [options]
+astron-collection backup one --backupId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -167,12 +167,12 @@ notploy backup one --backupId <value> [options]
 | `--backupId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy backup remove`
+### `astron-collection backup remove`
 
 Calls `POST /api/trpc/backup.remove`.
 
 ```bash
-notploy backup remove --backupId <value> [options]
+astron-collection backup remove --backupId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -180,12 +180,12 @@ notploy backup remove --backupId <value> [options]
 | `--backupId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy backup update`
+### `astron-collection backup update`
 
 Calls `POST /api/trpc/backup.update`.
 
 ```bash
-notploy backup update --schedule <value> --enabled --prefix <value> --backupId <value> --destinationId <value> --database <value> --keepLatestCount <value> --serviceName <value> --metadata <json> --databaseType <value> [options]
+astron-collection backup update --schedule <value> --enabled --prefix <value> --backupId <value> --destinationId <value> --database <value> --keepLatestCount <value> --serviceName <value> --metadata <json> --databaseType <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |

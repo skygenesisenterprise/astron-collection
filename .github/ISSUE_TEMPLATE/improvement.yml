@@ -1,5 +1,5 @@
 name: 🔧 Improvement
-description: Make something Notploy already does better — performance, DX, reliability, error messages, or ergonomics.
+description: Make something Astron Collection already does better — performance, DX, reliability, error messages, or ergonomics.
 title: "[Improvement]: "
 labels: ["improvement"]
 
@@ -11,8 +11,8 @@ body:
         slower than it should be, harder to use than it should be, unreliable, or badly
         explained when it fails.
 
-        If Notploy cannot do this at all, use
-        [Feature request](https://github.com/skygenesisenterprise/notploy/issues/new?template=feature_request.yml).
+        If Astron Collection cannot do this at all, use
+        [Feature request](https://github.com/skygenesisenterprise/astron-collection/issues/new?template=feature_request.yml).
 
   - type: input
     id: summary
@@ -27,7 +27,7 @@ body:
     id: area
     attributes:
       label: Affected area
-      description: Which part of Notploy are you talking about?
+      description: Which part of Astron Collection are you talking about?
       options:
         - Applications — builds, deployments, auto-deploy, sources, rollbacks, patches
         - Docker Compose / Swarm stacks
@@ -40,11 +40,11 @@ body:
         - Dashboard (web UI)
         - Authentication and access — users, sessions, organizations, roles, permissions
         - API — REST/OpenAPI surface, SDK, MCP server
-        - CLI — the `notploy` command-line client
+        - CLI — the `astron-collection` command-line client
         - Self-hosting and installation — Docker image, Compose stack, upgrades
         - Automation — monitors, schedule jobs, notifications
         - Secrets — environment variables, secret/vault providers
-        - Templates gallery — blueprints at templates.notploy.com
+        - Templates gallery — blueprints at templates.astron-collection.com
         - Something else
     validations:
       required: true
@@ -57,7 +57,7 @@ body:
       options:
         - Performance — it works, but it is too slow or too heavy
         - Developer experience — local setup, debugging, contribution workflow
-        - CLI ergonomics — commands, flags, output of the `notploy` client
+        - CLI ergonomics — commands, flags, output of the `astron-collection` client
         - API design — routes, payloads, error responses of the REST/OpenAPI surface
         - Architecture and maintainability — structure, duplication, coupling
         - Reliability and error handling — failures, retries, partial states
@@ -73,7 +73,7 @@ body:
     id: current
     attributes:
       label: Current behavior
-      description: What Notploy does today. Include measurements, timings, or a snippet if you have them.
+      description: What Astron Collection does today. Include measurements, timings, or a snippet if you have them.
       placeholder: >-
         The application log viewer requests the last 500 lines and refetches the whole
         payload on every scroll; a 10 MB build log takes ~8 s to display.

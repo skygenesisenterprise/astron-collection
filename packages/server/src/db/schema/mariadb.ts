@@ -96,7 +96,7 @@ export const mariadb = pgTable("mariadb", {
 		onDelete: "cascade",
 	}),
 	networkIds: text("networkIds").array().default([]),
-	detachNotployNetwork: boolean("detachNotployNetwork")
+	detachAstronCollectionNetwork: boolean("detachAstronCollectionNetwork")
 		.notNull()
 		.default(false),
 });
@@ -160,7 +160,7 @@ const createSchema = createInsertSchema(mariadb, {
 	endpointSpecSwarm: EndpointSpecSwarmSchema.nullable(),
 	ulimitsSwarm: UlimitsSwarmSchema.nullable(),
 	networkIds: z.array(z.string()).optional(),
-	detachNotployNetwork: z.boolean().optional(),
+	detachAstronCollectionNetwork: z.boolean().optional(),
 });
 
 export const apiCreateMariaDB = createSchema.pick({

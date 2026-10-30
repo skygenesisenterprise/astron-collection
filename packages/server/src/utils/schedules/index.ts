@@ -1,4 +1,4 @@
-import { schedules } from "@notploy/server/db/schema";
+import { schedules } from "@astron-collection/server/db/schema";
 import { eq } from "drizzle-orm";
 import { db } from "../../db/index";
 import { scheduleJob } from "./utils";

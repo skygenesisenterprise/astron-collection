@@ -20,7 +20,7 @@ const INJECTION_NODE_IDS = [
 
 describe("getNodeInfo nodeId command injection", () => {
 	it("does not execute injected commands from the nodeId", () => {
-		const mark = `/tmp/notploy_swarm_pwned_${process.pid}`;
+		const mark = `/tmp/astron_collectionswarm_pwned_${process.pid}`;
 		for (const template of INJECTION_NODE_IDS) {
 			if (existsSync(mark)) rmSync(mark);
 			const nodeId = template.replace("%MARK%", mark);

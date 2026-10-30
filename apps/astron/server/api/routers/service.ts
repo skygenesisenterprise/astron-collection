@@ -1,7 +1,7 @@
 import {
 	MOVE_SERVICE_TYPES,
 	previewServiceMove,
-} from "@notploy/server/services/service-move";
+} from "@astron-collection/server/services/service-move";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 

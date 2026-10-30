@@ -9,7 +9,7 @@ export async function main(): Promise<void> {
   const transport = new StdioServerTransport();
   await runtime.server.connect(transport);
 
-  logger.info("MCP Notploy server running via stdio", {
+  logger.info("MCP Astron Collection server running via stdio", {
     mode: runtime.catalog.summary.mode,
     tools: runtime.registry.size,
     environment: runtime.config.environment,

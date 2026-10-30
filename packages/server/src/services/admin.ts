@@ -1,10 +1,10 @@
-import { db } from "@notploy/server/db";
+import { db } from "@astron-collection/server/db";
 import {
 	invitation,
 	member,
 	organization,
 	user,
-} from "@notploy/server/db/schema";
+} from "@astron-collection/server/db/schema";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import { IS_CLOUD } from "../constants";
@@ -104,9 +104,9 @@ export const removeUserById = async (userId: string) => {
 		.then((res) => res[0]);
 };
 
-export const getNotployUrl = async () => {
+export const getAstronCollectionUrl = async () => {
 	if (IS_CLOUD) {
-		return "https://app.notploy.com";
+		return "https://app.astron-collection.com";
 	}
 	const settings = await getWebServerSettings();
 

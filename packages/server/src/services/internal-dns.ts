@@ -1,9 +1,9 @@
-import { db } from "@notploy/server/db";
-import { dnsProvider, dnsZone } from "@notploy/server/db/schema";
+import { db } from "@astron-collection/server/db";
+import { dnsProvider, dnsZone } from "@astron-collection/server/db/schema";
 import {
 	deriveInternalDnsZone,
 	getDomainRequirements,
-} from "@notploy/server/utils/domain-scope";
+} from "@astron-collection/server/utils/domain-scope";
 import { and, eq } from "drizzle-orm";
 import { createDnsProviderRecord } from "./dns-provider";
 import { findServerById } from "./server";
@@ -38,7 +38,7 @@ export const findInternalDnsProvider = async (organizationId: string) =>
 	db.query.dnsProvider.findFirst({
 		where: and(
 			eq(dnsProvider.organizationId, organizationId),
-			eq(dnsProvider.providerType, "notploy-internal"),
+			eq(dnsProvider.providerType, "astron-collection-internal"),
 		),
 	});
 
@@ -74,8 +74,8 @@ export const ensureInternalDnsZone = async (
 };
 
 /**
- * Registers a LAN/internal domain in the organization's Notploy Internal DNS
- * provider so `gitlab.notploy.lan` or `gitlab.notploy.local` resolves without
+ * Registers a LAN/internal domain in the organization's Astron Collection Internal DNS
+ * provider so `gitlab.astron-collection.lan` or `gitlab.astron-collection.local` resolves without
  * any external DNS. Public and localhost domains are ignored. The provider is
  * never created implicitly: when none exists the caller receives `no-provider`
  * and can point the user at the DNS settings page.
@@ -98,7 +98,7 @@ export const syncDomainToInternalDns = async ({
 	if (!provider) {
 		return {
 			status: "no-provider",
-			message: "No Notploy Internal DNS provider is configured",
+			message: "No Astron Collection Internal DNS provider is configured",
 		};
 	}
 

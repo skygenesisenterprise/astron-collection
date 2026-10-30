@@ -343,7 +343,7 @@ export const createOciRegistryAdapter = (
 				remediation:
 					status === "misconfigured"
 						? "Verify the username and password (or secret reference) and that the account may read this registry."
-						: "Verify the endpoint, that the Notploy server can reach it, and its TLS certificate.",
+						: "Verify the endpoint, that the Astron Collection server can reach it, and its TLS certificate.",
 			};
 		}
 

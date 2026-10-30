@@ -1,4 +1,4 @@
-import { dbUrl } from "@notploy/server/db";
+import { dbUrl } from "@astron-collection/server/db";
 import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({

@@ -4,19 +4,19 @@ import { promisify } from "node:util";
 
 const execAsync = promisify(exec);
 
-import { setupDirectories } from "@notploy/server/setup/config-paths";
-import { initializePostgres } from "@notploy/server/setup/postgres-setup";
+import { setupDirectories } from "@astron-collection/server/setup/config-paths";
+import { initializePostgres } from "@astron-collection/server/setup/postgres-setup";
 import {
 	initializeNetwork,
 	initializeSwarm,
-} from "@notploy/server/setup/setup";
+} from "@astron-collection/server/setup/setup";
 import {
 	createDefaultMiddlewares,
 	createDefaultServerTraefikConfig,
 	createDefaultTraefikConfig,
 	initializeStandaloneTraefik,
 	TRAEFIK_VERSION,
-} from "@notploy/server/setup/traefik-setup";
+} from "@astron-collection/server/setup/traefik-setup";
 
 (async () => {
 	try {
@@ -29,9 +29,9 @@ import {
 		await execAsync(`docker pull traefik:v${TRAEFIK_VERSION}`);
 		await initializeStandaloneTraefik();
 		await initializePostgres();
-		console.log("Notploy setup completed");
+		console.log("Astron Collection setup completed");
 		exit(0);
 	} catch (e) {
-		console.error("Error in notploy setup", e);
+		console.error("Error in astron-collection setup", e);
 	}
 })();

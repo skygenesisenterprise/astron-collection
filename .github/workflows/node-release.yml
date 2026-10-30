@@ -53,16 +53,16 @@ jobs:
           case "$suffix" in
             cli)
               # CLI patch releases (`vX.Y.Z-cli`) go to npmjs only.
-              matrix="$(jq -cn '{include:[{package:"@notploy/cli",dir:"packages/cli"}]}')"
+              matrix="$(jq -cn '{include:[{package:"@astron-collection/cli",dir:"packages/cli"}]}')"
               ;;
             sdk)
-              matrix="$(jq -cn '{include:[{package:"@notploy/sdk",dir:"packages/sdk"}]}')"
+              matrix="$(jq -cn '{include:[{package:"@astron-collection/sdk",dir:"packages/sdk"}]}')"
               ;;
             trpc-openapi)
-              matrix="$(jq -cn '{include:[{package:"@notploy/trpc-openapi",dir:"packages/trpc-openapi"}]}')"
+              matrix="$(jq -cn '{include:[{package:"@astron-collection/trpc-openapi",dir:"packages/trpc-openapi"}]}')"
               ;;
             node)
-              matrix="$(jq -cn '{include:[{package:"@notploy/cli",dir:"packages/cli"},{package:"@notploy/sdk",dir:"packages/sdk"},{package:"@notploy/trpc-openapi",dir:"packages/trpc-openapi"}]}')"
+              matrix="$(jq -cn '{include:[{package:"@astron-collection/cli",dir:"packages/cli"},{package:"@astron-collection/sdk",dir:"packages/sdk"},{package:"@astron-collection/trpc-openapi",dir:"packages/trpc-openapi"}]}')"
               ;;
           esac
 
@@ -98,23 +98,23 @@ jobs:
       - name: Enable npm trusted publishing
         run: npm install --global npm@^11.5.1
 
-      - name: Pin the @notploy scope to npmjs
+      - name: Pin the @astron-collection scope to npmjs
         env:
           NPMJS_REGISTRY: ${{ env.NPMJS_REGISTRY }}
         run: |
           set -euo pipefail
 
           # `npm publish --registry` changes only the default registry: a scoped
-          # `@notploy:registry` entry takes precedence. Pin the scope explicitly
+          # `@astron-collection:registry` entry takes precedence. Pin the scope explicitly
           # so a CLI patch cannot be redirected to GitHub Packages by an
           # inherited npm configuration.
           npmrc="${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
           registry="${NPMJS_REGISTRY%/}"
           touch "$npmrc"
-          if grep -q '^@notploy:registry=' "$npmrc"; then
-            sed -i "s|^@notploy:registry=.*|@notploy:registry=${registry}/|" "$npmrc"
+          if grep -q '^@astron-collection:registry=' "$npmrc"; then
+            sed -i "s|^@astron-collection:registry=.*|@astron-collection:registry=${registry}/|" "$npmrc"
           else
-            printf '\n@notploy:registry=%s/\n' "$registry" >> "$npmrc"
+            printf '\n@astron-collection:registry=%s/\n' "$registry" >> "$npmrc"
           fi
 
       - name: Install dependencies

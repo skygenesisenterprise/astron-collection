@@ -1,4 +1,4 @@
-import { syncOrganizationCommunity } from "@notploy/server/services/community";
+import { syncOrganizationCommunity } from "@astron-collection/server/services/community";
 import { scheduleJob, scheduledJobs } from "node-schedule";
 
 /**

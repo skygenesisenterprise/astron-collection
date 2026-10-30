@@ -1,9 +1,9 @@
-import { dnsRecordTypes, type DnsRecordType } from "@notploy/server/db/schema";
+import { dnsRecordTypes, type DnsRecordType } from "@astron-collection/server/db/schema";
 import type { DnsRecord, DnsRecordInput } from "./types";
 
 /**
  * Minimal RFC 1035 zone-file support, shared by the import and export tRPC
- * endpoints. It intentionally covers the record types Notploy manages and the
+ * endpoints. It intentionally covers the record types Astron Collection manages and the
  * syntax the common providers emit; anything else (SOA, DNSSEC inline data,
  * `$INCLUDE`) is skipped rather than rejected.
  */

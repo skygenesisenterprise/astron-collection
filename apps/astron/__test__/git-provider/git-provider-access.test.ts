@@ -1,7 +1,7 @@
 import {
 	canEditDeployGitSource,
 	getAccessibleGitProviderIds,
-} from "@notploy/server/services/git-provider";
+} from "@astron-collection/server/services/git-provider";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockDb = vi.hoisted(() => ({
@@ -16,7 +16,7 @@ const mockDb = vi.hoisted(() => ({
 	},
 }));
 
-vi.mock("@notploy/server/db", () => ({ db: mockDb }));
+vi.mock("@astron-collection/server/db", () => ({ db: mockDb }));
 
 const ORG_ID = "org-1";
 const USER_OWNER = "user-owner";

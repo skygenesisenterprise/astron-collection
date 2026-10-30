@@ -1,27 +1,27 @@
 ---
 title: "Domains"
-description: "Attach domains to applications and Compose stacks, and generate or validate them. Generated from the `notploy` command surface."
+description: "Attach domains to applications and Compose stacks, and generate or validate them. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Attach domains to applications and Compose stacks, and generate or validate them.
 
-`notploy domain` exposes **11 commands**. They map one-to-one onto the `domain.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection domain` exposes **11 commands**. They map one-to-one onto the `domain.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy domain --help` to list these commands in your terminal, or
-	`notploy domain <command> --help` for a single command.
+	Run `astron-collection domain --help` to list these commands in your terminal, or
+	`astron-collection domain <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy domain by-application-id`
+### `astron-collection domain by-application-id`
 
 Calls `GET /api/trpc/domain.byApplicationId`.
 
 ```bash
-notploy domain by-application-id --applicationId <value> [options]
+astron-collection domain by-application-id --applicationId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -29,12 +29,12 @@ notploy domain by-application-id --applicationId <value> [options]
 | `--applicationId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy domain by-compose-id`
+### `astron-collection domain by-compose-id`
 
 Calls `GET /api/trpc/domain.byComposeId`.
 
 ```bash
-notploy domain by-compose-id --composeId <value> [options]
+astron-collection domain by-compose-id --composeId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -42,12 +42,12 @@ notploy domain by-compose-id --composeId <value> [options]
 | `--composeId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy domain can-generate-traefik-me-domains`
+### `astron-collection domain can-generate-traefik-me-domains`
 
 Calls `GET /api/trpc/domain.canGenerateTraefikMeDomains`.
 
 ```bash
-notploy domain can-generate-traefik-me-domains --serverId <value> [options]
+astron-collection domain can-generate-traefik-me-domains --serverId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -55,12 +55,12 @@ notploy domain can-generate-traefik-me-domains --serverId <value> [options]
 | `--serverId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy domain create`
+### `astron-collection domain create`
 
 Calls `POST /api/trpc/domain.create`.
 
 ```bash
-notploy domain create --host <value> [options]
+astron-collection domain create --host <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -86,12 +86,12 @@ notploy domain create --host <value> [options]
 | `--no-forwardAuthEnabled` | boolean | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy domain delete`
+### `astron-collection domain delete`
 
 Calls `POST /api/trpc/domain.delete`.
 
 ```bash
-notploy domain delete --domainId <value> [options]
+astron-collection domain delete --domainId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -99,12 +99,12 @@ notploy domain delete --domainId <value> [options]
 | `--domainId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy domain generate-domain`
+### `astron-collection domain generate-domain`
 
 Calls `POST /api/trpc/domain.generateDomain`.
 
 ```bash
-notploy domain generate-domain --appName <value> [options]
+astron-collection domain generate-domain --appName <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -113,24 +113,24 @@ notploy domain generate-domain --appName <value> [options]
 | `--serverId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy domain internal-dns`
+### `astron-collection domain internal-dns`
 
 Calls `GET /api/trpc/domain.internalDns`.
 
 ```bash
-notploy domain internal-dns [options]
+astron-collection domain internal-dns [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy domain one`
+### `astron-collection domain one`
 
 Calls `GET /api/trpc/domain.one`.
 
 ```bash
-notploy domain one --domainId <value> [options]
+astron-collection domain one --domainId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -138,12 +138,12 @@ notploy domain one --domainId <value> [options]
 | `--domainId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy domain toggle-enable`
+### `astron-collection domain toggle-enable`
 
 Calls `POST /api/trpc/domain.toggleEnable`.
 
 ```bash
-notploy domain toggle-enable --domainId <value> [options]
+astron-collection domain toggle-enable --domainId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -151,12 +151,12 @@ notploy domain toggle-enable --domainId <value> [options]
 | `--domainId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy domain update`
+### `astron-collection domain update`
 
 Calls `POST /api/trpc/domain.update`.
 
 ```bash
-notploy domain update --host <value> --domainId <value> [options]
+astron-collection domain update --host <value> --domainId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -182,12 +182,12 @@ notploy domain update --host <value> --domainId <value> [options]
 | `--domainId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy domain validate-domain`
+### `astron-collection domain validate-domain`
 
 Calls `POST /api/trpc/domain.validateDomain`.
 
 ```bash
-notploy domain validate-domain --domain <value> [options]
+astron-collection domain validate-domain --domain <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |

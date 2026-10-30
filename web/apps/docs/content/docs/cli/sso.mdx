@@ -1,27 +1,27 @@
 ---
 title: "SSO"
-description: "Single sign-on providers, enforcement and trusted origins. Generated from the `notploy` command surface."
+description: "Single sign-on providers, enforcement and trusted origins. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Single sign-on providers, enforcement and trusted origins.
 
-`notploy sso` exposes **16 commands**. They map one-to-one onto the `sso.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection sso` exposes **16 commands**. They map one-to-one onto the `sso.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy sso --help` to list these commands in your terminal, or
-	`notploy sso <command> --help` for a single command.
+	Run `astron-collection sso --help` to list these commands in your terminal, or
+	`astron-collection sso <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy sso add-trusted-origin`
+### `astron-collection sso add-trusted-origin`
 
 Calls `POST /api/trpc/sso.addTrustedOrigin`.
 
 ```bash
-notploy sso add-trusted-origin --origin <value> [options]
+astron-collection sso add-trusted-origin --origin <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -29,12 +29,12 @@ notploy sso add-trusted-origin --origin <value> [options]
 | `--origin <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy sso delete-provider`
+### `astron-collection sso delete-provider`
 
 Calls `POST /api/trpc/sso.deleteProvider`.
 
 ```bash
-notploy sso delete-provider --providerId <value> [options]
+astron-collection sso delete-provider --providerId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -42,48 +42,48 @@ notploy sso delete-provider --providerId <value> [options]
 | `--providerId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy sso descriptors`
+### `astron-collection sso descriptors`
 
 Calls `GET /api/trpc/sso.descriptors`.
 
 ```bash
-notploy sso descriptors [options]
+astron-collection sso descriptors [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy sso enforce-sso`
+### `astron-collection sso enforce-sso`
 
 Calls `GET /api/trpc/sso.enforceSSO`.
 
 ```bash
-notploy sso enforce-sso [options]
+astron-collection sso enforce-sso [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy sso get-trusted-origins`
+### `astron-collection sso get-trusted-origins`
 
 Calls `GET /api/trpc/sso.getTrustedOrigins`.
 
 ```bash
-notploy sso get-trusted-origins [options]
+astron-collection sso get-trusted-origins [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy sso health`
+### `astron-collection sso health`
 
 Calls `GET /api/trpc/sso.health`.
 
 ```bash
-notploy sso health --providerId <value> [options]
+astron-collection sso health --providerId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -91,24 +91,24 @@ notploy sso health --providerId <value> [options]
 | `--providerId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy sso list-providers`
+### `astron-collection sso list-providers`
 
 Calls `GET /api/trpc/sso.listProviders`.
 
 ```bash
-notploy sso list-providers [options]
+astron-collection sso list-providers [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy sso one`
+### `astron-collection sso one`
 
 Calls `GET /api/trpc/sso.one`.
 
 ```bash
-notploy sso one --providerId <value> [options]
+astron-collection sso one --providerId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -116,12 +116,12 @@ notploy sso one --providerId <value> [options]
 | `--providerId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy sso provider-kind`
+### `astron-collection sso provider-kind`
 
 Calls `GET /api/trpc/sso.providerKind`.
 
 ```bash
-notploy sso provider-kind --email <value> [options]
+astron-collection sso provider-kind --email <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -129,12 +129,12 @@ notploy sso provider-kind --email <value> [options]
 | `--email <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy sso register`
+### `astron-collection sso register`
 
 Calls `POST /api/trpc/sso.register`.
 
 ```bash
-notploy sso register --providerId <value> --issuer <value> --domains <json> [options]
+astron-collection sso register --providerId <value> --issuer <value> --domains <json> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -151,12 +151,12 @@ notploy sso register --providerId <value> --issuer <value> --domains <json> [opt
 | `--no-overrideUserInfo` | boolean | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy sso remove-trusted-origin`
+### `astron-collection sso remove-trusted-origin`
 
 Calls `POST /api/trpc/sso.removeTrustedOrigin`.
 
 ```bash
-notploy sso remove-trusted-origin --origin <value> [options]
+astron-collection sso remove-trusted-origin --origin <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -164,36 +164,36 @@ notploy sso remove-trusted-origin --origin <value> [options]
 | `--origin <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy sso show-sign-in-with-sso`
+### `astron-collection sso show-sign-in-with-sso`
 
 Calls `GET /api/trpc/sso.showSignInWithSSO`.
 
 ```bash
-notploy sso show-sign-in-with-sso [options]
+astron-collection sso show-sign-in-with-sso [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy sso social-provider`
+### `astron-collection sso social-provider`
 
 Calls `GET /api/trpc/sso.socialProvider`.
 
 ```bash
-notploy sso social-provider [options]
+astron-collection sso social-provider [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy sso test-connection`
+### `astron-collection sso test-connection`
 
 Calls `POST /api/trpc/sso.testConnection`.
 
 ```bash
-notploy sso test-connection --issuer <value> [options]
+astron-collection sso test-connection --issuer <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -206,12 +206,12 @@ notploy sso test-connection --issuer <value> [options]
 | `--oauthConfig <json>` | object | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy sso update`
+### `astron-collection sso update`
 
 Calls `POST /api/trpc/sso.update`.
 
 ```bash
-notploy sso update --providerId <value> --issuer <value> --domains <json> [options]
+astron-collection sso update --providerId <value> --issuer <value> --domains <json> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -228,12 +228,12 @@ notploy sso update --providerId <value> --issuer <value> --domains <json> [optio
 | `--no-overrideUserInfo` | boolean | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy sso update-trusted-origin`
+### `astron-collection sso update-trusted-origin`
 
 Calls `POST /api/trpc/sso.updateTrustedOrigin`.
 
 ```bash
-notploy sso update-trusted-origin --oldOrigin <value> --newOrigin <value> [options]
+astron-collection sso update-trusted-origin --oldOrigin <value> --newOrigin <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |

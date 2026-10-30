@@ -26,7 +26,7 @@ export const apiKeyNameSchema = z
  * The organization an API key is scoped to.
  *
  * The `apikey` table has no organization foreign key: `@better-auth/api-key`
- * only knows about users, so Notploy stores the scope as JSON in the plugin's
+ * only knows about users, so Astron Collection stores the scope as JSON in the plugin's
  * own `metadata` column and `validateRequest` reads it back to build the
  * synthetic session used by `x-api-key` requests. That makes this blob the
  * single source of truth for a key's organization, which is why every read and

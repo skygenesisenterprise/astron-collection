@@ -54,7 +54,7 @@ type OperationUpdate = Partial<
 /**
  * Process-wide operation registry.
  *
- * With `NOTPLOY_MCP_OPERATION_STORE` set, the registry is persisted as JSON and
+ * With `ASTRON_COLLECTION_MCP_OPERATION_STORE` set, the registry is persisted as JSON and
  * reloaded at startup. Without it, state is in memory only: restarts lose the
  * history and multiple instances do not share it. Both limits are documented.
  */
@@ -201,7 +201,7 @@ export class OperationStore {
     } catch (error) {
       const code = (error as NodeJS.ErrnoException).code;
       if (code === "ENOENT") return;
-      throw new Error(`Could not read NOTPLOY_MCP_OPERATION_STORE at ${path}`, { cause: error });
+      throw new Error(`Could not read ASTRON_COLLECTION_MCP_OPERATION_STORE at ${path}`, { cause: error });
     }
   }
 

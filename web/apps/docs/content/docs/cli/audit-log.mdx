@@ -1,27 +1,27 @@
 ---
 title: "Audit log"
-description: "Every recorded action performed in the organization. Generated from the `notploy` command surface."
+description: "Every recorded action performed in the organization. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Every recorded action performed in the organization.
 
-`notploy audit-log` exposes **1 command**. They map one-to-one onto the `audit-log.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection audit-log` exposes **1 command**. They map one-to-one onto the `audit-log.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy audit-log --help` to list these commands in your terminal, or
-	`notploy audit-log <command> --help` for a single command.
+	Run `astron-collection audit-log --help` to list these commands in your terminal, or
+	`astron-collection audit-log <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy audit-log all`
+### `astron-collection audit-log all`
 
 Calls `GET /api/trpc/auditLog.all`.
 
 ```bash
-notploy audit-log all [options]
+astron-collection audit-log all [options]
 ```
 
 | Option | Type | Required | Allowed values |

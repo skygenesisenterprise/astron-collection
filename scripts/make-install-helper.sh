@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-# Notploy self-hosted installation helper
+# Astron Collection self-hosted installation helper
 # Orchestrates the full setup for 'make install'
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -140,13 +140,13 @@ generate_secrets() {
 # Create necessary directories
 setup_directories() {
     log_info "Creating directories..."
-    mkdir -p /etc/notploy 2>/dev/null || sudo mkdir -p /etc/notploy 2>/dev/null || true
+    mkdir -p /etc/astron-collection 2>/dev/null || sudo mkdir -p /etc/astron-collection 2>/dev/null || true
     log_success "Directories ready"
 }
 
 # Start the stack
 start_stack() {
-    log_info "Starting Notploy stack..."
+    log_info "Starting Astron Collection stack..."
     docker compose up -d --build
     log_success "Stack started"
 }
@@ -180,7 +180,7 @@ check_status() {
 
 main() {
     echo -e "${GREEN}=====================================${NC}"
-    echo -e "${GREEN}   Notploy Installation Script       ${NC}"
+    echo -e "${GREEN}   Astron Collection Installation Script       ${NC}"
     echo -e "${GREEN}=====================================${NC}"
     echo ""
     
@@ -194,7 +194,7 @@ main() {
     check_status
     
     echo ""
-    echo -e "${GREEN}✓ Notploy installation completed${NC}"
+    echo -e "${GREEN}✓ Astron Collection installation completed${NC}"
     echo ""
     echo -e "${BLUE}Next steps:${NC}"
     echo -e "  1. Open http://localhost:3000 in your browser"

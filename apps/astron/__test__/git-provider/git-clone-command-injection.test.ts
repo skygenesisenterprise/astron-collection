@@ -1,4 +1,4 @@
-import { cloneGitRepository } from "@notploy/server/utils/providers/git";
+import { cloneGitRepository } from "@astron-collection/server/utils/providers/git";
 import { parse, quote } from "shell-quote";
 import { describe, expect, it } from "vitest";
 
@@ -22,7 +22,7 @@ const LEGIT_VALUES = [
 	"main",
 	"feature/login-v2",
 	"release-1.2.3",
-	"https://github.com/skygenesisenterprise/notploy.git",
+	"https://github.com/skygenesisenterprise/astron-collection.git",
 	"https://gitlab.example.com/group/sub/project.git",
 ];
 

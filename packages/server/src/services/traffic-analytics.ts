@@ -1,4 +1,4 @@
-import { db } from "@notploy/server/db";
+import { db } from "@astron-collection/server/db";
 import {
 	type TrafficSource,
 	trafficAudienceAggregates,
@@ -6,11 +6,11 @@ import {
 	trafficAudienceSessions,
 	trafficHttpAggregates,
 	trafficHttpRoutes,
-} from "@notploy/server/db/schema";
+} from "@astron-collection/server/db/schema";
 import {
 	LATENCY_BUCKET_COUNT,
 	percentileFromHistogram,
-} from "@notploy/server/utils/traffic/aggregate";
+} from "@astron-collection/server/utils/traffic/aggregate";
 import { and, asc, desc, gte, inArray, lt, type SQL, sql } from "drizzle-orm";
 import {
 	AUDIENCE_BUCKET_SECONDS,

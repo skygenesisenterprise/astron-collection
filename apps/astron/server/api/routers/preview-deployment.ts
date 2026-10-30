@@ -4,8 +4,8 @@ import {
 	findPreviewDeploymentsByApplicationId,
 	IS_CLOUD,
 	removePreviewDeployment,
-} from "@notploy/server";
-import { checkServicePermissionAndAccess } from "@notploy/server/services/permission";
+} from "@astron-collection/server";
+import { checkServicePermissionAndAccess } from "@astron-collection/server/services/permission";
 import { z } from "zod";
 import { audit } from "@/server/api/utils/audit";
 import { apiFindAllByApplication } from "@/server/db/schema";

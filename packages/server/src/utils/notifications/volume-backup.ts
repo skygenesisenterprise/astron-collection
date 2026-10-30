@@ -1,7 +1,7 @@
-import { db } from "@notploy/server/db";
-import { notifications } from "@notploy/server/db/schema";
-import { VolumeBackupEmail } from "@notploy/server/emails/emails/volume-backup";
-import { redactSecrets } from "@notploy/server/utils/security/redact";
+import { db } from "@astron-collection/server/db";
+import { notifications } from "@astron-collection/server/db/schema";
+import { VolumeBackupEmail } from "@astron-collection/server/emails/emails/volume-backup";
+import { redactSecrets } from "@astron-collection/server/utils/security/redact";
 import { render } from "@react-email/components";
 import { format } from "date-fns";
 import { and, eq } from "drizzle-orm";
@@ -180,7 +180,7 @@ export const sendVolumeBackupNotifications = async ({
 					],
 					timestamp: date.toISOString(),
 					footer: {
-						text: "Notploy Volume Backup Notification",
+						text: "Astron Collection Volume Backup Notification",
 					},
 				});
 			}
@@ -321,7 +321,7 @@ export const sendVolumeBackupNotifications = async ({
 				await sendMattermostNotification(mattermost, {
 					text: `**${statusEmoji} Volume Backup ${typeStatus}**\n\n**Project:** ${projectName}\n**Application:** ${applicationName}\n**Volume Name:** ${volumeName}\n**Service Type:** ${serviceType}${sizeInfo}\n**Date:** ${format(date, "PP")}\n**Time:** ${format(date, "pp")}${errorMsg}`,
 					channel: mattermost.channel,
-					username: mattermost.username || "Notploy",
+					username: mattermost.username || "Astron Collection",
 				});
 			}
 

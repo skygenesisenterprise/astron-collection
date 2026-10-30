@@ -7,7 +7,7 @@ import {
 	isManagedCloud,
 	recordAdvancedStats,
 	validateRequest,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import { quote } from "shell-quote";
 import { WebSocketServer } from "ws";
 import { canAccessDockerOverWss } from "./authorize";
@@ -146,8 +146,8 @@ export const setupDockerStatsMonitoringSocketServer = (
 			}
 			inFlight = true;
 			try {
-				// Special case: when monitoring "notploy", get host system stats instead of container stats
-				if (appName === "notploy") {
+				// Special case: when monitoring "astron-collection", get host system stats instead of container stats
+				if (appName === "astron-collection") {
 					const stat = await getHostSystemStats();
 					if (closed) {
 						return;

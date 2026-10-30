@@ -1,4 +1,4 @@
-import { createCommand } from "@notploy/server/utils/builders/compose";
+import { createCommand } from "@astron-collection/server/utils/builders/compose";
 import { describe, expect, it } from "vitest";
 
 const base = {

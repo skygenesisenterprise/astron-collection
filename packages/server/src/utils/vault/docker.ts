@@ -1,5 +1,5 @@
-import { docker } from "@notploy/server/constants";
-import type { dockerVaultConfigSchema } from "@notploy/server/db/schema";
+import { docker } from "@astron-collection/server/constants";
+import type { dockerVaultConfigSchema } from "@astron-collection/server/db/schema";
 import { readdir, readFile } from "node:fs/promises";
 import { join, resolve, sep } from "node:path";
 import type { z } from "zod";
@@ -28,7 +28,7 @@ const secretFile = (config: DockerConfig, ref: string) => {
  * Swarm secrets and configs are metadata-only through the Docker API: the
  * engine never returns their value. Listing them still lets the Console
  * discover the names a cluster exposes, while values are read from the files
- * mounted into the Notploy container.
+ * mounted into the Astron Collection container.
  */
 const listSwarmEntries = async (): Promise<{ name: string; source: string }[]> => {
 	const entries: { name: string; source: string }[] = [];
@@ -69,7 +69,7 @@ const readMountDirectory = async (config: DockerConfig) => {
 	} catch (error) {
 		throw new Error(
 			`Docker secrets: cannot read "${config.mountPath}" (${errorMessage(error)}). ` +
-				`Mount the secrets directory into the Notploy service, e.g. ` +
+				`Mount the secrets directory into the Astron Collection service, e.g. ` +
 				`docker service update --mount-add type=bind,source=/run/secrets,target=/run/secrets <service>.`,
 		);
 	}
@@ -101,7 +101,7 @@ const collectSecretRecords = async (
 			name: entry.name,
 			source: entry.source,
 			resolvable: false,
-			detail: "Not mounted in the Notploy container",
+			detail: "Not mounted in the Astron Collection container",
 		});
 	}
 	return [...records.values()].sort((a, b) => a.name.localeCompare(b.name));
@@ -113,14 +113,14 @@ const pingDocker = async () => {
 	} catch (error) {
 		throw new Error(
 			`Docker secrets: the Docker daemon is unreachable (${errorMessage(error)}). ` +
-				`Mount /var/run/docker.sock into the Notploy service so it can discover cluster secrets.`,
+				`Mount /var/run/docker.sock into the Astron Collection service so it can discover cluster secrets.`,
 		);
 	}
 };
 
 /**
  * Reads Docker/Swarm secrets (or any directory of secret files, such as a
- * bind-mounted folder of Docker configs) reachable by the Notploy agent. The
+ * bind-mounted folder of Docker configs) reachable by the Astron Collection agent. The
  * Docker socket is used to discover the Swarm secrets and configs of the
  * cluster; their values come from the mounted files, since Docker never exposes
  * them through its API.
@@ -147,8 +147,8 @@ export const dockerClient: VaultClient<DockerConfig> = {
 				const swarmNames = await listSwarmNames();
 				if (swarmNames.includes(ref)) {
 					throw new Error(
-						`Docker secrets: "${ref}" exists in the Swarm but is not mounted in the Notploy container. ` +
-							`Add it to the Notploy service with ` +
+						`Docker secrets: "${ref}" exists in the Swarm but is not mounted in the Astron Collection container. ` +
+							`Add it to the Astron Collection service with ` +
 							`docker service update --secret-add source=${ref},target=/run/secrets/${ref} <service>.`,
 					);
 				}

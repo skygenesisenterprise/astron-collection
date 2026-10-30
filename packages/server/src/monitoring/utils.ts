@@ -47,7 +47,7 @@ export const recordAdvancedStats = async (
 	});
 	if (aborted()) return;
 
-	if (appName === "notploy") {
+	if (appName === "astron-collection") {
 		const osutils = new OSUtils();
 		const diskResult = await osutils.disk.usageByMountPoint("/");
 
@@ -70,7 +70,7 @@ export const recordAdvancedStats = async (
 
 /**
  * Get host system statistics using node-os-utils
- * This is used when monitoring "notploy" to show host stats instead of container stats
+ * This is used when monitoring "astron-collection" to show host stats instead of container stats
  */
 export const getHostSystemStats = async (): Promise<Container> => {
 	const osutils = new OSUtils({
@@ -158,9 +158,9 @@ export const getHostSystemStats = async (): Promise<Container> => {
 		MemUsage: memUsageFormatted,
 		BlockIO: blockIOFormatted,
 		NetIO: netIOFormatted,
-		Container: "notploy",
+		Container: "astron-collection",
 		ID: "host-system",
-		Name: "notploy",
+		Name: "astron-collection",
 	};
 };
 

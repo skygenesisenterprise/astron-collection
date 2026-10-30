@@ -1,4 +1,4 @@
-import type { PublicComponentUptimeDto } from "@notploy/status";
+import type { PublicComponentUptimeDto } from "@astron-collection/status";
 import { cn } from "@/lib/utils";
 import {
 	componentStatusLabel,

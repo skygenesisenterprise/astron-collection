@@ -1,27 +1,27 @@
 ---
 title: "Docker images"
-description: "List, inspect and remove images stored on a server. Generated from the `notploy` command surface."
+description: "List, inspect and remove images stored on a server. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 List, inspect and remove images stored on a server.
 
-`notploy docker-image` exposes **3 commands**. They map one-to-one onto the `docker-image.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection docker-image` exposes **3 commands**. They map one-to-one onto the `docker-image.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy docker-image --help` to list these commands in your terminal, or
-	`notploy docker-image <command> --help` for a single command.
+	Run `astron-collection docker-image --help` to list these commands in your terminal, or
+	`astron-collection docker-image <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy docker-image get-image-config`
+### `astron-collection docker-image get-image-config`
 
 Calls `GET /api/trpc/dockerImage.getImageConfig`.
 
 ```bash
-notploy docker-image get-image-config --imageRef <value> [options]
+astron-collection docker-image get-image-config --imageRef <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -30,12 +30,12 @@ notploy docker-image get-image-config --imageRef <value> [options]
 | `--serverId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy docker-image get-images`
+### `astron-collection docker-image get-images`
 
 Calls `GET /api/trpc/dockerImage.getImages`.
 
 ```bash
-notploy docker-image get-images [options]
+astron-collection docker-image get-images [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -43,12 +43,12 @@ notploy docker-image get-images [options]
 | `--serverId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy docker-image remove-image`
+### `astron-collection docker-image remove-image`
 
 Calls `POST /api/trpc/dockerImage.removeImage`.
 
 ```bash
-notploy docker-image remove-image --repository <value> --tag <value> --id <value> [options]
+astron-collection docker-image remove-image --repository <value> --tag <value> --id <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |

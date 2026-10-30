@@ -1,6 +1,6 @@
 // utils/github-utils.ts
 // This file contains client-safe utilities for GitHub integration.
-// Duplicates parseGithubBaseUrl from @notploy/server, which cannot be imported
+// Duplicates parseGithubBaseUrl from @astron-collection/server, which cannot be imported
 // here (node-only modules). Kept in step by github-url-parity.test.ts.
 
 export const DEFAULT_GITHUB_URL = "https://github.com";

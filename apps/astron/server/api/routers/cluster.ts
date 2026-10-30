@@ -4,7 +4,7 @@ import {
 	execAsyncRemote,
 	findServerById,
 	getRemoteDocker,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import { TRPCError } from "@trpc/server";
 import { quote } from "shell-quote";
 import { z } from "zod";

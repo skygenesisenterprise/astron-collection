@@ -135,7 +135,7 @@ export const SsoProviderDetailsDialog = ({ provider, onOpenChange }: Props) => {
 					)}
 					{callbackPath && !baseURL && (
 						<p className="text-xs text-muted-foreground">
-							Replace {"{baseURL}"} with your Notploy URL (e.g.
+							Replace {"{baseURL}"} with your Astron Collection URL (e.g.
 							https://your-domain.com).
 						</p>
 					)}

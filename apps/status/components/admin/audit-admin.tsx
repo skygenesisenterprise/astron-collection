@@ -1,6 +1,6 @@
 "use client";
 
-import type { AuditLogDto } from "@notploy/status";
+import type { AuditLogDto } from "@astron-collection/status";
 import { useAdminResource } from "@/lib/use-admin";
 import { formatDateTime } from "@/lib/view-model";
 import { useAdminToken } from "./admin-token-provider";

@@ -15,7 +15,7 @@ import {
 	testObjectStorageConnection,
 	updateObjectStorageBucket,
 	updateObjectStorageProvider,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import { TRPCError } from "@trpc/server";
 import { audit } from "@/server/api/utils/audit";
 import {

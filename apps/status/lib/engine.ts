@@ -7,21 +7,21 @@
  * one SQLite handle. The notification outbox worker is started alongside.
  */
 
-import type { OutboxWorkerHandle } from "@notploy/status";
-import { createStatusPlatform, type StatusPlatform } from "@notploy/status";
+import type { OutboxWorkerHandle } from "@astron-collection/status";
+import { createStatusPlatform, type StatusPlatform } from "@astron-collection/status";
 
 const globalForStatus = globalThis as unknown as {
-	notployStatus?: StatusPlatform;
-	notployStatusWorker?: OutboxWorkerHandle | null;
+	astronCollectionStatus?: StatusPlatform;
+	astronCollectionStatusWorker?: OutboxWorkerHandle | null;
 };
 
 export const getPlatform = (): StatusPlatform => {
-	if (!globalForStatus.notployStatus) {
+	if (!globalForStatus.astronCollectionStatus) {
 		const platform = createStatusPlatform();
-		globalForStatus.notployStatus = platform;
+		globalForStatus.astronCollectionStatus = platform;
 		if (platform.mode === "read-write") {
-			globalForStatus.notployStatusWorker = platform.startWorkers();
+			globalForStatus.astronCollectionStatusWorker = platform.startWorkers();
 		}
 	}
-	return globalForStatus.notployStatus;
+	return globalForStatus.astronCollectionStatus;
 };

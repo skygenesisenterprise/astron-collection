@@ -33,7 +33,7 @@ export const GATEWAY_ERRORS: Record<
 		category: "routing",
 		title: "Page not found",
 		description:
-			"This address does not match an application configured on this Notploy instance.",
+			"This address does not match an application configured on this Astron Collection instance.",
 		visitorGuidance:
 			"Check the address for typos. If someone shared this link with you, ask them to confirm it is still valid.",
 		operatorGuidance:
@@ -65,7 +65,7 @@ export const GATEWAY_ERRORS: Record<
 		visitorGuidance:
 			"The service is temporarily unreachable. Try again in a few moments.",
 		operatorGuidance:
-			"Verify the container is running, that it listens on the configured port and that it accepts connections from the notploy-network. Restarting the deployment can clear a stuck process.",
+			"Verify the container is running, that it listens on the configured port and that it accepts connections from the astron-collection-network. Restarting the deployment can clear a stuck process.",
 		retryable: true,
 		docsPath: "/docs/core/domains",
 	},

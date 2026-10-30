@@ -1,11 +1,11 @@
-import { db } from "@notploy/server/db";
-import { type apiCreateRegistry, registry } from "@notploy/server/db/schema";
-import { execAsync } from "@notploy/server/utils/process/execAsync";
+import { db } from "@astron-collection/server/db";
+import { type apiCreateRegistry, registry } from "@astron-collection/server/db/schema";
+import { execAsync } from "@astron-collection/server/utils/process/execAsync";
 import {
 	createOciRegistryAdapter,
 	normalizeRegistryEndpoint,
 	type RegistryCredentials,
-} from "@notploy/server/utils/registry";
+} from "@astron-collection/server/utils/registry";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import type { z } from "zod";

@@ -1,38 +1,38 @@
-import { docker } from "@notploy/server/constants";
-import { db } from "@notploy/server/db";
+import { docker } from "@astron-collection/server/constants";
+import { db } from "@astron-collection/server/db";
 import {
 	type apiCreateApplication,
 	applications,
 	buildAppName,
-} from "@notploy/server/db/schema";
-import { getAdvancedStats } from "@notploy/server/monitoring/utils";
+} from "@astron-collection/server/db/schema";
+import { getAdvancedStats } from "@astron-collection/server/monitoring/utils";
 import {
 	getBuildCommand,
 	mechanizeDockerContainer,
-} from "@notploy/server/utils/builders";
-import { sendBuildErrorNotifications } from "@notploy/server/utils/notifications/build-error";
-import { sendBuildSuccessNotifications } from "@notploy/server/utils/notifications/build-success";
+} from "@astron-collection/server/utils/builders";
+import { sendBuildErrorNotifications } from "@astron-collection/server/utils/notifications/build-error";
+import { sendBuildSuccessNotifications } from "@astron-collection/server/utils/notifications/build-success";
 import {
 	ExecError,
 	execAsync,
 	execAsyncRemote,
-} from "@notploy/server/utils/process/execAsync";
-import { cloneBitbucketRepository } from "@notploy/server/utils/providers/bitbucket";
-import { buildRemoteDocker } from "@notploy/server/utils/providers/docker";
+} from "@astron-collection/server/utils/process/execAsync";
+import { cloneBitbucketRepository } from "@astron-collection/server/utils/providers/bitbucket";
+import { buildRemoteDocker } from "@astron-collection/server/utils/providers/docker";
 import {
 	cloneGitRepository,
 	getGitCommitInfo,
-} from "@notploy/server/utils/providers/git";
-import { cloneGiteaRepository } from "@notploy/server/utils/providers/gitea";
-import { cloneGithubRepository } from "@notploy/server/utils/providers/github";
-import { cloneGitlabRepository } from "@notploy/server/utils/providers/gitlab";
-import { redactSecrets } from "@notploy/server/utils/security/redact";
-import { createTraefikConfig } from "@notploy/server/utils/traefik/application";
+} from "@astron-collection/server/utils/providers/git";
+import { cloneGiteaRepository } from "@astron-collection/server/utils/providers/gitea";
+import { cloneGithubRepository } from "@astron-collection/server/utils/providers/github";
+import { cloneGitlabRepository } from "@astron-collection/server/utils/providers/gitlab";
+import { redactSecrets } from "@astron-collection/server/utils/security/redact";
+import { createTraefikConfig } from "@astron-collection/server/utils/traefik/application";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import type { z } from "zod";
 import { encodeBase64 } from "../utils/docker/utils";
-import { getNotployUrl } from "./admin";
+import { getAstronCollectionUrl } from "./admin";
 import {
 	createDeployment,
 	createDeploymentPreview,
@@ -194,7 +194,7 @@ export const updateApplicationStatus = async (
 };
 
 /**
- * Notploy Cloud: assign and provision the generated *.notploy.app hostname
+ * Astron Collection Cloud: assign and provision the generated *.astron-collection.app hostname
  * once a deployment is live. Imported lazily because `cloud-domain` imports
  * this module; the cycle stays safe, and domain provisioning must never turn a
  * successful deployment into a failure (the ledger records the error instead).
@@ -239,7 +239,7 @@ export const deployApplication = async ({
 		serverId: serverId,
 	};
 
-	const buildLink = `${await getNotployUrl()}/dashboard/project/${application.environment.projectId}/environment/${application.environmentId}/services/application/${application.applicationId}?tab=deployments`;
+	const buildLink = `${await getAstronCollectionUrl()}/dashboard/project/${application.environment.projectId}/environment/${application.environmentId}/services/application/${application.applicationId}?tab=deployments`;
 	const deployment = deploymentId
 		? await findDeploymentById(deploymentId)
 		: await createDeployment({
@@ -358,7 +358,7 @@ export const rebuildApplication = async ({
 }) => {
 	const application = await findApplicationById(applicationId);
 	const serverId = application.buildServerId || application.serverId;
-	const buildLink = `${await getNotployUrl()}/dashboard/project/${application.environment.projectId}/environment/${application.environmentId}/services/application/${application.applicationId}?tab=deployments`;
+	const buildLink = `${await getAstronCollectionUrl()}/dashboard/project/${application.environment.projectId}/environment/${application.environmentId}/services/application/${application.applicationId}?tab=deployments`;
 
 	const deployment = await createDeployment({
 		applicationId: applicationId,
@@ -477,12 +477,12 @@ export const deployPreviewApplication = async ({
 		);
 		await updateIssueComment({
 			...issueParams,
-			body: `### Notploy Preview Deployment\n\n${buildingComment}`,
+			body: `### Astron Collection Preview Deployment\n\n${buildingComment}`,
 		});
 		application.appName = previewDeployment.appName;
-		application.env = `${application.previewEnv}\nNOTPLOY_DEPLOY_URL=${previewDeployment?.domain?.host}`;
-		application.buildArgs = `${application.previewBuildArgs}\nNOTPLOY_DEPLOY_URL=${previewDeployment?.domain?.host}`;
-		application.buildSecrets = `${application.previewBuildSecrets}\nNOTPLOY_DEPLOY_URL=${previewDeployment?.domain?.host}`;
+		application.env = `${application.previewEnv}\nASTRON_COLLECTION_DEPLOY_URL=${previewDeployment?.domain?.host}`;
+		application.buildArgs = `${application.previewBuildArgs}\nASTRON_COLLECTION_DEPLOY_URL=${previewDeployment?.domain?.host}`;
+		application.buildSecrets = `${application.previewBuildSecrets}\nASTRON_COLLECTION_DEPLOY_URL=${previewDeployment?.domain?.host}`;
 		application.rollbackActive = false;
 		application.buildRegistry = null;
 		application.rollbackRegistry = null;
@@ -512,7 +512,7 @@ export const deployPreviewApplication = async ({
 		);
 		await updateIssueComment({
 			...issueParams,
-			body: `### Notploy Preview Deployment\n\n${successComment}`,
+			body: `### Astron Collection Preview Deployment\n\n${successComment}`,
 		});
 		await updateDeploymentStatus(deployment.deploymentId, "done");
 		await updatePreviewDeployment(previewDeploymentId, {
@@ -522,7 +522,7 @@ export const deployPreviewApplication = async ({
 		const comment = getIssueComment(application.name, "error", previewDomain);
 		await updateIssueComment({
 			...issueParams,
-			body: `### Notploy Preview Deployment\n\n${comment}`,
+			body: `### Astron Collection Preview Deployment\n\n${comment}`,
 		});
 		await updateDeploymentStatus(deployment.deploymentId, "error");
 		await updatePreviewDeployment(previewDeploymentId, {
@@ -594,14 +594,14 @@ export const rebuildPreviewApplication = async ({
 		);
 		await updateIssueComment({
 			...issueParams,
-			body: `### Notploy Preview Deployment\n\n${buildingComment}`,
+			body: `### Astron Collection Preview Deployment\n\n${buildingComment}`,
 		});
 
 		// Set application properties for preview deployment
 		application.appName = previewDeployment.appName;
-		application.env = `${application.previewEnv}\nNOTPLOY_DEPLOY_URL=${previewDeployment?.domain?.host}`;
-		application.buildArgs = `${application.previewBuildArgs}\nNOTPLOY_DEPLOY_URL=${previewDeployment?.domain?.host}`;
-		application.buildSecrets = `${application.previewBuildSecrets}\nNOTPLOY_DEPLOY_URL=${previewDeployment?.domain?.host}`;
+		application.env = `${application.previewEnv}\nASTRON_COLLECTION_DEPLOY_URL=${previewDeployment?.domain?.host}`;
+		application.buildArgs = `${application.previewBuildArgs}\nASTRON_COLLECTION_DEPLOY_URL=${previewDeployment?.domain?.host}`;
+		application.buildSecrets = `${application.previewBuildSecrets}\nASTRON_COLLECTION_DEPLOY_URL=${previewDeployment?.domain?.host}`;
 		application.rollbackActive = false;
 		application.buildRegistry = null;
 		application.rollbackRegistry = null;
@@ -626,7 +626,7 @@ export const rebuildPreviewApplication = async ({
 		);
 		await updateIssueComment({
 			...issueParams,
-			body: `### Notploy Preview Deployment\n\n${successComment}`,
+			body: `### Astron Collection Preview Deployment\n\n${successComment}`,
 		});
 		await updateDeploymentStatus(deployment.deploymentId, "done");
 		await updatePreviewDeployment(previewDeploymentId, {
@@ -653,7 +653,7 @@ export const rebuildPreviewApplication = async ({
 		const comment = getIssueComment(application.name, "error", previewDomain);
 		await updateIssueComment({
 			...issueParams,
-			body: `### Notploy Preview Deployment\n\n${comment}`,
+			body: `### Astron Collection Preview Deployment\n\n${comment}`,
 		});
 		await updateDeploymentStatus(deployment.deploymentId, "error");
 		await updatePreviewDeployment(previewDeploymentId, {
@@ -666,7 +666,7 @@ export const rebuildPreviewApplication = async ({
 };
 
 export const getApplicationStats = async (appName: string) => {
-	if (appName === "notploy") {
+	if (appName === "astron-collection") {
 		return await getAdvancedStats(appName);
 	}
 	const filter = {

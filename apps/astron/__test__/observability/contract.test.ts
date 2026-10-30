@@ -3,11 +3,11 @@ import {
 	isAllowedObservabilityLabelKey,
 	isFreshSample,
 	toObservabilityLabels,
-} from "@notploy/server/services/observability/types";
+} from "@astron-collection/server/services/observability/types";
 import {
 	ObservabilityBackendError,
 	validateObservabilityBackendUrl,
-} from "@notploy/server/services/observability/backend-validation";
+} from "@astron-collection/server/services/observability/backend-validation";
 
 describe("observability labels", () => {
 	it("maps resource refs to mastered label keys only", () => {
@@ -19,15 +19,15 @@ describe("observability labels", () => {
 				serviceType: "application",
 			}),
 		).toEqual({
-			notploy_org_id: "org_1",
-			notploy_server_id: "srv_1",
-			notploy_service_id: "svc_1",
-			notploy_service_type: "application",
+			astron_collectionorg_id: "org_1",
+			astron_collectionserver_id: "srv_1",
+			astron_collectionservice_id: "svc_1",
+			astron_collectionservice_type: "application",
 		});
 	});
 
 	it("rejects secret and unbounded label keys", () => {
-		expect(isAllowedObservabilityLabelKey("notploy_server_id")).toBe(true);
+		expect(isAllowedObservabilityLabelKey("astron_collectionserver_id")).toBe(true);
 		expect(isAllowedObservabilityLabelKey("token")).toBe(false);
 		expect(isAllowedObservabilityLabelKey("password")).toBe(false);
 		expect(isAllowedObservabilityLabelKey("user_agent")).toBe(false);

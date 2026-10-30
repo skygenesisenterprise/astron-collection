@@ -2,11 +2,11 @@ import {
 	getAllBackupsForOrganization,
 	getAllDomainsForOrganization,
 	getAllServicesForOrganization,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import {
 	findMemberByUserId,
 	hasPermission,
-} from "@notploy/server/services/permission";
+} from "@astron-collection/server/services/permission";
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, protectedProcedure, withPermission } from "../trpc";
 

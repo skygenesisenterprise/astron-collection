@@ -2,8 +2,8 @@ import {
 	getAccessibleServerIds,
 	IS_CLOUD,
 	transferService,
-} from "@notploy/server";
-import { checkServicePermissionAndAccess } from "@notploy/server/services/permission";
+} from "@astron-collection/server";
+import { checkServicePermissionAndAccess } from "@astron-collection/server/services/permission";
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { audit } from "@/server/api/utils/audit";
@@ -36,7 +36,7 @@ export const transferRouter = createTRPCRouter({
 			} else if (IS_CLOUD) {
 				throw new TRPCError({
 					code: "BAD_REQUEST",
-					message: "The Notploy server is not available as a target",
+					message: "The Astron Collection server is not available as a target",
 				});
 			}
 

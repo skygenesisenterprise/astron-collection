@@ -52,7 +52,7 @@ vi.mock("@/server/db/schema", () => ({
 	},
 }));
 
-vi.mock("@notploy/server/db", () => ({
+vi.mock("@astron-collection/server/db", () => ({
 	db: {
 		update: vi.fn(() => ({ set: mocks.updateSet })),
 		query: {
@@ -69,7 +69,7 @@ vi.mock("@notploy/server/db", () => ({
 	},
 }));
 
-vi.mock("@notploy/server", () => ({
+vi.mock("@astron-collection/server", () => ({
 	IS_CLOUD: false,
 	shouldDeploy: mocks.shouldDeploy,
 	checkUserRepositoryPermissions: vi.fn(),
@@ -178,10 +178,10 @@ const buildPushBody = (
 		},
 	],
 	repository: {
-		name: "notploy",
-		full_name: "agentHits/notploy",
-		clone_url: "https://github.com/skygenesisenterprise/notploy.git",
-		html_url: "https://github.com/skygenesisenterprise/notploy",
+		name: "astron-collection",
+		full_name: "agentHits/astron-collection",
+		clone_url: "https://github.com/skygenesisenterprise/astron-collection.git",
+		html_url: "https://github.com/skygenesisenterprise/astron-collection",
 		owner,
 	},
 });
@@ -217,7 +217,7 @@ describe("GitHub app webhook auto-deploy", () => {
 				getConditionValue(where, "application.autoDeploy") === true &&
 				getConditionValue(where, "application.triggerType") === "push" &&
 				getConditionValue(where, "application.branch") === "main" &&
-				getConditionValue(where, "application.repository") === "notploy" &&
+				getConditionValue(where, "application.repository") === "astron-collection" &&
 				getConditionValue(where, "application.owner") === "agentHits" &&
 				getConditionValue(where, "application.githubId") ===
 					"github-provider-id";
@@ -271,7 +271,7 @@ describe("GitHub app webhook auto-deploy", () => {
 				getConditionValue(where, "compose.autoDeploy") === true &&
 				getConditionValue(where, "compose.triggerType") === "push" &&
 				getConditionValue(where, "compose.branch") === "main" &&
-				getConditionValue(where, "compose.repository") === "notploy" &&
+				getConditionValue(where, "compose.repository") === "astron-collection" &&
 				getConditionValue(where, "compose.owner") === "agentHits" &&
 				getConditionValue(where, "compose.githubId") === "github-provider-id";
 
@@ -313,7 +313,7 @@ describe("GitHub app webhook auto-deploy", () => {
 				getConditionValue(where, "application.sourceType") === "github" &&
 				getConditionValue(where, "application.autoDeploy") === true &&
 				getConditionValue(where, "application.triggerType") === "tag" &&
-				getConditionValue(where, "application.repository") === "notploy" &&
+				getConditionValue(where, "application.repository") === "astron-collection" &&
 				getConditionValue(where, "application.owner") === "agentHits" &&
 				getConditionValue(where, "application.githubId") ===
 					"github-provider-id";
@@ -393,7 +393,7 @@ describe("GitHub app webhook preview deployments", () => {
 					id: 987,
 					number: 42,
 					title: "feat: add preview",
-					html_url: "https://github.com/skygenesisenterprise/notploy/pull/42",
+					html_url: "https://github.com/skygenesisenterprise/astron-collection/pull/42",
 					labels: [],
 					user: {
 						login: "agentHits",
@@ -407,7 +407,7 @@ describe("GitHub app webhook preview deployments", () => {
 					},
 				},
 				repository: {
-					name: "notploy",
+					name: "astron-collection",
 					owner: {
 						login: "agentHits",
 					},

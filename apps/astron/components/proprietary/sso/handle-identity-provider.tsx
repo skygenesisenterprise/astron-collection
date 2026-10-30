@@ -991,7 +991,7 @@ export const HandleIdentityProvider = ({
 										<Input
 											placeholder={
 												watchedProtocol === "active-directory"
-													? "CN=svc-notploy,OU=Service,DC=corp,DC=example,DC=com"
+													? "CN=svc-astron-collection,OU=Service,DC=corp,DC=example,DC=com"
 													: "cn=admin,dc=example,dc=com"
 											}
 											{...field}

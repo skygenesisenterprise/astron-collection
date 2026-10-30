@@ -22,7 +22,7 @@ traefik.yml
 /.next/
 /out/
 next-env.d.ts
-/notploy
+/astron-collection
 /config
 
 # production

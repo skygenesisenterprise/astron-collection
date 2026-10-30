@@ -1,5 +1,5 @@
 import type { IdentityResolver } from "../adapters/identity.js";
-import { ApiError } from "../adapters/notployApi.js";
+import { ApiError } from "../adapters/astronCollectionApi.js";
 import type { McpConfig } from "../config.js";
 import type { ApiPort } from "../contracts/api.js";
 import type {

@@ -8,11 +8,11 @@ BUILDER=$(docker buildx create --use)
 if [ "$BUILD_TYPE" == "canary" ]; then
     TAG="canary"
     echo PUSHING CANARY
-        docker buildx build --platform linux/amd64,linux/arm64 --pull --rm -t "skygenesisenterprise/notploy:${TAG}" -f 'Dockerfile' --push .
+        docker buildx build --platform linux/amd64,linux/arm64 --pull --rm -t "skygenesisenterprise/astron-collection:${TAG}" -f 'Dockerfile' --push .
 else
     echo  "PUSHING PRODUCTION"
     VERSION=$(node -p "require('./package.json').version")
-    docker buildx build --platform linux/amd64,linux/arm64 --pull --rm -t "skygenesisenterprise/notploy:latest" -t "skygenesisenterprise/notploy:${VERSION}" -f 'Dockerfile' --push .
+    docker buildx build --platform linux/amd64,linux/arm64 --pull --rm -t "skygenesisenterprise/astron-collection:latest" -t "skygenesisenterprise/astron-collection:${VERSION}" -f 'Dockerfile' --push .
 fi
 
 docker buildx rm $BUILDER

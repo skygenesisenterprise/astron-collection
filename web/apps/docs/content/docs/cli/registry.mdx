@@ -1,39 +1,39 @@
 ---
 title: "Registries"
-description: "Container registries used to pull private images. Generated from the `notploy` command surface."
+description: "Container registries used to pull private images. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Container registries used to pull private images.
 
-`notploy registry` exposes **17 commands**. They map one-to-one onto the `registry.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection registry` exposes **17 commands**. They map one-to-one onto the `registry.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy registry --help` to list these commands in your terminal, or
-	`notploy registry <command> --help` for a single command.
+	Run `astron-collection registry --help` to list these commands in your terminal, or
+	`astron-collection registry <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy registry all`
+### `astron-collection registry all`
 
 Calls `GET /api/trpc/registry.all`.
 
 ```bash
-notploy registry all [options]
+astron-collection registry all [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy registry capabilities`
+### `astron-collection registry capabilities`
 
 Calls `GET /api/trpc/registry.capabilities`.
 
 ```bash
-notploy registry capabilities --registryId <value> [options]
+astron-collection registry capabilities --registryId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -41,12 +41,12 @@ notploy registry capabilities --registryId <value> [options]
 | `--registryId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy registry create`
+### `astron-collection registry create`
 
 Calls `POST /api/trpc/registry.create`.
 
 ```bash
-notploy registry create --registryName <value> --registryUrl <value> [options]
+astron-collection registry create --registryName <value> --registryUrl <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -67,12 +67,12 @@ notploy registry create --registryName <value> --registryUrl <value> [options]
 | `--serverId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy registry delete-image`
+### `astron-collection registry delete-image`
 
 Calls `POST /api/trpc/registry.deleteImage`.
 
 ```bash
-notploy registry delete-image --registryId <value> --repository <value> --digest <value> [options]
+astron-collection registry delete-image --registryId <value> --repository <value> --digest <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -82,24 +82,24 @@ notploy registry delete-image --registryId <value> --repository <value> --digest
 | `--digest <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy registry descriptors`
+### `astron-collection registry descriptors`
 
 Calls `GET /api/trpc/registry.descriptors`.
 
 ```bash
-notploy registry descriptors [options]
+astron-collection registry descriptors [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy registry get-digest`
+### `astron-collection registry get-digest`
 
 Calls `GET /api/trpc/registry.getDigest`.
 
 ```bash
-notploy registry get-digest --registryId <value> --repository <value> --reference <value> [options]
+astron-collection registry get-digest --registryId <value> --repository <value> --reference <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -109,12 +109,12 @@ notploy registry get-digest --registryId <value> --repository <value> --referenc
 | `--reference <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy registry get-manifest`
+### `astron-collection registry get-manifest`
 
 Calls `GET /api/trpc/registry.getManifest`.
 
 ```bash
-notploy registry get-manifest --registryId <value> --repository <value> --reference <value> [options]
+astron-collection registry get-manifest --registryId <value> --repository <value> --reference <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -124,12 +124,12 @@ notploy registry get-manifest --registryId <value> --repository <value> --refere
 | `--reference <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy registry health`
+### `astron-collection registry health`
 
 Calls `GET /api/trpc/registry.health`.
 
 ```bash
-notploy registry health --registryId <value> [options]
+astron-collection registry health --registryId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -137,12 +137,12 @@ notploy registry health --registryId <value> [options]
 | `--registryId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy registry list-repositories`
+### `astron-collection registry list-repositories`
 
 Calls `GET /api/trpc/registry.listRepositories`.
 
 ```bash
-notploy registry list-repositories --registryId <value> [options]
+astron-collection registry list-repositories --registryId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -150,12 +150,12 @@ notploy registry list-repositories --registryId <value> [options]
 | `--registryId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy registry list-tags`
+### `astron-collection registry list-tags`
 
 Calls `GET /api/trpc/registry.listTags`.
 
 ```bash
-notploy registry list-tags --registryId <value> --repository <value> [options]
+astron-collection registry list-tags --registryId <value> --repository <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -164,12 +164,12 @@ notploy registry list-tags --registryId <value> --repository <value> [options]
 | `--repository <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy registry one`
+### `astron-collection registry one`
 
 Calls `GET /api/trpc/registry.one`.
 
 ```bash
-notploy registry one --registryId <value> [options]
+astron-collection registry one --registryId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -177,12 +177,12 @@ notploy registry one --registryId <value> [options]
 | `--registryId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy registry remove`
+### `astron-collection registry remove`
 
 Calls `POST /api/trpc/registry.remove`.
 
 ```bash
-notploy registry remove --registryId <value> [options]
+astron-collection registry remove --registryId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -190,24 +190,24 @@ notploy registry remove --registryId <value> [options]
 | `--registryId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy registry secret-options`
+### `astron-collection registry secret-options`
 
 Calls `GET /api/trpc/registry.secretOptions`.
 
 ```bash
-notploy registry secret-options [options]
+astron-collection registry secret-options [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy registry test-connection`
+### `astron-collection registry test-connection`
 
 Calls `POST /api/trpc/registry.testConnection`.
 
 ```bash
-notploy registry test-connection [options]
+astron-collection registry test-connection [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -225,12 +225,12 @@ notploy registry test-connection [options]
 | `--no-allowAnonymous` | boolean | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy registry test-registry`
+### `astron-collection registry test-registry`
 
 Calls `POST /api/trpc/registry.testRegistry`.
 
 ```bash
-notploy registry test-registry [options]
+astron-collection registry test-registry [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -248,12 +248,12 @@ notploy registry test-registry [options]
 | `--no-allowAnonymous` | boolean | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy registry test-registry-by-id`
+### `astron-collection registry test-registry-by-id`
 
 Calls `POST /api/trpc/registry.testRegistryById`.
 
 ```bash
-notploy registry test-registry-by-id --registryId <value> [options]
+astron-collection registry test-registry-by-id --registryId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -261,12 +261,12 @@ notploy registry test-registry-by-id --registryId <value> [options]
 | `--registryId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy registry update`
+### `astron-collection registry update`
 
 Calls `POST /api/trpc/registry.update`.
 
 ```bash
-notploy registry update --registryId <value> [options]
+astron-collection registry update --registryId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |

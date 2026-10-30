@@ -1,4 +1,4 @@
-import type * as schema from "@notploy/server/db/schema";
+import type * as schema from "@astron-collection/server/db/schema";
 import type {
 	BuildQueryResult,
 	DBQueryConfig,

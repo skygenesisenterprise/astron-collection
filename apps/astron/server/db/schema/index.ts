@@ -1,1 +1,1 @@
-export * from "@notploy/server/db/schema";
+export * from "@astron-collection/server/db/schema";

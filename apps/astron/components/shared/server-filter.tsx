@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/select";
 import { api } from "@/utils/api";
 
-const NOTPLOY_SERVER = "notploy-server";
+const ASTRON_COLLECTION_SERVER = "astron-collection-server";
 
 interface Props {
 	children: (serverId?: string) => ReactNode;
@@ -44,7 +44,7 @@ export const ServerFilter = ({ children, emptyAction }: Props) => {
 	const selectedServer = servers?.find(
 		(server) => server.serverId === queryServerId,
 	);
-	// Cloud has no local Notploy server, so fall back to the first remote server
+	// Cloud has no local Astron Collection server, so fall back to the first remote server
 	const serverId = selectedServer
 		? selectedServer.serverId
 		: isCloud
@@ -56,7 +56,7 @@ export const ServerFilter = ({ children, emptyAction }: Props) => {
 		router.replace(
 			{
 				pathname: router.pathname,
-				query: value === NOTPLOY_SERVER ? query : { ...query, serverId: value },
+				query: value === ASTRON_COLLECTION_SERVER ? query : { ...query, serverId: value },
 			},
 			undefined,
 			{ shallow: true },
@@ -116,7 +116,7 @@ export const ServerFilter = ({ children, emptyAction }: Props) => {
 						Viewing server
 					</Label>
 					<Select
-						value={serverId ?? NOTPLOY_SERVER}
+						value={serverId ?? ASTRON_COLLECTION_SERVER}
 						onValueChange={setServerId}
 					>
 						<SelectTrigger id="server-filter" className="w-fit min-w-[220px]">
@@ -129,9 +129,9 @@ export const ServerFilter = ({ children, emptyAction }: Props) => {
 							<SelectGroup>
 								<SelectLabel>Servers</SelectLabel>
 								{!isCloud && (
-									<SelectItem value={NOTPLOY_SERVER}>
+									<SelectItem value={ASTRON_COLLECTION_SERVER}>
 										<div className="flex items-center gap-2">
-											<span>Notploy Server</span>
+											<span>Astron Collection Server</span>
 											<Badge
 												variant="secondary"
 												className="text-[10px] px-1.5 py-0"
@@ -156,7 +156,7 @@ export const ServerFilter = ({ children, emptyAction }: Props) => {
 					</Select>
 				</div>
 			)}
-			<Fragment key={serverId ?? NOTPLOY_SERVER}>{children(serverId)}</Fragment>
+			<Fragment key={serverId ?? ASTRON_COLLECTION_SERVER}>{children(serverId)}</Fragment>
 		</div>
 	);
 };

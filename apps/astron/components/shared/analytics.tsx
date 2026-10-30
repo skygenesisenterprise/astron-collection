@@ -44,7 +44,7 @@ export const Analytics = () => {
 	return (
 		<>
 			<OpenPanelComponent
-				apiUrl="https://openpanel.notploy.com/api"
+				apiUrl="https://openpanel.astron-collection.com/api"
 				clientId="bf5a178b-7f28-4461-bf47-d63feff15922"
 				trackScreenViews={true}
 				trackOutgoingLinks={true}

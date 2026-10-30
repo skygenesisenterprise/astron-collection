@@ -3,8 +3,8 @@ import {
 	getIdentityCapabilities,
 	getIdentityProviderHealth,
 	listIdentityProviderDescriptors,
-} from "@notploy/server/services/identity-provider";
-import type { IdentityProviderRecord } from "@notploy/server/services/identity-provider";
+} from "@astron-collection/server/services/identity-provider";
+import type { IdentityProviderRecord } from "@astron-collection/server/services/identity-provider";
 
 const mockFetch = vi.fn();
 global.fetch = mockFetch as typeof fetch;

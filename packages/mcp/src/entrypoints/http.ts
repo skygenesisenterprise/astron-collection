@@ -51,7 +51,7 @@ class PayloadTooLargeError extends Error {}
 async function readJsonBody(request: Request, maxBytes: number): Promise<unknown> {
   const text = await request.text();
   if (Buffer.byteLength(text, "utf8") > maxBytes) {
-    throw new PayloadTooLargeError("Request body exceeds NOTPLOY_MCP_HTTP_MAX_BODY_BYTES");
+    throw new PayloadTooLargeError("Request body exceeds ASTRON_COLLECTION_MCP_HTTP_MAX_BODY_BYTES");
   }
   if (text.trim() === "") return undefined;
   return JSON.parse(text) as unknown;
@@ -62,18 +62,18 @@ async function readJsonBody(request: Request, maxBytes: number): Promise<unknown
  *
  * Remote transports require a bearer token. An explicit opt-out is accepted
  * only on loopback, so a published container cannot expose an unauthenticated
- * Notploy automation surface by accident.
+ * Astron Collection automation surface by accident.
  */
 export function assertHttpSecurity(http: HttpConfig): void {
   if (!http.token && !http.allowUnauthenticated) {
     throw new Error(
-      "HTTP transport requires NOTPLOY_MCP_HTTP_TOKEN (at least 16 characters). " +
-        "For local development only, set NOTPLOY_MCP_HTTP_ALLOW_UNAUTHENTICATED=true with a loopback bind address.",
+      "HTTP transport requires ASTRON_COLLECTION_MCP_HTTP_TOKEN (at least 16 characters). " +
+        "For local development only, set ASTRON_COLLECTION_MCP_HTTP_ALLOW_UNAUTHENTICATED=true with a loopback bind address.",
     );
   }
   if (!http.token && http.allowUnauthenticated && !isLoopbackHost(http.host)) {
     throw new Error(
-      "NOTPLOY_MCP_HTTP_ALLOW_UNAUTHENTICATED is only allowed when NOTPLOY_MCP_HTTP_HOST is loopback",
+      "ASTRON_COLLECTION_MCP_HTTP_ALLOW_UNAUTHENTICATED is only allowed when ASTRON_COLLECTION_MCP_HTTP_HOST is loopback",
     );
   }
 }
@@ -179,8 +179,8 @@ export async function createHttpApplication(
 
   // RFC 9728 OAuth protected-resource metadata (MCP auth discovery).
   // Public by design: it describes how to authenticate, it never accepts
-  // credentials and never proxies to the Notploy API.
-  // When NOTPLOY_MCP_OAUTH_ISSUER is unset, this endpoint honestly reports
+  // credentials and never proxies to the Astron Collection API.
+  // When ASTRON_COLLECTION_MCP_OAUTH_ISSUER is unset, this endpoint honestly reports
   // bearer-only auth (developer/private-connector path) instead of faking
   // an authorization server. ChatGPT public listing requires a real issuer.
   app.get("/.well-known/oauth-protected-resource", (c) => {
@@ -189,7 +189,7 @@ export async function createHttpApplication(
         {
           error: "oauth_not_configured",
           message:
-            "This MCP server uses bearer-only auth (NOTPLOY_MCP_HTTP_TOKEN) for private/developer connectors. OAuth 2.1 with dynamic client registration is not configured; public ChatGPT listing is not available with this configuration.",
+            "This MCP server uses bearer-only auth (ASTRON_COLLECTION_MCP_HTTP_TOKEN) for private/developer connectors. OAuth 2.1 with dynamic client registration is not configured; public ChatGPT listing is not available with this configuration.",
           resource: resourceUrl,
           bearer_methods_supported: ["header"],
           docs: "See packages/mcp/CHATGPT.md for the supported private-connector path.",
@@ -440,7 +440,7 @@ export async function main(): Promise<void> {
       hostname: config.http.host,
     },
     (info) => {
-      logger.info("MCP Notploy HTTP server started", {
+      logger.info("MCP Astron Collection HTTP server started", {
         host: config.http.host,
         port: info.port,
         authenticated: Boolean(config.http.token),

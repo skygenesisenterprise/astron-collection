@@ -123,7 +123,7 @@ function getDashboardPageTitle(
 		return serviceTitles[serviceType] ?? "Service";
 	}
 
-	return "Notploy";
+	return "Astron Collection";
 }
 
 interface Props {
@@ -135,8 +135,8 @@ export const DashboardLayout = ({ children, metaName }: Props) => {
 	const router = useRouter();
 	const { data: haveRootAccess } = api.user.haveRootAccess.useQuery();
 	const { data: isCloud } = api.settings.isCloud.useQuery();
-	// Each environment brands the browser tab: Notploy, Notploy Cloud or
-	// Notploy Console (a whitelabel app name overrides all three).
+	// Each environment brands the browser tab: Astron Collection, Astron Collection Cloud or
+	// Astron Collection Console (a whitelabel app name overrides all three).
 	const appName = useAppName();
 	const pageTitle =
 		metaName ?? getDashboardPageTitle(router.pathname, router.query);

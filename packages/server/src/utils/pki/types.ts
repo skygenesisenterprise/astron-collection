@@ -1,14 +1,14 @@
 /**
- * Notploy Instance Identity & Certificate Authority — domain model.
+ * Astron Collection Instance Identity & Certificate Authority — domain model.
  *
  * This module is intentionally separate from:
  *  - `utils/tls/certificate` (application TLS certificates served by Traefik), and
  *  - `utils/identity` (human/IdP identity providers: OIDC, SAML, LDAP).
  *
  * It answers the two distinct questions of issue #75:
- *  - **Identity** — *who is this Notploy instance?* → a locally generated key
+ *  - **Identity** — *who is this Astron Collection instance?* → a locally generated key
  *    pair and its X.509 certificate.
- *  - **Entitlement** — *what is it authorized to use?* → a Notploy-signed token
+ *  - **Entitlement** — *what is it authorized to use?* → a Astron Collection-signed token
  *    that grants a product and its capabilities.
  *
  * Identity is not licensing: a valid certificate never by itself grants a
@@ -16,19 +16,19 @@
  */
 
 /**
- * Notploy distribution/flavor running on the host.
+ * Astron Collection distribution/flavor running on the host.
  *
  * `self` is free and autonomous: it bootstraps a local trust anchor and needs no
- * contact with Notploy services. `cloud` and `console` are protected products
- * that require a Notploy-signed entitlement.
+ * contact with Astron Collection services. `cloud` and `console` are protected products
+ * that require a Astron Collection-signed entitlement.
  */
-export const notployProducts = ["self", "cloud", "console"] as const;
-export type NotployProduct = (typeof notployProducts)[number];
+export const astronCollectionProducts = ["self", "cloud", "console"] as const;
+export type AstronCollectionProduct = (typeof astronCollectionProducts)[number];
 
-export const notployProductLabels: Record<NotployProduct, string> = {
+export const astronCollectionProductLabels: Record<AstronCollectionProduct, string> = {
 	self: "Self-hosted",
-	cloud: "Notploy Cloud",
-	console: "Notploy Console",
+	cloud: "Astron Collection Cloud",
+	console: "Astron Collection Console",
 };
 
 /**
@@ -39,7 +39,7 @@ export const notployProductLabels: Record<NotployProduct, string> = {
  * naturally. The set is closed and validated: an unknown capability is never
  * trusted because it arrived in a token.
  */
-export const notployCapabilities = [
+export const astronCollectionCapabilities = [
 	"self.hosted",
 	"self.local-registry",
 	"self.offline",
@@ -50,12 +50,12 @@ export const notployCapabilities = [
 	"console.fleet",
 	"console.remote-management",
 ] as const;
-export type NotployCapability = (typeof notployCapabilities)[number];
+export type AstronCollectionCapability = (typeof astronCollectionCapabilities)[number];
 
 /** Capabilities granted by default to each product. */
 export const productCapabilities: Record<
-	NotployProduct,
-	readonly NotployCapability[]
+	AstronCollectionProduct,
+	readonly AstronCollectionCapability[]
 > = {
 	self: ["self.hosted", "self.local-registry", "self.offline"],
 	cloud: ["cloud.control-plane", "cloud.managed-services", "cloud.fleet"],
@@ -67,28 +67,28 @@ export const productCapabilities: Record<
 };
 
 /**
- * Products that must present a Notploy-signed entitlement. `self` is deliberately
+ * Products that must present a Astron Collection-signed entitlement. `self` is deliberately
  * absent: self-hosted must keep working with no online dependency.
  */
-export const protectedProducts: readonly NotployProduct[] = [
+export const protectedProducts: readonly AstronCollectionProduct[] = [
 	"cloud",
 	"console",
 ];
 
-export const isNotployProduct = (value: string): value is NotployProduct =>
-	(notployProducts as readonly string[]).includes(value);
+export const isAstronCollectionProduct = (value: string): value is AstronCollectionProduct =>
+	(astronCollectionProducts as readonly string[]).includes(value);
 
-export const isNotployCapability = (
+export const isAstronCollectionCapability = (
 	value: string,
-): value is NotployCapability =>
-	(notployCapabilities as readonly string[]).includes(value);
+): value is AstronCollectionCapability =>
+	(astronCollectionCapabilities as readonly string[]).includes(value);
 
 /**
  * Private-extension OID carrying the instance identity document in the X.509
- * certificate. The pen is a placeholder until Notploy's IANA PEN is assigned;
+ * certificate. The pen is a placeholder until Astron Collection's IANA PEN is assigned;
  * it only has to stay stable for the lifetime of issued certificates.
  */
-export const NOTPLOY_IDENTITY_EXTENSION_OID = "1.3.6.1.4.1.99999.1.1";
+export const ASTRON_COLLECTION_IDENTITY_EXTENSION_OID = "1.3.6.1.4.1.99999.1.1";
 
 /** Version of the instance identity extension payload. */
 export const INSTANCE_IDENTITY_EXTENSION_VERSION = 1;
@@ -96,23 +96,23 @@ export const INSTANCE_IDENTITY_EXTENSION_VERSION = 1;
 /**
  * Trust anchor a certificate chains to.
  *  - `local` — the instance's own self-signed CA (self-hosted).
- *  - `notploy` — a Notploy-issued CA (cloud/console, managed servers).
+ *  - `astron-collection` — a Astron Collection-issued CA (cloud/console, managed servers).
  */
-export type TrustAnchorKind = "local" | "notploy";
+export type TrustAnchorKind = "local" | "astron-collection";
 
 /**
  * Payload embedded in the instance certificate extension. It is *self-asserted
  * identity metadata* (signed by the local CA), not an authorization: the
- * authoritative entitlement travels in a separate Notploy-signed token.
+ * authoritative entitlement travels in a separate Astron Collection-signed token.
  */
 export interface InstanceIdentityDocument {
 	version: number;
 	/** Stable random identifier of this installation. */
 	instanceId: string;
 	/** Product the instance was bootstrapped as. */
-	product: NotployProduct;
+	product: AstronCollectionProduct;
 	/** Capabilities the instance believes it is entitled to. */
-	capabilities: NotployCapability[];
+	capabilities: AstronCollectionCapability[];
 	/** SHA-256 fingerprint (hex) of the instance public key. */
 	subjectKeyFingerprint: string;
 	/** ISO-8601 creation timestamp. */
@@ -122,8 +122,8 @@ export interface InstanceIdentityDocument {
 /** Public metadata extracted from an instance certificate. */
 export interface InstanceCertificateInfo {
 	instanceId: string;
-	product: NotployProduct;
-	capabilities: NotployCapability[];
+	product: AstronCollectionProduct;
+	capabilities: AstronCollectionCapability[];
 	subjectKeyFingerprint: string;
 	createdAt: string;
 	serialNumber: string;
@@ -181,8 +181,8 @@ export interface IdentityDiagnostic {
 /** Public, secret-free description of an installation identity. */
 export interface InstanceIdentity {
 	instanceId: string;
-	product: NotployProduct;
-	capabilities: NotployCapability[];
+	product: AstronCollectionProduct;
+	capabilities: AstronCollectionCapability[];
 	status: InstanceIdentityStatus;
 	trustAnchor: TrustAnchorKind;
 	createdAt: string;
@@ -195,15 +195,15 @@ export interface InstanceIdentity {
 
 /**
  * A signed authorization that answers "what are you authorized to use?".
- * Produced by Notploy's entitlement issuing authority and verified locally with
+ * Produced by Astron Collection's entitlement issuing authority and verified locally with
  * its public key. It is bound to the instance public key so it cannot be copied
  * to another instance.
  */
 export interface EntitlementPayload {
 	version: number;
 	instanceId: string;
-	product: NotployProduct;
-	capabilities: NotployCapability[];
+	product: AstronCollectionProduct;
+	capabilities: AstronCollectionCapability[];
 	/** SHA-256 fingerprint (hex) of the instance public key. */
 	subjectKeyFingerprint: string;
 	issuedAt: string;
@@ -219,7 +219,7 @@ export type EntitlementVerification =
 
 export const TRUST_ANCHOR_LABELS: Record<TrustAnchorKind, string> = {
 	local: "Local instance CA",
-	notploy: "Notploy issuing CA",
+	"astron-collection": "Astron Collection issuing CA",
 };
 
 export const INSTANCE_IDENTITY_STATUS_LABELS: Record<

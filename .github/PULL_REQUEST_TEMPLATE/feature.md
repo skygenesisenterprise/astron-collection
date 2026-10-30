@@ -32,15 +32,15 @@ would otherwise have to reverse-engineer from the diff.
 ## API surface
 
 <!--
-Notploy's public interface is generated from the tRPC routers in
-`apps/notploy/server/api/routers/`. If you touched them, say what changed and
+Astron Collection's public interface is generated from the tRPC routers in
+`apps/astron-collection/server/api/routers/`. If you touched them, say what changed and
 confirm the generated artifacts were refreshed:
 
   pnpm generate:openapi        # regenerates openapi.json at the repository root
   # then refresh the copies consumed by:
-  #   packages/cli/openapi.json                        (pnpm --filter @notploy/cli build)
-  #   packages/sdk/openapi.json                       (pnpm --filter @notploy/sdk generate)
-  #   packages/mcp/src/generated/openapi.json         (pnpm --filter @notploy/mcp generate:all)
+  #   packages/cli/openapi.json                        (pnpm --filter @astron-collection/cli build)
+  #   packages/sdk/openapi.json                       (pnpm --filter @astron-collection/sdk generate)
+  #   packages/mcp/src/generated/openapi.json         (pnpm --filter @astron-collection/mcp generate:all)
   #   web/apps/docs/public/openapi.json               (API reference, web/apps/docs build:docs)
 
 Do not hand-edit generated files — packages/sdk/src, packages/cli/src/generated,
@@ -56,14 +56,14 @@ web/apps/docs/content/docs/api, and packages/mcp/src/generated are all produced.
 
 <!--
 New or updated tests, and what they cover. `pnpm test` runs the vitest suite in
-apps/notploy/__test__. Add a test even if the change looks UI-only when it
+apps/astron-collection/__test__. Add a test even if the change looks UI-only when it
 touches routing, services, or builders.
 -->
 
 ## Breaking changes and migration
 
 <!--
-What breaks for existing self-hosted instances and Notploy Cloud users, and what
+What breaks for existing self-hosted instances and Astron Collection Cloud users, and what
 they must do. Include new environment variables, renamed configuration keys, or
 database migrations. Write "None" if there are none.
 -->

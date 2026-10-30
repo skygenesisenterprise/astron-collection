@@ -1,10 +1,10 @@
 import fs, { existsSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
-import { paths } from "@notploy/server/constants";
-import { db } from "@notploy/server/db";
-import { network, patch } from "@notploy/server/db/schema";
-import type { Compose } from "@notploy/server/services/compose";
-import type { Domain } from "@notploy/server/services/domain";
+import { paths } from "@astron-collection/server/constants";
+import { db } from "@astron-collection/server/db";
+import { network, patch } from "@astron-collection/server/db/schema";
+import type { Compose } from "@astron-collection/server/services/compose";
+import type { Domain } from "@astron-collection/server/services/domain";
 import { eq, inArray } from "drizzle-orm";
 import { quote } from "shell-quote";
 import { parse, stringify } from "yaml";
@@ -382,7 +382,7 @@ export const addDomainToCompose = async (
 				: "traefik.swarm.network";
 		const networkName = compose.isolatedDeployment
 			? compose.suffix || compose.appName
-			: "notploy-network";
+			: "astron-collection-network";
 
 		if (Array.isArray(labels)) {
 			if (!labels.includes("traefik.enable=true")) {
@@ -405,8 +405,8 @@ export const addDomainToCompose = async (
 		}
 
 		if (!compose.isolatedDeployment) {
-			// Add the notploy-network to the service
-			result.services[serviceName].networks = addNotployNetworkToService(
+			// Add the astron-collection-network to the service
+			result.services[serviceName].networks = addAstronCollectionNetworkToService(
 				result.services[serviceName].networks,
 			);
 		}
@@ -446,17 +446,17 @@ export const applyServiceNetworks = async (
 		for (const networkId of config.networkIds) {
 			const match = networks.find((n) => n.networkId === networkId);
 			if (!match) continue;
-			service.networks = addNotployNetworkToService(
+			service.networks = addAstronCollectionNetworkToService(
 				service.networks,
 				match.name,
 			);
 			injectedNetworkNames.add(match.name);
 		}
 
-		if (config.detachNotployNetwork) {
-			removeNetworkFromService(service, "notploy-network");
+		if (config.detachAstronCollectionNetwork) {
+			removeNetworkFromService(service, "astron-collection-network");
 			removeNetworkFromService(service, "default");
-			removeNotployNetworkLabel(service);
+			removeAstronCollectionNetworkLabel(service);
 		}
 	}
 
@@ -475,12 +475,12 @@ export const declareUsedNetworksInRoot = (
 			return false;
 		});
 
-	if (isUsed("notploy-network")) {
-		result.networks = addNotployNetworkToRoot(result.networks);
+	if (isUsed("astron-collection-network")) {
+		result.networks = addAstronCollectionNetworkToRoot(result.networks);
 	}
 	for (const name of injectedNetworkNames) {
 		if (isUsed(name)) {
-			result.networks = addNotployNetworkToRoot(result.networks, name);
+			result.networks = addAstronCollectionNetworkToRoot(result.networks, name);
 		}
 	}
 };
@@ -606,9 +606,9 @@ export const createDomainLabels = (
 	return labels;
 };
 
-export const addNotployNetworkToService = (
+export const addAstronCollectionNetworkToService = (
 	networkService: DefinitionsService["networks"],
-	networkName = "notploy-network",
+	networkName = "astron-collection-network",
 ) => {
 	let networks = networkService;
 	const network = networkName;
@@ -648,13 +648,13 @@ export const removeNetworkFromService = (
 	}
 };
 
-const removeNotployNetworkLabel = (service: DefinitionsService) => {
+const removeAstronCollectionNetworkLabel = (service: DefinitionsService) => {
 	const stripped = (labels: DefinitionsService["labels"]) => {
 		if (Array.isArray(labels)) {
 			return labels.filter(
 				(l) =>
-					l !== "traefik.docker.network=notploy-network" &&
-					l !== "traefik.swarm.network=notploy-network",
+					l !== "traefik.docker.network=astron-collection-network" &&
+					l !== "traefik.swarm.network=astron-collection-network",
 			);
 		}
 		return labels;
@@ -664,9 +664,9 @@ const removeNotployNetworkLabel = (service: DefinitionsService) => {
 		service.deploy.labels = stripped(service.deploy.labels);
 };
 
-export const addNotployNetworkToRoot = (
+export const addAstronCollectionNetworkToRoot = (
 	networkRoot: PropertiesNetworks | undefined,
-	networkName = "notploy-network",
+	networkName = "astron-collection-network",
 ) => {
 	let networks = networkRoot;
 	const network = networkName;

@@ -40,7 +40,7 @@ vi.mock("@aws-sdk/client-ssm", () => ({
 	paginateDescribeParameters: paginate,
 }));
 
-vi.mock("@notploy/server/db", () => ({
+vi.mock("@astron-collection/server/db", () => ({
 	db: {
 		query: {
 			vaultProvider: {
@@ -50,8 +50,8 @@ vi.mock("@notploy/server/db", () => ({
 	},
 }));
 
-import { resolveVaultReferences } from "@notploy/server/utils/vault";
-import { awsParameterStoreClient } from "@notploy/server/utils/vault/aws-parameter-store";
+import { resolveVaultReferences } from "@astron-collection/server/utils/vault";
+import { awsParameterStoreClient } from "@astron-collection/server/utils/vault/aws-parameter-store";
 
 const config = {
 	providerType: "aws-parameter-store" as const,

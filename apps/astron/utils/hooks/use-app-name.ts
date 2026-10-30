@@ -9,7 +9,7 @@ import {
  * Branded application name of the current environment.
  *
  * A whitelabel app name wins when set; otherwise the product decides — so the
- * three environments read "Notploy", "Notploy Cloud" and "Notploy Console".
+ * three environments read "Astron Collection", "Astron Collection Cloud" and "Astron Collection Console".
  * Used for the browser tab, page titles and branded surfaces.
  */
 export function useAppName(): string {

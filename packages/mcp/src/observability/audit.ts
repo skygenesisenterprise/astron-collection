@@ -60,7 +60,7 @@ export class AuditLog implements AuditPort {
             mode: 0o600,
           });
         } catch (error) {
-          logger.error("Could not append to NOTPLOY_MCP_AUDIT_LOG", {
+          logger.error("Could not append to ASTRON_COLLECTION_MCP_AUDIT_LOG", {
             error: error instanceof Error ? error.message : "unknown error",
           });
         }

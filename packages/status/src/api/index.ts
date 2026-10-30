@@ -1,5 +1,5 @@
 /**
- * `@notploy/status/api` — HTTP surface of the platform, importable by any
+ * `@astron-collection/status/api` — HTTP surface of the platform, importable by any
  * host. The status application mounts `createStatusApi(ctx).fetch` in a
  * catch-all Next.js route handler.
  */

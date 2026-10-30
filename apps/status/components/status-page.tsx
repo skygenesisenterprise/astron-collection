@@ -2,7 +2,7 @@ import type {
 	PublicIncidentDto,
 	PublicMaintenanceDto,
 	PublicPageDto,
-} from "@notploy/status";
+} from "@astron-collection/status";
 import { AlertTriangle, CalendarClock, DatabaseZap } from "lucide-react";
 import Link from "next/link";
 import { EmptyState } from "./empty-state";

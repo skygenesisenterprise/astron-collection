@@ -1,14 +1,14 @@
-import * as adminService from "@notploy/server/services/admin";
-import * as applicationService from "@notploy/server/services/application";
-import { deployApplication } from "@notploy/server/services/application";
-import * as deploymentService from "@notploy/server/services/deployment";
-import * as builders from "@notploy/server/utils/builders";
-import * as notifications from "@notploy/server/utils/notifications/build-success";
-import * as execProcess from "@notploy/server/utils/process/execAsync";
-import * as gitProvider from "@notploy/server/utils/providers/git";
+import * as adminService from "@astron-collection/server/services/admin";
+import * as applicationService from "@astron-collection/server/services/application";
+import { deployApplication } from "@astron-collection/server/services/application";
+import * as deploymentService from "@astron-collection/server/services/deployment";
+import * as builders from "@astron-collection/server/utils/builders";
+import * as notifications from "@astron-collection/server/utils/notifications/build-success";
+import * as execProcess from "@astron-collection/server/utils/process/execAsync";
+import * as gitProvider from "@astron-collection/server/utils/providers/git";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@notploy/server/db", () => {
+vi.mock("@astron-collection/server/db", () => {
 	const createChainableMock = (): any => {
 		const chain = {
 			set: vi.fn(() => chain),
@@ -44,10 +44,10 @@ vi.mock("@notploy/server/db", () => {
 	};
 });
 
-vi.mock("@notploy/server/services/application", async () => {
+vi.mock("@astron-collection/server/services/application", async () => {
 	const actual = await vi.importActual<
-		typeof import("@notploy/server/services/application")
-	>("@notploy/server/services/application");
+		typeof import("@astron-collection/server/services/application")
+	>("@astron-collection/server/services/application");
 	return {
 		...actual,
 		findApplicationById: vi.fn(),
@@ -55,35 +55,35 @@ vi.mock("@notploy/server/services/application", async () => {
 	};
 });
 
-vi.mock("@notploy/server/services/admin", () => ({
-	getNotployUrl: vi.fn(),
+vi.mock("@astron-collection/server/services/admin", () => ({
+	getAstronCollectionUrl: vi.fn(),
 }));
 
-vi.mock("@notploy/server/services/deployment", () => ({
+vi.mock("@astron-collection/server/services/deployment", () => ({
 	createDeployment: vi.fn(),
 	updateDeploymentStatus: vi.fn(),
 	updateDeployment: vi.fn(),
 }));
 
-vi.mock("@notploy/server/utils/providers/git", async () => {
+vi.mock("@astron-collection/server/utils/providers/git", async () => {
 	const actual = await vi.importActual<
-		typeof import("@notploy/server/utils/providers/git")
-	>("@notploy/server/utils/providers/git");
+		typeof import("@astron-collection/server/utils/providers/git")
+	>("@astron-collection/server/utils/providers/git");
 	return {
 		...actual,
 		getGitCommitInfo: vi.fn(),
 	};
 });
 
-vi.mock("@notploy/server/utils/process/execAsync", () => ({
+vi.mock("@astron-collection/server/utils/process/execAsync", () => ({
 	execAsync: vi.fn(),
 	ExecError: class ExecError extends Error {},
 }));
 
-vi.mock("@notploy/server/utils/builders", async () => {
+vi.mock("@astron-collection/server/utils/builders", async () => {
 	const actual = await vi.importActual<
-		typeof import("@notploy/server/utils/builders")
-	>("@notploy/server/utils/builders");
+		typeof import("@astron-collection/server/utils/builders")
+	>("@astron-collection/server/utils/builders");
 	return {
 		...actual,
 		mechanizeDockerContainer: vi.fn(),
@@ -91,27 +91,27 @@ vi.mock("@notploy/server/utils/builders", async () => {
 	};
 });
 
-vi.mock("@notploy/server/utils/notifications/build-success", () => ({
+vi.mock("@astron-collection/server/utils/notifications/build-success", () => ({
 	sendBuildSuccessNotifications: vi.fn(),
 }));
 
-vi.mock("@notploy/server/utils/notifications/build-error", () => ({
+vi.mock("@astron-collection/server/utils/notifications/build-error", () => ({
 	sendBuildErrorNotifications: vi.fn(),
 }));
 
-vi.mock("@notploy/server/services/rollbacks", () => ({
+vi.mock("@astron-collection/server/services/rollbacks", () => ({
 	createRollback: vi.fn(),
 }));
 
-import { db } from "@notploy/server/db";
-import { cloneGitRepository } from "@notploy/server/utils/providers/git";
+import { db } from "@astron-collection/server/db";
+import { cloneGitRepository } from "@astron-collection/server/utils/providers/git";
 
 const createMockApplication = (overrides = {}) => ({
 	applicationId: "test-app-id",
 	name: "Test App",
 	appName: "test-app",
 	sourceType: "git" as const,
-	customGitUrl: "https://github.com/skygenesisenterprise/notploy.git",
+	customGitUrl: "https://github.com/skygenesisenterprise/astron-collection.git",
 	customGitBranch: "main",
 	customGitSSHKeyId: null,
 	buildType: "nixpacks" as const,
@@ -149,7 +149,7 @@ describe("deployApplication - Command Generation Tests", () => {
 		vi.mocked(applicationService.findApplicationById).mockResolvedValue(
 			createMockApplication() as any,
 		);
-		vi.mocked(adminService.getNotployUrl).mockResolvedValue(
+		vi.mocked(adminService.getAstronCollectionUrl).mockResolvedValue(
 			"http://localhost:3000",
 		);
 		vi.mocked(deploymentService.createDeployment).mockResolvedValue(
@@ -183,7 +183,7 @@ describe("deployApplication - Command Generation Tests", () => {
 		const command = await cloneGitRepository(app);
 		console.log(command);
 
-		expect(command).toContain("https://github.com/skygenesisenterprise/notploy.git");
+		expect(command).toContain("https://github.com/skygenesisenterprise/astron-collection.git");
 		expect(command).not.toContain("--recurse-submodules");
 		expect(command).toContain("--branch main");
 		expect(command).toContain("--depth 1");
@@ -195,7 +195,7 @@ describe("deployApplication - Command Generation Tests", () => {
 		const command = await cloneGitRepository(app);
 
 		expect(command).toContain("--recurse-submodules");
-		expect(command).toContain("https://github.com/skygenesisenterprise/notploy.git");
+		expect(command).toContain("https://github.com/skygenesisenterprise/astron-collection.git");
 	});
 
 	it("should verify nixpacks command is called with correct app", async () => {
@@ -211,7 +211,7 @@ describe("deployApplication - Command Generation Tests", () => {
 		expect(builders.getBuildCommand).toHaveBeenCalledWith(
 			expect.objectContaining({
 				buildType: "nixpacks",
-				customGitUrl: "https://github.com/skygenesisenterprise/notploy.git",
+				customGitUrl: "https://github.com/skygenesisenterprise/astron-collection.git",
 				buildPath: "/astro",
 			}),
 		);

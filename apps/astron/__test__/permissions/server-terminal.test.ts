@@ -26,7 +26,7 @@ const mockMemberData = (role: string) => ({
 let memberToReturn = mockMemberData("deployer");
 let rolesToReturn: { permission: string }[] = [];
 
-vi.mock("@notploy/server/db", () => ({
+vi.mock("@astron-collection/server/db", () => ({
 	db: {
 		query: {
 			member: {
@@ -42,7 +42,7 @@ vi.mock("@notploy/server/db", () => ({
 }));
 
 const { checkPermission, resolvePermissions } = await import(
-	"@notploy/server/services/permission"
+	"@astron-collection/server/services/permission"
 );
 
 const ctx = {

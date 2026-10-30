@@ -1,6 +1,6 @@
 name: Browser Release
 
-# Packages the official Notploy browser extension and attaches the versioned
+# Packages the official Astron Collection browser extension and attaches the versioned
 # ZIP to a GitHub Release.
 #
 #   git tag v0.1.0-browser
@@ -43,7 +43,7 @@ env:
   NODE_VERSION: "24.4.0"
   PNPM_VERSION: "10.22.0"
   BROWSER_DIR: packages/browser
-  BROWSER_FILTER: "@notploy/browser"
+  BROWSER_FILTER: "@astron-collection/browser"
 
 jobs:
   release:
@@ -132,10 +132,10 @@ jobs:
           done
 
       - name: Build the SDK
-        # The extension imports @notploy/sdk, whose export map points at dist/:
+        # The extension imports @astron-collection/sdk, whose export map points at dist/:
         # with no compiled SDK the typecheck cannot even resolve the module, so
         # this has to run before anything that reads the extension's source.
-        run: pnpm --filter "@notploy/sdk" run build
+        run: pnpm --filter "@astron-collection/sdk" run build
 
       - name: Verify the extension
         id: verify
@@ -163,13 +163,13 @@ jobs:
           # `package` is the same script a maintainer runs locally, so CI and
           # a hand-built ZIP cannot drift apart. It rebuilds `dist/`, checks
           # the manifest version, scans `dist/` for secret-shaped strings, and
-          # produces `notploy-browser-<version>.zip` (zip binary or python3
+          # produces `astron-collection-browser-<version>.zip` (zip binary or python3
           # fallback — both exist on ubuntu-latest).
           pnpm --filter "$BROWSER_FILTER" run package
 
-          zip="$(find "$BROWSER_DIR" -maxdepth 1 -name 'notploy-browser-*.zip' -print -quit)"
+          zip="$(find "$BROWSER_DIR" -maxdepth 1 -name 'astron-collection-browser-*.zip' -print -quit)"
           if [[ -z "$zip" ]]; then
-            echo "::error::No notploy-browser-*.zip was produced in $BROWSER_DIR"
+            echo "::error::No astron-collection-browser-*.zip was produced in $BROWSER_DIR"
             exit 1
           fi
 
@@ -183,7 +183,7 @@ jobs:
         if: ${{ !cancelled() && steps.package.outcome == 'success' }}
         uses: actions/upload-artifact@v7
         with:
-          name: notploy-browser-${{ steps.release.outputs.version }}
+          name: astron-collection-browser-${{ steps.release.outputs.version }}
           path: ${{ steps.package.outputs.zip }}
           if-no-files-found: error
           retention-days: 90
@@ -193,12 +193,12 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          name: Notploy Browser ${{ steps.release.outputs.version }}
+          name: Astron Collection Browser ${{ steps.release.outputs.version }}
           generate_release_notes: true
           fail_on_unmatched_files: true
           files: ${{ steps.package.outputs.zip }}
           body: |
-            ## Notploy Browser
+            ## Astron Collection Browser
 
             Version `${{ steps.release.outputs.version }}` as a reviewable ZIP
             (no store upload — signing, accounts, and store review are not
@@ -207,8 +207,8 @@ jobs:
             Install it unpacked in Chromium (Chrome / Edge / Brave 114+):
 
             ```bash
-            unzip notploy-browser-${{ steps.release.outputs.version }}.zip -d notploy-browser
-            # chrome://extensions → Developer mode → Load unpacked → notploy-browser/
+            unzip astron-collection-browser-${{ steps.release.outputs.version }}.zip -d astron-collection-browser
+            # chrome://extensions → Developer mode → Load unpacked → astron-collection-browser/
             ```
 
             The ZIP attached below is the exact artifact that was verified
@@ -233,7 +233,7 @@ jobs:
           }
 
           {
-            echo "### Notploy Browser ${VERSION:-unresolved}"
+            echo "### Astron Collection Browser ${VERSION:-unresolved}"
             echo
             echo "| Step | Result |"
             echo "| --- | --- |"

@@ -40,8 +40,8 @@ import {
 	updateSlackNotification,
 	updateTeamsNotification,
 	updateTelegramNotification,
-} from "@notploy/server";
-import { db } from "@notploy/server/db";
+} from "@astron-collection/server";
+import { db } from "@astron-collection/server/db";
 import { TRPCError } from "@trpc/server";
 import { desc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
@@ -145,7 +145,7 @@ export const notificationRouter = createTRPCRouter({
 			try {
 				await sendSlackNotification(input, {
 					channel: input.channel,
-					text: "Hi, From Notploy 👋",
+					text: "Hi, From Astron Collection 👋",
 				});
 				return true;
 			} catch (error) {
@@ -212,7 +212,7 @@ export const notificationRouter = createTRPCRouter({
 		.input(apiTestTelegramConnection)
 		.mutation(async ({ input }) => {
 			try {
-				await sendTelegramNotification(input, "Hi, From Notploy 👋");
+				await sendTelegramNotification(input, "Hi, From Astron Collection 👋");
 				return true;
 			} catch (error) {
 				throw new TRPCError({
@@ -284,7 +284,7 @@ export const notificationRouter = createTRPCRouter({
 
 				await sendDiscordNotification(input, {
 					title: decorate(">", "`🤚` - Test Notification"),
-					description: decorate(">", "Hi, From Notploy 👋"),
+					description: decorate(">", "Hi, From Astron Collection 👋"),
 					color: 0xf3f7f4,
 				});
 
@@ -352,7 +352,7 @@ export const notificationRouter = createTRPCRouter({
 				await sendEmailNotification(
 					input,
 					"Test Email",
-					"<p>Hi, From Notploy 👋</p>",
+					"<p>Hi, From Astron Collection 👋</p>",
 				);
 				return true;
 			} catch (error) {
@@ -418,7 +418,7 @@ export const notificationRouter = createTRPCRouter({
 				await sendResendNotification(
 					input,
 					"Test Email",
-					"<p>Hi, From Notploy 👋</p>",
+					"<p>Hi, From Astron Collection 👋</p>",
 				);
 				return true;
 			} catch (error) {
@@ -492,7 +492,7 @@ export const notificationRouter = createTRPCRouter({
 	receiveNotification: publicProcedure
 		.input(
 			z.object({
-				ServerType: z.enum(["Notploy", "Remote"]).default("Notploy"),
+				ServerType: z.enum(["Astron Collection", "Remote"]).default("Astron Collection"),
 				Type: z.enum(["Memory", "CPU"]),
 				Value: z.number(),
 				Threshold: z.number(),
@@ -506,7 +506,7 @@ export const notificationRouter = createTRPCRouter({
 				let organizationId = "";
 				let ServerName = "";
 				let ServerId: string | undefined;
-				if (input.ServerType === "Notploy") {
+				if (input.ServerType === "Astron Collection") {
 					const settings = await getWebServerSettings();
 					if (
 						!settings?.metricsConfig?.server?.token ||
@@ -519,7 +519,7 @@ export const notificationRouter = createTRPCRouter({
 					}
 
 					organizationId = "";
-					ServerName = "Notploy";
+					ServerName = "Astron Collection";
 				} else {
 					const result = await db
 						.select()
@@ -607,7 +607,7 @@ export const notificationRouter = createTRPCRouter({
 				await sendGotifyNotification(
 					input,
 					"Test Notification",
-					"Hi, From Notploy 👋",
+					"Hi, From Astron Collection 👋",
 				);
 				return true;
 			} catch (error) {
@@ -673,8 +673,8 @@ export const notificationRouter = createTRPCRouter({
 					input,
 					"Test Notification",
 					"",
-					"view, visit Notploy on Github, https://github.com/skygenesisenterprise/notploy, clear=true;",
-					"Hi, From Notploy 👋",
+					"view, visit Astron Collection on Github, https://github.com/skygenesisenterprise/astron-collection, clear=true;",
+					"Hi, From Astron Collection 👋",
 				);
 				return true;
 			} catch (error) {
@@ -743,9 +743,9 @@ export const notificationRouter = createTRPCRouter({
 		.mutation(async ({ input }) => {
 			try {
 				await sendMattermostNotification(input, {
-					text: "Hi, From Notploy 👋",
+					text: "Hi, From Astron Collection 👋",
 					channel: input.channel,
-					username: input.username || "Notploy Bot",
+					username: input.username || "Astron Collection Bot",
 				});
 				return true;
 			} catch (error) {
@@ -806,7 +806,7 @@ export const notificationRouter = createTRPCRouter({
 			try {
 				await sendCustomNotification(input, {
 					title: "Test Notification",
-					message: "Hi, From Notploy 👋",
+					message: "Hi, From Astron Collection 👋",
 					timestamp: new Date().toISOString(),
 				});
 				return true;
@@ -872,7 +872,7 @@ export const notificationRouter = createTRPCRouter({
 				await sendLarkNotification(input, {
 					msg_type: "text",
 					content: {
-						text: "Hi, From Notploy 👋",
+						text: "Hi, From Astron Collection 👋",
 					},
 				});
 				return true;
@@ -937,7 +937,7 @@ export const notificationRouter = createTRPCRouter({
 			try {
 				await sendTeamsNotification(input, {
 					title: "🤚 Test Notification",
-					facts: [{ name: "Message", value: "Hi, From Notploy 👋" }],
+					facts: [{ name: "Message", value: "Hi, From Astron Collection 👋" }],
 				});
 				return true;
 			} catch (error) {
@@ -1005,7 +1005,7 @@ export const notificationRouter = createTRPCRouter({
 				await sendPushoverNotification(
 					input,
 					"Test Notification",
-					"Hi, From Notploy 👋",
+					"Hi, From Astron Collection 👋",
 				);
 				return true;
 			} catch (error) {

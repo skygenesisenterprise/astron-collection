@@ -28,18 +28,18 @@ import {
 	runWebServerBackup,
 	scheduleBackup,
 	updateBackupById,
-} from "@notploy/server";
-import { findDestinationById } from "@notploy/server/services/destination";
-import { checkServicePermissionAndAccess } from "@notploy/server/services/permission";
-import { runComposeBackup } from "@notploy/server/utils/backups/compose";
+} from "@astron-collection/server";
+import { findDestinationById } from "@astron-collection/server/services/destination";
+import { checkServicePermissionAndAccess } from "@astron-collection/server/services/permission";
+import { runComposeBackup } from "@astron-collection/server/utils/backups/compose";
 import {
 	getS3Credentials,
 	normalizeS3Path,
-} from "@notploy/server/utils/backups/utils";
+} from "@astron-collection/server/utils/backups/utils";
 import {
 	execAsync,
 	execAsyncRemote,
-} from "@notploy/server/utils/process/execAsync";
+} from "@astron-collection/server/utils/process/execAsync";
 import {
 	restoreComposeBackup,
 	restoreLibsqlBackup,
@@ -48,7 +48,7 @@ import {
 	restoreMySqlBackup,
 	restorePostgresBackup,
 	restoreWebServerBackup,
-} from "@notploy/server/utils/restore";
+} from "@astron-collection/server/utils/restore";
 import { TRPCError } from "@trpc/server";
 import { quote } from "shell-quote";
 import { z } from "zod";

@@ -20,8 +20,8 @@
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
 		"paths": {
-			"@notploy/status": ["./src/index.ts"],
-			"@notploy/status/*": ["./src/*"]
+			"@astron-collection/status": ["./src/index.ts"],
+			"@astron-collection/status/*": ["./src/*"]
 		}
 	},
 	"include": ["src/**/*.ts", "scripts/**/*.ts", "esbuild.config.ts"],

@@ -34,7 +34,7 @@ const mocks = vi.hoisted(() => {
 	};
 });
 
-vi.mock("@notploy/server/db", () => ({
+vi.mock("@astron-collection/server/db", () => ({
 	db: { transaction: mocks.transaction },
 	dbUrl: "postgres://mock:mock@localhost:5432/mock",
 }));
@@ -42,7 +42,7 @@ vi.mock("@notploy/server/db", () => ({
 import {
 	createPortChecked,
 	updatePortChecked,
-} from "@notploy/server/services/port";
+} from "@astron-collection/server/services/port";
 
 const existingPort = {
 	portId: "port-1",

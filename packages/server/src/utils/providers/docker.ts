@@ -1,4 +1,4 @@
-import { safeDockerLoginCommand } from "@notploy/server/services/registry";
+import { safeDockerLoginCommand } from "@astron-collection/server/services/registry";
 import { quote } from "shell-quote";
 import type { ApplicationNested } from "../builders";
 

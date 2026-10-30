@@ -1,9 +1,9 @@
-import { db } from "@notploy/server/db";
+import { db } from "@astron-collection/server/db";
 import {
 	type apiCreateGitea,
 	gitea,
 	gitProvider,
-} from "@notploy/server/db/schema";
+} from "@astron-collection/server/db/schema";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import type { z } from "zod";

@@ -1,9 +1,9 @@
 import { readFileSync } from "node:fs";
-import { TEMPLATES_BASE_URL } from "@notploy/server/templates/github";
+import { TEMPLATES_BASE_URL } from "@astron-collection/server/templates/github";
 import {
 	getLocalBlueprintsDir,
 	getLocalTemplateLogoPath,
-} from "@notploy/server/templates/local";
+} from "@astron-collection/server/templates/local";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 /**

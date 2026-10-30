@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { type CallToolResult, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 import { IdentityResolver } from "../adapters/identity.js";
-import { NotployApi } from "../adapters/notployApi.js";
+import { AstronCollectionApi } from "../adapters/astronCollectionApi.js";
 import { buildCatalog, CapabilityRegistry, type Catalog } from "../catalog/registry.js";
 import { getConfig, type McpConfig } from "../config.js";
 import type { ApiPort } from "../contracts/api.js";
@@ -73,7 +73,7 @@ export async function createServerParts(options: CreateRuntimeOptions = {}): Pro
   const config = options.config ?? getConfig();
   setLogLevel(config.logLevel as LogLevel);
 
-  const api = options.api ?? new NotployApi(config);
+  const api = options.api ?? new AstronCollectionApi(config);
   const operations =
     options.operations ??
     new OperationStore({
@@ -108,10 +108,10 @@ export async function createServerParts(options: CreateRuntimeOptions = {}): Pro
 /** Creates an MCP protocol server bound to shared parts (one per transport). */
 export function buildMcpServer(parts: ServerParts): McpServer {
   const server = new McpServer(
-    { name: "notploy", version: MCP_SERVER_VERSION },
+    { name: "astron-collection", version: MCP_SERVER_VERSION },
     {
       instructions:
-        "Notploy automation server. Start with the discovery capabilities, use read-only diagnostics before mutating anything, and poll get_operation_status after long-running actions.",
+        "Astron Collection automation server. Start with the discovery capabilities, use read-only diagnostics before mutating anything, and poll get_operation_status after long-running actions.",
     },
   );
 

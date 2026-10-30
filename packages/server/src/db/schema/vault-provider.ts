@@ -233,9 +233,9 @@ export const apiFindOneVaultProvider = z.object({
 });
 
 /**
- * Secrets stored and managed directly by Notploy. Values are encrypted at rest
+ * Secrets stored and managed directly by Astron Collection. Values are encrypted at rest
  * (AES-256-GCM) and resolve like any other vault reference, so a provider can
- * hold both externally-managed and Notploy-managed secrets.
+ * hold both externally-managed and Astron Collection-managed secrets.
  */
 export const vaultSecret = pgTable(
 	"vault_secret",

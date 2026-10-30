@@ -87,7 +87,7 @@ export function renderCoreFeatures({ core, namespacesByFeature, cliGroups }) {
 		const cli = namespaces
 			.map((name) => kebabCase(name))
 			.filter((name) => groups.has(name))
-			.map((name) => `\`notploy ${name}\``)
+			.map((name) => `\`astron-collection ${name}\``)
 			.join(", ");
 		const docs = feature.docs ?? [];
 		const guide = docs.length

@@ -1,7 +1,7 @@
 import {
 	type cloudflareDnsConfigSchema,
 	proxiableDnsRecordTypes,
-} from "@notploy/server/db/schema";
+} from "@astron-collection/server/db/schema";
 import type { z } from "zod";
 import { type DnsClient, dnsFetch } from "./types";
 

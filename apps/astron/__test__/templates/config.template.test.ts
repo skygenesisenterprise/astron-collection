@@ -1,6 +1,6 @@
-import type { Schema } from "@notploy/server/templates";
-import type { CompleteTemplate } from "@notploy/server/templates/processors";
-import { processTemplate } from "@notploy/server/templates/processors";
+import type { Schema } from "@astron-collection/server/templates";
+import type { CompleteTemplate } from "@astron-collection/server/templates/processors";
+import { processTemplate } from "@astron-collection/server/templates/processors";
 import { describe, expect, it } from "vitest";
 
 describe("processTemplate", () => {

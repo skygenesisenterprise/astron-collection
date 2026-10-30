@@ -1,10 +1,10 @@
-import type { ComposeSpecification } from "@notploy/server";
+import type { ComposeSpecification } from "@astron-collection/server";
 import {
 	addSuffixToAllNetworks,
 	addSuffixToNetworksRoot,
 	addSuffixToServiceNetworks,
 	generateRandomHash,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import { expect, test } from "vitest";
 import { parse } from "yaml";
 
@@ -266,13 +266,13 @@ services:
         aliases:
           - app
       backend:
-      notploy-network:
+      astron-collection-network:
 
   worker:
     image: worker:latest
     networks:
       - backend
-      - notploy-network
+      - astron-collection-network
 
 networks:
   frontend:
@@ -284,7 +284,7 @@ networks:
     driver_opts:
       com.docker.network.bridge.enable_icc: "true"
 
-  notploy-network:
+  astron-collection-network:
     driver: bridge
 
 `;
@@ -300,13 +300,13 @@ services:
         aliases:
           - app
       backend-testhash:
-      notploy-network:
+      astron-collection-network:
 
   worker:
     image: worker:latest
     networks:
       - backend-testhash
-      - notploy-network
+      - astron-collection-network
 
 networks:
   frontend-testhash:
@@ -318,14 +318,14 @@ networks:
     driver_opts:
       com.docker.network.bridge.enable_icc: "true"
   
-  notploy-network:
+  astron-collection-network:
     driver: bridge
 
 
   
 `);
 
-test("Expect don't add suffix to notploy-network in compose file with multiple services and complex network configurations", () => {
+test("Expect don't add suffix to astron-collection-network in compose file with multiple services and complex network configurations", () => {
 	const composeData = parse(composeFile4) as ComposeSpecification;
 
 	const suffix = "testhash";

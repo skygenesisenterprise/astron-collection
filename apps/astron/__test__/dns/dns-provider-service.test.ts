@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("@notploy/server/db", () => ({
+vi.mock("@astron-collection/server/db", () => ({
 	db: {
 		query: { dnsProvider: { findFirst: vi.fn(), findMany: vi.fn() } },
 		insert: vi.fn(),
@@ -13,7 +13,7 @@ import {
 	DNS_SECRET_MASK,
 	maskDnsProviderConfig,
 	mergeDnsProviderConfig,
-} from "@notploy/server/services/dns-provider";
+} from "@astron-collection/server/services/dns-provider";
 
 describe("maskDnsProviderConfig", () => {
 	it("masks the apiToken for a cloudflare config", () => {

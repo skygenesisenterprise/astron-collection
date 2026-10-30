@@ -37,7 +37,7 @@ vi.mock("@aws-sdk/client-route-53", () => ({
 	ChangeResourceRecordSetsCommand,
 }));
 
-import { route53Client } from "@notploy/server/utils/dns/route53";
+import { route53Client } from "@astron-collection/server/utils/dns/route53";
 
 const config = {
 	providerType: "route53" as const,

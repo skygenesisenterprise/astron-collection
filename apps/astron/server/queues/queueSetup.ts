@@ -1,9 +1,9 @@
-import { getRedis, IS_CLOUD, isRedisEnabled } from "@notploy/server";
-import { db } from "@notploy/server/db";
+import { getRedis, IS_CLOUD, isRedisEnabled } from "@astron-collection/server";
+import { db } from "@astron-collection/server/db";
 import {
 	execAsync,
 	execAsyncRemote,
-} from "@notploy/server/utils/process/execAsync";
+} from "@astron-collection/server/utils/process/execAsync";
 import { BullMqQueue } from "./bullmq-queue";
 import { resolveBuildsConcurrency } from "./concurrency";
 import { processDeploymentJob } from "./deployments-queue";
@@ -106,7 +106,7 @@ const createBullMqQueue = (): DeploymentQueue => {
 // (relative import in server.ts vs `@/` alias in the routers); without this the
 // worker and the `add()` calls would land on different queue instances.
 const globalForQueue = globalThis as unknown as {
-	__notployDeploymentQueue?: DeploymentQueue;
+	__astronCollectionDeploymentQueue?: DeploymentQueue;
 };
 
 // Managed Cloud production delegates deployments to an external service, so
@@ -114,15 +114,15 @@ const globalForQueue = globalThis as unknown as {
 // with IS_CLOUD=true — a real local worker processes deployments. Without
 // this, Deploy would acknowledge the queued job and never run anything.
 const useNoopQueue = IS_CLOUD && process.env.NODE_ENV === "production";
-if (!globalForQueue.__notployDeploymentQueue) {
-	globalForQueue.__notployDeploymentQueue = !useNoopQueue
+if (!globalForQueue.__astronCollectionDeploymentQueue) {
+	globalForQueue.__astronCollectionDeploymentQueue = !useNoopQueue
 		? isRedisEnabled()
 			? createBullMqQueue()
 			: createInMemoryQueue()
 		: createNoopQueue();
 }
 
-const myQueue: DeploymentQueue = globalForQueue.__notployDeploymentQueue;
+const myQueue: DeploymentQueue = globalForQueue.__astronCollectionDeploymentQueue;
 
 /** Start processing jobs. Called once on server startup (self-hosted). */
 export const startDeploymentWorker = () => myQueue.run();

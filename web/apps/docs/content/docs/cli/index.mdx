@@ -1,12 +1,12 @@
 ---
 title: Introduction
-description: "Install the Notploy CLI, authenticate it and drive projects, applications and servers from your terminal."
+description: "Install the Astron Collection CLI, authenticate it and drive projects, applications and servers from your terminal."
 ---
 
 import { Card, Cards } from 'fumadocs-ui/components/card';
 import { Callout } from 'fumadocs-ui/components/callout';
 
-`notploy` is the official command-line client for Notploy. It talks to the same API the dashboard uses, so anything you can do in the interface — create projects, deploy applications, provision databases, inspect logs, clean up servers — you can do from a shell, a CI job or a Makefile.
+`astron-collection` is the official command-line client for Astron Collection. It talks to the same API the dashboard uses, so anything you can do in the interface — create projects, deploy applications, provision databases, inspect logs, clean up servers — you can do from a shell, a CI job or a Makefile.
 
 The command surface is generated from the API specification rather than written by hand: **57 command groups and 604 commands**, each one mapping to exactly one API operation.
 
@@ -22,44 +22,44 @@ The command surface is generated from the API specification rather than written 
 ## Requirements
 
 - **Node.js 18 or newer** — the CLI declares `>=18.0.0` in its `engines` field.
-- **A Notploy instance you can reach over HTTP** — self-hosted or Notploy Cloud.
+- **A Astron Collection instance you can reach over HTTP** — self-hosted or Astron Collection Cloud.
 - **An API key** with the permissions you need. See [Authentication](/docs/cli/authentication).
 
 ## Installation
 
 ```bash
-npm install -g @notploy/cli
+npm install -g @astron-collection/cli
 ```
 
-The package installs a single binary called `notploy`:
+The package installs a single binary called `astron-collection`:
 
 ```bash
-notploy --version
+astron-collection --version
 ```
 
-`pnpm add -g @notploy/cli` and `bun add -g @notploy/cli` work the same way.
+`pnpm add -g @astron-collection/cli` and `bun add -g @astron-collection/cli` work the same way.
 
 ## Authenticate
 
 ```bash
-notploy auth -u https://panel.example.com -t "$NOTPLOY_API_KEY"
+astron-collection auth -u https://panel.example.com -t "$ASTRON_COLLECTION_API_KEY"
 ```
 
-The CLI validates the key against your instance and stores it for later commands. Environment variables (`NOTPLOY_URL` + `NOTPLOY_API_KEY`) are an alternative that is a better fit for CI — both are covered in [Authentication](/docs/cli/authentication).
+The CLI validates the key against your instance and stores it for later commands. Environment variables (`ASTRON_COLLECTION_URL` + `ASTRON_COLLECTION_API_KEY`) are an alternative that is a better fit for CI — both are covered in [Authentication](/docs/cli/authentication).
 
 ## How commands work
 
 Every command follows the same shape:
 
 ```bash
-notploy <group> <command> [options]
+astron-collection <group> <command> [options]
 ```
 
 | Example | What it does |
 | --- | --- |
-| `notploy project all` | Lists projects (a command with no inputs). |
-| `notploy application one --applicationId <applicationId>` | Reads a single application. |
-| `notploy postgres create --name <name> --environmentId <environmentId>` | Creates a database. |
+| `astron-collection project all` | Lists projects (a command with no inputs). |
+| `astron-collection application one --applicationId <applicationId>` | Reads a single application. |
+| `astron-collection postgres create --name <name> --environmentId <environmentId>` | Creates a database. |
 
 Flags and behaviour:
 
@@ -72,12 +72,12 @@ Flags and behaviour:
 ### Help
 
 ```bash
-notploy --help                    # groups
-notploy application --help        # commands in a group
-notploy application create --help # options of one command
+astron-collection --help                    # groups
+astron-collection application --help        # commands in a group
+astron-collection application create --help # options of one command
 ```
 
-Running `notploy` or `notploy <group>` without a command prints the same help, and `notploy --help` is safe to paste into any script.
+Running `astron-collection` or `astron-collection <group>` without a command prints the same help, and `astron-collection --help` is safe to paste into any script.
 
 ## Output and exit codes
 
@@ -87,7 +87,7 @@ Running `notploy` or `notploy <group>` without a command prints the same help, a
 | `--json` | The raw API payload, unformatted. |
 | Failure (bad key, unknown resource, network error) | The error message on stderr and **exit code 1**. |
 
-Because failures are non-zero exits, the CLI drops straight into pipelines: `notploy application deploy --applicationId "$APP_ID" && echo deployed`.
+Because failures are non-zero exits, the CLI drops straight into pipelines: `astron-collection application deploy --applicationId "$APP_ID" && echo deployed`.
 
 ## How requests are made
 
@@ -105,21 +105,21 @@ Create a project, add an environment, wire up a Git application and deploy it:
 
 ```bash
 # 1. Point the CLI at your instance
-notploy auth -u https://panel.example.com -t "$NOTPLOY_API_KEY"
+astron-collection auth -u https://panel.example.com -t "$ASTRON_COLLECTION_API_KEY"
 
 # 2. Look around
-notploy project all
-notploy server all
+astron-collection project all
+astron-collection server all
 
 # 3. Create a project, then an environment inside it
-notploy project create --name my-project --description "My first project" --env production
-notploy environment create --name production --description "Production" --projectId <projectId>
+astron-collection project create --name my-project --description "My first project" --env production
+astron-collection environment create --name production --description "Production" --projectId <projectId>
 
 # 4. Create an application in that environment
-notploy application create --name my-app --environmentId <environmentId>
+astron-collection application create --name my-app --environmentId <environmentId>
 
 # 5. Connect the Git repository it should build from
-notploy application save-github-provider \
+astron-collection application save-github-provider \
   --applicationId <applicationId> \
   --githubId <githubId> \
   --owner <owner> \
@@ -129,14 +129,14 @@ notploy application save-github-provider \
   --triggerType push
 
 # 6. Deploy, then follow the deployment
-notploy application deploy --applicationId <applicationId>
-notploy deployment all --applicationId <applicationId>
-notploy deployment read-logs --deploymentId <deploymentId>
+astron-collection application deploy --applicationId <applicationId>
+astron-collection deployment all --applicationId <applicationId>
+astron-collection deployment read-logs --deploymentId <deploymentId>
 ```
 
 <Callout type="info">
 	Identifiers such as `<projectId>` are placeholders for values returned by a previous command.
-	`notploy project all --json` prints the raw payload so you can pull them out with `jq`.
+	`astron-collection project all --json` prints the raw payload so you can pull them out with `jq`.
 </Callout>
 
 ## Where to go next

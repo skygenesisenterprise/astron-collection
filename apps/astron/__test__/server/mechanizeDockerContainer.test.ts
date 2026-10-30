@@ -1,5 +1,5 @@
-import type { ApplicationNested } from "@notploy/server/utils/builders";
-import { mechanizeDockerContainer } from "@notploy/server/utils/builders";
+import type { ApplicationNested } from "@astron-collection/server/utils/builders";
+import { mechanizeDockerContainer } from "@astron-collection/server/utils/builders";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 type MockCreateServiceOptions = {
@@ -31,7 +31,7 @@ const { inspectMock, getServiceMock, createServiceMock, getRemoteDockerMock } =
 		};
 	});
 
-vi.mock("@notploy/server/utils/servers/remote-docker", () => ({
+vi.mock("@astron-collection/server/utils/servers/remote-docker", () => ({
 	getRemoteDocker: getRemoteDockerMock,
 }));
 

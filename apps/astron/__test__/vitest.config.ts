@@ -25,7 +25,7 @@ export default defineConfig({
 	],
 	resolve: {
 		alias: {
-			"@notploy/server": path.resolve(
+			"@astron-collection/server": path.resolve(
 				__dirname,
 				"../../../packages/server/src",
 			),

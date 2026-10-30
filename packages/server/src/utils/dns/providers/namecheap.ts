@@ -1,4 +1,4 @@
-import type { namecheapDnsConfigSchema } from "@notploy/server/db/schema";
+import type { namecheapDnsConfigSchema } from "@astron-collection/server/db/schema";
 import { XMLParser } from "fast-xml-parser";
 import type { z } from "zod";
 import { createDnsHttp, stripTrailingDot, toSubdomain } from "../http";

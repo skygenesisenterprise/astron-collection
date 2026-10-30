@@ -1,63 +1,63 @@
 ---
 title: "Whitelabeling"
-description: "Rebrand the instance: application name, logos, favicon and links. Generated from the `notploy` command surface."
+description: "Rebrand the instance: application name, logos, favicon and links. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Rebrand the instance: application name, logos, favicon and links.
 
-`notploy whitelabeling` exposes **4 commands**. They map one-to-one onto the `whitelabeling.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection whitelabeling` exposes **4 commands**. They map one-to-one onto the `whitelabeling.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy whitelabeling --help` to list these commands in your terminal, or
-	`notploy whitelabeling <command> --help` for a single command.
+	Run `astron-collection whitelabeling --help` to list these commands in your terminal, or
+	`astron-collection whitelabeling <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy whitelabeling get`
+### `astron-collection whitelabeling get`
 
 Calls `GET /api/trpc/whitelabeling.get`.
 
 ```bash
-notploy whitelabeling get [options]
+astron-collection whitelabeling get [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy whitelabeling get-public`
+### `astron-collection whitelabeling get-public`
 
 Calls `GET /api/trpc/whitelabeling.getPublic`.
 
 ```bash
-notploy whitelabeling get-public [options]
+astron-collection whitelabeling get-public [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy whitelabeling reset`
+### `astron-collection whitelabeling reset`
 
 Calls `POST /api/trpc/whitelabeling.reset`.
 
 ```bash
-notploy whitelabeling reset [options]
+astron-collection whitelabeling reset [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy whitelabeling update`
+### `astron-collection whitelabeling update`
 
 Calls `POST /api/trpc/whitelabeling.update`.
 
 ```bash
-notploy whitelabeling update --whitelabelingConfig <json> [options]
+astron-collection whitelabeling update --whitelabelingConfig <json> [options]
 ```
 
 | Option | Type | Required | Allowed values |

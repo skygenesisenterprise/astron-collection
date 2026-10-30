@@ -3,18 +3,18 @@ import { defineCapability } from "../contracts/capability.js";
 import { toolResultEnvelopeShape } from "../contracts/result.js";
 import { asArray, asRecord, fetchApplication, projectApplicationSummary } from "./helpers.js";
 
-const projectId = z.string().min(1).max(128).describe("Notploy project identifier");
+const projectId = z.string().min(1).max(128).describe("Astron Collection project identifier");
 const applicationId = z
   .string()
   .min(1)
   .max(128)
-  .describe("Notploy application identifier (not the application name)");
+  .describe("Astron Collection application identifier (not the application name)");
 
 export const listProjectsCapability = defineCapability({
   name: "list_projects",
   title: "List projects",
   description:
-    "Lists the Notploy projects visible to the authenticated identity in the active organization. Use this first to discover project and environment identifiers. Returns a count and the project records; the API already filters projects the identity cannot access.",
+    "Lists the Astron Collection projects visible to the authenticated identity in the active organization. Use this first to discover project and environment identifiers. Returns a count and the project records; the API already filters projects the identity cannot access.",
   category: "discovery",
   mode: "business",
   source: "business",
@@ -61,7 +61,7 @@ export const getProjectCapability = defineCapability({
   name: "get_project",
   title: "Get project",
   description:
-    "Returns one Notploy project by identifier, including its environments and services when the API provides them. Use list_projects first when the identifier is unknown.",
+    "Returns one Astron Collection project by identifier, including its environments and services when the API provides them. Use list_projects first when the identifier is unknown.",
   category: "discovery",
   mode: "business",
   source: "business",
@@ -102,7 +102,7 @@ export const getApplicationCapability = defineCapability({
   name: "get_application",
   title: "Get application",
   description:
-    "Returns one Notploy application with a stable summary (environment, project, source type, status) and the raw application record. Requires service read access; the API also enforces the identity's per-service access list.",
+    "Returns one Astron Collection application with a stable summary (environment, project, source type, status) and the raw application record. Requires service read access; the API also enforces the identity's per-service access list.",
   category: "discovery",
   mode: "business",
   source: "business",
@@ -209,7 +209,7 @@ export const listServersCapability = defineCapability({
   name: "list_servers",
   title: "List servers",
   description:
-    "Lists the Notploy servers the authenticated identity can read, with their status and connection details useful for deployment diagnostics. Requires server read permission.",
+    "Lists the Astron Collection servers the authenticated identity can read, with their status and connection details useful for deployment diagnostics. Requires server read permission.",
   category: "discovery",
   mode: "business",
   source: "business",

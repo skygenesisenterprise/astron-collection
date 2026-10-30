@@ -1,4 +1,4 @@
-import type { cloudnsDnsConfigSchema } from "@notploy/server/db/schema";
+import type { cloudnsDnsConfigSchema } from "@astron-collection/server/db/schema";
 import type { z } from "zod";
 import { createDnsHttp, stripTrailingDot, toSubdomain } from "../http";
 import type { DnsClient } from "../types";

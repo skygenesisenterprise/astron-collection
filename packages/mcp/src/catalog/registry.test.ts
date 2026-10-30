@@ -7,8 +7,8 @@ import { buildCatalog, CapabilityRegistry } from "./registry.js";
 
 function config(overrides: Partial<McpConfig> = {}): McpConfig {
   const base = loadConfig({
-    NOTPLOY_URL: "https://notploy.example.com",
-    NOTPLOY_API_KEY: "test-api-key-12345678",
+    ASTRON_COLLECTION_URL: "https://astron-collection.example.com",
+    ASTRON_COLLECTION_API_KEY: "test-api-key-12345678",
   } as NodeJS.ProcessEnv);
   return {
     ...base,
@@ -142,7 +142,7 @@ describe("buildCatalog", () => {
       }),
     );
     expect(
-      catalog.warnings.some((warning) => warning.includes("Unknown NOTPLOY_TOOL_PRESET")),
+      catalog.warnings.some((warning) => warning.includes("Unknown ASTRON_COLLECTION_TOOL_PRESET")),
     ).toBe(true);
   });
 });

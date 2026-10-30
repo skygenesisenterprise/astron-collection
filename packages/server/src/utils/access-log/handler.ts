@@ -1,10 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
-import { paths } from "@notploy/server/constants";
+import { paths } from "@astron-collection/server/constants";
 import {
 	getWebServerSettings,
 	updateWebServerSettings,
-} from "@notploy/server/services/web-server-settings";
+} from "@astron-collection/server/services/web-server-settings";
 import { scheduledJobs, scheduleJob } from "node-schedule";
 import { execAsync } from "../process/execAsync";
 
@@ -33,11 +33,11 @@ export const startLogCleanup = async (
 					`tail -n 1000 ${accessLogPath} > ${accessLogPath}.tmp && mv ${accessLogPath}.tmp ${accessLogPath}`,
 				);
 
-				// Traefik can run as a standalone container ("notploy-traefik") or a
-				// swarm service task ("notploy-traefik.1.<task-id>"), so resolve the
+				// Traefik can run as a standalone container ("astron-collection-traefik") or a
+				// swarm service task ("astron-collection-traefik.1.<task-id>"), so resolve the
 				// running container id dynamically instead of assuming the name.
 				const { stdout: containerId } = await execAsync(
-					'docker ps -q --filter "name=notploy-traefik" --filter "status=running" | head -n 1',
+					'docker ps -q --filter "name=astron-collection-traefik" --filter "status=running" | head -n 1',
 				);
 				const traefikContainerId = containerId.trim();
 				if (!traefikContainerId) {

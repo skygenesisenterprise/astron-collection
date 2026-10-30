@@ -22,7 +22,7 @@ export const Logo = ({ className = "size-14", logoUrl }: Props) => {
 			<source media="(prefers-color-scheme: dark)" srcSet="/icon-dark.svg" />
 			<img
 				src="/icon-light.svg"
-				alt="Notploy"
+				alt="Astron Collection"
 				className={cn(className, "object-contain")}
 			/>
 		</picture>

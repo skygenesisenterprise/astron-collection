@@ -1,7 +1,7 @@
 /**
  * Status page administration.
  *
- * A "page" is a publication scope (e.g. `notploy`, `sge-cloud`). Multiple
+ * A "page" is a publication scope (e.g. `astron-collection`, `sge-cloud`). Multiple
  * pages let the platform serve several products without duplicating the
  * deployment.
  */

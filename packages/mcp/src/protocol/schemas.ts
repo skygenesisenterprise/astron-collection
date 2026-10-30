@@ -61,7 +61,7 @@ function stripUnsupportedRegexPatterns(value: unknown): void {
  * built-in Zod converter emits draft-07, so tool listing is served from
  * pre-converted schemas with a custom list handler.
  *
- * See https://github.com/skygenesisenterprise/notploy/issues/32
+ * See https://github.com/skygenesisenterprise/astron-collection/issues/32
  */
 export function toDraft2020_12JsonSchema(schema: ZodObject<ZodRawShape>): Record<string, unknown> {
   const result = zodToJsonSchema(schema, {
@@ -117,15 +117,15 @@ export function toToolListEntry(capability: AnyCapability): ToolListEntry {
     outputSchema: capabilityOutputSchema(capability),
     annotations: capability.annotations,
     _meta: {
-      "notploy/mode": capability.mode,
-      "notploy/source": capability.source,
-      "notploy/risk": risk,
-      "notploy/environments": [...capability.environments],
-      "notploy/permissions": capability.permissions.map(describePermission),
-      "notploy/version": capability.version,
-      "notploy/status": capability.status,
-      "notploy/effects": capability.effects,
-      "notploy/approvalRequired": risk >= 2,
+      "astron-collection/mode": capability.mode,
+      "astron-collection/source": capability.source,
+      "astron-collection/risk": risk,
+      "astron-collection/environments": [...capability.environments],
+      "astron-collection/permissions": capability.permissions.map(describePermission),
+      "astron-collection/version": capability.version,
+      "astron-collection/status": capability.status,
+      "astron-collection/effects": capability.effects,
+      "astron-collection/approvalRequired": risk >= 2,
     },
   };
 }

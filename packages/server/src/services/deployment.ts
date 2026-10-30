@@ -1,7 +1,7 @@
 import { existsSync, promises as fsPromises } from "node:fs";
 import path from "node:path";
-import { IS_CLOUD, paths } from "@notploy/server/constants";
-import { db } from "@notploy/server/db";
+import { IS_CLOUD, paths } from "@astron-collection/server/constants";
+import { db } from "@astron-collection/server/db";
 import {
 	type apiCreateDeployment,
 	type apiCreateDeploymentBackup,
@@ -15,13 +15,13 @@ import {
 	deployments,
 	environments,
 	projects,
-} from "@notploy/server/db/schema";
-import { removeDirectoryIfExistsContent } from "@notploy/server/utils/filesystem/directory";
+} from "@astron-collection/server/db/schema";
+import { removeDirectoryIfExistsContent } from "@astron-collection/server/utils/filesystem/directory";
 import {
 	execAsync,
 	execAsyncRemote,
-} from "@notploy/server/utils/process/execAsync";
-import { redactSecrets } from "@notploy/server/utils/security/redact";
+} from "@astron-collection/server/utils/process/execAsync";
+import { redactSecrets } from "@astron-collection/server/utils/security/redact";
 import { TRPCError } from "@trpc/server";
 import { format } from "date-fns";
 import {
@@ -198,7 +198,7 @@ export const createDeployment = async (
 			const command = `
 				mkdir -p ${LOGS_PATH}/${application.appName};
             	echo "Initializing deployment" >> ${logFilePath};
-			    echo "Building on ${serverId ? "Build Server" : "Notploy Server"}" >> ${logFilePath};
+			    echo "Building on ${serverId ? "Build Server" : "Astron Collection Server"}" >> ${logFilePath};
 			`;
 
 			await execAsyncRemote(server.serverId, command);

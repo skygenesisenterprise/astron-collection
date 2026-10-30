@@ -1,4 +1,4 @@
-import type { corednsDnsConfigSchema } from "@notploy/server/db/schema";
+import type { corednsDnsConfigSchema } from "@astron-collection/server/db/schema";
 import { Buffer } from "node:buffer";
 import type { z } from "zod";
 import { createDnsHttp, stripTrailingDot } from "../http";

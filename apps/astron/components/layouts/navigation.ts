@@ -56,8 +56,8 @@ type PermissionsOutput =
 /**
  * Deployment environments a navigation node can target.
  *
- * - `self`    self-hosted Notploy
- * - `cloud`   managed Notploy Cloud
+ * - `self`    self-hosted Astron Collection
+ * - `cloud`   managed Astron Collection Cloud
  * - `console` platform operator console
  */
 export type NavigationEnvironment = "self" | "cloud" | "console";
@@ -732,7 +732,7 @@ type ExternalNavigationDestination = {
 const EXTERNAL_DESTINATIONS = {
 	documentation: {
 		label: "Documentation",
-		href: "https://docs.notploy.com/docs/core",
+		href: "https://docs.astron-collection.com/docs/core",
 		icon: BookIcon,
 	},
 	support: {

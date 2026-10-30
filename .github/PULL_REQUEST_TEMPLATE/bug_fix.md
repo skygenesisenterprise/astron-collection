@@ -26,12 +26,12 @@ Casing is not enforced.
 ## How this was verified
 
 <!--
-Tests, or the exact manual steps you followed. Notploy's test suite lives in
-apps/notploy/__test__ (vitest) and runs with `pnpm test`; `pnpm typecheck` and
+Tests, or the exact manual steps you followed. Astron Collection's test suite lives in
+apps/astron-collection/__test__ (vitest) and runs with `pnpm test`; `pnpm typecheck` and
 `pnpm lint` (Biome) cover the workspace.
 -->
 
-- [ ] Added or updated a test in `apps/notploy/__test__/` that fails without this change
+- [ ] Added or updated a test in `apps/astron-collection/__test__/` that fails without this change
 - [ ] Verified manually — steps: <!-- ... -->
 - [ ] No new test — the fix is in wiring, styling, or configuration
 

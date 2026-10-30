@@ -1,7 +1,7 @@
 /*
- * Notploy Status — visual identity shared with the Notploy console.
+ * Astron Collection Status — visual identity shared with the Astron Collection console.
  *
- * The oklch tokens mirror `apps/notploy/styles/globals.css` so the status
+ * The oklch tokens mirror `apps/astron-collection/styles/globals.css` so the status
  * page reads as the same product family, while staying a self-contained
  * stylesheet: the status platform must render even when the console
  * frontend stack is unavailable. Dark mode follows the system preference.

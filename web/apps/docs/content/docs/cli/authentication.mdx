@@ -30,7 +30,7 @@ Copy the key when it is shown. It is displayed once; only a prefix is kept after
 ## Log the CLI in
 
 ```bash
-notploy auth -u https://panel.example.com -t YOUR_API_KEY
+astron-collection auth -u https://panel.example.com -t YOUR_API_KEY
 ```
 
 Both `--url` and `--token` are required. The CLI:
@@ -43,7 +43,7 @@ If the call fails you get `Authentication failed: <reason>` and the command exit
 
 ## Where the credentials are stored
 
-`notploy auth` writes a `config.json` next to the installed CLI package:
+`astron-collection auth` writes a `config.json` next to the installed CLI package:
 
 ```json
 {
@@ -52,7 +52,7 @@ If the call fails you get `Authentication failed: <reason>` and the command exit
 }
 ```
 
-Because that file lives inside the package directory (for a global install, something like `$(npm root -g)/@notploy/cli/config.json`), that directory has to be writable by your user. It usually is — and when it is not, the environment variables below are the better answer.
+Because that file lives inside the package directory (for a global install, something like `$(npm root -g)/@astron-collection/cli/config.json`), that directory has to be writable by your user. It usually is — and when it is not, the environment variables below are the better answer.
 
 The file is plain text, so keep it out of backups and repositories. It is not read from your project — the CLI always uses the file in its own package directory.
 
@@ -62,17 +62,17 @@ For CI, containers and ephemeral machines, configure the CLI through the environ
 
 | Variable | Purpose |
 | --- | --- |
-| `NOTPLOY_URL` | Base URL of your instance, for example `https://panel.example.com`. |
-| `NOTPLOY_API_KEY` | The API key. Preferred name. |
-| `NOTPLOY_AUTH_TOKEN` | Alternative name for the key, used when `NOTPLOY_API_KEY` is not set. |
+| `ASTRON_COLLECTION_URL` | Base URL of your instance, for example `https://panel.example.com`. |
+| `ASTRON_COLLECTION_API_KEY` | The API key. Preferred name. |
+| `ASTRON_COLLECTION_AUTH_TOKEN` | Alternative name for the key, used when `ASTRON_COLLECTION_API_KEY` is not set. |
 
 <Tabs items={['Shell', 'CI (GitHub Actions)']}>
 <Tab value="Shell">
 ```bash
-export NOTPLOY_URL="https://panel.example.com"
-export NOTPLOY_API_KEY="YOUR_API_KEY"
+export ASTRON_COLLECTION_URL="https://panel.example.com"
+export ASTRON_COLLECTION_API_KEY="YOUR_API_KEY"
 
-notploy project all
+astron-collection project all
 ```
 </Tab>
 <Tab value="CI (GitHub Actions)">
@@ -81,11 +81,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - run: npm install -g @notploy/cli
-      - run: notploy application deploy --applicationId "$APP_ID"
+      - run: npm install -g @astron-collection/cli
+      - run: astron-collection application deploy --applicationId "$APP_ID"
         env:
-          NOTPLOY_URL: ${{ secrets.NOTPLOY_URL }}
-          NOTPLOY_API_KEY: ${{ secrets.NOTPLOY_API_KEY }}
+          ASTRON_COLLECTION_URL: ${{ secrets.ASTRON_COLLECTION_URL }}
+          ASTRON_COLLECTION_API_KEY: ${{ secrets.ASTRON_COLLECTION_API_KEY }}
 ```
 </Tab>
 </Tabs>
@@ -97,8 +97,8 @@ Both the URL **and** the key have to be present in the environment: if only one 
 The CLI also reads a `.env` file from **the directory you run it in**, on every command:
 
 ```bash
-NOTPLOY_URL="https://panel.example.com"
-NOTPLOY_API_KEY="YOUR_API_KEY"
+ASTRON_COLLECTION_URL="https://panel.example.com"
+ASTRON_COLLECTION_API_KEY="YOUR_API_KEY"
 ```
 
 - Variables already defined in the shell **win**: the file only fills in what the environment does not provide.
@@ -109,23 +109,23 @@ NOTPLOY_API_KEY="YOUR_API_KEY"
 
 | Order | Source | Notes |
 | --- | --- | --- |
-| 1 | Environment variables | Used when `NOTPLOY_URL` and either key variable are set. |
+| 1 | Environment variables | Used when `ASTRON_COLLECTION_URL` and either key variable are set. |
 | 2 | `.env` in the working directory | Only fills variables the shell does not already define. |
-| 3 | `config.json` from `notploy auth` | Used when the environment does not provide a complete pair. |
+| 3 | `config.json` from `astron-collection auth` | Used when the environment does not provide a complete pair. |
 
-A typical setup therefore is: `notploy auth` on your own machine, environment variables in CI, and never both in the same place.
+A typical setup therefore is: `astron-collection auth` on your own machine, environment variables in CI, and never both in the same place.
 
 ## Troubleshooting
 
 | Message | Cause |
 | --- | --- |
-| `No configuration found. Please run 'notploy auth' first or set NOTPLOY_URL and NOTPLOY_AUTH_TOKEN environment variables.` | Nothing is configured — no usable environment pair and no `config.json`. |
-| `Incomplete auth config. Run 'notploy auth' or set environment variables.` | A `config.json` exists but is missing `url` or `token`. Re-run `notploy auth`. |
-| `Authentication failed: <reason>` | `notploy auth` could not validate the key: wrong URL, wrong key, expired key, or the instance is unreachable. |
+| `No configuration found. Please run 'astron-collection auth' first or set ASTRON_COLLECTION_URL and ASTRON_COLLECTION_AUTH_TOKEN environment variables.` | Nothing is configured — no usable environment pair and no `config.json`. |
+| `Incomplete auth config. Run 'astron-collection auth' or set environment variables.` | A `config.json` exists but is missing `url` or `token`. Re-run `astron-collection auth`. |
+| `Authentication failed: <reason>` | `astron-collection auth` could not validate the key: wrong URL, wrong key, expired key, or the instance is unreachable. |
 | `error: required option '--name <value>' not specified` | A different problem: a mandatory flag is missing. See the [command reference](/docs/cli/reference). |
 
 Every one of these exits with code 1, so a script stops instead of running against the wrong instance.
 
 ## Managing keys from the CLI
 
-Keys can also be managed headlessly — `notploy user create-api-key` creates one and `notploy user delete-api-key` revokes it. Both need an already-authenticated CLI, which makes them handy for rotating a key from the machine that holds it. Their flags, including expiry and rate limits, are listed under [Users](/docs/cli/user).
+Keys can also be managed headlessly — `astron-collection user create-api-key` creates one and `astron-collection user delete-api-key` revokes it. Both need an already-authenticated CLI, which makes them handy for rotating a key from the machine that holds it. Their flags, including expiry and rate limits, are listed under [Users](/docs/cli/user).

@@ -1,10 +1,10 @@
 import { execFileSync } from "node:child_process";
 import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { getCreateEnvFileCommand } from "@notploy/server/utils/builders/compose";
+import { getCreateEnvFileCommand } from "@astron-collection/server/utils/builders/compose";
 import { afterEach, describe, expect, it } from "vitest";
 
-// Regression coverage for https://github.com/skygenesisenterprise/notploy/issues/4694 —
+// Regression coverage for https://github.com/skygenesisenterprise/astron-collection/issues/4694 —
 // values must survive Docker Compose's own `.env` parsing, not just base64 decode.
 const appName = `env-file-literals-${process.pid}`;
 const projectPath = join(process.cwd(), ".docker", "compose", appName);

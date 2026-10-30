@@ -1,4 +1,4 @@
-import { redactRcloneCredentials } from "@notploy/server/utils/backups/redact";
+import { redactRcloneCredentials } from "@astron-collection/server/utils/backups/redact";
 import { describe, expect, it } from "vitest";
 
 describe("redactRcloneCredentials (#4621)", () => {

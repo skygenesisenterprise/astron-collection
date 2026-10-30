@@ -7,7 +7,7 @@ const ping = vi.fn();
 const listSecrets = vi.fn();
 const listConfigs = vi.fn();
 
-vi.mock("@notploy/server/constants", () => ({
+vi.mock("@astron-collection/server/constants", () => ({
 	docker: {
 		ping: (...args: unknown[]) => ping(...args),
 		listSecrets: (...args: unknown[]) => listSecrets(...args),
@@ -15,7 +15,7 @@ vi.mock("@notploy/server/constants", () => ({
 	},
 }));
 
-import { dockerClient } from "@notploy/server/utils/vault/docker";
+import { dockerClient } from "@astron-collection/server/utils/vault/docker";
 
 let mountPath: string;
 
@@ -25,7 +25,7 @@ beforeEach(async () => {
 	ping.mockReset().mockResolvedValue("OK");
 	listSecrets.mockReset().mockResolvedValue([]);
 	listConfigs.mockReset().mockResolvedValue([]);
-	mountPath = await mkdtemp(join(tmpdir(), "notploy-docker-vault-"));
+	mountPath = await mkdtemp(join(tmpdir(), "astron-collection-docker-vault-"));
 });
 
 afterEach(async () => {

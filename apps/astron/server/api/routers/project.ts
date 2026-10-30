@@ -33,16 +33,16 @@ import {
 	isManagedCloud,
 	updateProjectById,
 	updateUser,
-} from "@notploy/server";
-import { db } from "@notploy/server/db";
+} from "@astron-collection/server";
+import { db } from "@astron-collection/server/db";
 import {
 	addNewEnvironment,
 	addNewProject,
 	checkPermission,
 	checkProjectAccess,
 	findMemberByUserId,
-} from "@notploy/server/services/permission";
-import { serviceColumns } from "@notploy/server/services/project";
+} from "@astron-collection/server/services/permission";
+import { serviceColumns } from "@astron-collection/server/services/project";
 import { TRPCError } from "@trpc/server";
 import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
 import type { AnyPgColumn } from "drizzle-orm/pg-core";

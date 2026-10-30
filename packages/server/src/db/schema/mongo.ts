@@ -93,7 +93,7 @@ export const mongo = pgTable("mongo", {
 	}),
 	replicaSets: boolean("replicaSets").default(false),
 	networkIds: text("networkIds").array().default([]),
-	detachNotployNetwork: boolean("detachNotployNetwork")
+	detachAstronCollectionNetwork: boolean("detachAstronCollectionNetwork")
 		.notNull()
 		.default(false),
 });
@@ -151,7 +151,7 @@ const createSchema = createInsertSchema(mongo, {
 	endpointSpecSwarm: EndpointSpecSwarmSchema.nullable(),
 	ulimitsSwarm: UlimitsSwarmSchema.nullable(),
 	networkIds: z.array(z.string()).optional(),
-	detachNotployNetwork: z.boolean().optional(),
+	detachAstronCollectionNetwork: z.boolean().optional(),
 });
 
 export const apiCreateMongo = createSchema.pick({

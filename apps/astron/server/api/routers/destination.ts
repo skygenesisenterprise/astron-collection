@@ -7,8 +7,8 @@ import {
 	IS_CLOUD,
 	removeDestinationById,
 	updateDestinationById,
-} from "@notploy/server";
-import { db } from "@notploy/server/db";
+} from "@astron-collection/server";
+import { db } from "@astron-collection/server/db";
 import { TRPCError } from "@trpc/server";
 import { desc, eq } from "drizzle-orm";
 import { quote } from "shell-quote";

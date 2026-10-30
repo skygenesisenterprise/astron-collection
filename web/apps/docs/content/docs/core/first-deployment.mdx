@@ -8,7 +8,7 @@ This is the payoff of the setup path: a project, an application, and a deploymen
 ## 1. Create a project
 
 1. Open **Projects** and create a new project — for example `demo`.
-2. Give it a name; Notploy creates a default **environment** (usually `production`).
+2. Give it a name; Astron Collection creates a default **environment** (usually `production`).
 
 A project groups related services; the environment is the deployment context they run in. See [Core concepts](/docs/core/concepts#project).
 
@@ -20,9 +20,9 @@ A project groups related services; the environment is the deployment context the
 2. Pick the **source** you connected in the previous step (a repository, an image, or an upload).
 3. Select the **build type**:
    - **Dockerfile** if your repository contains one.
-   - **Nixpacks / Railpack / buildpacks** to let Notploy detect and build your stack.
+   - **Nixpacks / Railpack / buildpacks** to let Astron Collection detect and build your stack.
    - **Static** / **Docker image** when no build is needed.
-4. Save. Notploy reads the repository and prepares the service.
+4. Save. Astron Collection reads the repository and prepares the service.
 
 See [Build types](/docs/core/applications/build-type) if you are unsure which to choose.
 
@@ -40,7 +40,7 @@ Never commit real credentials to the repository — put them in environment vari
 
 ## 4. Deploy
 
-Click **Deploy**. Notploy:
+Click **Deploy**. Astron Collection:
 
 1. fetches the source,
 2. builds (or pulls) the image,

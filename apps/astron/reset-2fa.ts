@@ -1,12 +1,12 @@
-import { findOwner } from "@notploy/server";
-import { db } from "@notploy/server/db";
+import { findOwner } from "@astron-collection/server";
+import { db } from "@astron-collection/server/db";
 import {
 	securityKey,
 	securityKeyBackupCode,
 	securityKeyLoginRequest,
 	twoFactor,
 	user,
-} from "@notploy/server/db/schema";
+} from "@astron-collection/server/db/schema";
 import { eq } from "drizzle-orm";
 
 /**

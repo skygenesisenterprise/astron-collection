@@ -22,7 +22,7 @@
 		"outDir": "./dist",
 		/* Path Aliases */
 		"paths": {
-			"@notploy/server/*": ["./src/*"]
+			"@astron-collection/server/*": ["./src/*"]
 		}
 	},
 	"include": ["next-env.d.ts", "./src/**/*.ts"],
@@ -30,7 +30,7 @@
 	"exclude": [
 		"tsup.ts",
 		"node_modules",
-		"notploy",
+		"astron-collection",
 		"config",
 		"dist",
 		".next",

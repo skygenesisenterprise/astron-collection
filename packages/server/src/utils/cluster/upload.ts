@@ -1,12 +1,12 @@
-import { findAllDeploymentsByApplicationId } from "@notploy/server/services/deployment";
+import { findAllDeploymentsByApplicationId } from "@astron-collection/server/services/deployment";
 import {
 	findRegistryByIdWithCredentials,
 	type Registry,
 	resolveRegistryCredentials,
 	safeDockerLoginCommand,
-} from "@notploy/server/services/registry";
-import { createRollback } from "@notploy/server/services/rollbacks";
-import { registryProviderLabels } from "@notploy/server/utils/registry";
+} from "@astron-collection/server/services/registry";
+import { createRollback } from "@astron-collection/server/services/rollbacks";
+import { registryProviderLabels } from "@astron-collection/server/utils/registry";
 import { quote } from "shell-quote";
 import type { ApplicationNested } from "../builders";
 

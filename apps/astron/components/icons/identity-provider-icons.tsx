@@ -11,7 +11,7 @@ import type { ProviderProtocol } from "@/components/proprietary/sso/sso-provider
 
 /**
  * Icon shown for each identity provider protocol. Protocols share a generic
- * icon because Notploy addresses them by protocol, not by vendor.
+ * icon because Astron Collection addresses them by protocol, not by vendor.
  */
 export const identityProviderIcons: Record<ProviderProtocol, LucideIcon> = {
 	oidc: KeyRound,

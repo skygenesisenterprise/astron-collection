@@ -1,4 +1,4 @@
-import { db } from "@notploy/server/db";
+import { db } from "@astron-collection/server/db";
 import { TRPCError } from "@trpc/server";
 import { sql } from "drizzle-orm";
 import { checkServiceAccess, type PermissionCtx } from "./permission";

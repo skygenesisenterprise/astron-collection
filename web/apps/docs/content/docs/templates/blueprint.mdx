@@ -3,13 +3,13 @@ title: Blueprint anatomy
 description: "The files that make up a template and the rules every blueprint follows."
 ---
 
-**Purpose** — A blueprint is one folder under `templates/blueprints/` in the Notploy repository, mirrored at `/blueprints/<id>/` on every gallery host. This page describes its files, the metadata contract and the Compose rules the validators enforce.
+**Purpose** — A blueprint is one folder under `templates/blueprints/` in the Astron Collection repository, mirrored at `/blueprints/<id>/` on every gallery host. This page describes its files, the metadata contract and the Compose rules the validators enforce.
 
 ## Files
 
 | File | Required | Role |
 | --- | --- | --- |
-| `docker-compose.yml` | Yes | The stack Notploy deploys. |
+| `docker-compose.yml` | Yes | The stack Astron Collection deploys. |
 | `template.toml` | Yes | Variables, environment, domains and file mounts generated on import. |
 | `meta.json` | Yes | Catalogue metadata: identity, links and tags. |
 | `<logo>.svg` (or `.png`, `.webp`, `.jpg`) | Yes | Logo referenced by the `logo` field of `meta.json`. |
@@ -48,13 +48,13 @@ Every blueprint owns its metadata in its own folder, so pull requests never touc
 
 ## docker-compose.yml
 
-The compose file is a regular Docker Compose file, with three Notploy conventions:
+The compose file is a regular Docker Compose file, with three Astron Collection conventions:
 
 | Rule | Why |
 | --- | --- |
-| No `container_name` | Notploy names containers per deployment so several copies can coexist. |
-| No `networks` section | Notploy creates the network the stack runs on. |
-| Ports as bare numbers (`3000`), never `3000:3000` | Notploy routes traffic to the service itself; publishing ports on the host is not needed. |
+| No `container_name` | Astron Collection names containers per deployment so several copies can coexist. |
+| No `networks` section | Astron Collection creates the network the stack runs on. |
+| Ports as bare numbers (`3000`), never `3000:3000` | Astron Collection routes traffic to the service itself; publishing ports on the host is not needed. |
 
 Service names should be lowercase and use hyphens instead of underscores. At least one service is required.
 
@@ -76,8 +76,8 @@ Two comment markers lift a rule for blueprints whose protocol genuinely requires
 
 | Marker | Use when |
 | --- | --- |
-| `# notploy: allow-host-ports` | Traffic cannot be routed by the HTTP proxy: raw TCP/UDP protocols (game servers, VPNs, mail SMTP/IMAP, DNS, streaming, peer-to-peer). |
-| `# notploy: allow-container-names` | The stack functionally resolves other containers by name, and the names are deployment-unique. Rare — legacy Supabase is the reference case. |
+| `# astron-collection: allow-host-ports` | Traffic cannot be routed by the HTTP proxy: raw TCP/UDP protocols (game servers, VPNs, mail SMTP/IMAP, DNS, streaming, peer-to-peer). |
+| `# astron-collection: allow-container-names` | The stack functionally resolves other containers by name, and the names are deployment-unique. Rare — legacy Supabase is the reference case. |
 
 With a marker in place the validator downgrades the violation to a warning and records the reason in its output.
 

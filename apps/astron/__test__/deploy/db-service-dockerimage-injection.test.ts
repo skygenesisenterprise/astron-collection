@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
 // The six database deploy functions (postgres/mysql/mariadb/mongo/redis/libsql)
 // build `docker pull ${quote([dockerImage])}` for the remote (execAsyncRemote)
 // path. `docker` is replaced by `:` so only the injection surface is exercised.
-const MARK = `/tmp/notploy_dbimg_pwned_${process.pid}`;
+const MARK = `/tmp/astron_collectiondbimg_pwned_${process.pid}`;
 
 const PAYLOADS = [
 	"$(touch %MARK%)",

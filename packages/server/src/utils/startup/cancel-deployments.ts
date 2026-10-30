@@ -3,7 +3,7 @@ import {
 	compose,
 	deployments,
 	schedules,
-} from "@notploy/server/db/schema";
+} from "@astron-collection/server/db/schema";
 import { eq, inArray } from "drizzle-orm";
 import { db } from "../../db/index";
 
@@ -25,7 +25,7 @@ export const initCancelDeployments = async () => {
 			.filter(
 				(deployment) =>
 					!deployment.scheduleId ||
-					deployment.scheduleType === "notploy-server",
+					deployment.scheduleType === "astron-collection-server",
 			)
 			.map((deployment) => deployment.deploymentId);
 

@@ -29,7 +29,7 @@ For a new page: what it covers and who it is for.
 <!--
 The API reference under `content/docs/api/` is generated from the OpenAPI
 specification. If your change belongs there, the real fix is the router and its
-`.meta` in `apps/notploy/server/api/routers/`, not the generated MDX.
+`.meta` in `apps/astron-collection/server/api/routers/`, not the generated MDX.
 -->
 
 - [ ] Hand-written docs only

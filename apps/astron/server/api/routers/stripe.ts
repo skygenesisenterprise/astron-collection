@@ -3,9 +3,9 @@ import {
 	findUserById,
 	IS_CLOUD,
 	updateUser,
-} from "@notploy/server";
-import { db } from "@notploy/server/db";
-import { member, organization } from "@notploy/server/db/schema";
+} from "@astron-collection/server";
+import { db } from "@astron-collection/server/db";
+import { member, organization } from "@astron-collection/server/db/schema";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import Stripe from "stripe";
@@ -42,7 +42,7 @@ import {
 /**
  * Resolves the account that owns billing for the active organization.
  *
- * Notploy Cloud keeps Stripe state on the organization owner's user row, so
+ * Astron Collection Cloud keeps Stripe state on the organization owner's user row, so
  * every billing operation is scoped through that owner rather than the caller.
  * This is what makes billing organization-level even though the data model is
  * denormalized.
@@ -248,7 +248,7 @@ export const stripeRouter = createTRPCRouter({
 			if (!IS_CLOUD) {
 				throw new TRPCError({
 					code: "BAD_REQUEST",
-					message: "This feature is only available in Notploy Cloud",
+					message: "This feature is only available in Astron Collection Cloud",
 				});
 			}
 
@@ -613,7 +613,7 @@ export const stripeRouter = createTRPCRouter({
 			if (!IS_CLOUD) {
 				throw new TRPCError({
 					code: "BAD_REQUEST",
-					message: "This feature is only available in Notploy Cloud",
+					message: "This feature is only available in Astron Collection Cloud",
 				});
 			}
 			const owner = await findUserById(ctx.user.ownerId);

@@ -140,7 +140,7 @@ export const requireScope = (
 ): AuthenticatedActor => {
 	if (!actor) {
 		throw unauthorized(
-			"This endpoint requires a Notploy Status API token (Authorization: Bearer <token>)",
+			"This endpoint requires a Astron Collection Status API token (Authorization: Bearer <token>)",
 		);
 	}
 	if (!actor.scopes.includes(scope) && !actor.scopes.includes("admin")) {

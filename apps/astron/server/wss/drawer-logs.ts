@@ -1,5 +1,5 @@
 import type http from "node:http";
-import { validateRequest } from "@notploy/server/lib/auth";
+import { validateRequest } from "@astron-collection/server/lib/auth";
 import { applyWSSHandler } from "@trpc/server/adapters/ws";
 import { WebSocketServer } from "ws";
 import { appRouter } from "../api/root";

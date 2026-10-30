@@ -1,7 +1,7 @@
 /**
  * Shared AI contracts.
  *
- * A provider describes *how* Notploy reaches a model endpoint. A model is an
+ * A provider describes *how* Astron Collection reaches a model endpoint. A model is an
  * identifier exposed by that endpoint. Capabilities describe what the adapter
  * knows about the protocol, not what every model served by it can do — an
  * `unknown` capability must never be presented as guaranteed.
@@ -23,7 +23,7 @@ export type AiCapabilityKey = (typeof AI_CAPABILITY_KEYS)[number];
 /**
  * - `supported`: declared by the adapter and safe to rely on for this endpoint.
  * - `unsupported`: the adapter cannot provide it.
- * - `unknown`: the endpoint may support it, but Notploy has not verified it.
+ * - `unknown`: the endpoint may support it, but Astron Collection has not verified it.
  */
 export type AiCapabilitySupport = "supported" | "unsupported" | "unknown";
 
@@ -75,7 +75,7 @@ export interface AiProviderPreset {
 	category: AiProviderCategory;
 	description: string;
 	requiresApiKey: boolean;
-	/** Whether the provider exposes an endpoint Notploy can use to list models. */
+	/** Whether the provider exposes an endpoint Astron Collection can use to list models. */
 	modelDiscovery: boolean;
 	capabilities: AiCapabilities;
 }

@@ -17,8 +17,8 @@ import {
 	updateVaultProvider,
 	updateVaultSecret,
 	type VaultSecretRecord,
-} from "@notploy/server";
-import { findMemberByUserId } from "@notploy/server/services/permission";
+} from "@astron-collection/server";
+import { findMemberByUserId } from "@astron-collection/server/services/permission";
 import { TRPCError } from "@trpc/server";
 import { audit } from "@/server/api/utils/audit";
 import {
@@ -191,7 +191,7 @@ export const vaultProviderRouter = createTRPCRouter({
 
 	/**
 	 * Secret records (name, source and resolvability) for a connected provider,
-	 * combining the provider adapter's secrets with the ones Notploy manages.
+	 * combining the provider adapter's secrets with the ones Astron Collection manages.
 	 * Values are never returned, and the read is auditable.
 	 */
 	listSecrets: withPermission("vaultProvider", "read")
@@ -207,13 +207,13 @@ export const vaultProviderRouter = createTRPCRouter({
 			const managedRecords: VaultSecretRecord[] = managed.map((secret) => ({
 				id: secret.vaultSecretId,
 				name: secret.name,
-				source: "Notploy",
+				source: "Astron Collection",
 				resolvable: true,
 				managed: true,
 				...(secret.description ? { detail: secret.description } : {}),
 			}));
 
-			// A broken adapter must not hide the secrets Notploy stores itself.
+			// A broken adapter must not hide the secrets Astron Collection stores itself.
 			let external: VaultSecretRecord[] = [];
 			try {
 				external = await listVaultProviderSecretRecords(provider.config);
@@ -242,7 +242,7 @@ export const vaultProviderRouter = createTRPCRouter({
 			};
 		}),
 
-	/** Stores a secret in Notploy, encrypted at rest. */
+	/** Stores a secret in Astron Collection, encrypted at rest. */
 	createSecret: withPermission("vaultProvider", "create")
 		.input(apiCreateVaultSecret)
 		.mutation(async ({ ctx, input }) => {

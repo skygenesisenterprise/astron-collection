@@ -9,7 +9,7 @@
 import { writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { generateOpenApiDocument } from "@notploy/trpc-openapi";
+import { generateOpenApiDocument } from "@astron-collection/trpc-openapi";
 import { appRouter } from "../server/api/root";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -20,10 +20,10 @@ async function generateOpenAPI() {
 		console.log("🔄 Generating OpenAPI specification...");
 
 		const openApiDocument = generateOpenApiDocument(appRouter, {
-			title: "Notploy API",
+			title: "Astron Collection API",
 			version: "1.0.0",
-			baseUrl: "https://your-notploy-instance.com/api",
-			docsUrl: "https://docs.notploy.com/api",
+			baseUrl: "https://your-astron-collection-instance.com/api",
+			docsUrl: "https://docs.astron-collection.com/api",
 		});
 
 		// Derive top-level tag metadata from the operations themselves. The
@@ -46,17 +46,17 @@ async function generateOpenAPI() {
 
 		// Enhance metadata
 		openApiDocument.info = {
-			title: "Notploy API",
+			title: "Astron Collection API",
 			description:
-				"Complete API documentation for Notploy - Deploy applications, manage databases, and orchestrate your infrastructure. This API allows you to programmatically manage all aspects of your Notploy instance.",
+				"Complete API documentation for Astron Collection - Deploy applications, manage databases, and orchestrate your infrastructure. This API allows you to programmatically manage all aspects of your Astron Collection instance.",
 			version: "1.0.0",
 			contact: {
-				name: "Notploy Team",
-				url: "https://notploy.com",
+				name: "Astron Collection Team",
+				url: "https://astron-collection.com",
 			},
 			license: {
 				name: "Apache 2.0",
-				url: "https://github.com/skygenesisenterprise/notploy/blob/master/LICENSE",
+				url: "https://github.com/skygenesisenterprise/astron-collection/blob/master/LICENSE",
 			},
 		};
 
@@ -69,7 +69,7 @@ async function generateOpenAPI() {
 					in: "header",
 					name: "x-api-key",
 					description:
-						"API key authentication. Generate an API key from your Notploy dashboard under Settings > API Keys.",
+						"API key authentication. Generate an API key from your Astron Collection dashboard under Settings > API Keys.",
 				},
 			},
 		};
@@ -81,7 +81,7 @@ async function generateOpenAPI() {
 			},
 		];
 
-		// `@notploy/trpc-openapi` marks each operation with the legacy
+		// `@astron-collection/trpc-openapi` marks each operation with the legacy
 		// "Authorization" scheme, which is not defined in the document. Point
 		// those requirements at the `apiKey` scheme so the spec is internally
 		// consistent and generated clients do not look for a missing scheme.
@@ -101,7 +101,7 @@ async function generateOpenAPI() {
 		// Add external docs
 		openApiDocument.externalDocs = {
 			description: "Full documentation",
-			url: "https://docs.notploy.com",
+			url: "https://docs.astron-collection.com",
 		};
 
 		// Write to root of repo

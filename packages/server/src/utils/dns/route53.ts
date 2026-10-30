@@ -8,7 +8,7 @@ import {
 import type {
 	DnsRecordType,
 	route53DnsConfigSchema,
-} from "@notploy/server/db/schema";
+} from "@astron-collection/server/db/schema";
 import type { z } from "zod";
 import type { DnsClient } from "./types";
 

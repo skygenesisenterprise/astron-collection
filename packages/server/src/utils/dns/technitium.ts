@@ -1,4 +1,4 @@
-import type { technitiumDnsConfigSchema } from "@notploy/server/db/schema";
+import type { technitiumDnsConfigSchema } from "@astron-collection/server/db/schema";
 import type { z } from "zod";
 import { type DnsClient, dnsFetch } from "./types";
 

@@ -1,27 +1,27 @@
 ---
 title: "PostgreSQL"
-description: "Provision and operate PostgreSQL databases, including backups and external ports. Generated from the `notploy` command surface."
+description: "Provision and operate PostgreSQL databases, including backups and external ports. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Provision and operate PostgreSQL databases, including backups and external ports.
 
-`notploy postgres` exposes **16 commands**. They map one-to-one onto the `postgres.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection postgres` exposes **16 commands**. They map one-to-one onto the `postgres.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy postgres --help` to list these commands in your terminal, or
-	`notploy postgres <command> --help` for a single command.
+	Run `astron-collection postgres --help` to list these commands in your terminal, or
+	`astron-collection postgres <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy postgres change-password`
+### `astron-collection postgres change-password`
 
 Calls `POST /api/trpc/postgres.changePassword`.
 
 ```bash
-notploy postgres change-password --postgresId <value> --password <value> [options]
+astron-collection postgres change-password --postgresId <value> --password <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -30,12 +30,12 @@ notploy postgres change-password --postgresId <value> --password <value> [option
 | `--password <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy postgres change-status`
+### `astron-collection postgres change-status`
 
 Calls `POST /api/trpc/postgres.changeStatus`.
 
 ```bash
-notploy postgres change-status --postgresId <value> --applicationStatus <value> [options]
+astron-collection postgres change-status --postgresId <value> --applicationStatus <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -44,12 +44,12 @@ notploy postgres change-status --postgresId <value> --applicationStatus <value> 
 | `--applicationStatus <value>` | string | Yes | `idle`, `running`, `done`, `error` |
 | `--profile <name>` | string | No | — |
 
-### `notploy postgres create`
+### `astron-collection postgres create`
 
 Calls `POST /api/trpc/postgres.create`.
 
 ```bash
-notploy postgres create --name <value> --databaseName <value> --databaseUser <value> --databasePassword <value> --environmentId <value> [options]
+astron-collection postgres create --name <value> --databaseName <value> --databaseUser <value> --databasePassword <value> --environmentId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -65,12 +65,12 @@ notploy postgres create --name <value> --databaseName <value> --databaseUser <va
 | `--serverId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy postgres deploy`
+### `astron-collection postgres deploy`
 
 Calls `POST /api/trpc/postgres.deploy`.
 
 ```bash
-notploy postgres deploy --postgresId <value> [options]
+astron-collection postgres deploy --postgresId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -78,12 +78,12 @@ notploy postgres deploy --postgresId <value> [options]
 | `--postgresId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy postgres move`
+### `astron-collection postgres move`
 
 Calls `POST /api/trpc/postgres.move`.
 
 ```bash
-notploy postgres move --postgresId <value> --targetEnvironmentId <value> [options]
+astron-collection postgres move --postgresId <value> --targetEnvironmentId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -92,12 +92,12 @@ notploy postgres move --postgresId <value> --targetEnvironmentId <value> [option
 | `--targetEnvironmentId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy postgres one`
+### `astron-collection postgres one`
 
 Calls `GET /api/trpc/postgres.one`.
 
 ```bash
-notploy postgres one --postgresId <value> [options]
+astron-collection postgres one --postgresId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -105,12 +105,12 @@ notploy postgres one --postgresId <value> [options]
 | `--postgresId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy postgres read-logs`
+### `astron-collection postgres read-logs`
 
 Calls `GET /api/trpc/postgres.readLogs`.
 
 ```bash
-notploy postgres read-logs --postgresId <value> [options]
+astron-collection postgres read-logs --postgresId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -121,12 +121,12 @@ notploy postgres read-logs --postgresId <value> [options]
 | `--search <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy postgres rebuild`
+### `astron-collection postgres rebuild`
 
 Calls `POST /api/trpc/postgres.rebuild`.
 
 ```bash
-notploy postgres rebuild --postgresId <value> [options]
+astron-collection postgres rebuild --postgresId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -134,12 +134,12 @@ notploy postgres rebuild --postgresId <value> [options]
 | `--postgresId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy postgres reload`
+### `astron-collection postgres reload`
 
 Calls `POST /api/trpc/postgres.reload`.
 
 ```bash
-notploy postgres reload --postgresId <value> --appName <value> [options]
+astron-collection postgres reload --postgresId <value> --appName <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -148,12 +148,12 @@ notploy postgres reload --postgresId <value> --appName <value> [options]
 | `--appName <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy postgres remove`
+### `astron-collection postgres remove`
 
 Calls `POST /api/trpc/postgres.remove`.
 
 ```bash
-notploy postgres remove --postgresId <value> [options]
+astron-collection postgres remove --postgresId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -161,12 +161,12 @@ notploy postgres remove --postgresId <value> [options]
 | `--postgresId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy postgres save-environment`
+### `astron-collection postgres save-environment`
 
 Calls `POST /api/trpc/postgres.saveEnvironment`.
 
 ```bash
-notploy postgres save-environment --postgresId <value> --env <value> [options]
+astron-collection postgres save-environment --postgresId <value> --env <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -175,12 +175,12 @@ notploy postgres save-environment --postgresId <value> --env <value> [options]
 | `--env <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy postgres save-external-port`
+### `astron-collection postgres save-external-port`
 
 Calls `POST /api/trpc/postgres.saveExternalPort`.
 
 ```bash
-notploy postgres save-external-port --postgresId <value> --externalPort <value> [options]
+astron-collection postgres save-external-port --postgresId <value> --externalPort <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -189,12 +189,12 @@ notploy postgres save-external-port --postgresId <value> --externalPort <value> 
 | `--externalPort <value>` | number | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy postgres search`
+### `astron-collection postgres search`
 
 Calls `GET /api/trpc/postgres.search`.
 
 ```bash
-notploy postgres search [options]
+astron-collection postgres search [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -209,12 +209,12 @@ notploy postgres search [options]
 | `--offset <value>` | number | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy postgres start`
+### `astron-collection postgres start`
 
 Calls `POST /api/trpc/postgres.start`.
 
 ```bash
-notploy postgres start --postgresId <value> [options]
+astron-collection postgres start --postgresId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -222,12 +222,12 @@ notploy postgres start --postgresId <value> [options]
 | `--postgresId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy postgres stop`
+### `astron-collection postgres stop`
 
 Calls `POST /api/trpc/postgres.stop`.
 
 ```bash
-notploy postgres stop --postgresId <value> [options]
+astron-collection postgres stop --postgresId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -235,12 +235,12 @@ notploy postgres stop --postgresId <value> [options]
 | `--postgresId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy postgres update`
+### `astron-collection postgres update`
 
 Calls `POST /api/trpc/postgres.update`.
 
 ```bash
-notploy postgres update --postgresId <value> [options]
+astron-collection postgres update --postgresId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -277,6 +277,6 @@ notploy postgres update --postgresId <value> [options]
 | `--createdAt <value>` | string | No | — |
 | `--environmentId <value>` | string | No | — |
 | `--networkIds <json>` | array | No | — |
-| `--detachNotployNetwork [boolean]` | boolean | No | — |
-| `--no-detachNotployNetwork` | boolean | No | — |
+| `--detachAstronCollectionNetwork [boolean]` | boolean | No | — |
+| `--no-detachAstronCollectionNetwork` | boolean | No | — |
 | `--profile <name>` | string | No | — |

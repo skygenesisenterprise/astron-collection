@@ -1,14 +1,14 @@
 import { createWriteStream } from "node:fs";
 import path from "node:path";
-import { paths } from "@notploy/server/constants";
-import { isManagedCloud } from "@notploy/server/services/instance-identity";
-import type { Schedule } from "@notploy/server/db/schema/schedule";
+import { paths } from "@astron-collection/server/constants";
+import { isManagedCloud } from "@astron-collection/server/services/instance-identity";
+import type { Schedule } from "@astron-collection/server/db/schema/schedule";
 import {
 	createDeploymentSchedule,
 	updateDeployment,
 	updateDeploymentStatus,
-} from "@notploy/server/services/deployment";
-import { findScheduleById } from "@notploy/server/services/schedule";
+} from "@astron-collection/server/services/deployment";
+import { findScheduleById } from "@astron-collection/server/services/schedule";
 import { scheduledJobs, scheduleJob as scheduleJobNode } from "node-schedule";
 import { quote } from "shell-quote";
 import { getComposeContainer, getServiceContainer } from "../docker/utils";
@@ -146,7 +146,7 @@ export const runCommand = async (scheduleId: string) => {
 					throw error;
 				}
 			}
-		} else if (scheduleType === "notploy-server") {
+		} else if (scheduleType === "astron-collection-server") {
 			const writeStream = createWriteStream(deployment.logPath, { flags: "a" });
 			const { SCHEDULES_PATH } = paths();
 			const fullPath = path.join(SCHEDULES_PATH, appName || "");

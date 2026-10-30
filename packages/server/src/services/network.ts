@@ -1,5 +1,5 @@
-import { db } from "@notploy/server/db";
-import { type apiCreateNetwork, network } from "@notploy/server/db/schema";
+import { db } from "@astron-collection/server/db";
+import { type apiCreateNetwork, network } from "@astron-collection/server/db/schema";
 import { TRPCError } from "@trpc/server";
 import type Dockerode from "dockerode";
 import { and, eq, inArray, isNull } from "drizzle-orm";
@@ -14,14 +14,14 @@ const RESERVED_NETWORKS = [
 	"none",
 	"ingress",
 	"docker_gwbridge",
-	"notploy-network",
+	"astron-collection-network",
 ];
 
 /**
  * Dedicated per-service network used when `isolatedNetwork` is on. The prefix
  * keeps it out of the way of user networks and the reserved ones.
  */
-export const ISOLATED_NETWORK_PREFIX = "notploy-iso";
+export const ISOLATED_NETWORK_PREFIX = "astron-collection-iso";
 
 export const isolatedNetworkName = (appName: string) =>
 	`${ISOLATED_NETWORK_PREFIX}-${appName}`;
@@ -29,7 +29,7 @@ export const isolatedNetworkName = (appName: string) =>
 /**
  * Makes sure a service's dedicated overlay network exists, creating it if
  * needed. Idempotent, so it is safe to call on every deploy. The service stays
- * attached to notploy-network as well, which is how Traefik keeps serving its
+ * attached to astron-collection-network as well, which is how Traefik keeps serving its
  * domains while it is otherwise isolated.
  */
 export const ensureIsolatedNetwork = async (
@@ -427,7 +427,7 @@ export const resolveServiceNetworks = async (
 		return application.networkSwarm;
 	}
 
-	const { networkIds, detachNotployNetwork } = application;
+	const { networkIds, detachAstronCollectionNetwork } = application;
 	const rows =
 		networkIds && networkIds.length > 0
 			? await db.query.network.findMany({
@@ -439,13 +439,13 @@ export const resolveServiceNetworks = async (
 				})
 			: [];
 
-	const networks = detachNotployNetwork ? [] : ["notploy-network"];
+	const networks = detachAstronCollectionNetwork ? [] : ["astron-collection-network"];
 	for (const row of rows) {
 		networks.push(row.name);
 	}
 
 	// A service with an isolated network keeps its own dedicated overlay so it
-	// is separated from the rest, while notploy-network keeps Traefik routing
+	// is separated from the rest, while astron-collection-network keeps Traefik routing
 	// its domains. Databases have no such flag, so this is a no-op for them.
 	if (application.isolatedNetwork && application.appName) {
 		const name = await ensureIsolatedNetwork(

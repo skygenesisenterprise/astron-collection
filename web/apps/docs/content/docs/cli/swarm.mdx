@@ -1,27 +1,27 @@
 ---
 title: "Swarm"
-description: "Inspect Docker Swarm nodes, node workloads and container statistics. Generated from the `notploy` command surface."
+description: "Inspect Docker Swarm nodes, node workloads and container statistics. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Inspect Docker Swarm nodes, node workloads and container statistics.
 
-`notploy swarm` exposes **5 commands**. They map one-to-one onto the `swarm.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection swarm` exposes **5 commands**. They map one-to-one onto the `swarm.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy swarm --help` to list these commands in your terminal, or
-	`notploy swarm <command> --help` for a single command.
+	Run `astron-collection swarm --help` to list these commands in your terminal, or
+	`astron-collection swarm <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy swarm get-console`
+### `astron-collection swarm get-console`
 
 Calls `GET /api/trpc/swarm.getConsole`.
 
 ```bash
-notploy swarm get-console [options]
+astron-collection swarm get-console [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -29,12 +29,12 @@ notploy swarm get-console [options]
 | `--serverId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy swarm get-container-stats`
+### `astron-collection swarm get-container-stats`
 
 Calls `GET /api/trpc/swarm.getContainerStats`.
 
 ```bash
-notploy swarm get-container-stats [options]
+astron-collection swarm get-container-stats [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -42,12 +42,12 @@ notploy swarm get-container-stats [options]
 | `--serverId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy swarm get-node-apps`
+### `astron-collection swarm get-node-apps`
 
 Calls `GET /api/trpc/swarm.getNodeApps`.
 
 ```bash
-notploy swarm get-node-apps [options]
+astron-collection swarm get-node-apps [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -55,12 +55,12 @@ notploy swarm get-node-apps [options]
 | `--serverId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy swarm get-node-info`
+### `astron-collection swarm get-node-info`
 
 Calls `GET /api/trpc/swarm.getNodeInfo`.
 
 ```bash
-notploy swarm get-node-info --nodeId <value> [options]
+astron-collection swarm get-node-info --nodeId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -69,12 +69,12 @@ notploy swarm get-node-info --nodeId <value> [options]
 | `--serverId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy swarm get-nodes`
+### `astron-collection swarm get-nodes`
 
 Calls `GET /api/trpc/swarm.getNodes`.
 
 ```bash
-notploy swarm get-nodes [options]
+astron-collection swarm get-nodes [options]
 ```
 
 | Option | Type | Required | Allowed values |

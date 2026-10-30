@@ -28,16 +28,16 @@ version and publish the packages in the pnpm workspace.
 
 Published to npmjs (public):
 
-- `@notploy/cli`
-- `@notploy/sdk`
-- `@notploy/trpc-openapi`
+- `@astron-collection/cli`
+- `@astron-collection/sdk`
+- `@astron-collection/trpc-openapi`
 
 Other workspace packages are not published by this workflow. Some may be
 versioned by Changesets or shipped as containers:
 
-- `@notploy/app` (the dashboard/server, shipped as a Docker image)
-- `@notploy/docs`, `@notploy/website` (deployed to GitHub Pages and Docker)
-- `@notploy/api`, `@notploy/schedules` (internal services, ignored by changesets)
+- `@astron-collection/app` (the dashboard/server, shipped as a Docker image)
+- `@astron-collection/docs`, `@astron-collection/website` (deployed to GitHub Pages and Docker)
+- `@astron-collection/api`, `@astron-collection/schedules` (internal services, ignored by changesets)
 
 ## Common commands
 

@@ -1,7 +1,7 @@
 import {
 	ingestTraefikAccessLog,
 	runTrafficRetention,
-} from "@notploy/server/services/traffic";
+} from "@astron-collection/server/services/traffic";
 import { scheduledJobs, scheduleJob } from "node-schedule";
 
 /**

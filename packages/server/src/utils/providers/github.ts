@@ -1,8 +1,8 @@
 import { join } from "node:path";
-import { paths } from "@notploy/server/constants";
-import type { apiFindGithubBranches } from "@notploy/server/db/schema";
-import { findGithubById, type Github } from "@notploy/server/services/github";
-import type { InferResultType } from "@notploy/server/types/with";
+import { paths } from "@astron-collection/server/constants";
+import type { apiFindGithubBranches } from "@astron-collection/server/db/schema";
+import { findGithubById, type Github } from "@astron-collection/server/services/github";
+import type { InferResultType } from "@astron-collection/server/types/with";
 import { createAppAuth } from "@octokit/auth-app";
 import { TRPCError } from "@trpc/server";
 import { Octokit } from "octokit";
@@ -320,7 +320,7 @@ export const getGithubBranches = async (
  * Auth is a GitHub App installation, so the identity is the account the app is
  * installed on (fetched with a JWT, since installation tokens cannot read
  * `/app/installations`). Repositories come from the installation, which is
- * exactly the set Notploy is allowed to deploy from.
+ * exactly the set Astron Collection is allowed to deploy from.
  */
 export const githubGitProviderAdapter: GitProviderAdapter<Github> = {
 	providerType: "github",

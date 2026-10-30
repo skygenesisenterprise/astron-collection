@@ -298,7 +298,7 @@ export const createTokenSchema = z
 	});
 
 /**
- * Monitoring event received from an external source (Notploy Console, the Go
+ * Monitoring event received from an external source (Astron Collection Console, the Go
  * monitoring agent, or any other probe). `eventId` makes the ingestion
  * idempotent; `correlationKey` groups repeated alerts under one incident.
  */

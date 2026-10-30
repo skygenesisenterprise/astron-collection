@@ -1,6 +1,6 @@
 ---
 title: Account Security
-description: "Protect your Notploy account with two-factor authentication: authenticator codes or a security key."
+description: "Protect your Astron Collection account with two-factor authentication: authenticator codes or a security key."
 ---
 
 import { Callout } from "fumadocs-ui/components/callout";
@@ -19,7 +19,7 @@ Once enabled, password sign-ins require the current code from your app.
 
 ## Security keys (WebAuthn)
 
-A security key is a second factor based on WebAuthn. It lives in the authenticator itself: a hardware key such as a YubiKey, the platform authenticator (Touch ID, Face ID, Windows Hello), or a key stored in a password manager such as Bitwarden, 1Password, or iCloud Keychain. The credential never leaves the authenticator and is bound to your Notploy domain, so it is resistant to phishing.
+A security key is a second factor based on WebAuthn. It lives in the authenticator itself: a hardware key such as a YubiKey, the platform authenticator (Touch ID, Face ID, Windows Hello), or a key stored in a password manager such as Bitwarden, 1Password, or iCloud Keychain. The credential never leaves the authenticator and is bound to your Astron Collection domain, so it is resistant to phishing.
 
 A security key never replaces the password: it is only accepted after the password step.
 
@@ -43,5 +43,5 @@ You can register up to ten keys and remove them individually at any time. Removi
 - You can keep both: sign in with the key when it is available, and fall back to a code or a backup code otherwise.
 
 <Callout type="info">
-  Organization owners on Notploy Cloud and self-hosted instances with SSO can additionally enforce sign-in through their identity provider — see the SSO documentation.
+  Organization owners on Astron Collection Cloud and self-hosted instances with SSO can additionally enforce sign-in through their identity provider — see the SSO documentation.
 </Callout>

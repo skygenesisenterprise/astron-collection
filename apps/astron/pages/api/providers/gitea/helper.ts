@@ -1,4 +1,4 @@
-import { findGiteaById } from "@notploy/server";
+import { findGiteaById } from "@astron-collection/server";
 import type { NextApiResponse } from "next";
 
 export interface Gitea {

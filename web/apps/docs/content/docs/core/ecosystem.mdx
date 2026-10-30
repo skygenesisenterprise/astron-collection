@@ -1,9 +1,9 @@
 ---
 title: Ecosystem
-description: "How Notploy's features connect — the relationships between DNS, domains, secrets, registries, storage and your services."
+description: "How Astron Collection's features connect — the relationships between DNS, domains, secrets, registries, storage and your services."
 ---
 
-Notploy is not a list of unrelated menu entries. Its features form a connected platform, and most real problems are solved by understanding how they relate. This page maps the important relationships so you can follow them from whatever you are configuring.
+Astron Collection is not a list of unrelated menu entries. Its features form a connected platform, and most real problems are solved by understanding how they relate. This page maps the important relationships so you can follow them from whatever you are configuring.
 
 ## The relationships at a glance
 
@@ -24,17 +24,17 @@ Object storage (S3) ◄── Backups ◄── Database & Volumes (Volume Backu
 
 ## Sources → builds → deployments
 
-An **Application** or **Compose** service reads its code from a **source**: a Git provider, any Git URL, a container image, an uploaded archive or (for Compose) a raw file. The **source** and the **build type** together determine how Notploy produces a runnable image.
+An **Application** or **Compose** service reads its code from a **source**: a Git provider, any Git URL, a container image, an uploaded archive or (for Compose) a raw file. The **source** and the **build type** together determine how Astron Collection produces a runnable image.
 
 - Git-based sources need credentials — either the provider app/integration or an [SSH key](/docs/core/ssh-keys).
-- The **build type** (Dockerfile, Nixpacks, Railpack, buildpacks, or a prebuilt image) decides whether Notploy builds anything at all.
+- The **build type** (Dockerfile, Nixpacks, Railpack, buildpacks, or a prebuilt image) decides whether Astron Collection builds anything at all.
 - When a workload runs away from where it is built, the resulting image must be pushed to a [registry](/docs/core/registry) that the target server can pull from.
 
 → [Sources & providers](/docs/core/providers) · [Build types](/docs/core/applications/build-type) · [Deployments](/docs/core/concepts#deployment)
 
 ## Secrets → services
 
-Environment variables and secrets are consumed by services at build and deploy time. Notploy resolves them from multiple levels — **project**, **environment**, **service** — and can also read secrets from an external [secrets provider](/docs/core/secrets-providers) such as HashiCorp Vault, AWS Secrets Manager or Infisical. Which level you use determines scope and blast radius.
+Environment variables and secrets are consumed by services at build and deploy time. Astron Collection resolves them from multiple levels — **project**, **environment**, **service** — and can also read secrets from an external [secrets provider](/docs/core/secrets-providers) such as HashiCorp Vault, AWS Secrets Manager or Infisical. Which level you use determines scope and blast radius.
 
 → [Environment variables](/docs/core/variables) · [Secrets](/docs/core/security/secrets)
 
@@ -43,10 +43,10 @@ Environment variables and secrets are consumed by services at build and deploy t
 Three layers make a service reachable:
 
 1. **DNS** maps a hostname to the server's address. You can manage records manually at your provider or connect a [DNS provider](/docs/core/dns-providers) to automate them.
-2. A **domain** in Notploy binds that hostname to the service's container port and creates the routing rule in Traefik.
+2. A **domain** in Astron Collection binds that hostname to the service's container port and creates the routing rule in Traefik.
 3. **TLS** — automatic via Let's Encrypt, a [generated certificate](/docs/core/certificates) or your own — secures the connection. Certificate issuance depends on DNS already resolving correctly.
 
-Each layer depends on the one before it, which is why "the domain does not work" is usually a DNS problem rather than a Notploy problem. The [troubleshooting guides](/docs/core/troubleshooting/domains) walk the chain in order.
+Each layer depends on the one before it, which is why "the domain does not work" is usually a DNS problem rather than a Astron Collection problem. The [troubleshooting guides](/docs/core/troubleshooting/domains) walk the chain in order.
 
 → [Domains](/docs/core/domains) · [Certificates](/docs/core/certificates)
 

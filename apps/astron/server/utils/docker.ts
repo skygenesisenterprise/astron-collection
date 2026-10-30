@@ -1,4 +1,4 @@
-import { execAsync } from "@notploy/server";
+import { execAsync } from "@astron-collection/server";
 
 /** Returns if the current operating system is Windows Subsystem for Linux (WSL). */
 export const isWSL = async () => {

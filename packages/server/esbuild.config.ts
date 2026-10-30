@@ -17,7 +17,7 @@ build({
 	format: "esm",
 	plugins: [
 		alias({
-			"@notploy/server": path.resolve(__dirname, "src"),
+			"@astron-collection/server": path.resolve(__dirname, "src"),
 		}),
 	],
 	packages: "external",

@@ -14,12 +14,12 @@ export const OnboardingLayout = ({ children }: Props) => {
 			<Card className="w-full max-w-md p-6">{children}</Card>
 			<div className="mt-6 mx-auto flex w-full max-w-md items-center justify-center gap-1 text-muted-foreground">
 				<Button variant="ghost" size="icon">
-					<Link href="https://github.com/skygenesisenterprise/notploy">
+					<Link href="https://github.com/skygenesisenterprise/astron-collection">
 						<GithubIcon />
 					</Link>
 				</Button>
 				<Button variant="ghost" size="icon">
-					<Link href="https://x.com/getnotploy">
+					<Link href="https://x.com/getastron-collection">
 						<svg
 							stroke="currentColor"
 							fill="currentColor"

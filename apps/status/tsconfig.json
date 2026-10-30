@@ -23,12 +23,12 @@
 		"incremental": true,
 		"paths": {
 			"@/*": ["./*"],
-			"@notploy/status": ["../../packages/status/src/index.ts"],
-			"@notploy/status/api": ["../../packages/status/src/api/index.ts"],
-			"@notploy/status/client": [
+			"@astron-collection/status": ["../../packages/status/src/index.ts"],
+			"@astron-collection/status/api": ["../../packages/status/src/api/index.ts"],
+			"@astron-collection/status/client": [
 				"../../packages/status/src/integration/client.ts"
 			],
-			"@notploy/status/*": ["../../packages/status/src/*"]
+			"@astron-collection/status/*": ["../../packages/status/src/*"]
 		}
 	},
 	"include": [

@@ -1,10 +1,10 @@
-import { addDomainToCompose } from "@notploy/server/utils/docker/domain";
-import { execAsyncRemote } from "@notploy/server/utils/process/execAsync";
+import { addDomainToCompose } from "@astron-collection/server/utils/docker/domain";
+import { execAsyncRemote } from "@astron-collection/server/utils/process/execAsync";
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("@notploy/server/utils/process/execAsync", async (importOriginal) => ({
+vi.mock("@astron-collection/server/utils/process/execAsync", async (importOriginal) => ({
 	...(await importOriginal<
-		typeof import("@notploy/server/utils/process/execAsync")
+		typeof import("@astron-collection/server/utils/process/execAsync")
 	>()),
 	execAsyncRemote: vi.fn(),
 }));

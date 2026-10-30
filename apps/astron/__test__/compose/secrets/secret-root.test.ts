@@ -1,5 +1,5 @@
-import type { ComposeSpecification } from "@notploy/server";
-import { addSuffixToSecretsRoot, generateRandomHash } from "@notploy/server";
+import type { ComposeSpecification } from "@astron-collection/server";
+import { addSuffixToSecretsRoot, generateRandomHash } from "@astron-collection/server";
 import { expect, test } from "vitest";
 import { parse } from "yaml";
 

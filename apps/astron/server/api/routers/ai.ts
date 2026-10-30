@@ -1,15 +1,15 @@
-import { IS_CLOUD } from "@notploy/server/constants";
+import { IS_CLOUD } from "@astron-collection/server/constants";
 import {
 	apiCreateAi,
 	apiSaveAiCustomProviders,
 	apiUpdateAi,
 	deploySuggestionSchema,
-} from "@notploy/server/db/schema/ai";
+} from "@astron-collection/server/db/schema/ai";
 import {
 	createDomain,
 	createMount,
 	findEnvironmentById,
-} from "@notploy/server/index";
+} from "@astron-collection/server/index";
 import {
 	deleteAiSettings,
 	findAiSettingById,
@@ -21,22 +21,22 @@ import {
 	suggestVariants,
 	testAiConnectionForSetting,
 	toAiSettingView,
-} from "@notploy/server/services/ai";
-import { createComposeByTemplate } from "@notploy/server/services/compose";
+} from "@astron-collection/server/services/ai";
+import { createComposeByTemplate } from "@astron-collection/server/services/compose";
 import {
 	addNewService,
 	checkServiceAccess,
-} from "@notploy/server/services/permission";
-import { findProjectById } from "@notploy/server/services/project";
+} from "@astron-collection/server/services/permission";
+import { findProjectById } from "@astron-collection/server/services/project";
 import {
 	getAiProviderLabel,
 	getModelCapabilities,
 	resolveAiProviderId,
-} from "@notploy/server/utils/ai/contracts";
+} from "@astron-collection/server/utils/ai/contracts";
 import {
 	generateAiText,
 	normalizeAiError,
-} from "@notploy/server/utils/ai/runtime";
+} from "@astron-collection/server/utils/ai/runtime";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { slugify } from "@/lib/slug";

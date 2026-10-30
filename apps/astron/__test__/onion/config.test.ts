@@ -8,7 +8,7 @@ import {
 	renderTorrc,
 	sanitizeOnionError,
 	toContainerSafeName,
-} from "@notploy/server/utils/onion/config";
+} from "@astron-collection/server/utils/onion/config";
 import { describe, expect, it } from "vitest";
 
 describe("renderTorrc", () => {
@@ -156,10 +156,10 @@ describe("getOnionServicePaths", () => {
 
 	it("derives a docker-safe container name", () => {
 		expect(getOnionServicePaths("abc123").containerName).toBe(
-			"notploy-onion-abc123",
+			"astron-collection-onion-abc123",
 		);
-		expect(toContainerSafeName("notploy-onion-a b/c")).toBe(
-			"notploy-onion-a-b-c",
+		expect(toContainerSafeName("astron-collection-onion-a b/c")).toBe(
+			"astron-collection-onion-a-b-c",
 		);
 		expect(toContainerSafeName("-leading")).toBe("n-leading");
 	});

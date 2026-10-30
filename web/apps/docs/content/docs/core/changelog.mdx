@@ -1,15 +1,15 @@
 ---
 title: Changelog
-description: "How Notploy releases and their notes are published."
+description: "How Astron Collection releases and their notes are published."
 ---
 
 **Purpose** — Explain where release information lives and how to track changes that affect you, instead of duplicating a release feed here.
 
 ## Where releases are published
 
-Notploy releases are published on GitHub:
+Astron Collection releases are published on GitHub:
 
-- **Releases and notes** — [github.com/skygenesisenterprise/notploy/releases](https://github.com/skygenesisenterprise/notploy/releases)
+- **Releases and notes** — [github.com/skygenesisenterprise/astron-collection/releases](https://github.com/skygenesisenterprise/astron-collection/releases)
 - **Changesets** — user-facing changes are tracked with [Changesets](https://github.com/changesets/changesets) in the repository; each release aggregates the entries for the version.
 
 Each release attaches its own `install.sh`, which installs exactly that version with the setup it expects. This is the supported way to install or update to a **specific** version. See [Installation](/docs/core/installation).
@@ -25,7 +25,7 @@ Each release attaches its own `install.sh`, which installs exactly that version 
 Release tags are semantic-ish version tags (for example `v0.26.6`). Pre-release / development builds are published under the **canary** channel:
 
 ```bash
-export NOTPLOY_VERSION=canary && curl -sSL https://notploy.com/install.sh | sh
+export ASTRON_COLLECTION_VERSION=canary && curl -sSL https://astron-collection.com/install.sh | sh
 ```
 
 <Callout type="warn">

@@ -1,10 +1,10 @@
 import { execSync } from "node:child_process";
 import { existsSync, rmSync } from "node:fs";
-import { createCommand } from "@notploy/server/utils/builders/compose";
+import { createCommand } from "@astron-collection/server/utils/builders/compose";
 import { parse, quote } from "shell-quote";
 import { describe, expect, it } from "vitest";
 
-const MARK = `/tmp/notploy_compose_pwned_${process.pid}`;
+const MARK = `/tmp/astron_collectioncompose_pwned_${process.pid}`;
 
 const base = {
 	composeType: "docker-compose" as const,

@@ -1,11 +1,11 @@
 ---
 title: Object storage (S3)
-description: "Configure S3-compatible destinations where Notploy writes and restores backups."
+description: "Configure S3-compatible destinations where Astron Collection writes and restores backups."
 ---
 
-**Purpose** — An **S3 destination** is an S3-compatible object storage target that Notploy uses to store backups and restore from them. You configure a destination once, then reference it when scheduling [database](/docs/core/databases/backups) and [volume](/docs/core/volume-backups) backups.
+**Purpose** — An **S3 destination** is an S3-compatible object storage target that Astron Collection uses to store backups and restore from them. You configure a destination once, then reference it when scheduling [database](/docs/core/databases/backups) and [volume](/docs/core/volume-backups) backups.
 
-## How it fits into Notploy
+## How it fits into Astron Collection
 
 An S3 destination is a **resource**: it is not tied to a single service. Multiple databases and volumes can back up to the same destination, and restores read from it. This makes the destination part of your disaster-recovery path — if it is misconfigured, you find out when you try to restore.
 
@@ -17,7 +17,7 @@ Database / Named volume  ──scheduled backup──►  S3 destination (bucket
 
 ## Supported destinations
 
-Notploy works with any S3-compatible provider. Guides are available for the common ones:
+Astron Collection works with any S3-compatible provider. Guides are available for the common ones:
 
 <Cards>
   <Card href="/docs/core/aws-s3" title="AWS S3" description="Amazon's object storage." />
@@ -32,7 +32,7 @@ Multiple destinations are supported, so you can separate production and staging 
 
 - An S3-compatible account with a bucket you control.
 - An access key and secret with permission to read and write objects in that bucket.
-- Network access from the Notploy host to the provider's endpoint.
+- Network access from the Astron Collection host to the provider's endpoint.
 
 ## Configuration
 
@@ -44,7 +44,7 @@ Create a manual backup to the destination and confirm the object appears in the 
 
 ## Security and limitations
 
-- **Never** put real credentials in examples or repositories; store them in Notploy's settings, which are encrypted.
+- **Never** put real credentials in examples or repositories; store them in Astron Collection's settings, which are encrypted.
 - Volume Backups only cover Docker **named volumes**, not bind mounts (`../files`).
 - Restoring overwrites current data — always confirm the snapshot.
 

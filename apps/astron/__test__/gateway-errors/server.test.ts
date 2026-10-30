@@ -2,7 +2,7 @@ import type { AddressInfo } from "node:net";
 import {
 	startGatewayErrorsServer,
 	type GatewayErrorLogRecord,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 
 const now = () => new Date("2026-10-29T12:34:56.789Z");
@@ -14,8 +14,8 @@ beforeAll(async () => {
 	server = startGatewayErrorsServer({
 		port: 0,
 		env: {
-			NOTPLOY_GATEWAY_BRAND_NAME: "Acme",
-			NOTPLOY_GATEWAY_PORT: "8080",
+			ASTRON_COLLECTION_GATEWAY_BRAND_NAME: "Acme",
+			ASTRON_COLLECTION_GATEWAY_PORT: "8080",
 		},
 		now,
 		logger: (record) => logs.push(record),
@@ -39,13 +39,13 @@ describe("gateway error server", () => {
 		expect(response.headers.get("cache-control")).toContain("no-store");
 		expect(response.headers.get("x-content-type-options")).toBe("nosniff");
 		expect(response.headers.get("x-robots-tag")).toContain("noindex");
-		expect(response.headers.get("x-notploy-error-code")).toBe("NP-1001");
+		expect(response.headers.get("x-astron-collection-error-code")).toBe("NP-1001");
 		expect(response.headers.get("content-security-policy")).toContain(
 			"frame-ancestors 'none'",
 		);
 		expect(response.headers.get("retry-after")).toBeNull();
 
-		const requestId = response.headers.get("x-notploy-request-id");
+		const requestId = response.headers.get("x-astron-collection-request-id");
 		expect(requestId).toMatch(/^np_[0-9a-f]{32}$/);
 		expect(body).toContain("NP-1001");
 		expect(body).toContain(requestId);
@@ -56,12 +56,12 @@ describe("gateway error server", () => {
 
 	test("renders the status provided by the Traefik errors middleware", async () => {
 		const response = await fetch(
-			`${baseUrl}/__notploy_error?status=502`,
+			`${baseUrl}/__astron_collectionerror?status=502`,
 		);
 		const body = await response.text();
 
 		expect(response.status).toBe(502);
-		expect(response.headers.get("x-notploy-error-code")).toBe("NP-1003");
+		expect(response.headers.get("x-astron-collection-error-code")).toBe("NP-1003");
 		expect(response.headers.get("retry-after")).toBe("30");
 		expect(body).toContain("Cannot reach the application");
 		expect(body).toContain("502 Bad Gateway");
@@ -69,30 +69,30 @@ describe("gateway error server", () => {
 
 	test("honours an explicit code when it matches the status", async () => {
 		const response = await fetch(
-			`${baseUrl}/__notploy_error?status=503&code=NP-1503`,
+			`${baseUrl}/__astron_collectionerror?status=503&code=NP-1503`,
 		);
 		const body = await response.text();
 
 		expect(response.status).toBe(503);
-		expect(response.headers.get("x-notploy-error-code")).toBe("NP-1503");
+		expect(response.headers.get("x-astron-collection-error-code")).toBe("NP-1503");
 		expect(body).toContain("Scheduled maintenance");
 	});
 
 	test("ignores a code that does not match the status", async () => {
 		const response = await fetch(
-			`${baseUrl}/__notploy_error?status=502&code=NP-1503`,
+			`${baseUrl}/__astron_collectionerror?status=502&code=NP-1503`,
 		);
 
-		expect(response.headers.get("x-notploy-error-code")).toBe("NP-1003");
+		expect(response.headers.get("x-astron-collection-error-code")).toBe("NP-1003");
 	});
 
 	test("maps malformed and non-error statuses to 404", async () => {
 		for (const status of ["200", "abc", "999"]) {
 			const response = await fetch(
-				`${baseUrl}/__notploy_error?status=${status}`,
+				`${baseUrl}/__astron_collectionerror?status=${status}`,
 			);
 			expect(response.status).toBe(404);
-			expect(response.headers.get("x-notploy-error-code")).toBe("NP-1001");
+			expect(response.headers.get("x-astron-collection-error-code")).toBe("NP-1001");
 		}
 	});
 
@@ -120,7 +120,7 @@ describe("gateway error server", () => {
 
 	test("logs structured records without the query string", async () => {
 		logs.length = 0;
-		await fetch(`${baseUrl}/__notploy_error?status=504&secret=value`);
+		await fetch(`${baseUrl}/__astron_collectionerror?status=504&secret=value`);
 
 		expect(logs).toHaveLength(1);
 		const record = logs[0];
@@ -129,7 +129,7 @@ describe("gateway error server", () => {
 		expect(record.status).toBe(504);
 		expect(record.requestId).toMatch(/^np_[0-9a-f]{32}$/);
 		expect(record.timestamp).toBe("2026-10-29T12:34:56.789Z");
-		expect(record.path).toBe("/__notploy_error");
+		expect(record.path).toBe("/__astron_collectionerror");
 		expect(JSON.stringify(record)).not.toContain("secret");
 	});
 });

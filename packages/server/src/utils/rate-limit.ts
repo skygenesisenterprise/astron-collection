@@ -47,7 +47,7 @@ export const createRateLimiter = (options: {
 	const now = options.now ?? (() => Date.now());
 	const windows = new Map<string, MemoryWindow>();
 	const redisKey = (key: string) =>
-		`notploy:ratelimit:${options.namespace}:${key}`;
+		`astron-collection:ratelimit:${options.namespace}:${key}`;
 
 	const pruneExpired = (): void => {
 		const current = now();

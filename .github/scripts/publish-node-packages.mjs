@@ -11,9 +11,9 @@ const repositoryRoot = path.resolve(
 );
 const npmjsRegistry = "https://registry.npmjs.org/";
 const packages = [
-  { name: "@notploy/cli", directory: "packages/cli" },
-  { name: "@notploy/sdk", directory: "packages/sdk" },
-  { name: "@notploy/trpc-openapi", directory: "packages/trpc-openapi" },
+  { name: "@astron-collection/cli", directory: "packages/cli" },
+  { name: "@astron-collection/sdk", directory: "packages/sdk" },
+  { name: "@astron-collection/trpc-openapi", directory: "packages/trpc-openapi" },
 ];
 
 function run(command, args, options = {}) {
@@ -158,7 +158,7 @@ async function main() {
   }
 
   const tempDirectory = await mkdtemp(
-    path.join(os.tmpdir(), "notploy-node-release-"),
+    path.join(os.tmpdir(), "astron-collection-node-release-"),
   );
   const npmConfig = path.join(tempDirectory, "npmrc");
   const completedPackages = [];

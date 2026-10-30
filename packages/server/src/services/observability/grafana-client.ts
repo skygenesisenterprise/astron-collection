@@ -114,7 +114,7 @@ export const createGrafanaClient = (options: GrafanaClientOptions) => {
 		},
 
 		listDashboards: async (
-			query = "notploy",
+			query = "astron-collection",
 		): Promise<GrafanaDashboardRef[]> => {
 			const params = new URLSearchParams({ type: "dash-db", query });
 			const body = await request<
@@ -170,7 +170,7 @@ export const createGrafanaClient = (options: GrafanaClientOptions) => {
 		exploreUrl: (expr: string): string =>
 			`${baseUrl}/explore?left=${encodeURIComponent(
 				JSON.stringify({
-					datasource: "Notploy Prometheus",
+					datasource: "Astron Collection Prometheus",
 					queries: [{ expr }],
 				}),
 			)}`,

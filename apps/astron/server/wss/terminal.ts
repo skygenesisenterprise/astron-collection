@@ -4,7 +4,7 @@ import {
 	findServerById,
 	isManagedCloud,
 	validateRequest,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import { publicIpv4, publicIpv6 } from "public-ip";
 import { Client, type ConnectConfig } from "ssh2";
 import { WebSocketServer } from "ws";
@@ -23,13 +23,13 @@ mkdir -p $HOME/.ssh && \\
 chmod 700 $HOME/.ssh && \\
 touch $HOME/.ssh/authorized_keys && \\
 chmod 600 $HOME/.ssh/authorized_keys && \\
-cat /etc/notploy/ssh/auto_generated-notploy-local.pub >> $HOME/.ssh/authorized_keys && \\
-echo "✓ Notploy SSH key added successfully. Reopen the terminal in Notploy to reconnect."
+cat /etc/astron-collection/ssh/auto_generated-astron-collection-local.pub >> $HOME/.ssh/authorized_keys && \\
+echo "✓ Astron Collection SSH key added successfully. Reopen the terminal in Astron Collection to reconnect."
 # ----------------------------------------`;
 
 const COMMAND_TO_GRANT_PERMISSION_ACCESS = `
 # ----------------------------------------
-sudo chown -R $USER:$USER /etc/notploy/ssh
+sudo chown -R $USER:$USER /etc/astron-collection/ssh
 # ----------------------------------------
 `;
 

@@ -7,8 +7,8 @@ const mockHasPermission = vi.hoisted(() => vi.fn());
 const mockCreateGithub = vi.hoisted(() => vi.fn());
 const mockOctokitRequest = vi.hoisted(() => vi.fn());
 
-vi.mock("@notploy/server", async (importOriginal) => {
-	const actual = await importOriginal<typeof import("@notploy/server")>();
+vi.mock("@astron-collection/server", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@astron-collection/server")>();
 	return {
 		...actual,
 		validateRequest: mockValidateRequest,
@@ -16,7 +16,7 @@ vi.mock("@notploy/server", async (importOriginal) => {
 	};
 });
 
-vi.mock("@notploy/server/services/permission", () => ({
+vi.mock("@astron-collection/server/services/permission", () => ({
 	hasPermission: mockHasPermission,
 }));
 
@@ -77,8 +77,8 @@ describe("github setup handler — host validation", () => {
 		mockHasPermission.mockResolvedValue(true);
 		mockOctokitRequest.mockResolvedValue({
 			data: {
-				name: "Notploy",
-				html_url: "https://acme.ghe.com/apps/notploy",
+				name: "Astron Collection",
+				html_url: "https://acme.ghe.com/apps/astron-collection",
 				id: 1,
 				client_id: "cid",
 				client_secret: "csecret",

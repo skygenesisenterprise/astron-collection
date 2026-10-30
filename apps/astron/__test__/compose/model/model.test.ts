@@ -1,17 +1,17 @@
-import type { Compose, ComposeSpecification } from "@notploy/server";
+import type { Compose, ComposeSpecification } from "@astron-collection/server";
 import {
 	addAppNameToPreventCollision,
 	addSuffixToAllProperties,
-} from "@notploy/server";
-import { addDomainToCompose } from "@notploy/server/utils/docker/domain";
-import { execAsyncRemote } from "@notploy/server/utils/process/execAsync";
+} from "@astron-collection/server";
+import { addDomainToCompose } from "@astron-collection/server/utils/docker/domain";
+import { execAsyncRemote } from "@astron-collection/server/utils/process/execAsync";
 import { expect, test, vi } from "vitest";
 import { stringify } from "yaml";
 import composeSpec from "../../../components/shared/compose-spec.json";
 
-vi.mock("@notploy/server/utils/process/execAsync", async (importOriginal) => ({
+vi.mock("@astron-collection/server/utils/process/execAsync", async (importOriginal) => ({
 	...(await importOriginal<
-		typeof import("@notploy/server/utils/process/execAsync")
+		typeof import("@astron-collection/server/utils/process/execAsync")
 	>()),
 	execAsyncRemote: vi.fn(),
 }));

@@ -18,10 +18,10 @@ export type TemplateProps = {
 };
 
 export const DockerCleanupEmail = ({
-	message = "Docker cleanup for notploy",
+	message = "Docker cleanup for astron-collection",
 	date = "2023-05-01T00:00:00.000Z",
 }: TemplateProps) => {
-	const previewText = "Docker cleanup for notploy";
+	const previewText = "Docker cleanup for astron-collection";
 	return (
 		<Html>
 			<Preview>{previewText}</Preview>
@@ -33,22 +33,22 @@ export const DockerCleanupEmail = ({
 						<Section className="mt-[32px]">
 							<Img
 								src={
-									"https://raw.githubusercontent.com/skygenesisenterprise/notploy/refs/heads/master/apps/notploy/logo.png"
+									"https://raw.githubusercontent.com/skygenesisenterprise/astron-collection/refs/heads/master/apps/astron-collection/logo.png"
 								}
 								width="100"
 								height="50"
-								alt="Notploy"
+								alt="Astron Collection"
 								className="my-0 mx-auto"
 							/>
 						</Section>
 						<Heading className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
-							Docker cleanup for <strong>notploy</strong>
+							Docker cleanup for <strong>astron-collection</strong>
 						</Heading>
 						<Text className="text-black text-[14px] leading-[24px]">
 							Hello,
 						</Text>
 						<Text className="text-black text-[14px] leading-[24px]">
-							The docker cleanup for <strong>notploy</strong> was successful ✅
+							The docker cleanup for <strong>astron-collection</strong> was successful ✅
 						</Text>
 
 						<Section className="flex text-black text-[14px]  leading-[24px] bg-[#F4F4F5] rounded-lg p-2">

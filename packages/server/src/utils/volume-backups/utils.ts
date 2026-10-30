@@ -1,15 +1,15 @@
 import path from "node:path";
-import { paths } from "@notploy/server/constants";
+import { paths } from "@astron-collection/server/constants";
 import {
 	createDeploymentVolumeBackup,
 	updateDeploymentStatus,
-} from "@notploy/server/services/deployment";
-import { findDestinationById } from "@notploy/server/services/destination";
-import { findVolumeBackupById } from "@notploy/server/services/volume-backups";
+} from "@astron-collection/server/services/deployment";
+import { findDestinationById } from "@astron-collection/server/services/destination";
+import { findVolumeBackupById } from "@astron-collection/server/services/volume-backups";
 import {
 	execAsync,
 	execAsyncRemote,
-} from "@notploy/server/utils/process/execAsync";
+} from "@astron-collection/server/utils/process/execAsync";
 import { scheduledJobs, scheduleJob } from "node-schedule";
 import { getS3Credentials, normalizeS3Path } from "../backups/utils";
 import { sendVolumeBackupNotifications } from "../notifications/volume-backup";

@@ -10,8 +10,8 @@ export const addSuffixToNetworksRoot = (
 	suffix: string,
 ): { [key: string]: DefinitionsNetwork } => {
 	return _.mapKeys(networks, (_value, key) => {
-		if (key === "notploy-network") {
-			return "notploy-network";
+		if (key === "astron-collection-network") {
+			return "astron-collection-network";
 		}
 		return `${key}-${suffix}`;
 	});
@@ -26,16 +26,16 @@ export const addSuffixToServiceNetworks = (
 			// 1 Case the most common
 			if (Array.isArray(service.networks)) {
 				service.networks = service.networks.map((network: string) => {
-					if (network === "notploy-network") {
-						return "notploy-network";
+					if (network === "astron-collection-network") {
+						return "astron-collection-network";
 					}
 					return `${network}-${suffix}`;
 				});
 			} else {
 				// 2 Case
 				service.networks = _.mapKeys(service.networks, (_value, key) => {
-					if (key === "notploy-network") {
-						return "notploy-network";
+					if (key === "astron-collection-network") {
+						return "astron-collection-network";
 					}
 					return `${key}-${suffix}`;
 				});

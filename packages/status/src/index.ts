@@ -1,5 +1,5 @@
 /**
- * `@notploy/status` — engine of the Notploy Status platform.
+ * `@astron-collection/status` — engine of the Astron Collection Status platform.
  *
  * Responsibilities (see README.md for the full architecture):
  * - Status Core: domain types, validation contracts, state engine;
@@ -9,7 +9,7 @@
  *   Next.js status application mounts through a catch-all route.
  *
  * The web interface lives in `apps/status` and consumes this package; the
- * platform has no dependency on Notploy Console and keeps serving the last
+ * platform has no dependency on Astron Collection Console and keeps serving the last
  * known public state when the control plane (or its own storage) is down.
  */
 
@@ -24,7 +24,7 @@ export {
 export { loadConfig, type StatusConfig } from "./config";
 export {
 	type CatalogComponent,
-	NOTPLOY_STATUS_CATALOG,
+	ASTRON_COLLECTION_STATUS_CATALOG,
 	type StatusCatalog,
 } from "./core/catalog";
 export * from "./core/dto";

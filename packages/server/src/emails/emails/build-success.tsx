@@ -24,10 +24,10 @@ export type TemplateProps = {
 };
 
 export const BuildSuccessEmail = ({
-	projectName = "notploy",
+	projectName = "astron-collection",
 	applicationName = "frontend",
 	applicationType = "application",
-	buildLink = "https://notploy.com/projects/notploy-test/applications/notploy-test",
+	buildLink = "https://astron-collection.com/projects/astron-collection-test/applications/astron-collection-test",
 	date = "2023-05-01T00:00:00.000Z",
 	environmentName = "production",
 }: TemplateProps) => {
@@ -42,11 +42,11 @@ export const BuildSuccessEmail = ({
 						<Section className="mt-[32px]">
 							<Img
 								src={
-									"https://raw.githubusercontent.com/skygenesisenterprise/notploy/refs/heads/master/apps/notploy/logo.png"
+									"https://raw.githubusercontent.com/skygenesisenterprise/astron-collection/refs/heads/master/apps/astron-collection/logo.png"
 								}
 								width="100"
 								height="50"
-								alt="Notploy"
+								alt="Astron Collection"
 								className="my-0 mx-auto"
 							/>
 						</Section>

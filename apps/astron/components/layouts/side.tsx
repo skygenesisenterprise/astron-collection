@@ -785,7 +785,7 @@ export default function Page({ children, pageTitle }: Props) {
 	const router = useRouter();
 	const { data: auth } = api.user.get.useQuery();
 	const { data: permissions } = api.user.getPermissions.useQuery();
-	const { data: notployVersion } = api.settings.getNotployVersion.useQuery();
+	const { data: astronCollectionVersion } = api.settings.getAstronCollectionVersion.useQuery();
 	const { data: whitelabeling } = api.whitelabeling.get.useQuery(undefined, {
 		staleTime: 5 * 60 * 1000,
 		refetchOnWindowFocus: false,
@@ -830,9 +830,9 @@ export default function Page({ children, pageTitle }: Props) {
 
 	// Pages without a navigation entry still deserve a location in the header.
 	// `DashboardLayout` falls back to the generic app name for unknown routes,
-	// which we ignore so we never show a meaningless "Notploy" crumb.
+	// which we ignore so we never show a meaningless "Astron Collection" crumb.
 	const standaloneTitle =
-		!activeNavigation && pageTitle && pageTitle !== "Notploy"
+		!activeNavigation && pageTitle && pageTitle !== "Astron Collection"
 			? pageTitle
 			: undefined;
 
@@ -923,9 +923,9 @@ export default function Page({ children, pageTitle }: Props) {
 						{/* Cloud surfaces its own product version elsewhere. Self-hosted and
 						    the operator console both show the build version under the account
 						    block. */}
-						{environment !== "cloud" && notployVersion && (
+						{environment !== "cloud" && astronCollectionVersion && (
 							<div className="px-3 text-xs text-muted-foreground text-center group-data-[collapsible=icon]:hidden">
-								Version {notployVersion}
+								Version {astronCollectionVersion}
 							</div>
 						)}
 					</SidebarMenu>
@@ -986,10 +986,10 @@ export default function Page({ children, pageTitle }: Props) {
 								<NotificationsButton />
 								<Button variant="ghost" size="icon" asChild>
 									<Link
-										href="https://github.com/skygenesisenterprise/notploy"
+										href="https://github.com/skygenesisenterprise/astron-collection"
 										target="_blank"
 										rel="noopener noreferrer"
-										aria-label="Notploy on GitHub"
+										aria-label="Astron Collection on GitHub"
 									>
 										<GithubIcon className="size-4" />
 									</Link>

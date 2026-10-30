@@ -1,7 +1,7 @@
-import { db } from "@notploy/server/db";
-import { notifications } from "@notploy/server/db/schema";
-import NotployBackupEmail from "@notploy/server/emails/emails/notploy-backup";
-import { redactSecrets } from "@notploy/server/utils/security/redact";
+import { db } from "@astron-collection/server/db";
+import { notifications } from "@astron-collection/server/db/schema";
+import AstronCollectionBackupEmail from "@astron-collection/server/emails/emails/astron-collection-backup";
+import { redactSecrets } from "@astron-collection/server/utils/security/redact";
 import { render } from "@react-email/components";
 import { format } from "date-fns";
 import { eq } from "drizzle-orm";
@@ -20,7 +20,7 @@ import {
 	sendTelegramNotification,
 } from "./utils";
 
-export const sendNotployBackupNotifications = async ({
+export const sendAstronCollectionBackupNotifications = async ({
 	type,
 	errorMessage: rawErrorMessage,
 	backupSize,
@@ -35,7 +35,7 @@ export const sendNotployBackupNotifications = async ({
 	const date = new Date();
 	const unixDate = ~~(Number(date) / 1000);
 	const notificationList = await db.query.notifications.findMany({
-		where: eq(notifications.notployBackup, true),
+		where: eq(notifications.astronCollectionBackup, true),
 		with: {
 			email: true,
 			discord: true,
@@ -71,7 +71,7 @@ export const sendNotployBackupNotifications = async ({
 		try {
 			if (email || resend) {
 				const template = await render(
-					NotployBackupEmail({
+					AstronCollectionBackupEmail({
 						type,
 						errorMessage,
 						date: date.toLocaleString(),
@@ -82,7 +82,7 @@ export const sendNotployBackupNotifications = async ({
 				if (email) {
 					await sendEmailNotification(
 						email,
-						"Notploy instance backup",
+						"Astron Collection instance backup",
 						template,
 					);
 				}
@@ -90,7 +90,7 @@ export const sendNotployBackupNotifications = async ({
 				if (resend) {
 					await sendResendNotification(
 						resend,
-						"Notploy instance backup",
+						"Astron Collection instance backup",
 						template,
 					);
 				}
@@ -103,13 +103,13 @@ export const sendNotployBackupNotifications = async ({
 				await sendDiscordNotification(discord, {
 					title:
 						type === "success"
-							? decorate(">", "`✅` Notploy Backup Successful")
-							: decorate(">", "`❌` Notploy Backup Failed"),
+							? decorate(">", "`✅` Astron Collection Backup Successful")
+							: decorate(">", "`❌` Astron Collection Backup Failed"),
 					color: type === "success" ? 0x57f287 : 0xed4245,
 					fields: [
 						{
 							name: decorate("`📦`", "Backup Type"),
-							value: "Complete Notploy Instance",
+							value: "Complete Astron Collection Instance",
 							inline: true,
 						},
 						...(backupSize
@@ -149,7 +149,7 @@ export const sendNotployBackupNotifications = async ({
 					],
 					timestamp: date.toISOString(),
 					footer: {
-						text: "Notploy Instance Backup Notification",
+						text: "Astron Collection Instance Backup Notification",
 					},
 				});
 			}
@@ -162,9 +162,9 @@ export const sendNotployBackupNotifications = async ({
 					gotify,
 					decorate(
 						type === "success" ? "✅" : "❌",
-						`Notploy Backup ${type === "success" ? "Successful" : "Failed"}`,
+						`Astron Collection Backup ${type === "success" ? "Successful" : "Failed"}`,
 					),
-					`${decorate("📦", "Backup Type: Complete Notploy Instance")}` +
+					`${decorate("📦", "Backup Type: Complete Astron Collection Instance")}` +
 						`${backupSize ? decorate("💾", `Backup Size: ${backupSize}`) : ""}` +
 						`${decorate("🕒", `Date: ${date.toLocaleString()}`)}` +
 						`${type === "error" && errorMessage ? decorate("❌", `Error:\n${errorMessage}`) : ""}`,
@@ -174,10 +174,10 @@ export const sendNotployBackupNotifications = async ({
 			if (ntfy) {
 				await sendNtfyNotification(
 					ntfy,
-					`Notploy Backup ${type === "success" ? "Successful" : "Failed"}`,
+					`Astron Collection Backup ${type === "success" ? "Successful" : "Failed"}`,
 					`${type === "success" ? "white_check_mark" : "x"}`,
 					"",
-					"📦Backup Type: Complete Notploy Instance\n" +
+					"📦Backup Type: Complete Astron Collection Instance\n" +
 						`${backupSize ? `💾Backup Size: ${backupSize}\n` : ""}` +
 						`🕒Date: ${date.toLocaleString()}\n` +
 						`${type === "error" && errorMessage ? `❌Error:\n${errorMessage}` : ""}`,
@@ -196,7 +196,7 @@ export const sendNotployBackupNotifications = async ({
 					? `\n<b>Backup Size:</b> ${backupSize}`
 					: "";
 
-				const messageText = `<b>${statusEmoji} Notploy Backup ${typeStatus}</b>\n\n<b>Backup Type:</b> Complete Notploy Instance${sizeInfo}\n<b>Date:</b> ${format(date, "PP")}\n<b>Time:</b> ${format(date, "pp")}${isError ? errorMsg : ""}`;
+				const messageText = `<b>${statusEmoji} Astron Collection Backup ${typeStatus}</b>\n\n<b>Backup Type:</b> Complete Astron Collection Instance${sizeInfo}\n<b>Date:</b> ${format(date, "PP")}\n<b>Time:</b> ${format(date, "pp")}${isError ? errorMsg : ""}`;
 
 				await sendTelegramNotification(telegram, messageText);
 			}
@@ -210,8 +210,8 @@ export const sendNotployBackupNotifications = async ({
 							color: type === "success" ? "#00FF00" : "#FF0000",
 							pretext:
 								type === "success"
-									? ":white_check_mark: *Notploy Backup Successful*"
-									: ":x: *Notploy Backup Failed*",
+									? ":white_check_mark: *Astron Collection Backup Successful*"
+									: ":x: *Astron Collection Backup Failed*",
 							fields: [
 								...(type === "error" && errorMessage
 									? [
@@ -224,7 +224,7 @@ export const sendNotployBackupNotifications = async ({
 									: []),
 								{
 									title: "Backup Type",
-									value: "Complete Notploy Instance",
+									value: "Complete Astron Collection Instance",
 									short: true,
 								},
 								...(backupSize
@@ -280,8 +280,8 @@ export const sendNotployBackupNotifications = async ({
 								tag: "plain_text",
 								content:
 									type === "success"
-										? "✅ Notploy Backup Successful"
-										: "❌ Notploy Backup Failed",
+										? "✅ Astron Collection Backup Successful"
+										: "❌ Astron Collection Backup Failed",
 							},
 							subtitle: {
 								tag: "plain_text",
@@ -304,7 +304,7 @@ export const sendNotployBackupNotifications = async ({
 												{
 													tag: "markdown",
 													content:
-														"**Backup Type:**\nComplete Notploy Instance",
+														"**Backup Type:**\nComplete Astron Collection Instance",
 													text_align: "left",
 													text_size: "normal_v2",
 												},
@@ -364,43 +364,43 @@ export const sendNotployBackupNotifications = async ({
 				const statusEmoji = type === "success" ? ":white_check_mark:" : ":x:";
 				const typeStatus = type === "success" ? "Successful" : "Failed";
 				await sendMattermostNotification(mattermost, {
-					text: `${statusEmoji} **Notploy Backup ${typeStatus}**
+					text: `${statusEmoji} **Astron Collection Backup ${typeStatus}**
 
-**Backup Type:** Complete Notploy Instance${backupSize ? `\n**Backup Size:** ${backupSize}` : ""}
+**Backup Type:** Complete Astron Collection Instance${backupSize ? `\n**Backup Size:** ${backupSize}` : ""}
 **Date:** ${date.toLocaleString()}
 **Status:** ${typeStatus}${type === "error" && errorMessage ? `\n\n**Error:**\n\`\`\`\n${errorMessage}\n\`\`\`` : ""}`,
 					channel: mattermost.channel,
-					username: mattermost.username || "Notploy Bot",
+					username: mattermost.username || "Astron Collection Bot",
 				});
 			}
 
 			if (custom) {
 				await sendCustomNotification(custom, {
-					title: `Notploy Backup ${type === "success" ? "Successful" : "Failed"}`,
-					message: `Notploy instance backup ${type === "success" ? "completed successfully" : "failed"}`,
-					backupType: "Complete Notploy Instance",
+					title: `Astron Collection Backup ${type === "success" ? "Successful" : "Failed"}`,
+					message: `Astron Collection instance backup ${type === "success" ? "completed successfully" : "failed"}`,
+					backupType: "Complete Astron Collection Instance",
 					...(backupSize ? { backupSize } : {}),
 					...(type === "error" && errorMessage ? { errorMessage } : {}),
 					timestamp: date.toISOString(),
 					date: date.toLocaleString(),
 					status: type,
-					type: "notploy-backup",
+					type: "astron-collection-backup",
 				});
 			}
 
 			if (pushover) {
 				await sendPushoverNotification(
 					pushover,
-					`Notploy Backup ${type === "success" ? "Successful" : "Failed"}`,
-					`Backup Type: Complete Notploy Instance${backupSize ? `\nBackup Size: ${backupSize}` : ""}\nDate: ${date.toLocaleString()}${type === "error" && errorMessage ? `\nError: ${errorMessage}` : ""}`,
+					`Astron Collection Backup ${type === "success" ? "Successful" : "Failed"}`,
+					`Backup Type: Complete Astron Collection Instance${backupSize ? `\nBackup Size: ${backupSize}` : ""}\nDate: ${date.toLocaleString()}${type === "error" && errorMessage ? `\nError: ${errorMessage}` : ""}`,
 				);
 			}
 
 			if (teams) {
 				await sendTeamsNotification(teams, {
-					title: `${type === "success" ? "✅" : "❌"} Notploy Backup ${type === "success" ? "Successful" : "Failed"}`,
+					title: `${type === "success" ? "✅" : "❌"} Astron Collection Backup ${type === "success" ? "Successful" : "Failed"}`,
 					facts: [
-						{ name: "Backup Type", value: "Complete Notploy Instance" },
+						{ name: "Backup Type", value: "Complete Astron Collection Instance" },
 						...(backupSize ? [{ name: "Backup Size", value: backupSize }] : []),
 						{ name: "Date", value: format(date, "PP pp") },
 						{

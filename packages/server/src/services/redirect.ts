@@ -1,10 +1,10 @@
-import { db } from "@notploy/server/db";
-import { type apiCreateRedirect, redirects } from "@notploy/server/db/schema";
+import { db } from "@astron-collection/server/db";
+import { type apiCreateRedirect, redirects } from "@astron-collection/server/db/schema";
 import {
 	createRedirectMiddleware,
 	removeRedirectMiddleware,
 	updateRedirectMiddleware,
-} from "@notploy/server/utils/traefik/redirect";
+} from "@astron-collection/server/utils/traefik/redirect";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import type { z } from "zod";

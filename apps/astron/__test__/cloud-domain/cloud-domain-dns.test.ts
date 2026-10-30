@@ -3,17 +3,17 @@ import {
 	getCloudDnsConfig,
 	resetCloudDnsCache,
 	selectZoneId,
-} from "@notploy/server/services/cloud-domain-dns";
+} from "@astron-collection/server/services/cloud-domain-dns";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const TOKEN = "cf-sentinel-token-value";
 
 const env = {
 	CLOUDFLARE_API_TOKEN: TOKEN,
-	NOTPLOY_CLOUD_INGRESS_TARGET: "203.0.113.10",
+	ASTRON_COLLECTION_CLOUD_INGRESS_TARGET: "203.0.113.10",
 };
 
-const createClient = (zones = [{ id: "zone-1", name: "notploy.app" }]) => ({
+const createClient = (zones = [{ id: "zone-1", name: "astron-collection.app" }]) => ({
 	listZones: vi.fn(async () => zones),
 	upsertRecord: vi.fn(async () => ({ id: "record-1" })),
 });
@@ -33,13 +33,13 @@ describe("getCloudDnsConfig", () => {
 	it("proxies by default and can be switched to DNS-only", () => {
 		expect(getCloudDnsConfig(env)).toMatchObject({ proxied: true });
 		expect(
-			getCloudDnsConfig({ ...env, NOTPLOY_CLOUD_DNS_PROXIED: "false" }),
+			getCloudDnsConfig({ ...env, ASTRON_COLLECTION_CLOUD_DNS_PROXIED: "false" }),
 		).toMatchObject({ proxied: false });
 	});
 
 	it("accepts an explicit zone id", () => {
 		expect(
-			getCloudDnsConfig({ ...env, NOTPLOY_CLOUD_DNS_ZONE_ID: "zone-explicit" }),
+			getCloudDnsConfig({ ...env, ASTRON_COLLECTION_CLOUD_DNS_ZONE_ID: "zone-explicit" }),
 		).toMatchObject({ zoneId: "zone-explicit" });
 	});
 });
@@ -49,17 +49,17 @@ describe("selectZoneId", () => {
 		expect(
 			selectZoneId(
 				[
-					{ id: "apex", name: "notploy.app" },
-					{ id: "sub", name: "cloud.notploy.app" },
+					{ id: "apex", name: "astron-collection.app" },
+					{ id: "sub", name: "cloud.astron-collection.app" },
 				],
-				"cloud.notploy.app",
+				"cloud.astron-collection.app",
 			),
 		).toBe("sub");
 	});
 
 	it("returns null when no zone manages the name", () => {
 		expect(
-			selectZoneId([{ id: "other", name: "example.com" }], "notploy.app"),
+			selectZoneId([{ id: "other", name: "example.com" }], "astron-collection.app"),
 		).toBeNull();
 	});
 });
@@ -71,7 +71,7 @@ describe("ensureCloudWildcardRecord", () => {
 			ensureCloudWildcardRecord({ base: null, env, client }),
 		).resolves.toMatchObject({ status: "skipped" });
 		await expect(
-			ensureCloudWildcardRecord({ base: "notploy.app", env: {}, client }),
+			ensureCloudWildcardRecord({ base: "astron-collection.app", env: {}, client }),
 		).resolves.toMatchObject({ status: "skipped" });
 		expect(client.upsertRecord).not.toHaveBeenCalled();
 	});
@@ -80,7 +80,7 @@ describe("ensureCloudWildcardRecord", () => {
 		const client = createClient();
 
 		const result = await ensureCloudWildcardRecord({
-			base: "notploy.app",
+			base: "astron-collection.app",
 			env,
 			client,
 		});
@@ -95,7 +95,7 @@ describe("ensureCloudWildcardRecord", () => {
 			expect.objectContaining({
 				zoneId: "zone-1",
 				type: "A",
-				name: "*.notploy.app",
+				name: "*.astron-collection.app",
 				content: "203.0.113.10",
 				proxied: true,
 			}),
@@ -105,20 +105,20 @@ describe("ensureCloudWildcardRecord", () => {
 	it("uses a CNAME for a hostname ingress and AAAA for IPv6", async () => {
 		const cnameClient = createClient();
 		await ensureCloudWildcardRecord({
-			base: "notploy.app",
-			env: { ...env, NOTPLOY_CLOUD_INGRESS_TARGET: "ingress.notploy.app" },
+			base: "astron-collection.app",
+			env: { ...env, ASTRON_COLLECTION_CLOUD_INGRESS_TARGET: "ingress.astron-collection.app" },
 			client: cnameClient,
 		});
 		expect(cnameClient.upsertRecord).toHaveBeenCalledWith(
 			expect.anything(),
-			expect.objectContaining({ type: "CNAME", content: "ingress.notploy.app" }),
+			expect.objectContaining({ type: "CNAME", content: "ingress.astron-collection.app" }),
 		);
 
 		resetCloudDnsCache();
 		const ipv6Client = createClient();
 		await ensureCloudWildcardRecord({
-			base: "notploy.app",
-			env: { ...env, NOTPLOY_CLOUD_INGRESS_TARGET: "2001:db8::1" },
+			base: "astron-collection.app",
+			env: { ...env, ASTRON_COLLECTION_CLOUD_INGRESS_TARGET: "2001:db8::1" },
 			client: ipv6Client,
 		});
 		expect(ipv6Client.upsertRecord).toHaveBeenCalledWith(
@@ -129,9 +129,9 @@ describe("ensureCloudWildcardRecord", () => {
 
 	it("does not call Cloudflare again within the cache window", async () => {
 		const client = createClient();
-		await ensureCloudWildcardRecord({ base: "notploy.app", env, client });
+		await ensureCloudWildcardRecord({ base: "astron-collection.app", env, client });
 		await ensureCloudWildcardRecord({
-			base: "notploy.app",
+			base: "astron-collection.app",
 			env,
 			client,
 			now: Date.now() + 60_000,
@@ -143,9 +143,9 @@ describe("ensureCloudWildcardRecord", () => {
 
 	it("bypasses the cache when forced", async () => {
 		const client = createClient();
-		await ensureCloudWildcardRecord({ base: "notploy.app", env, client });
+		await ensureCloudWildcardRecord({ base: "astron-collection.app", env, client });
 		await ensureCloudWildcardRecord({
-			base: "notploy.app",
+			base: "astron-collection.app",
 			env,
 			client,
 			force: true,
@@ -158,8 +158,8 @@ describe("ensureCloudWildcardRecord", () => {
 		const client = createClient([{ id: "other", name: "example.com" }]);
 
 		await expect(
-			ensureCloudWildcardRecord({ base: "notploy.app", env, client }),
-		).rejects.toThrow("no zone manages notploy.app");
+			ensureCloudWildcardRecord({ base: "astron-collection.app", env, client }),
+		).rejects.toThrow("no zone manages astron-collection.app");
 	});
 
 	it("never leaks the API token in an error", async () => {
@@ -169,7 +169,7 @@ describe("ensureCloudWildcardRecord", () => {
 		);
 
 		const error = await ensureCloudWildcardRecord({
-			base: "notploy.app",
+			base: "astron-collection.app",
 			env,
 			client,
 		}).catch((thrown: unknown) => thrown);

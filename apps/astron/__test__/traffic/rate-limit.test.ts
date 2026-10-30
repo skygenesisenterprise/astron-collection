@@ -1,10 +1,10 @@
-import { createRateLimiter } from "@notploy/server/utils/rate-limit";
+import { createRateLimiter } from "@astron-collection/server/utils/rate-limit";
 import {
 	adminRole,
 	memberRole,
 	ownerRole,
 	statements,
-} from "@notploy/server/lib/access-control";
+} from "@astron-collection/server/lib/access-control";
 import { describe, expect, it } from "vitest";
 
 describe("createRateLimiter", () => {

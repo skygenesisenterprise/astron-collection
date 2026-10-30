@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
 			userAgent: "*",
 			allow: "/",
 		},
-		sitemap: "https://docs.notploy.com/sitemap.xml",
+		sitemap: "https://docs.astron-collection.com/sitemap.xml",
 	};
 }
 

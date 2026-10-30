@@ -1,7 +1,7 @@
 /**
- * `pnpm seed [-- --slug notploy]`
+ * `pnpm seed [-- --slug astron-collection]`
  *
- * Creates the Notploy status page and its components (Notploy Cloud, API, MCP
+ * Creates the Astron Collection status page and its components (Astron Collection Cloud, API, MCP
  * Server, GitHub App, Website, Docs) from the shipped catalog. Idempotent: an
  * existing page or component is left untouched, so it is safe to re-run after
  * an upgrade or from a Make target.
@@ -13,7 +13,7 @@
  *   { "observedStatus": "operational" | "degraded" | "outage" | "unknown" }
  */
 import { loadConfig } from "../config";
-import { NOTPLOY_STATUS_CATALOG } from "../core/catalog";
+import { ASTRON_COLLECTION_STATUS_CATALOG } from "../core/catalog";
 import { createStatusContext } from "../services/context";
 import { seedCatalog } from "../services/seed";
 
@@ -30,7 +30,7 @@ const lines: string[] = [];
 try {
 	const result = seedCatalog(
 		ctx,
-		NOTPLOY_STATUS_CATALOG,
+		ASTRON_COLLECTION_STATUS_CATALOG,
 		{
 			slug: readFlag("slug"),
 			name: readFlag("name"),

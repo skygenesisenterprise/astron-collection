@@ -3,7 +3,7 @@
  *
  * The platform stores its state in a dedicated SQLite file (node:sqlite, no
  * native dependency) placed wherever `STATUS_DATA_DIR` points — deliberately
- * outside the Notploy control-plane database so a control-plane outage cannot
+ * outside the Astron Collection control-plane database so a control-plane outage cannot
  * take the status page down with it. WAL mode keeps concurrent reads cheap
  * while writes are serialized, which matches the low write volume of a status
  * platform.

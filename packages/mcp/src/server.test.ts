@@ -52,8 +52,8 @@ class MemoryAudit implements AuditPort {
 
 function testConfig(overrides: Partial<McpConfig> = {}): McpConfig {
   const base = loadConfig({
-    NOTPLOY_URL: "https://notploy.example.com",
-    NOTPLOY_API_KEY: API_KEY,
+    ASTRON_COLLECTION_URL: "https://astron-collection.example.com",
+    ASTRON_COLLECTION_API_KEY: API_KEY,
   } as NodeJS.ProcessEnv);
   return {
     ...base,
@@ -237,8 +237,8 @@ describe("MCP server", () => {
     expect(tools.map((tool) => tool.name)).not.toContain("list_projects");
     for (const tool of tools) {
       const meta = (tool as ToolListEntry & { _meta?: Record<string, unknown> })._meta;
-      expect(meta?.["notploy/mode"]).toBe("advanced");
-      expect(meta?.["notploy/risk"]).toBe(0);
+      expect(meta?.["astron-collection/mode"]).toBe("advanced");
+      expect(meta?.["astron-collection/risk"]).toBe(0);
       expect(tool.annotations?.readOnlyHint).toBe(true);
     }
   });

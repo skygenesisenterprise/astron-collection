@@ -17,7 +17,7 @@ import {
 	getConfiguredProduct,
 	getDockerDiskUsage,
 	getLogCleanupStatus,
-	getNotployImageTag,
+	getAstronCollectionImageTag,
 	getRemoteDocker,
 	getServerIpCandidates,
 	getUpdateData,
@@ -27,7 +27,7 @@ import {
 	isExternalJobsEnabled,
 	isManagedCloud,
 	isUpdateInstallable,
-	NOTPLOY_IMAGE,
+	ASTRON_COLLECTION_IMAGE,
 	normalizeVersion,
 	parseRawConfig,
 	paths,
@@ -56,14 +56,14 @@ import {
 	writeMainConfig,
 	writeTraefikConfigInPath,
 	writeTraefikSetup,
-} from "@notploy/server";
-import { db } from "@notploy/server/db";
-import { checkPermission } from "@notploy/server/services/permission";
+} from "@astron-collection/server";
+import { db } from "@astron-collection/server/db";
+import { checkPermission } from "@astron-collection/server/services/permission";
 import {
 	isValidIpAddress,
 	sortIpCandidates,
-} from "@notploy/server/utils/ip-address";
-import { generateOpenApiDocument } from "@notploy/trpc-openapi";
+} from "@astron-collection/server/utils/ip-address";
+import { generateOpenApiDocument } from "@astron-collection/trpc-openapi";
 import { TRPCError } from "@trpc/server";
 import { eq, sql } from "drizzle-orm";
 import { scheduledJobs, scheduleJob } from "node-schedule";
@@ -165,11 +165,11 @@ export const settingsRouter = createTRPCRouter({
 		if (IS_CLOUD) {
 			return true;
 		}
-		await reloadDockerResource("notploy", undefined, packageInfo.version);
+		await reloadDockerResource("astron-collection", undefined, packageInfo.version);
 		await audit(ctx, {
 			action: "reload",
 			resourceType: "settings",
-			resourceName: "notploy",
+			resourceName: "astron-collection",
 		});
 		return true;
 	}),
@@ -189,7 +189,7 @@ export const settingsRouter = createTRPCRouter({
 		.input(apiServerSchema)
 		.mutation(async ({ input, ctx }) => {
 			// Run in background so the request returns immediately; avoids proxy timeouts.
-			void reloadDockerResource("notploy-traefik", input?.serverId).catch(
+			void reloadDockerResource("astron-collection-traefik", input?.serverId).catch(
 				(err) => {
 					console.error("reloadTraefik background:", err);
 				},
@@ -197,16 +197,16 @@ export const settingsRouter = createTRPCRouter({
 			await audit(ctx, {
 				action: "reload",
 				resourceType: "settings",
-				resourceName: "notploy-traefik",
+				resourceName: "astron-collection-traefik",
 			});
 			return true;
 		}),
 	toggleDashboard: adminProcedure
 		.input(apiEnableDashboard)
 		.mutation(async ({ input, ctx }) => {
-			const ports = await readPorts("notploy-traefik", input.serverId);
+			const ports = await readPorts("astron-collection-traefik", input.serverId);
 			const env = await readEnvironmentVariables(
-				"notploy-traefik",
+				"astron-collection-traefik",
 				input.serverId,
 			);
 			const preparedEnv = prepareEnvironmentVariables(env);
@@ -389,8 +389,8 @@ export const settingsRouter = createTRPCRouter({
 				updateLetsEncryptEmail(input.letsEncryptEmail);
 			}
 
-			// Register the control-plane hostname in the organization's Notploy
-			// Internal DNS so names like `console.notploy.lan` resolve inside the
+			// Register the control-plane hostname in the organization's Astron Collection
+			// Internal DNS so names like `console.astron-collection.lan` resolve inside the
 			// LAN, the same way application domains do.
 			const organizationId = ctx.session?.activeOrganizationId;
 			const internalDns =
@@ -607,7 +607,7 @@ export const settingsRouter = createTRPCRouter({
 		if (IS_CLOUD) {
 			return true;
 		}
-		const traefikConfig = readConfig("notploy");
+		const traefikConfig = readConfig("astron-collection");
 		return traefikConfig;
 	}),
 	updateWebServerTraefikConfig: adminProcedure
@@ -616,7 +616,7 @@ export const settingsRouter = createTRPCRouter({
 			if (IS_CLOUD) {
 				return true;
 			}
-			writeConfig("notploy", input.traefikConfig);
+			writeConfig("astron-collection", input.traefikConfig);
 			await audit(ctx, {
 				action: "update",
 				resourceType: "settings",
@@ -689,24 +689,24 @@ export const settingsRouter = createTRPCRouter({
 			"update",
 			"--force",
 			"--image",
-			`${NOTPLOY_IMAGE}:${data.latestVersion}`,
-			"notploy",
+			`${ASTRON_COLLECTION_IMAGE}:${data.latestVersion}`,
+			"astron-collection",
 		]);
 		await audit(ctx, {
 			action: "update",
 			resourceType: "settings",
-			resourceName: "notploy-version",
+			resourceName: "astron-collection-version",
 		});
 
 		return true;
 	}),
 
-	getNotployVersion: protectedProcedure.query(() => {
+	getAstronCollectionVersion: protectedProcedure.query(() => {
 		// The UI shows a clean version (`1.0.1`), not the raw package/tag value.
 		return normalizeVersion(packageInfo.version) ?? packageInfo.version;
 	}),
 	getReleaseTag: protectedProcedure.query(() => {
-		return getNotployImageTag();
+		return getAstronCollectionImageTag();
 	}),
 	readDirectories: protectedProcedure
 		.input(apiServerSchema)
@@ -909,14 +909,14 @@ export const settingsRouter = createTRPCRouter({
 				}
 				try {
 					const container = await docker
-						.getContainer("notploy-traefik")
+						.getContainer("astron-collection-traefik")
 						.inspect();
 					if (container.State?.Running) {
 						status = "running";
 						version = container.Config?.Image ?? null;
 					}
 				} catch {
-					const service = await docker.getService("notploy-traefik").inspect();
+					const service = await docker.getService("astron-collection-traefik").inspect();
 					const replicas = service.Spec?.Mode?.Replicated?.Replicas;
 					const tasks = await docker.listTasks({
 						filters: { service: [service.ID], desiredState: ["running"] },
@@ -1088,8 +1088,8 @@ export const settingsRouter = createTRPCRouter({
 			});
 
 			openApiDocument.info = {
-				title: "Notploy API",
-				description: "Endpoints for notploy",
+				title: "Astron Collection API",
+				description: "Endpoints for astron-collection",
 				version: packageInfo.version,
 			};
 
@@ -1119,7 +1119,7 @@ export const settingsRouter = createTRPCRouter({
 		.input(apiServerSchema)
 		.query(async ({ input }) => {
 			const envVars = await readEnvironmentVariables(
-				"notploy-traefik",
+				"astron-collection-traefik",
 				input?.serverId,
 			);
 			return envVars;
@@ -1129,7 +1129,7 @@ export const settingsRouter = createTRPCRouter({
 		.input(z.object({ env: z.string(), serverId: z.string().optional() }))
 		.mutation(async ({ input, ctx }) => {
 			const envs = prepareEnvironmentVariables(input.env);
-			const ports = await readPorts("notploy-traefik", input?.serverId);
+			const ports = await readPorts("astron-collection-traefik", input?.serverId);
 
 			// Run in background so the request returns immediately; client polls /api/health.
 			void writeTraefikSetup({
@@ -1149,7 +1149,7 @@ export const settingsRouter = createTRPCRouter({
 	haveTraefikDashboardPortEnabled: adminProcedure
 		.input(apiServerSchema)
 		.query(async ({ input }) => {
-			const ports = await readPorts("notploy-traefik", input?.serverId);
+			const ports = await readPorts("astron-collection-traefik", input?.serverId);
 			return ports.some((port) => port.targetPort === 8080);
 		}),
 
@@ -1253,7 +1253,7 @@ export const settingsRouter = createTRPCRouter({
 			if (input.enable) {
 				const config = {
 					accessLog: {
-						filePath: "/etc/notploy/traefik/dynamic/access.log",
+						filePath: "/etc/astron-collection/traefik/dynamic/access.log",
 						format: "json",
 						bufferingSize: 100,
 					},
@@ -1398,7 +1398,7 @@ export const settingsRouter = createTRPCRouter({
 					});
 				}
 				const env = await readEnvironmentVariables(
-					"notploy-traefik",
+					"astron-collection-traefik",
 					input?.serverId,
 				);
 
@@ -1447,7 +1447,7 @@ export const settingsRouter = createTRPCRouter({
 	getTraefikPorts: adminProcedure
 		.input(apiServerSchema)
 		.query(async ({ input }) => {
-			const ports = await readPorts("notploy-traefik", input?.serverId);
+			const ports = await readPorts("astron-collection-traefik", input?.serverId);
 			return ports;
 		}),
 	updateLogCleanup: protectedProcedure
@@ -1478,11 +1478,11 @@ export const settingsRouter = createTRPCRouter({
 		return getLogCleanupStatus();
 	}),
 
-	getNotployCloudIps: adminProcedure.query(async () => {
+	getAstronCollectionCloudIps: adminProcedure.query(async () => {
 		if (!IS_CLOUD) {
 			return [];
 		}
-		const ips = process.env.NOTPLOY_CLOUD_IPS?.split(",");
+		const ips = process.env.ASTRON_COLLECTION_CLOUD_IPS?.split(",");
 		return ips;
 	}),
 });

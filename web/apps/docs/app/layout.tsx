@@ -1,7 +1,7 @@
 import { RootProvider } from "fumadocs-ui/provider/next";
 import "./global.css";
 import SearchDialog from "@/components/SearchDialog";
-import { NotployTraffic } from "@/components/NotployTraffic";
+import { AstronCollectionTraffic } from "@/components/AstronCollectionTraffic";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
@@ -11,25 +11,25 @@ const inter = Inter({
 
 export const metadata: Metadata = {
 	metadataBase: new URL(
-		process.env.NEXT_PUBLIC_APP_URL || "https://docs.notploy.com",
+		process.env.NEXT_PUBLIC_APP_URL || "https://docs.astron-collection.com",
 	),
 	title: {
-		default: "Notploy Documentation",
-		template: "%s | Notploy Documentation",
+		default: "Astron Collection Documentation",
+		template: "%s | Astron Collection Documentation",
 	},
 	description:
 		"Open Source Alternative to Vercel, Netlify and Heroku. Deploy your applications with ease.",
 	keywords: [
-		"notploy",
+		"astron-collection",
 		"deployment",
 		"docker",
 		"hosting",
 		"devops",
 		"open source",
 	],
-	authors: [{ name: "Notploy Team" }],
+	authors: [{ name: "Astron Collection Team" }],
 	openGraph: {
-		title: "Notploy Documentation",
+		title: "Astron Collection Documentation",
 		description: "Open Source Alternative to Vercel, Netlify and Heroku",
 		type: "website",
 	},
@@ -40,7 +40,7 @@ export default function Layout({ children }: LayoutProps<"/">) {
 		<html lang="en" className={inter.className} suppressHydrationWarning>
 			<body className="flex flex-col min-h-screen">
 				{/* Traffic Manager instrumentation (no-op without the env vars). */}
-				<NotployTraffic />
+				<AstronCollectionTraffic />
 				<RootProvider
 					search={{
 						SearchDialog,

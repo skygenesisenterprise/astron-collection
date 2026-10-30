@@ -20,7 +20,7 @@ vi.mock("drizzle-orm", () => ({
 	sql: vi.fn(() => "attempts + 1"),
 }));
 
-vi.mock("@notploy/server/db/schema", () => ({
+vi.mock("@astron-collection/server/db/schema", () => ({
 	githubWebhookDelivery: {
 		githubId: "delivery.githubId",
 		deliveryId: "delivery.deliveryId",
@@ -30,7 +30,7 @@ vi.mock("@notploy/server/db/schema", () => ({
 	},
 }));
 
-vi.mock("@notploy/server/db", () => ({
+vi.mock("@astron-collection/server/db", () => ({
 	db: {
 		insert: vi.fn(() => ({
 			values: vi.fn(() => ({

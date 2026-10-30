@@ -1,6 +1,6 @@
 "use client";
 
-import type { PublicPageDto } from "@notploy/status";
+import type { PublicPageDto } from "@astron-collection/status";
 import * as React from "react";
 import { describeFreshness, formatRelativeTime } from "@/lib/view-model";
 import { ComponentList } from "./component-list";

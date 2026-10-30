@@ -11,16 +11,16 @@ COPY . /usr/src/app
 WORKDIR /usr/src/app
 
 # Install dependencies (website + its workspace deps only)
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --filter=@notploy/website... --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --filter=@astron-collection/website... --frozen-lockfile
 
 # Deploy only the website app
 ENV NODE_ENV=production
-RUN pnpm --filter=@notploy/website run build
-RUN pnpm --filter=@notploy/website --prod deploy --legacy /prod/website
+RUN pnpm --filter=@astron-collection/website run build
+RUN pnpm --filter=@astron-collection/website --prod deploy --legacy /prod/website
 
 RUN cp -R /usr/src/app/web/apps/website/.next /prod/website/.next
 
-FROM base AS notploy
+FROM base AS astron-collection
 WORKDIR /app
 
 # Set production

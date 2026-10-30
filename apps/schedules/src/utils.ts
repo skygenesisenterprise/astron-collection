@@ -14,7 +14,7 @@ import {
 	runMySqlBackup,
 	runPostgresBackup,
 	runVolumeBackup,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import {
 	and,
 	backups,
@@ -23,7 +23,7 @@ import {
 	schedules,
 	server,
 	volumeBackups,
-} from "@notploy/server/db";
+} from "@astron-collection/server/db";
 import { logger } from "./logger.js";
 import { scheduleJob } from "./queue.js";
 import type { QueueJob } from "./schema.js";

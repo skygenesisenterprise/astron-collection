@@ -5,8 +5,8 @@ import { parse as parseYaml } from "yaml";
 
 const LOGO_EXTENSIONS = [".svg", ".png", ".webp", ".jpg", ".jpeg"];
 const REQUIRED_LINK_KEYS = ["github", "website", "docs"];
-const ALLOW_HOST_PORTS = "# notploy: allow-host-ports";
-const ALLOW_CONTAINER_NAMES = "# notploy: allow-container-names";
+const ALLOW_HOST_PORTS = "# astron-collection: allow-host-ports";
+const ALLOW_CONTAINER_NAMES = "# astron-collection: allow-container-names";
 // Injected by the template processor; APP_NAME is documented as always present.
 const BUILTIN_VARIABLES = new Set(["APP_NAME"]);
 
@@ -204,7 +204,7 @@ function validateCompose(dir, issues) {
 			file: "docker-compose.yml",
 			code: "templates.compose-networks",
 			message:
-				"docker-compose.yml must not declare networks; Notploy creates the network",
+				"docker-compose.yml must not declare networks; Astron Collection creates the network",
 		});
 	}
 	for (const name of serviceNames) {
@@ -214,7 +214,7 @@ function validateCompose(dir, issues) {
 				severity: "error",
 				file: "docker-compose.yml",
 				code: "templates.compose-container-name",
-				message: `service "${name}" sets container_name; Notploy names containers per deployment`,
+				message: `service "${name}" sets container_name; Astron Collection names containers per deployment`,
 			});
 		}
 		for (const port of service.ports ?? []) {

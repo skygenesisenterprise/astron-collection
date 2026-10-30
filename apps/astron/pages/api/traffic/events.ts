@@ -7,7 +7,7 @@ import {
 	ingestAudienceEvents,
 	MAX_AUDIENCE_PAYLOAD_BYTES,
 	TrafficServiceError,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 /**

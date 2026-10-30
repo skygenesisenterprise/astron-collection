@@ -4,7 +4,7 @@ import {
 	isLocalIpScope,
 	isValidIpAddress,
 	sortIpCandidates,
-} from "@notploy/server/utils/ip-address";
+} from "@astron-collection/server/utils/ip-address";
 import { describe, expect, it } from "vitest";
 
 describe("isValidIpAddress", () => {
@@ -25,7 +25,7 @@ describe("isValidIpAddress", () => {
 
 	it.each([
 		"",
-		"notploy.example.com",
+		"astron-collection.example.com",
 		"192.168.1.",
 		"999.1.1.1",
 		"localhost",

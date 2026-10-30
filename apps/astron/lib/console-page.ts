@@ -1,4 +1,4 @@
-import { validateRequest } from "@notploy/server/lib/auth";
+import { validateRequest } from "@astron-collection/server/lib/auth";
 import type { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 
 type ConsolePageProps = Record<string, never>;

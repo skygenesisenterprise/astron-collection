@@ -8,7 +8,7 @@ import {
 import { SshError } from "./errors";
 
 /** Comment appended to the generated key so it can be recognized later. */
-export const MANAGED_KEY_COMMENT = "notploy";
+export const MANAGED_KEY_COMMENT = "astron-collection";
 
 export type SshPrivilegeMode = "root" | "sudo" | "none";
 
@@ -74,7 +74,7 @@ export const parsePrivilegeProbe = (output: string): SshPrivilege => {
 	return { mode, home };
 };
 
-/** Resolves how (and where) Notploy's key should be installed. */
+/** Resolves how (and where) Astron Collection's key should be installed. */
 export const detectSshPrivilege = async (
 	session: SshSession,
 ): Promise<SshPrivilege> => {
@@ -165,7 +165,7 @@ const asAuthorizationError = (error: unknown): never => {
 			cause: error,
 			detail: "the SSH account could not write to ~/.ssh/authorized_keys",
 			message:
-				"Notploy could not write its key to the server. Use root or a non-root account with passwordless sudo access.",
+				"Astron Collection could not write its key to the server. Use root or a non-root account with passwordless sudo access.",
 		});
 	}
 	throw error;
@@ -300,8 +300,8 @@ export const verifyKeyBasedConnection = async (
 			clientFactory: target.clientFactory,
 		},
 		async (session) => {
-			const { stdout } = await session.exec("echo notploy-ssh-ok");
-			if (!stdout.includes("notploy-ssh-ok")) {
+			const { stdout } = await session.exec("echo astron-collection-ssh-ok");
+			if (!stdout.includes("astron-collection-ssh-ok")) {
 				throw new SshError({
 					category: "command",
 					detail: "key-based verification did not return the expected marker",

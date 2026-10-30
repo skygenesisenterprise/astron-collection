@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const mockFetch = vi.fn();
 global.fetch = mockFetch as typeof fetch;
 
-import { ovhClient } from "@notploy/server/utils/dns/ovh";
+import { ovhClient } from "@astron-collection/server/utils/dns/ovh";
 
 const textResponse = (body: string, ok = true, status = 200) =>
 	({

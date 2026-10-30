@@ -5,31 +5,31 @@ import path from "node:path";
 import {
 	getInstallation,
 	validateInstallation,
-} from "@notploy/server/services/instance-identity";
+} from "@astron-collection/server/services/instance-identity";
 import {
 	evaluateCapabilities,
 	hasCapability,
-} from "@notploy/server/utils/pki/capabilities";
+} from "@astron-collection/server/utils/pki/capabilities";
 import {
 	ENTITLEMENT_TOKEN_PREFIX,
 	signEntitlement,
 	verifyEntitlementForInstance,
 	verifyEntitlementToken,
-} from "@notploy/server/utils/pki/entitlement";
+} from "@astron-collection/server/utils/pki/entitlement";
 import {
 	generateLocalInstanceIdentity,
 	identityFiles,
 	loadInstanceIdentity,
 	rotateLocalInstanceIdentity,
 	writeEntitlementToken,
-} from "@notploy/server/utils/pki/instance";
-import type { EntitlementPayload } from "@notploy/server/utils/pki/types";
+} from "@astron-collection/server/utils/pki/instance";
+import type { EntitlementPayload } from "@astron-collection/server/utils/pki/types";
 import { afterEach, describe, expect, it } from "vitest";
 
 const tempDirs: string[] = [];
 
 const tempDir = () => {
-	const dir = fs.mkdtempSync(path.join(os.tmpdir(), "notploy-pki-"));
+	const dir = fs.mkdtempSync(path.join(os.tmpdir(), "astron-collection-pki-"));
 	tempDirs.push(dir);
 	return dir;
 };
@@ -59,7 +59,7 @@ const basePayload = (
 	subjectKeyFingerprint: "abc123",
 	issuedAt: new Date("2026-01-01T00:00:00Z").toISOString(),
 	expiresAt: new Date("2030-01-01T00:00:00Z").toISOString(),
-	issuer: "Notploy",
+	issuer: "Astron Collection",
 	...overrides,
 });
 
@@ -222,7 +222,7 @@ describe("local instance identity", () => {
 	it("loads a certificate without the X.509 extension via identity.json", () => {
 		const identityDir = tempDir();
 		// The shell installer signs the certificate with openssl, which cannot
-		// emit the Notploy extension, and writes identity.json instead.
+		// emit the Astron Collection extension, and writes identity.json instead.
 		const generated = generateLocalInstanceIdentity({
 			identityDir,
 			now,

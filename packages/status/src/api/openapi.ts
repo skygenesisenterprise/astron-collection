@@ -61,10 +61,10 @@ const idempotencyHeader = {
 export const buildOpenApiDocument = (publicUrl: string): OpenApiDocument => ({
 	openapi: "3.1.0",
 	info: {
-		title: "Notploy Status API",
+		title: "Astron Collection Status API",
 		version: "1.0.0",
 		description:
-			"Public and administration API of the Notploy Status platform. Public routes are read-only and unauthenticated; administration and integration routes require a bearer token with the matching scope (read, write, publish, ingest, tokens, admin).",
+			"Public and administration API of the Astron Collection Status platform. Public routes are read-only and unauthenticated; administration and integration routes require a bearer token with the matching scope (read, write, publish, ingest, tokens, admin).",
 	},
 	servers: [{ url: publicUrl, description: "This instance" }],
 	paths: {

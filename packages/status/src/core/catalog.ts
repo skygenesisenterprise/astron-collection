@@ -1,7 +1,7 @@
 /**
  * Status Core — default status catalog.
  *
- * The Notploy status page tracks the public Notploy offerings. The catalog is
+ * The Astron Collection status page tracks the public Astron Collection offerings. The catalog is
  * declarative and seeding is explicit (see `pnpm seed` / `make status-seed`),
  * idempotent and non-destructive: components are matched by name, so re-running
  * the seed after an upgrade never duplicates a component nor overwrites the
@@ -38,12 +38,12 @@ export interface StatusCatalog {
 	components: CatalogComponent[];
 }
 
-export const NOTPLOY_STATUS_CATALOG: StatusCatalog = {
+export const ASTRON_COLLECTION_STATUS_CATALOG: StatusCatalog = {
 	page: {
-		slug: "notploy",
-		name: "Notploy Status",
+		slug: "astron-collection",
+		name: "Astron Collection Status",
 		description:
-			"Real-time status and uptime history for the Notploy platform services.",
+			"Real-time status and uptime history for the Astron Collection platform services.",
 		// These are service-level components observed by monitoring, not probes
 		// reporting every few seconds: the two-minute engine default would flag
 		// them "no recent data" almost immediately. Fifteen minutes matches a
@@ -55,9 +55,9 @@ export const NOTPLOY_STATUS_CATALOG: StatusCatalog = {
 	},
 	components: [
 		{
-			name: "Notploy Cloud",
+			name: "Astron Collection Cloud",
 			description:
-				"Managed Notploy platform: console, deployments and billing.",
+				"Managed Astron Collection platform: console, deployments and billing.",
 			category: "application",
 			groupName: "Platform",
 		},
@@ -70,7 +70,7 @@ export const NOTPLOY_STATUS_CATALOG: StatusCatalog = {
 		{
 			name: "MCP Server",
 			description:
-				"Model Context Protocol server exposing Notploy tools to AI agents.",
+				"Model Context Protocol server exposing Astron Collection tools to AI agents.",
 			category: "api",
 			groupName: "Platform",
 		},

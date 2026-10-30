@@ -1,15 +1,15 @@
 /**
- * Use this command to automatically migrate the auth secret: curl -sSL https://notploy.com/security/1.1.5.sh | sudo bash
+ * Use this command to automatically migrate the auth secret: curl -sSL https://astron-collection.com/security/1.1.5.sh | sudo bash
  * Migration script: re-encrypt 2FA secrets after rotating BETTER_AUTH_SECRET.
  *
  * Usage:
- *   OLD_SECRET=<old_secret> NEW_SECRET=<new_secret> npx tsx apps/notploy/scripts/migrate-auth-secret.ts
+ *   OLD_SECRET=<old_secret> NEW_SECRET=<new_secret> npx tsx apps/astron-collection/scripts/migrate-auth-secret.ts
  *
  * Both OLD_SECRET and NEW_SECRET are required.
- * Run this BEFORE restarting Notploy with the new secret.
+ * Run this BEFORE restarting Astron Collection with the new secret.
  */
-import { db } from "@notploy/server/db";
-import { twoFactor } from "@notploy/server/db/schema";
+import { db } from "@astron-collection/server/db";
+import { twoFactor } from "@astron-collection/server/db/schema";
 import { symmetricDecrypt, symmetricEncrypt } from "better-auth/crypto";
 import { eq } from "drizzle-orm";
 
@@ -21,7 +21,7 @@ if (!OLD_SECRET || !NEW_SECRET) {
 		"❌ OLD_SECRET and NEW_SECRET environment variables are required.",
 	);
 	console.error(
-		"   Usage: OLD_SECRET=<old> NEW_SECRET=<new> npx tsx apps/notploy/scripts/migrate-auth-secret.ts",
+		"   Usage: OLD_SECRET=<old> NEW_SECRET=<new> npx tsx apps/astron-collection/scripts/migrate-auth-secret.ts",
 	);
 	process.exit(1);
 }

@@ -1,5 +1,5 @@
 name: ✨ Feature request
-description: Suggest a new capability that Notploy does not have today.
+description: Suggest a new capability that Astron Collection does not have today.
 title: "[Feature]: "
 labels: ["enhancement"]
 
@@ -7,9 +7,9 @@ body:
   - type: markdown
     attributes:
       value: |
-        Use this form for something Notploy **cannot do yet**. If the capability already exists
+        Use this form for something Astron Collection **cannot do yet**. If the capability already exists
         and you want it to be faster, clearer, or less error-prone, use
-        [Improvement](https://github.com/skygenesisenterprise/notploy/issues/new?template=improvement.yml) instead.
+        [Improvement](https://github.com/skygenesisenterprise/astron-collection/issues/new?template=improvement.yml) instead.
 
         Describe the need, not the patch. A clear use case is enough — you do not have to
         propose an implementation.
@@ -27,7 +27,7 @@ body:
     id: area
     attributes:
       label: Where would it live
-      description: Which part of Notploy would this belong to?
+      description: Which part of Astron Collection would this belong to?
       options:
         - Applications — builds, deployments, auto-deploy, sources, rollbacks, patches
         - Docker Compose / Swarm stacks
@@ -40,11 +40,11 @@ body:
         - Dashboard (web UI)
         - Authentication and access — users, sessions, organizations, roles, permissions
         - API — REST/OpenAPI surface, SDK, MCP server
-        - CLI — the `notploy` command-line client
+        - CLI — the `astron-collection` command-line client
         - Self-hosting and installation — Docker image, Compose stack, upgrades
         - Automation — monitors, schedule jobs, notifications
         - Secrets — environment variables, secret/vault providers
-        - Templates gallery — blueprints at templates.notploy.com
+        - Templates gallery — blueprints at templates.astron-collection.com
         - Something else
     validations:
       required: true
@@ -67,7 +67,7 @@ body:
       description: Describe the concrete workflow, including who does what and how often.
       placeholder: |
         As the platform owner I would set an allowlist of CIDR ranges once per registry.
-        Notploy would then refuse pulls from outside that list, in the dashboard and in
+        Astron Collection would then refuse pulls from outside that list, in the dashboard and in
         scheduled backups.
     validations:
       required: true
@@ -75,7 +75,7 @@ body:
   - type: textarea
     id: proposal
     attributes:
-      label: What should Notploy do?
+      label: What should Astron Collection do?
       description: >-
         Optional. Describe the behaviour you expect. A use case on its own is enough —
         a specific technical solution is welcome but not required.

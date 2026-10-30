@@ -1,4 +1,4 @@
-import { findMemberByUserId } from "@notploy/server/services/permission";
+import { findMemberByUserId } from "@astron-collection/server/services/permission";
 import { TRPCError } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";

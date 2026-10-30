@@ -1,27 +1,27 @@
 ---
 title: "Rollbacks"
-description: "Roll a deployment back to a previously built image. Generated from the `notploy` command surface."
+description: "Roll a deployment back to a previously built image. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Roll a deployment back to a previously built image.
 
-`notploy rollback` exposes **2 commands**. They map one-to-one onto the `rollback.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection rollback` exposes **2 commands**. They map one-to-one onto the `rollback.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy rollback --help` to list these commands in your terminal, or
-	`notploy rollback <command> --help` for a single command.
+	Run `astron-collection rollback --help` to list these commands in your terminal, or
+	`astron-collection rollback <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy rollback delete`
+### `astron-collection rollback delete`
 
 Calls `POST /api/trpc/rollback.delete`.
 
 ```bash
-notploy rollback delete --rollbackId <value> [options]
+astron-collection rollback delete --rollbackId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -29,12 +29,12 @@ notploy rollback delete --rollbackId <value> [options]
 | `--rollbackId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy rollback rollback`
+### `astron-collection rollback rollback`
 
 Calls `POST /api/trpc/rollback.rollback`.
 
 ```bash
-notploy rollback rollback --rollbackId <value> [options]
+astron-collection rollback rollback --rollbackId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |

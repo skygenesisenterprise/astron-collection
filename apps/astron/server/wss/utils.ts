@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { execAsync, isManagedCloud, paths } from "@notploy/server";
+import { execAsync, isManagedCloud, paths } from "@astron-collection/server";
 
 /**
  * Validates that the container ID matches Docker's expected format.
@@ -119,16 +119,16 @@ export const getShell = () => {
 	}
 };
 
-/** Returns private SSH key for notploy local server terminal. Uses already created SSH key or generates a new SSH key.
+/** Returns private SSH key for astron-collection local server terminal. Uses already created SSH key or generates a new SSH key.
  */
 export const setupLocalServerSSHKey = async () => {
 	const { SSH_PATH } = paths(true);
-	const sshKeyPath = path.join(SSH_PATH, "auto_generated-notploy-local");
+	const sshKeyPath = path.join(SSH_PATH, "auto_generated-astron-collection-local");
 
 	if (!fs.existsSync(sshKeyPath)) {
 		// Generate new SSH key if it hasn't been created yet
 		await execAsync(
-			`ssh-keygen -t rsa -b 4096 -f ${sshKeyPath} -N "" -C "notploy-local-access"`,
+			`ssh-keygen -t rsa -b 4096 -f ${sshKeyPath} -N "" -C "astron-collection-local-access"`,
 		);
 	}
 

@@ -2,7 +2,7 @@ import { execSync } from "node:child_process";
 import {
 	getRestoreCommand,
 	stripDatabaseSwitchCommand,
-} from "@notploy/server/utils/restore/utils";
+} from "@astron-collection/server/utils/restore/utils";
 import { describe, expect, it } from "vitest";
 
 const filter = (input: string) =>

@@ -1,4 +1,4 @@
-import { validateRequest } from "@notploy/server";
+import { validateRequest } from "@astron-collection/server";
 import { createServerSideHelpers } from "@trpc/react-query/server";
 import type { GetServerSidePropsContext, NextPage } from "next";
 import dynamic from "next/dynamic";

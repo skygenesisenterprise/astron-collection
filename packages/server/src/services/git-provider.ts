@@ -1,5 +1,5 @@
-import { db } from "@notploy/server/db";
-import { gitProvider, member } from "@notploy/server/db/schema";
+import { db } from "@astron-collection/server/db";
+import { gitProvider, member } from "@astron-collection/server/db/schema";
 import {
 	type GitProviderAdapter,
 	type GitProviderCapabilityMatrix,
@@ -12,7 +12,7 @@ import {
 	getGitProviderAdapter,
 	gitProviderAuthorizationMessages,
 	gitProviderLabels,
-} from "@notploy/server/utils/providers";
+} from "@astron-collection/server/utils/providers";
 import { TRPCError } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
 

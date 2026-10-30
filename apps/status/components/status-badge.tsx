@@ -1,4 +1,4 @@
-import type { GlobalStatus, IncidentSeverity } from "@notploy/status";
+import type { GlobalStatus, IncidentSeverity } from "@astron-collection/status";
 import { cn } from "@/lib/utils";
 import {
 	componentStatusLabel,

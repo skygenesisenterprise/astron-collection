@@ -31,7 +31,7 @@ type:
 
   - name: enhancement
     color: "a2eeef"
-    description: A new capability Notploy does not have today.
+    description: A new capability Astron Collection does not have today.
     auto_applied_by: .github/ISSUE_TEMPLATE/feature_request.yml
 
   - name: improvement
@@ -45,7 +45,7 @@ type:
     auto_applied_by: .github/ISSUE_TEMPLATE/documentation.yml
 
 area:
-  # Derived from the tRPC routers in apps/notploy/server/api/routers, the CLI
+  # Derived from the tRPC routers in apps/astron-collection/server/api/routers, the CLI
   # command groups in packages/cli, and the navigation in
   # web/apps/docs/content/docs/*/meta.json.
   - name: "area: applications"
@@ -83,7 +83,7 @@ area:
     description: The REST/OpenAPI surface, plus the generated SDK and MCP server.
   - name: "area: cli"
     color: "c5def5"
-    description: The `notploy` command-line client.
+    description: The `astron-collection` command-line client.
   - name: "area: selfhost"
     color: "c5def5"
     description: Self-hosting — Docker image, Compose stack, entrypoint, installation and upgrades.

@@ -1,39 +1,39 @@
 ---
 title: "Destinations"
-description: "S3-compatible storage destinations that backups are uploaded to. Generated from the `notploy` command surface."
+description: "S3-compatible storage destinations that backups are uploaded to. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 S3-compatible storage destinations that backups are uploaded to.
 
-`notploy destination` exposes **7 commands**. They map one-to-one onto the `destination.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection destination` exposes **7 commands**. They map one-to-one onto the `destination.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy destination --help` to list these commands in your terminal, or
-	`notploy destination <command> --help` for a single command.
+	Run `astron-collection destination --help` to list these commands in your terminal, or
+	`astron-collection destination <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy destination all`
+### `astron-collection destination all`
 
 Calls `GET /api/trpc/destination.all`.
 
 ```bash
-notploy destination all [options]
+astron-collection destination all [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy destination create`
+### `astron-collection destination create`
 
 Calls `POST /api/trpc/destination.create`.
 
 ```bash
-notploy destination create --name <value> --provider <value> --accessKey <value> --bucket <value> --region <value> --endpoint <value> --secretAccessKey <value> --additionalFlags <json> [options]
+astron-collection destination create --name <value> --provider <value> --accessKey <value> --bucket <value> --region <value> --endpoint <value> --secretAccessKey <value> --additionalFlags <json> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -50,12 +50,12 @@ notploy destination create --name <value> --provider <value> --accessKey <value>
 | `--objectStorageBucketId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy destination from-object-storage-bucket`
+### `astron-collection destination from-object-storage-bucket`
 
 Calls `POST /api/trpc/destination.fromObjectStorageBucket`.
 
 ```bash
-notploy destination from-object-storage-bucket --objectStorageBucketId <value> [options]
+astron-collection destination from-object-storage-bucket --objectStorageBucketId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -63,12 +63,12 @@ notploy destination from-object-storage-bucket --objectStorageBucketId <value> [
 | `--objectStorageBucketId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy destination one`
+### `astron-collection destination one`
 
 Calls `GET /api/trpc/destination.one`.
 
 ```bash
-notploy destination one --destinationId <value> [options]
+astron-collection destination one --destinationId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -76,12 +76,12 @@ notploy destination one --destinationId <value> [options]
 | `--destinationId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy destination remove`
+### `astron-collection destination remove`
 
 Calls `POST /api/trpc/destination.remove`.
 
 ```bash
-notploy destination remove --destinationId <value> [options]
+astron-collection destination remove --destinationId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -89,12 +89,12 @@ notploy destination remove --destinationId <value> [options]
 | `--destinationId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy destination test-connection`
+### `astron-collection destination test-connection`
 
 Calls `POST /api/trpc/destination.testConnection`.
 
 ```bash
-notploy destination test-connection --name <value> --provider <value> --accessKey <value> --bucket <value> --region <value> --endpoint <value> --secretAccessKey <value> --additionalFlags <json> [options]
+astron-collection destination test-connection --name <value> --provider <value> --accessKey <value> --bucket <value> --region <value> --endpoint <value> --secretAccessKey <value> --additionalFlags <json> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -111,12 +111,12 @@ notploy destination test-connection --name <value> --provider <value> --accessKe
 | `--objectStorageBucketId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy destination update`
+### `astron-collection destination update`
 
 Calls `POST /api/trpc/destination.update`.
 
 ```bash
-notploy destination update --name <value> --accessKey <value> --bucket <value> --region <value> --endpoint <value> --secretAccessKey <value> --destinationId <value> --provider <value> --additionalFlags <json> [options]
+astron-collection destination update --name <value> --accessKey <value> --bucket <value> --region <value> --endpoint <value> --secretAccessKey <value> --destinationId <value> --provider <value> --additionalFlags <json> [options]
 ```
 
 | Option | Type | Required | Allowed values |

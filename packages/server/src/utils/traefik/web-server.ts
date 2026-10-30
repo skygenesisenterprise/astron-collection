@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { paths } from "@notploy/server/constants";
-import type { webServerSettings } from "@notploy/server/db/schema/web-server-settings";
+import { paths } from "@astron-collection/server/constants";
+import type { webServerSettings } from "@astron-collection/server/db/schema/web-server-settings";
 import { parse, stringify } from "yaml";
 import {
 	loadOrCreateConfig,
@@ -16,7 +16,7 @@ export const updateServerTraefik = (
 	newHost: string | null,
 ) => {
 	const { https, certificateType, customCertResolver } = settings || {};
-	const appName = "notploy";
+	const appName = "astron-collection";
 	const config: FileConfig = loadOrCreateConfig(appName);
 
 	config.http = config.http || { routers: {}, services: {} };
@@ -43,7 +43,7 @@ export const updateServerTraefik = (
 			loadBalancer: {
 				servers: [
 					{
-						url: `http://notploy:${process.env.PORT || 3000}`,
+						url: `http://astron-collection:${process.env.PORT || 3000}`,
 					},
 				],
 				passHostHeader: true,

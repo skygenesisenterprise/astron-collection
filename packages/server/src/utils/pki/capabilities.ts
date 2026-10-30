@@ -1,8 +1,8 @@
 import {
 	type EntitlementPayload,
-	isNotployCapability,
-	type NotployCapability,
-	type NotployProduct,
+	isAstronCollectionCapability,
+	type AstronCollectionCapability,
+	type AstronCollectionProduct,
 	productCapabilities,
 	protectedProducts,
 } from "./types";
@@ -17,12 +17,12 @@ import {
  *
  *   installation.hasCapability("cloud.fleet")
  *
- * Legacy `NOTPLOY_FLAVOR` / `IS_CLOUD` values are only ever *hints*: a protected
+ * Legacy `ASTRON_COLLECTION_FLAVOR` / `IS_CLOUD` values are only ever *hints*: a protected
  * product's capabilities come from a signed entitlement, never from the
  * environment.
  */
 
-export const capabilityLabels: Record<NotployCapability, string> = {
+export const capabilityLabels: Record<AstronCollectionCapability, string> = {
 	"self.hosted": "Self-hosted",
 	"self.local-registry": "Local registry",
 	"self.offline": "Offline operation",
@@ -34,28 +34,28 @@ export const capabilityLabels: Record<NotployCapability, string> = {
 	"console.remote-management": "Remote management",
 };
 
-export const capabilityDescriptions: Record<NotployCapability, string> = {
-	"self.hosted": "Run the full Notploy control plane on your own host.",
+export const capabilityDescriptions: Record<AstronCollectionCapability, string> = {
+	"self.hosted": "Run the full Astron Collection control plane on your own host.",
 	"self.local-registry":
 		"Host and serve container images from a registry on the instance.",
 	"self.offline":
-		"Operate without any permanent connectivity to Notploy services.",
-	"cloud.control-plane": "Run the managed Notploy Cloud control plane.",
+		"Operate without any permanent connectivity to Astron Collection services.",
+	"cloud.control-plane": "Run the managed Astron Collection Cloud control plane.",
 	"cloud.managed-services":
-		"Offer Notploy-operated managed services to tenants.",
-	"cloud.fleet": "Manage a fleet of Notploy instances from the cloud.",
-	"console.instance-management": "Manage individual Notploy instances.",
+		"Offer Astron Collection-operated managed services to tenants.",
+	"cloud.fleet": "Manage a fleet of Astron Collection instances from the cloud.",
+	"console.instance-management": "Manage individual Astron Collection instances.",
 	"console.fleet": "Manage groups of instances from the Console.",
 	"console.remote-management":
 		"Perform privileged remote operations on managed instances.",
 };
 
 export interface CapabilityEvaluation {
-	product: NotployProduct;
+	product: AstronCollectionProduct;
 	/** Effective capabilities the instance may use. */
-	capabilities: NotployCapability[];
+	capabilities: AstronCollectionCapability[];
 	/** Capabilities of the product that were not granted. */
-	missingCapabilities: NotployCapability[];
+	missingCapabilities: AstronCollectionCapability[];
 	/** Whether the product requires a signed entitlement to be usable. */
 	requiresEntitlement: boolean;
 	/** True when a protected product is missing its entitlement. */
@@ -70,7 +70,7 @@ export interface CapabilityEvaluation {
  * declared for the product are refused even when an entitlement claims them.
  */
 export const evaluateCapabilities = (options: {
-	product: NotployProduct;
+	product: AstronCollectionProduct;
 	entitlement?: EntitlementPayload | null;
 	/** Self-hosted keeps its built-in capabilities even without an entitlement. */
 	allowProductDefaults?: boolean;
@@ -81,8 +81,8 @@ export const evaluateCapabilities = (options: {
 	const declared = productCapabilities[options.product];
 	const grantedByEntitlement = options.entitlement?.capabilities ?? [];
 	const granted = allowDefaults
-		? new Set<NotployCapability>([...declared, ...grantedByEntitlement])
-		: new Set<NotployCapability>(grantedByEntitlement);
+		? new Set<AstronCollectionCapability>([...declared, ...grantedByEntitlement])
+		: new Set<AstronCollectionCapability>(grantedByEntitlement);
 
 	// Never hand out a capability that is not part of the product's declared set.
 	const capabilities = declared.filter((capability) => granted.has(capability));
@@ -106,10 +106,10 @@ export const evaluateCapabilities = (options: {
  * an unknown id is always false so a typo cannot grant access by accident.
  */
 export const hasCapability = (
-	capabilities: readonly NotployCapability[],
+	capabilities: readonly AstronCollectionCapability[],
 	capability: string,
 ): boolean =>
-	isNotployCapability(capability) && capabilities.includes(capability);
+	isAstronCollectionCapability(capability) && capabilities.includes(capability);
 
 /**
  * Maps legacy flavour signals to a product. This is a *hint* only and must never
@@ -117,11 +117,11 @@ export const hasCapability = (
  * is authoritative.
  */
 export const resolveProductHint = (options: {
-	/** Explicit product override (NOTPLOY_PRODUCT); wins over every hint. */
+	/** Explicit product override (ASTRON_COLLECTION_PRODUCT); wins over every hint. */
 	product?: string | null;
 	flavor?: string | null;
 	isCloud?: boolean;
-}): NotployProduct => {
+}): AstronCollectionProduct => {
 	const explicit = (options.product ?? "").toLowerCase();
 	if (explicit === "cloud") return "cloud";
 	if (explicit === "console") return "console";

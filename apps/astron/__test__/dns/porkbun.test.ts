@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const mockFetch = vi.fn();
 global.fetch = mockFetch as typeof fetch;
 
-import { porkbunClient } from "@notploy/server/utils/dns/porkbun";
+import { porkbunClient } from "@astron-collection/server/utils/dns/porkbun";
 
 const jsonResponse = (body: unknown, ok = true, status = 200) =>
 	({

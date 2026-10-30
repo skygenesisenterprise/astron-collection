@@ -35,7 +35,7 @@ const config = {
 		extend: {
 			colors: {
 				// Tokens are defined in styles/tailwind.css based on the app's
-				// oklch palette (apps/notploy/styles/globals.css).
+				// oklch palette (apps/astron-collection/styles/globals.css).
 				border: "oklch(var(--border) / <alpha-value>)",
 				input: "oklch(var(--input) / <alpha-value>)",
 				ring: "oklch(var(--ring) / <alpha-value>)",

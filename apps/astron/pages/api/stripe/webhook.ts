@@ -1,6 +1,6 @@
 import { buffer } from "node:stream/consumers";
-import { findUserById, type Server } from "@notploy/server";
-import { db } from "@notploy/server/db";
+import { findUserById, type Server } from "@astron-collection/server";
+import { db } from "@astron-collection/server/db";
 import { and, asc, eq } from "drizzle-orm";
 import type { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";

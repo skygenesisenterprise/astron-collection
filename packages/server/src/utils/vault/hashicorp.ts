@@ -1,4 +1,4 @@
-import type { hashicorpVaultConfigSchema } from "@notploy/server/db/schema";
+import type { hashicorpVaultConfigSchema } from "@astron-collection/server/db/schema";
 import type { z } from "zod";
 import { type VaultClient, vaultFetch } from "./types";
 

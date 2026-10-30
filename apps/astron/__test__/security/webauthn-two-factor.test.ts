@@ -2,18 +2,18 @@ import {
 	parseCredentialTransports,
 	resolveWebAuthnRequestContext,
 	toSecurityKeySummary,
-} from "@notploy/server/lib/plugins/webauthn-two-factor";
+} from "@astron-collection/server/lib/plugins/webauthn-two-factor";
 import { describe, expect, it } from "vitest";
 
 describe("resolveWebAuthnRequestContext", () => {
 	it("derives the relying party from the request origin", () => {
 		expect(
 			resolveWebAuthnRequestContext({
-				requestOrigin: "https://notploy.example.com",
+				requestOrigin: "https://astron-collection.example.com",
 			}),
 		).toEqual({
-			rpID: "notploy.example.com",
-			origin: "https://notploy.example.com",
+			rpID: "astron-collection.example.com",
+			origin: "https://astron-collection.example.com",
 		});
 	});
 
@@ -30,11 +30,11 @@ describe("resolveWebAuthnRequestContext", () => {
 		// runs the ceremony on that host, so it is the relying party.
 		expect(
 			resolveWebAuthnRequestContext({
-				requestOrigin: "https://notploy.ngrok-free.app",
+				requestOrigin: "https://astron-collection.ngrok-free.app",
 			}),
 		).toEqual({
-			rpID: "notploy.ngrok-free.app",
-			origin: "https://notploy.ngrok-free.app",
+			rpID: "astron-collection.ngrok-free.app",
+			origin: "https://astron-collection.ngrok-free.app",
 		});
 		expect(
 			resolveWebAuthnRequestContext({
@@ -46,31 +46,31 @@ describe("resolveWebAuthnRequestContext", () => {
 	it("keeps an explicitly configured relying party ID", () => {
 		expect(
 			resolveWebAuthnRequestContext({
-				configuredRpID: "notploy.example.com",
-				requestOrigin: "https://notploy.example.com",
+				configuredRpID: "astron-collection.example.com",
+				requestOrigin: "https://astron-collection.example.com",
 			}),
 		).toEqual({
-			rpID: "notploy.example.com",
-			origin: "https://notploy.example.com",
+			rpID: "astron-collection.example.com",
+			origin: "https://astron-collection.example.com",
 		});
 	});
 
 	it("accepts a pinned relying party that covers a subdomain", () => {
 		expect(
 			resolveWebAuthnRequestContext({
-				configuredRpID: "notploy.example.com",
-				requestOrigin: "https://app.notploy.example.com",
+				configuredRpID: "astron-collection.example.com",
+				requestOrigin: "https://app.astron-collection.example.com",
 			}),
 		).toEqual({
-			rpID: "notploy.example.com",
-			origin: "https://app.notploy.example.com",
+			rpID: "astron-collection.example.com",
+			origin: "https://app.astron-collection.example.com",
 		});
 	});
 
 	it("rejects a pinned relying party that does not cover the origin", () => {
 		expect(
 			resolveWebAuthnRequestContext({
-				configuredRpID: "notploy.example.com",
+				configuredRpID: "astron-collection.example.com",
 				requestOrigin: "https://evil.example.net",
 			}),
 		).toBeNull();
@@ -79,7 +79,7 @@ describe("resolveWebAuthnRequestContext", () => {
 	it("rejects plain HTTP outside loopback", () => {
 		expect(
 			resolveWebAuthnRequestContext({
-				requestOrigin: "http://notploy.example.com",
+				requestOrigin: "http://astron-collection.example.com",
 			}),
 		).toBeNull();
 	});

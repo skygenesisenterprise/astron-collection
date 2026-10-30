@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Notploy container entrypoint — the single place that decides how the app
+# Astron Collection container entrypoint — the single place that decides how the app
 # starts. Both the production image (self-hosted / cloud targets) and the dev
 # image call this script.
 #
@@ -14,15 +14,15 @@
 #   6. exec the server (Next client + tRPC API)
 #
 # Escape hatches:
-#   NOTPLOY_MODE=development        force dev mode
-#   NOTPLOY_SKIP_IDENTITY=1         skip the instance identity bootstrap
-#   NOTPLOY_SKIP_DB_WAIT=1          skip the wait-for-postgres step
-#   NOTPLOY_SKIP_MIGRATIONS=1       skip migrations
-#   NOTPLOY_COMMAND="<cmd>"         run an arbitrary command instead
+#   ASTRON_COLLECTION_MODE=development        force dev mode
+#   ASTRON_COLLECTION_SKIP_IDENTITY=1         skip the instance identity bootstrap
+#   ASTRON_COLLECTION_SKIP_DB_WAIT=1          skip the wait-for-postgres step
+#   ASTRON_COLLECTION_SKIP_MIGRATIONS=1       skip migrations
+#   ASTRON_COLLECTION_COMMAND="<cmd>"         run an arbitrary command instead
 #   <entrypoint> shell              drop into a bash shell
 set -euo pipefail
 
-MODE="${NOTPLOY_MODE:-${NODE_ENV:-production}}"
+MODE="${ASTRON_COLLECTION_MODE:-${NODE_ENV:-production}}"
 case "$MODE" in
 	dev | development) MODE="development" ;;
 	prod | production) MODE="production" ;;
@@ -32,22 +32,22 @@ case "$MODE" in
 		;;
 esac
 
-log() { printf '[notploy] %s\n' "$*"; }
+log() { printf '[astron-collection] %s\n' "$*"; }
 
 # --- Escape hatches --------------------------------------------------------
 if [ "${1:-}" = "shell" ]; then
 	exec bash
 fi
-if [ -n "${NOTPLOY_COMMAND:-}" ]; then
-	log "running custom command: ${NOTPLOY_COMMAND}"
-	exec bash -lc "${NOTPLOY_COMMAND}"
+if [ -n "${ASTRON_COLLECTION_COMMAND:-}" ]; then
+	log "running custom command: ${ASTRON_COLLECTION_COMMAND}"
+	exec bash -lc "${ASTRON_COLLECTION_COMMAND}"
 fi
 
 # --- Status page application -----------------------------------------------
-# `NOTPLOY_APP=status` runs the standalone status page (apps/status) instead of
+# `ASTRON_COLLECTION_APP=status` runs the standalone status page (apps/status) instead of
 # the control plane: no PostgreSQL, no migrations, no instance identity. The
 # engine keeps its state in a SQLite file under STATUS_DATA_DIR.
-if [ "${NOTPLOY_APP:-notploy}" = "status" ]; then
+if [ "${ASTRON_COLLECTION_APP:-astron-collection}" = "status" ]; then
 	STATUS_CONTAINER_PORT="${PORT:-4100}"
 	if [ "$MODE" = "development" ]; then
 		log "app: status (development, port ${STATUS_CONTAINER_PORT})"
@@ -71,11 +71,11 @@ if [ "${NOTPLOY_APP:-notploy}" = "status" ]; then
 fi
 
 # --- Locate the application ------------------------------------------------
-if [ -n "${NOTPLOY_APP_DIR:-}" ]; then
-	cd "${NOTPLOY_APP_DIR}"
-elif [ ! -f "./dist/server.mjs" ] && [ -f "./apps/notploy/package.json" ]; then
-	# Dev image: we are at the monorepo root, the app lives in apps/notploy.
-	cd apps/notploy
+if [ -n "${ASTRON_COLLECTION_APP_DIR:-}" ]; then
+	cd "${ASTRON_COLLECTION_APP_DIR}"
+elif [ ! -f "./dist/server.mjs" ] && [ -f "./apps/astron-collection/package.json" ]; then
+	# Dev image: we are at the monorepo root, the app lives in apps/astron-collection.
+	cd apps/astron-collection
 fi
 
 # --- Mode-specific runners -------------------------------------------------
@@ -97,13 +97,13 @@ fi
 # Generate (self-hosted) or verify (cloud/console) the local instance identity
 # in the shared config volume before the app reads it. install.sh doubles as a
 # library here, so the container and the host installer share one implementation
-# and can never drift. Self-hosted needs no network and no Notploy account.
-if [ "${NOTPLOY_SKIP_IDENTITY:-0}" != "1" ]; then
-	if [ -f /usr/local/bin/notploy-install.sh ]; then
-		log "bootstrapping the instance identity (product: ${NOTPLOY_PRODUCT:-self})..."
-		export NOTPLOY_SOURCE_ONLY=1
+# and can never drift. Self-hosted needs no network and no Astron Collection account.
+if [ "${ASTRON_COLLECTION_SKIP_IDENTITY:-0}" != "1" ]; then
+	if [ -f /usr/local/bin/astron-collection-install.sh ]; then
+		log "bootstrapping the instance identity (product: ${ASTRON_COLLECTION_PRODUCT:-self})..."
+		export ASTRON_COLLECTION_SOURCE_ONLY=1
 		# shellcheck source=/dev/null
-		source /usr/local/bin/notploy-install.sh
+		source /usr/local/bin/astron-collection-install.sh
 		bootstrap_identity
 	else
 		log "identity bootstrap library not found, skipping"
@@ -111,7 +111,7 @@ if [ "${NOTPLOY_SKIP_IDENTITY:-0}" != "1" ]; then
 fi
 
 # --- Wait for PostgreSQL ---------------------------------------------------
-if [ "${NOTPLOY_SKIP_DB_WAIT:-0}" != "1" ]; then
+if [ "${ASTRON_COLLECTION_SKIP_DB_WAIT:-0}" != "1" ]; then
 	if [ -f "${SCRIPT_DIR}/wait-for-postgres.${SCRIPT_EXT}" ]; then
 		log "waiting for the database to accept connections..."
 		"${RUNNER[@]}" "${SCRIPT_DIR}/wait-for-postgres.${SCRIPT_EXT}"
@@ -121,7 +121,7 @@ if [ "${NOTPLOY_SKIP_DB_WAIT:-0}" != "1" ]; then
 fi
 
 # --- Migrations ------------------------------------------------------------
-if [ "${NOTPLOY_SKIP_MIGRATIONS:-0}" != "1" ]; then
+if [ "${ASTRON_COLLECTION_SKIP_MIGRATIONS:-0}" != "1" ]; then
 	if [ -f "${SCRIPT_DIR}/migration.${SCRIPT_EXT}" ]; then
 		log "applying database migrations..."
 		"${RUNNER[@]}" "${SCRIPT_DIR}/migration.${SCRIPT_EXT}"
@@ -131,5 +131,5 @@ if [ "${NOTPLOY_SKIP_MIGRATIONS:-0}" != "1" ]; then
 fi
 
 # --- Start -----------------------------------------------------------------
-log "starting Notploy..."
+log "starting Astron Collection..."
 exec "${SERVER_CMD[@]}"

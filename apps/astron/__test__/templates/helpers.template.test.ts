@@ -1,5 +1,5 @@
-import type { Schema } from "@notploy/server/templates";
-import { processValue } from "@notploy/server/templates/processors";
+import type { Schema } from "@astron-collection/server/templates";
+import { processValue } from "@astron-collection/server/templates/processors";
 import { describe, expect, it } from "vitest";
 
 describe("helpers functions", () => {
@@ -213,7 +213,7 @@ describe("helpers functions", () => {
 			expect(decodedPayload).toHaveProperty("iat");
 			expect(decodedPayload).toHaveProperty("iss");
 			expect(decodedPayload).toHaveProperty("exp");
-			expect(decodedPayload.iss).toEqual("notploy");
+			expect(decodedPayload.iss).toEqual("astron-collection");
 		});
 		it.each([6, 8, 12, 16, 32])(
 			"should generate a random hex string from parameter %d byte length",
@@ -239,7 +239,7 @@ describe("helpers functions", () => {
 			expect(decodedPayload).toHaveProperty("iat");
 			expect(decodedPayload).toHaveProperty("iss");
 			expect(decodedPayload).toHaveProperty("exp");
-			expect(decodedPayload.iss).toEqual("notploy");
+			expect(decodedPayload.iss).toEqual("astron-collection");
 		});
 	});
 	describe("${jwt:secret:payload}", () => {

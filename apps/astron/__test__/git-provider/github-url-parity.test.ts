@@ -1,9 +1,9 @@
-import { parseGithubBaseUrl } from "@notploy/server/utils/providers/github";
+import { parseGithubBaseUrl } from "@astron-collection/server/utils/providers/github";
 import { describe, expect, it } from "vitest";
 import { DEFAULT_GITHUB_URL, resolveGithubBaseUrl } from "@/utils/github-utils";
 
 /**
- * The client cannot import from @notploy/server (node-only modules), so
+ * The client cannot import from @astron-collection/server (node-only modules), so
  * resolveGithubBaseUrl duplicates parseGithubBaseUrl. Nothing but this file
  * stops the two from drifting apart — and they already did once, when the
  * client stripped trailing slashes but not paths and the form action disagreed

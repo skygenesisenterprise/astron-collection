@@ -1,27 +1,27 @@
 ---
 title: "Mounts"
-description: "Bind mounts and named volumes attached to applications and Compose services. Generated from the `notploy` command surface."
+description: "Bind mounts and named volumes attached to applications and Compose services. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Bind mounts and named volumes attached to applications and Compose services.
 
-`notploy mounts` exposes **6 commands**. They map one-to-one onto the `mounts.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection mounts` exposes **6 commands**. They map one-to-one onto the `mounts.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy mounts --help` to list these commands in your terminal, or
-	`notploy mounts <command> --help` for a single command.
+	Run `astron-collection mounts --help` to list these commands in your terminal, or
+	`astron-collection mounts <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy mounts all-named-by-application-id`
+### `astron-collection mounts all-named-by-application-id`
 
 Calls `GET /api/trpc/mounts.allNamedByApplicationId`.
 
 ```bash
-notploy mounts all-named-by-application-id --applicationId <value> [options]
+astron-collection mounts all-named-by-application-id --applicationId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -29,12 +29,12 @@ notploy mounts all-named-by-application-id --applicationId <value> [options]
 | `--applicationId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mounts create`
+### `astron-collection mounts create`
 
 Calls `POST /api/trpc/mounts.create`.
 
 ```bash
-notploy mounts create --type <value> --mountPath <value> --serviceId <value> [options]
+astron-collection mounts create --type <value> --mountPath <value> --serviceId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -49,12 +49,12 @@ notploy mounts create --type <value> --mountPath <value> --serviceId <value> [op
 | `--serviceId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mounts list-by-service-id`
+### `astron-collection mounts list-by-service-id`
 
 Calls `GET /api/trpc/mounts.listByServiceId`.
 
 ```bash
-notploy mounts list-by-service-id --serviceType <value> --serviceId <value> [options]
+astron-collection mounts list-by-service-id --serviceType <value> --serviceId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -63,12 +63,12 @@ notploy mounts list-by-service-id --serviceType <value> --serviceId <value> [opt
 | `--serviceId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mounts one`
+### `astron-collection mounts one`
 
 Calls `GET /api/trpc/mounts.one`.
 
 ```bash
-notploy mounts one --mountId <value> [options]
+astron-collection mounts one --mountId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -76,12 +76,12 @@ notploy mounts one --mountId <value> [options]
 | `--mountId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mounts remove`
+### `astron-collection mounts remove`
 
 Calls `POST /api/trpc/mounts.remove`.
 
 ```bash
-notploy mounts remove --mountId <value> [options]
+astron-collection mounts remove --mountId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -89,12 +89,12 @@ notploy mounts remove --mountId <value> [options]
 | `--mountId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy mounts update`
+### `astron-collection mounts update`
 
 Calls `POST /api/trpc/mounts.update`.
 
 ```bash
-notploy mounts update --mountId <value> [options]
+astron-collection mounts update --mountId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |

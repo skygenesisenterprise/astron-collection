@@ -5,14 +5,14 @@ description: "Browse the blueprint catalogue and deploy a template from the dash
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-**Purpose** — The gallery is the catalogue of ready-made blueprints. You browse it on the web at [templates.notploy.com](https://templates.notploy.com) or directly from a project environment, and Notploy turns the selected blueprint into a deployable Compose service.
+**Purpose** — The gallery is the catalogue of ready-made blueprints. You browse it on the web at [templates.astron-collection.com](https://templates.astron-collection.com) or directly from a project environment, and Astron Collection turns the selected blueprint into a deployable Compose service.
 
 ## Where blueprints come from
 
 | Source | When it is used |
 | --- | --- |
-| **Public gallery** (`https://templates.notploy.com`) | Default for every Notploy installation. |
-| **Local checkout** | You run Notploy from the repository: blueprints are read from `templates/blueprints`, so a blueprint you just added is usable without publishing anything. |
+| **Public gallery** (`https://templates.astron-collection.com`) | Default for every Astron Collection installation. |
+| **Local checkout** | You run Astron Collection from the repository: blueprints are read from `templates/blueprints`, so a blueprint you just added is usable without publishing anything. |
 | **Custom base URL** | You host your own gallery. Set the **Base URL (optional)** field of the template dialog; your browser remembers it. |
 
 <Callout type="info">
@@ -34,11 +34,11 @@ the project's GitHub repository, website and documentation.
 </Step>
 <Step>
 **Create the service.** Click **Create** and confirm. When several targets are possible, pick a
-**Server** — this step is mandatory on Notploy Cloud and when the instance is configured to deploy
+**Server** — this step is mandatory on Astron Collection Cloud and when the instance is configured to deploy
 to remote servers only.
 </Step>
 <Step>
-**Deploy.** Notploy creates a Compose service named after the blueprint, resolves every variable,
+**Deploy.** Astron Collection creates a Compose service named after the blueprint, resolves every variable,
 writes the environment, creates the mounts and domains declared by the template, and attaches the
 blueprint logo. Open the service and click **Deploy**.
 </Step>
@@ -59,10 +59,10 @@ The web gallery is a static site that mirrors the same catalogue:
 
 - **Search and filter** — the query lives in the URL (`?q=`), tags combine with AND semantics, and the grid/rows toggle switches layout.
 - **Template dialog** — opens with the *Instructions* tab when the blueprint ships a guide, plus *Docker Compose* and *Configuration* tabs with copy buttons.
-- **Base64 Configuration** — an encoded bundle of the compose file and the configuration, ready to paste into Notploy (see below).
-- **Edit Template** — links straight to the blueprint folder in the Notploy repository, and **Add Template** opens a GitHub issue for missing blueprints.
+- **Base64 Configuration** — an encoded bundle of the compose file and the configuration, ready to paste into Astron Collection (see below).
+- **Edit Template** — links straight to the blueprint folder in the Astron Collection repository, and **Add Template** opens a GitHub issue for missing blueprints.
 
-→ Browse the gallery at [templates.notploy.com](https://templates.notploy.com)
+→ Browse the gallery at [templates.astron-collection.com](https://templates.astron-collection.com)
 
 ## Import a Base64 configuration
 

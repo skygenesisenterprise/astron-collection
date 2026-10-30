@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { createRestartSafeBackupCommand } from "@notploy/server/utils/volume-backups/backup";
+import { createRestartSafeBackupCommand } from "@astron-collection/server/utils/volume-backups/backup";
 import { describe, expect, it } from "vitest";
 
 const runCommand = (command: string) =>

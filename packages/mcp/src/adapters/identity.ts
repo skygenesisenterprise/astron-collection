@@ -1,7 +1,7 @@
 import type { ApiPort } from "../contracts/api.js";
 import type { AuthenticatedIdentity } from "../contracts/context.js";
 import type { ResolvedPermissions } from "../contracts/core.js";
-import { ApiError } from "./notployApi.js";
+import { ApiError } from "./astronCollectionApi.js";
 
 const DEFAULT_TTL_MS = 30_000;
 
@@ -86,7 +86,7 @@ export class IdentityResolver {
     if (typeof userId !== "string" || userId === "" || typeof organizationId !== "string") {
       throw new ApiError({
         message:
-          "The configured Notploy API key is not valid or has no active organization. Check NOTPLOY_API_KEY.",
+          "The configured Astron Collection API key is not valid or has no active organization. Check ASTRON_COLLECTION_API_KEY.",
         code: "unauthenticated",
       });
     }
@@ -96,7 +96,7 @@ export class IdentityResolver {
     );
     if (!permissions) {
       throw new ApiError({
-        message: "The Notploy API returned an unexpected permission set; refusing to execute",
+        message: "The Astron Collection API returned an unexpected permission set; refusing to execute",
         code: "internal_error",
       });
     }

@@ -12,9 +12,9 @@ import {
 	removeGitProvider,
 	searchGitProviderRepositories,
 	updateGitProvider,
-} from "@notploy/server";
-import { db } from "@notploy/server/db";
-import { findMemberByUserId } from "@notploy/server/services/permission";
+} from "@astron-collection/server";
+import { db } from "@astron-collection/server/db";
+import { findMemberByUserId } from "@astron-collection/server/services/permission";
 import { TRPCError } from "@trpc/server";
 import { desc, eq, inArray } from "drizzle-orm";
 import {

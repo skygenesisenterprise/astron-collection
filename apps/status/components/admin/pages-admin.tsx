@@ -1,6 +1,6 @@
 "use client";
 
-import type { AdminPageDto } from "@notploy/status";
+import type { AdminPageDto } from "@astron-collection/status";
 import Link from "next/link";
 import * as React from "react";
 import { adminRequest } from "@/lib/admin-client";
@@ -94,7 +94,7 @@ export const PagesAdmin = () => {
 								onChange={(event) =>
 									setForm({ ...form, slug: event.target.value })
 								}
-								placeholder="notploy"
+								placeholder="astron-collection"
 								pattern="[a-z0-9]+(?:-[a-z0-9]+)*"
 								required
 							/>
@@ -105,7 +105,7 @@ export const PagesAdmin = () => {
 								onChange={(event) =>
 									setForm({ ...form, name: event.target.value })
 								}
-								placeholder="Notploy Status"
+								placeholder="Astron Collection Status"
 								required
 							/>
 						</Field>

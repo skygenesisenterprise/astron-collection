@@ -8,7 +8,7 @@ import {
 	getRemoteDocker,
 	getSwarmNodes,
 	IS_CLOUD,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import { TRPCError } from "@trpc/server";
 import type Dockerode from "dockerode";
 import { z } from "zod";

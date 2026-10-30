@@ -5,7 +5,7 @@ import { getLLMText, source } from "@/lib/source";
 // no-op change for the standalone server.
 export const dynamic = "force-static";
 
-const baseUrl = "https://docs.notploy.com";
+const baseUrl = "https://docs.astron-collection.com";
 
 export async function GET() {
 	const pages = source

@@ -15,7 +15,7 @@ set -u
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 INSTALL="$ROOT/install.sh"
 
-WORK="$(mktemp -d "${TMPDIR:-/tmp}/notploy-install-test.XXXXXX")"
+WORK="$(mktemp -d "${TMPDIR:-/tmp}/astron-collection-install-test.XXXXXX")"
 MOCKS="$WORK/bin"
 CASE_DIR="$WORK/case"
 STATE="$CASE_DIR/state"
@@ -365,11 +365,11 @@ case "$*" in
     i\ -g\ *|install\ -g\ *)
         home="${PNPM_HOME:?PNPM_HOME unset}"
         mkdir -p "$home/bin"
-        cat > "$home/bin/notploy" <<'SH'
+        cat > "$home/bin/astron-collection" <<'SH'
 #!/bin/sh
 printf '1.0.3\n'
 SH
-        chmod +x "$home/bin/notploy"
+        chmod +x "$home/bin/astron-collection"
         ;;
     'bin -g') printf '%s/bin\n' "${PNPM_HOME:?}" ;;
 esac
@@ -413,7 +413,7 @@ printf '0\n' > "$STATE/fail_cli"
     : > "$STATE/dump"
     : > "$STATE/secret_values"
     : > "$STATE/dokploy_auth_secret"
-    printf 'https://github.com/skygenesisenterprise/notploy/releases/tag/v1.2.3\n' > "$STATE/release_url"
+    printf 'https://github.com/skygenesisenterprise/astron-collection/releases/tag/v1.2.3\n' > "$STATE/release_url"
     printf '203.0.113.10\n' > "$STATE/public_ip"
     : > "$LOG"
 }
@@ -421,9 +421,9 @@ printf '0\n' > "$STATE/fail_cli"
 run_install() {
     PATH="$MOCKS:$PATH" \
     MOCK_STATE="$STATE" \
-    NOTPLOY_CONFIG_PATH="$CASE_DIR/etc/notploy" \
-    NOTPLOY_CLI_HOME="$CASE_DIR/cli" \
-    NOTPLOY_CLI_BIN="$CASE_DIR/bin/notploy" \
+    ASTRON_COLLECTION_CONFIG_PATH="$CASE_DIR/etc/astron-collection" \
+    ASTRON_COLLECTION_CLI_HOME="$CASE_DIR/cli" \
+    ASTRON_COLLECTION_CLI_BIN="$CASE_DIR/bin/astron-collection" \
     sh "$INSTALL" "$@"
 }
 
@@ -444,39 +444,39 @@ assert_logged "docker swarm init" "initializes a new Swarm"
 assert_not_logged "docker swarm leave" "never leaves a Swarm on a fresh host"
 assert_logged "docker network create" "creates the overlay network"
 assert_logged "docker service create" "creates services"
-assert_file_exists "$CASE_DIR/etc/notploy/identity/instance.key" "bootstraps the identity"
+assert_file_exists "$CASE_DIR/etc/astron-collection/identity/instance.key" "bootstraps the identity"
 assert_contains "$OUT" "Running as root" "detects root without needing sudo"
 assert_not_logged "sudo docker" "does not invoke sudo when already root"
-assert_contains "$OUT" "Notploy CLI ready: 1.0.3" "installs the official Notploy CLI"
-assert_logged "pnpm i -g @notploy/cli@latest" "installs @notploy/cli through pnpm"
-assert_file_exists "$CASE_DIR/bin/notploy" "exposes the CLI launcher"
+assert_contains "$OUT" "Astron Collection CLI ready: 1.0.3" "installs the official Astron Collection CLI"
+assert_logged "pnpm i -g @astron-collection/cli@latest" "installs @astron-collection/cli through pnpm"
+assert_file_exists "$CASE_DIR/bin/astron-collection" "exposes the CLI launcher"
 
 # ==========================================================================
-# 2. Notploy already installed
+# 2. Astron Collection already installed
 # ==========================================================================
-echo "2. Notploy already installed"
+echo "2. Astron Collection already installed"
 init_state
-printf 'notploy\nnotploy-postgres\n' > "$STATE/services"
+printf 'astron-collection\nastron-collection-postgres\n' > "$STATE/services"
 run_install_capture
-assert_rc "$RC" 1 "refuses a fresh install over an existing Notploy"
-assert_contains "$OUT" "existing Notploy installation" "explains the existing install"
+assert_rc "$RC" 1 "refuses a fresh install over an existing Astron Collection"
+assert_contains "$OUT" "existing Astron Collection installation" "explains the existing install"
 assert_not_logged "docker swarm init" "does not re-initialize the Swarm"
 
 # ==========================================================================
-# 3. Existing Notploy network/secrets but no service (partial install)
+# 3. Existing Astron Collection network/secrets but no service (partial install)
 # ==========================================================================
 echo "3. Existing network and secrets are reused"
 init_state
-printf 'notploy-network|overlay\n' > "$STATE/networks"
-printf 'notploy_postgres_password\nnotploy_auth_secret\n' > "$STATE/secrets"
+printf 'astron-collection-network|overlay\n' > "$STATE/networks"
+printf 'astron_collectionpostgres_password\nastron_collectionauth_secret\n' > "$STATE/secrets"
 run_install_capture
 assert_rc "$RC" 0 "completes a partial install"
-assert_contains "$OUT" "Reusing the existing 'notploy-network'" "reuses the overlay network"
+assert_contains "$OUT" "Reusing the existing 'astron-collection-network'" "reuses the overlay network"
 assert_contains "$OUT" "already exists; reusing" "reuses existing secrets"
 assert_not_logged "docker network rm" "never removes an existing network"
 
 # ==========================================================================
-# 4. Active Swarm not owned by Notploy
+# 4. Active Swarm not owned by Astron Collection
 # ==========================================================================
 echo "4. Active third-party Swarm is preserved"
 init_state
@@ -542,16 +542,16 @@ printf '1\n' > "$STATE/fail_secret"
 run_install_capture
 assert_rc "$RC" 1 "fails when a required secret cannot be created"
 assert_contains "$OUT" "failed to create the required Docker secret" "explains the secret failure"
-assert_not_logged "docker service create --name notploy " "does not start services after a secret failure"
+assert_not_logged "docker service create --name astron-collection " "does not start services after a secret failure"
 
 # ==========================================================================
 # 10. Image pull fails during update
 # ==========================================================================
 echo "10. Image pull fails during update"
 init_state
-printf 'notploy\nnotploy-postgres\n' > "$STATE/services"
+printf 'astron-collection\nastron-collection-postgres\n' > "$STATE/services"
 printf '1\n' > "$STATE/fail_pull"
-NOTPLOY_VERSION=v2.0.0 run_install_capture update
+ASTRON_COLLECTION_VERSION=v2.0.0 run_install_capture update
 assert_rc "$RC" 1 "fails when the update image cannot be pulled"
 assert_contains "$OUT" "could not pull" "explains the pull failure"
 assert_not_logged "docker service update" "does not update the service before a successful pull"
@@ -561,11 +561,11 @@ assert_not_logged "docker service update" "does not update the service before a 
 # ==========================================================================
 echo "11. Service fails to converge after update"
 init_state
-printf 'notploy\nnotploy-postgres\n' > "$STATE/services"
+printf 'astron-collection\nastron-collection-postgres\n' > "$STATE/services"
 printf 'rollback_started\n' > "$STATE/update_state"
-NOTPLOY_VERSION=v2.0.0 run_install_capture update
+ASTRON_COLLECTION_VERSION=v2.0.0 run_install_capture update
 assert_rc "$RC" 1 "fails when the update does not converge"
-assert_contains "$OUT" "rollback notploy" "suggests an explicit rollback"
+assert_contains "$OUT" "rollback astron-collection" "suggests an explicit rollback"
 assert_contains "$OUT" "does not undo database schema migrations" "documents the rollback limitation"
 
 # ==========================================================================
@@ -573,39 +573,39 @@ assert_contains "$OUT" "does not undo database schema migrations" "documents the
 # ==========================================================================
 echo "12. Successful update"
 init_state
-printf 'notploy\nnotploy-postgres\n' > "$STATE/services"
-NOTPLOY_VERSION=v2.0.0 run_install_capture update
+printf 'astron-collection\nastron-collection-postgres\n' > "$STATE/services"
+ASTRON_COLLECTION_VERSION=v2.0.0 run_install_capture update
 assert_rc "$RC" 0 "update succeeds when the service converges"
 assert_logged "docker service update" "updates the service"
 assert_contains "$OUT" "has been updated to version: v2.0.0" "reports the updated version"
-assert_logged "pnpm i -g @notploy/cli@latest" "refreshes the Notploy CLI on update"
-assert_contains "$OUT" "Notploy CLI ready: 1.0.3" "reports the refreshed CLI"
+assert_logged "pnpm i -g @astron-collection/cli@latest" "refreshes the Astron Collection CLI on update"
+assert_contains "$OUT" "Astron Collection CLI ready: 1.0.3" "reports the refreshed CLI"
 
 # ==========================================================================
 # 13. Existing coherent identity is preserved
 # ==========================================================================
 echo "13. Coherent identity is preserved"
 init_state
-mkdir -p "$CASE_DIR/etc/notploy/identity"
-printf 'EXISTING-KEY' > "$CASE_DIR/etc/notploy/identity/instance.key"
-printf 'EXISTING-CRT' > "$CASE_DIR/etc/notploy/identity/instance.crt"
-printf 'EXISTING-CA' > "$CASE_DIR/etc/notploy/identity/ca.crt"
+mkdir -p "$CASE_DIR/etc/astron-collection/identity"
+printf 'EXISTING-KEY' > "$CASE_DIR/etc/astron-collection/identity/instance.key"
+printf 'EXISTING-CRT' > "$CASE_DIR/etc/astron-collection/identity/instance.crt"
+printf 'EXISTING-CA' > "$CASE_DIR/etc/astron-collection/identity/ca.crt"
 run_install_capture
 assert_rc "$RC" 0 "install proceeds with a coherent identity"
 assert_contains "$OUT" "coherent at" "keeps the existing identity"
-assert_eq "$(cat "$CASE_DIR/etc/notploy/identity/instance.key")" "EXISTING-KEY" "does not overwrite the private key"
+assert_eq "$(cat "$CASE_DIR/etc/astron-collection/identity/instance.key")" "EXISTING-KEY" "does not overwrite the private key"
 
 # ==========================================================================
 # 14. Incoherent identity is not silently regenerated
 # ==========================================================================
 echo "14. Incoherent identity"
 init_state
-mkdir -p "$CASE_DIR/etc/notploy/identity"
-printf 'PARTIAL' > "$CASE_DIR/etc/notploy/identity/instance.key"
+mkdir -p "$CASE_DIR/etc/astron-collection/identity"
+printf 'PARTIAL' > "$CASE_DIR/etc/astron-collection/identity/instance.key"
 run_install_capture
 assert_rc "$RC" 1 "fails on an incomplete identity"
 assert_contains "$OUT" "incomplete or incoherent" "explains the identity problem"
-assert_eq "$(cat "$CASE_DIR/etc/notploy/identity/instance.key")" "PARTIAL" "does not overwrite the partial key"
+assert_eq "$(cat "$CASE_DIR/etc/astron-collection/identity/instance.key")" "PARTIAL" "does not overwrite the partial key"
 
 # ==========================================================================
 # 15. --dry-run is non-destructive
@@ -616,7 +616,7 @@ printf 'abc123|dokploy-app|app:1||dokploy-network|\n' > "$STATE/containers"
 run_install_capture --dry-run
 assert_rc "$RC" 0 "dry-run exits cleanly"
 assert_contains "$OUT" "Dry-run: the assessment report was not written" "does not persist the report"
-assert_file_absent "$CASE_DIR/etc/notploy" "does not create the config directory"
+assert_file_absent "$CASE_DIR/etc/astron-collection" "does not create the config directory"
 assert_not_logged "docker swarm init" "does not mutate the host"
 
 # ==========================================================================
@@ -635,12 +635,12 @@ case "$OUT" in
 esac
 
 # ==========================================================================
-# 17. NOTPLOY_SOURCE_ONLY=1 is a library
+# 17. ASTRON_COLLECTION_SOURCE_ONLY=1 is a library
 # ==========================================================================
-echo "17. NOTPLOY_SOURCE_ONLY=1"
+echo "17. ASTRON_COLLECTION_SOURCE_ONLY=1"
 init_state
-OUT="$(PATH="$MOCKS:$PATH" MOCK_STATE="$STATE" NOTPLOY_CONFIG_PATH="$CASE_DIR/etc/notploy" \
-    NOTPLOY_SOURCE_ONLY=1 sh -c '. "$1"; command -v bootstrap_identity && command -v install_notploy' _ "$INSTALL" 2>&1)"
+OUT="$(PATH="$MOCKS:$PATH" MOCK_STATE="$STATE" ASTRON_COLLECTION_CONFIG_PATH="$CASE_DIR/etc/astron-collection" \
+    ASTRON_COLLECTION_SOURCE_ONLY=1 sh -c '. "$1"; command -v bootstrap_identity && command -v install_astron-collection' _ "$INSTALL" 2>&1)"
 RC=$?
 assert_rc "$RC" 0 "sourcing the library defines the exported functions"
 assert_not_logged "docker swarm init" "does not install when sourced"
@@ -658,7 +658,7 @@ assert_contains "$OUT" '"applications": 1' "counts only attributed applications"
 assert_contains "$OUT" '"unattributed": 1' "counts unattributed containers separately"
 
 # ==========================================================================
-# 19. --migrate performs the full Dokploy → Notploy migration
+# 19. --migrate performs the full Dokploy → Astron Collection migration
 # ==========================================================================
 echo "19. --migrate performs the full migration"
 init_state
@@ -670,20 +670,20 @@ printf 'dokploy-network|overlay\n' > "$STATE/networks"
 printf 'CREATE TABLE project (id text primary key);\n\INSERT INTO project VALUES (1);\n' > "$STATE/dump"
 mkdir -p "$CASE_DIR/dokploy/etc/dokploy/traefik/dynamic"
 printf 'http:\n  routers:\n' > "$CASE_DIR/dokploy/etc/dokploy/traefik/dynamic/example.yml"
-NOTPLOY_DOKPLOY_CONFIG_PATH="$CASE_DIR/dokploy/etc/dokploy" run_install_capture --migrate
+ASTRON_COLLECTION_DOKPLOY_CONFIG_PATH="$CASE_DIR/dokploy/etc/dokploy" run_install_capture --migrate
 assert_rc "$RC" 0 "migration succeeds"
 assert_contains "$OUT" "Migration complete" "reports migration success"
 assert_contains "$OUT" "Database imported" "reports the DB dump/restore"
 assert_logged "docker exec c1 pg_dump" "dumps the Dokploy database"
 assert_logged "--no-owner" "drops ownership-dependent clauses from the dump"
 assert_logged "--no-acl" "drops GRANTs that would abort the import"
-assert_logged "docker service create --name notploy-postgres" "creates the Notploy Postgres service"
+assert_logged "docker service create --name astron-collection-postgres" "creates the Astron Collection Postgres service"
 assert_logged "docker service rm dokploy" "stops Dokploy's management service"
-assert_logged "docker network connect dokploy-network notploy-traefik" "joins the Dokploy network for routing"
-assert_logged "docker service update --network-add dokploy-network" "attaches the Notploy service to the Dokploy network"
+assert_logged "docker network connect dokploy-network astron-collection-traefik" "joins the Dokploy network for routing"
+assert_logged "docker service update --network-add dokploy-network" "attaches the Astron Collection service to the Dokploy network"
 assert_not_logged "docker swarm leave" "never leaves the Swarm during migration"
-assert_file_exists "$CASE_DIR/etc/notploy/traefik/dynamic/example.yml" "adopts the Dokploy config into Notploy"
-backup_dir="$(echo "$CASE_DIR"/etc/notploy/backups/dokploy-* | awk '{print $1}')"
+assert_file_exists "$CASE_DIR/etc/astron-collection/traefik/dynamic/example.yml" "adopts the Dokploy config into Astron Collection"
+backup_dir="$(echo "$CASE_DIR"/etc/astron-collection/backups/dokploy-* | awk '{print $1}')"
 if [ -f "$backup_dir/database.sql" ] && [ -f "$backup_dir/config.tar.gz" ]; then
     pass "creates DB and config backups"
 else
@@ -714,7 +714,7 @@ printf 'dokploy-network|overlay\n' > "$STATE/networks"
 printf 'CREATE TABLE project (id text primary key);\n' > "$STATE/dump"
 mkdir -p "$CASE_DIR/dokploy/etc/dokploy/traefik/dynamic"
 printf 'http:\n  routers:\n' > "$CASE_DIR/dokploy/etc/dokploy/traefik/dynamic/example.yml"
-NOTPLOY_DOKPLOY_CONFIG_PATH="$CASE_DIR/dokploy/etc/dokploy" run_install_capture
+ASTRON_COLLECTION_DOKPLOY_CONFIG_PATH="$CASE_DIR/dokploy/etc/dokploy" run_install_capture
 assert_rc "$RC" 0 "a Dokploy host is not treated as a fresh host"
 assert_contains "$OUT" "Migration complete" "migrates automatically without flags"
 assert_logged "docker service rm dokploy" "stops Dokploy management services"
@@ -728,10 +728,10 @@ init_state
 printf 'active\n' > "$STATE/swarm_state"
 printf 'abc123|dokploy-app|app:1||dokploy-network|\n' > "$STATE/containers"
 printf 'dokploy-network|overlay\n' > "$STATE/networks"
-NOTPLOY_DOKPLOY_CONFIG_PATH="$CASE_DIR/none/dokploy" run_install_capture --migrate
+ASTRON_COLLECTION_DOKPLOY_CONFIG_PATH="$CASE_DIR/none/dokploy" run_install_capture --migrate
 assert_rc "$RC" 1 "refuses to migrate an incomplete runtime"
 assert_contains "$OUT" "No change was made to this host" "explains the refusal"
-assert_not_logged "docker service create --name notploy " "does not deploy Notploy services"
+assert_not_logged "docker service create --name astron-collection " "does not deploy Astron Collection services"
 assert_not_logged "docker service rm dokploy" "does not stop Dokploy services"
 
 # ==========================================================================
@@ -749,7 +749,7 @@ printf 'CREATE TABLE project (id text primary key);\n' > "$STATE/dump"
 printf 'LISTEN 0 128 0.0.0.0:80 0.0.0.0:*\n' > "$STATE/listen"
 mkdir -p "$CASE_DIR/dokploy/etc/dokploy/traefik/dynamic"
 printf 'http:\n  routers:\n' > "$CASE_DIR/dokploy/etc/dokploy/traefik/dynamic/example.yml"
-NOTPLOY_DOKPLOY_CONFIG_PATH="$CASE_DIR/dokploy/etc/dokploy" run_install_capture --migrate
+ASTRON_COLLECTION_DOKPLOY_CONFIG_PATH="$CASE_DIR/dokploy/etc/dokploy" run_install_capture --migrate
 assert_rc "$RC" 0 "migration succeeds even when Dokploy holds port 80"
 assert_contains "$OUT" "Migration complete" "reports migration success"
 assert_contains "$OUT" "Reclaiming port 80" "explains the port reclaim"
@@ -768,7 +768,7 @@ printf 'dokploy-network|bridge\n' > "$STATE/networks"
 printf 'CREATE TABLE project (id text primary key);\n' > "$STATE/dump"
 mkdir -p "$CASE_DIR/dokploy/etc/dokploy/traefik/dynamic"
 printf 'http:\n  routers:\n' > "$CASE_DIR/dokploy/etc/dokploy/traefik/dynamic/example.yml"
-NOTPLOY_DOKPLOY_CONFIG_PATH="$CASE_DIR/dokploy/etc/dokploy" run_install_capture --migrate
+ASTRON_COLLECTION_DOKPLOY_CONFIG_PATH="$CASE_DIR/dokploy/etc/dokploy" run_install_capture --migrate
 assert_rc "$RC" 0 "migrates a Compose-based Dokploy host"
 assert_contains "$OUT" "No active Docker Swarm detected" "announces the Swarm initialization"
 assert_logged "docker swarm init" "initializes the missing Swarm"
@@ -776,9 +776,9 @@ assert_contains "$OUT" "Migration complete" "completes the migration"
 assert_not_logged "docker swarm leave" "never leaves the Swarm"
 
 # ==========================================================================
-# 25. Migration rewrites Dokploy absolute paths to the Notploy layout
+# 25. Migration rewrites Dokploy absolute paths to the Astron Collection layout
 # ==========================================================================
-echo "25. Migration rewrites Dokploy paths for Notploy"
+echo "25. Migration rewrites Dokploy paths for Astron Collection"
 init_state
 printf 'active\n' > "$STATE/swarm_state"
 printf 'c1|dokploy-postgres|postgres:16||dokploy-network|\n' > "$STATE/containers"
@@ -790,23 +790,23 @@ mkdir -p "$CASE_DIR/dokploy/etc/dokploy/traefik/dynamic"
 printf 'provider:\n  file:\n    directory: /etc/dokploy/traefik/dynamic\n' > "$CASE_DIR/dokploy/etc/dokploy/traefik/traefik.yml"
 printf '{}' > "$CASE_DIR/dokploy/etc/dokploy/traefik/dynamic/acme.json"
 printf 'certificates: /etc/dokploy/certificates\n' > "$CASE_DIR/dokploy/etc/dokploy/dokploy.yml"
-NOTPLOY_DOKPLOY_CONFIG_PATH="$CASE_DIR/dokploy/etc/dokploy" run_install_capture --migrate
+ASTRON_COLLECTION_DOKPLOY_CONFIG_PATH="$CASE_DIR/dokploy/etc/dokploy" run_install_capture --migrate
 assert_rc "$RC" 0 "migration succeeds with path rewriting"
-backup_dir="$(echo "$CASE_DIR"/etc/notploy/backups/dokploy-* | awk '{print $1}')"
+backup_dir="$(echo "$CASE_DIR"/etc/astron-collection/backups/dokploy-* | awk '{print $1}')"
 import_dump="$backup_dir/database-import.sql"
 assert_file_exists "$import_dump" "writes a rewritten import dump"
-if grep -q "/etc/notploy/certificates/abc" "$import_dump" 2>/dev/null; then
-    pass "rewrites DB paths to /etc/notploy"
+if grep -q "/etc/astron-collection/certificates/abc" "$import_dump" 2>/dev/null; then
+    pass "rewrites DB paths to /etc/astron-collection"
 else
-    fail "rewrites DB paths to /etc/notploy"
+    fail "rewrites DB paths to /etc/astron-collection"
 fi
 assert_file_exists "$backup_dir/database.sql" "keeps the pristine Dokploy dump"
-if grep -q "/etc/dokploy" "$CASE_DIR/etc/notploy/traefik/traefik.yml" 2>/dev/null; then
+if grep -q "/etc/dokploy" "$CASE_DIR/etc/astron-collection/traefik/traefik.yml" 2>/dev/null; then
     fail "rewrites the adopted Traefik config paths"
 else
     pass "rewrites the adopted Traefik config paths"
 fi
-if grep -q "/etc/notploy/certificates" "$CASE_DIR/etc/notploy/dokploy.yml" 2>/dev/null; then
+if grep -q "/etc/astron-collection/certificates" "$CASE_DIR/etc/astron-collection/dokploy.yml" 2>/dev/null; then
     pass "rewrites every adopted config file, not just traefik.yml"
 else
     fail "rewrites every adopted config file, not just traefik.yml"
@@ -816,7 +816,7 @@ if grep -q "/etc/dokploy" "$backup_dir/database.sql" 2>/dev/null; then
 else
     fail "leaves the pristine backup directory untouched"
 fi
-assert_eq "$(stat -c %a "$CASE_DIR/etc/notploy/traefik/dynamic/acme.json" 2>/dev/null)" "600" "secures acme.json"
+assert_eq "$(stat -c %a "$CASE_DIR/etc/astron-collection/traefik/dynamic/acme.json" 2>/dev/null)" "600" "secures acme.json"
 
 # ==========================================================================
 # 26. Non-root user with passwordless sudo (rootless)
@@ -832,7 +832,7 @@ assert_contains "$OUT" "Running as deploy with sudo privileges" "reports the ele
 assert_logged "sudo docker swarm init" "initializes the Swarm through sudo"
 assert_logged "sudo docker service create" "creates services through sudo"
 assert_logged "sudo docker network create" "creates the network through sudo"
-assert_file_exists "$CASE_DIR/etc/notploy/identity/instance.key" "bootstraps the identity as the sudoer"
+assert_file_exists "$CASE_DIR/etc/astron-collection/identity/instance.key" "bootstraps the identity as the sudoer"
 assert_not_contains "$OUT" "must be run as root" "no longer demands running as root"
 
 # ==========================================================================
@@ -864,14 +864,14 @@ printf 'CREATE TABLE project (id text primary key);\n' > "$STATE/dump"
 printf 'dokployauthsecretvalue\n' > "$STATE/dokploy_auth_secret"
 mkdir -p "$CASE_DIR/dokploy/etc/dokploy/traefik/dynamic"
 printf 'http:\n  routers:\n' > "$CASE_DIR/dokploy/etc/dokploy/traefik/dynamic/example.yml"
-NOTPLOY_DOKPLOY_CONFIG_PATH="$CASE_DIR/dokploy/etc/dokploy" run_install_capture --migrate
+ASTRON_COLLECTION_DOKPLOY_CONFIG_PATH="$CASE_DIR/dokploy/etc/dokploy" run_install_capture --migrate
 assert_rc "$RC" 0 "migration succeeds while reusing the secret"
 assert_logged "docker exec app1 cat /run/secrets/dokploy_auth_secret" "reads Dokploy's auth secret while it still runs"
 assert_contains "$OUT" "Reusing the Dokploy auth secret" "announces the reuse"
-if grep -q '^notploy_auth_secret|dokployauthsecretvalue$' "$STATE/secret_values" 2>/dev/null; then
-    pass "stores Dokploy's original auth secret for Notploy"
+if grep -q '^astron_collectionauth_secret|dokployauthsecretvalue$' "$STATE/secret_values" 2>/dev/null; then
+    pass "stores Dokploy's original auth secret for Astron Collection"
 else
-    fail "stores Dokploy's original auth secret for Notploy"
+    fail "stores Dokploy's original auth secret for Astron Collection"
 fi
 
 # ==========================================================================
@@ -887,17 +887,17 @@ printf 'dokploy-network|overlay\n' > "$STATE/networks"
 printf "CREATE TABLE project (id text primary key);\nINSERT INTO project VALUES ('enc:v1:AAAABBBBCCCC');\n" > "$STATE/dump"
 mkdir -p "$CASE_DIR/dokploy/etc/dokploy/traefik/dynamic"
 printf 'http:\n  routers:\n' > "$CASE_DIR/dokploy/etc/dokploy/traefik/dynamic/example.yml"
-NOTPLOY_DOKPLOY_CONFIG_PATH="$CASE_DIR/dokploy/etc/dokploy" run_install_capture --migrate
+ASTRON_COLLECTION_DOKPLOY_CONFIG_PATH="$CASE_DIR/dokploy/etc/dokploy" run_install_capture --migrate
 assert_rc "$RC" 1 "aborts instead of orphaning encrypted values"
 assert_contains "$OUT" "contains encrypted values" "explains the encryption risk"
-assert_contains "$OUT" "NOTPLOY_DOKPLOY_AUTH_SECRET" "documents the recovery override"
+assert_contains "$OUT" "ASTRON_COLLECTION_DOKPLOY_AUTH_SECRET" "documents the recovery override"
 assert_not_logged "docker service rm dokploy" "leaves Dokploy running"
-assert_file_absent "$CASE_DIR/etc/notploy/traefik/dynamic/example.yml" "does not adopt the config before resolving the secret"
+assert_file_absent "$CASE_DIR/etc/astron-collection/traefik/dynamic/example.yml" "does not adopt the config before resolving the secret"
 
 # ==========================================================================
 # 30. Migration uses an explicitly provided auth secret as a fallback
 # ==========================================================================
-echo "30. Migration uses NOTPLOY_DOKPLOY_AUTH_SECRET"
+echo "30. Migration uses ASTRON_COLLECTION_DOKPLOY_AUTH_SECRET"
 init_state
 printf 'active\n' > "$STATE/swarm_state"
 printf 'c1|dokploy-postgres|postgres:16||dokploy-network|\n' > "$STATE/containers"
@@ -907,14 +907,14 @@ printf 'dokploy-network|overlay\n' > "$STATE/networks"
 printf "CREATE TABLE project (id text primary key);\nINSERT INTO project VALUES ('enc:v1:AAAABBBBCCCC');\n" > "$STATE/dump"
 mkdir -p "$CASE_DIR/dokploy/etc/dokploy/traefik/dynamic"
 printf 'http:\n  routers:\n' > "$CASE_DIR/dokploy/etc/dokploy/traefik/dynamic/example.yml"
-NOTPLOY_DOKPLOY_AUTH_SECRET=overridesecretvalue \
-    NOTPLOY_DOKPLOY_CONFIG_PATH="$CASE_DIR/dokploy/etc/dokploy" run_install_capture --migrate
+ASTRON_COLLECTION_DOKPLOY_AUTH_SECRET=overridesecretvalue \
+    ASTRON_COLLECTION_DOKPLOY_CONFIG_PATH="$CASE_DIR/dokploy/etc/dokploy" run_install_capture --migrate
 assert_rc "$RC" 0 "migrates with an explicitly provided secret"
-assert_contains "$OUT" "NOTPLOY_DOKPLOY_AUTH_SECRET" "reports the override source"
-if grep -q '^notploy_auth_secret|overridesecretvalue$' "$STATE/secret_values" 2>/dev/null; then
-    pass "stores the provided auth secret for Notploy"
+assert_contains "$OUT" "ASTRON_COLLECTION_DOKPLOY_AUTH_SECRET" "reports the override source"
+if grep -q '^astron_collectionauth_secret|overridesecretvalue$' "$STATE/secret_values" 2>/dev/null; then
+    pass "stores the provided auth secret for Astron Collection"
 else
-    fail "stores the provided auth secret for Notploy"
+    fail "stores the provided auth secret for Astron Collection"
 fi
 
 # ==========================================================================
@@ -925,9 +925,9 @@ init_state
 printf '1\n' > "$STATE/fail_cli"
 run_install_capture
 assert_rc "$RC" 0 "install still succeeds when the CLI cannot be installed"
-assert_contains "$OUT" "Warning: the Notploy CLI could not be installed or updated" "warns about the CLI failure"
+assert_contains "$OUT" "Warning: the Astron Collection CLI could not be installed or updated" "warns about the CLI failure"
 assert_contains "$OUT" "is installed and the service is running" "still reports the server as installed"
-assert_file_absent "$CASE_DIR/bin/notploy" "does not leave a broken launcher"
+assert_file_absent "$CASE_DIR/bin/astron-collection" "does not leave a broken launcher"
 
 # ==========================================================================
 echo ""

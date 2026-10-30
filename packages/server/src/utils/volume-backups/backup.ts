@@ -1,8 +1,8 @@
 import path from "node:path";
-import { paths } from "@notploy/server/constants";
-import { findComposeById } from "@notploy/server/services/compose";
-import { findDestinationById } from "@notploy/server/services/destination";
-import type { findVolumeBackupById } from "@notploy/server/services/volume-backups";
+import { paths } from "@astron-collection/server/constants";
+import { findComposeById } from "@astron-collection/server/services/compose";
+import { findDestinationById } from "@astron-collection/server/services/destination";
+import type { findVolumeBackupById } from "@astron-collection/server/services/volume-backups";
 import {
 	getBackupTimestamp,
 	getS3Credentials,
@@ -27,21 +27,21 @@ export const createRestartSafeBackupCommand = ({
 	(
 		${backupCommand}
 	)
-	NOTPLOY_VOLUME_BACKUP_STATUS=$?
+	ASTRON_COLLECTION_VOLUME_BACKUP_STATUS=$?
 	(
 		set -e
 		${startCommand}
 	)
-	NOTPLOY_VOLUME_RESTART_STATUS=$?
+	ASTRON_COLLECTION_VOLUME_RESTART_STATUS=$?
 	set -e
-	if [ "$NOTPLOY_VOLUME_BACKUP_STATUS" -ne 0 ]; then
-		if [ "$NOTPLOY_VOLUME_RESTART_STATUS" -ne 0 ]; then
-			echo "Service restart also failed with exit code $NOTPLOY_VOLUME_RESTART_STATUS"
+	if [ "$ASTRON_COLLECTION_VOLUME_BACKUP_STATUS" -ne 0 ]; then
+		if [ "$ASTRON_COLLECTION_VOLUME_RESTART_STATUS" -ne 0 ]; then
+			echo "Service restart also failed with exit code $ASTRON_COLLECTION_VOLUME_RESTART_STATUS"
 		fi
-		exit "$NOTPLOY_VOLUME_BACKUP_STATUS"
+		exit "$ASTRON_COLLECTION_VOLUME_BACKUP_STATUS"
 	fi
-	if [ "$NOTPLOY_VOLUME_RESTART_STATUS" -ne 0 ]; then
-		exit "$NOTPLOY_VOLUME_RESTART_STATUS"
+	if [ "$ASTRON_COLLECTION_VOLUME_RESTART_STATUS" -ne 0 ]; then
+		exit "$ASTRON_COLLECTION_VOLUME_RESTART_STATUS"
 	fi
 	${uploadCommand}
 `;

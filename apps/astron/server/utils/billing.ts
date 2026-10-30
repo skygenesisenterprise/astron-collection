@@ -1,5 +1,5 @@
-import { findUserById, IS_CLOUD } from "@notploy/server";
-import { getOrganizationOwnerId } from "@notploy/server/services/proprietary/sso";
+import { findUserById, IS_CLOUD } from "@astron-collection/server";
+import { getOrganizationOwnerId } from "@astron-collection/server/services/proprietary/sso";
 import Stripe from "stripe";
 import {
 	HOBBY_PRICE_ANNUAL_ID,

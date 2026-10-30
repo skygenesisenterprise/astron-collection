@@ -1,4 +1,4 @@
-import { db } from "@notploy/server/db";
+import { db } from "@astron-collection/server/db";
 import {
 	type apiCreateNetworkProvider,
 	type NetworkPeerInput,
@@ -6,12 +6,12 @@ import {
 	networkPeer,
 	networkProvider,
 	networkProviderTypes,
-} from "@notploy/server/db/schema";
+} from "@astron-collection/server/db/schema";
 import {
 	getNetworkCapabilities,
 	getNetworkProviderCategory,
-} from "@notploy/server/utils/network";
-import { isValidCidr } from "@notploy/server/utils/network/cidr";
+} from "@astron-collection/server/utils/network";
+import { isValidCidr } from "@astron-collection/server/utils/network/cidr";
 import { TRPCError } from "@trpc/server";
 import { asc, eq } from "drizzle-orm";
 import type { z } from "zod";

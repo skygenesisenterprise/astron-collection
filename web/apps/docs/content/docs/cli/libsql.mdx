@@ -1,27 +1,27 @@
 ---
 title: "libSQL"
-description: "Provision and operate libSQL (SQLite-compatible) databases. Generated from the `notploy` command surface."
+description: "Provision and operate libSQL (SQLite-compatible) databases. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Provision and operate libSQL (SQLite-compatible) databases.
 
-`notploy libsql` exposes **14 commands**. They map one-to-one onto the `libsql.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection libsql` exposes **14 commands**. They map one-to-one onto the `libsql.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy libsql --help` to list these commands in your terminal, or
-	`notploy libsql <command> --help` for a single command.
+	Run `astron-collection libsql --help` to list these commands in your terminal, or
+	`astron-collection libsql <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy libsql change-status`
+### `astron-collection libsql change-status`
 
 Calls `POST /api/trpc/libsql.changeStatus`.
 
 ```bash
-notploy libsql change-status --libsqlId <value> --applicationStatus <value> [options]
+astron-collection libsql change-status --libsqlId <value> --applicationStatus <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -30,12 +30,12 @@ notploy libsql change-status --libsqlId <value> --applicationStatus <value> [opt
 | `--applicationStatus <value>` | string | Yes | `idle`, `running`, `done`, `error` |
 | `--profile <name>` | string | No | — |
 
-### `notploy libsql create`
+### `astron-collection libsql create`
 
 Calls `POST /api/trpc/libsql.create`.
 
 ```bash
-notploy libsql create --name <value> --appName <value> --dockerImage <value> --environmentId <value> --description <value> --databaseUser <value> --databasePassword <value> --sqldNode <value> --sqldPrimaryUrl <value> --enableNamespaces --serverId <value> [options]
+astron-collection libsql create --name <value> --appName <value> --dockerImage <value> --environmentId <value> --description <value> --databaseUser <value> --databasePassword <value> --sqldNode <value> --sqldPrimaryUrl <value> --enableNamespaces --serverId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -53,12 +53,12 @@ notploy libsql create --name <value> --appName <value> --dockerImage <value> --e
 | `--serverId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy libsql deploy`
+### `astron-collection libsql deploy`
 
 Calls `POST /api/trpc/libsql.deploy`.
 
 ```bash
-notploy libsql deploy --libsqlId <value> [options]
+astron-collection libsql deploy --libsqlId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -66,12 +66,12 @@ notploy libsql deploy --libsqlId <value> [options]
 | `--libsqlId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy libsql move`
+### `astron-collection libsql move`
 
 Calls `POST /api/trpc/libsql.move`.
 
 ```bash
-notploy libsql move --libsqlId <value> --targetEnvironmentId <value> [options]
+astron-collection libsql move --libsqlId <value> --targetEnvironmentId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -80,12 +80,12 @@ notploy libsql move --libsqlId <value> --targetEnvironmentId <value> [options]
 | `--targetEnvironmentId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy libsql one`
+### `astron-collection libsql one`
 
 Calls `GET /api/trpc/libsql.one`.
 
 ```bash
-notploy libsql one --libsqlId <value> [options]
+astron-collection libsql one --libsqlId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -93,12 +93,12 @@ notploy libsql one --libsqlId <value> [options]
 | `--libsqlId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy libsql read-logs`
+### `astron-collection libsql read-logs`
 
 Calls `GET /api/trpc/libsql.readLogs`.
 
 ```bash
-notploy libsql read-logs --libsqlId <value> [options]
+astron-collection libsql read-logs --libsqlId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -109,12 +109,12 @@ notploy libsql read-logs --libsqlId <value> [options]
 | `--search <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy libsql rebuild`
+### `astron-collection libsql rebuild`
 
 Calls `POST /api/trpc/libsql.rebuild`.
 
 ```bash
-notploy libsql rebuild --libsqlId <value> [options]
+astron-collection libsql rebuild --libsqlId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -122,12 +122,12 @@ notploy libsql rebuild --libsqlId <value> [options]
 | `--libsqlId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy libsql reload`
+### `astron-collection libsql reload`
 
 Calls `POST /api/trpc/libsql.reload`.
 
 ```bash
-notploy libsql reload --libsqlId <value> --appName <value> [options]
+astron-collection libsql reload --libsqlId <value> --appName <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -136,12 +136,12 @@ notploy libsql reload --libsqlId <value> --appName <value> [options]
 | `--appName <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy libsql remove`
+### `astron-collection libsql remove`
 
 Calls `POST /api/trpc/libsql.remove`.
 
 ```bash
-notploy libsql remove --libsqlId <value> [options]
+astron-collection libsql remove --libsqlId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -149,12 +149,12 @@ notploy libsql remove --libsqlId <value> [options]
 | `--libsqlId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy libsql save-environment`
+### `astron-collection libsql save-environment`
 
 Calls `POST /api/trpc/libsql.saveEnvironment`.
 
 ```bash
-notploy libsql save-environment --libsqlId <value> --env <value> [options]
+astron-collection libsql save-environment --libsqlId <value> --env <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -163,12 +163,12 @@ notploy libsql save-environment --libsqlId <value> --env <value> [options]
 | `--env <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy libsql save-external-ports`
+### `astron-collection libsql save-external-ports`
 
 Calls `POST /api/trpc/libsql.saveExternalPorts`.
 
 ```bash
-notploy libsql save-external-ports --libsqlId <value> [options]
+astron-collection libsql save-external-ports --libsqlId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -179,12 +179,12 @@ notploy libsql save-external-ports --libsqlId <value> [options]
 | `--externalAdminPort <value>` | number | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy libsql start`
+### `astron-collection libsql start`
 
 Calls `POST /api/trpc/libsql.start`.
 
 ```bash
-notploy libsql start --libsqlId <value> [options]
+astron-collection libsql start --libsqlId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -192,12 +192,12 @@ notploy libsql start --libsqlId <value> [options]
 | `--libsqlId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy libsql stop`
+### `astron-collection libsql stop`
 
 Calls `POST /api/trpc/libsql.stop`.
 
 ```bash
-notploy libsql stop --libsqlId <value> [options]
+astron-collection libsql stop --libsqlId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -205,12 +205,12 @@ notploy libsql stop --libsqlId <value> [options]
 | `--libsqlId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy libsql update`
+### `astron-collection libsql update`
 
 Calls `POST /api/trpc/libsql.update`.
 
 ```bash
-notploy libsql update --libsqlId <value> [options]
+astron-collection libsql update --libsqlId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -248,8 +248,8 @@ notploy libsql update --libsqlId <value> [options]
 | `--endpointSpecSwarm <json>` | object | No | — |
 | `--replicas <value>` | number | No | — |
 | `--networkIds <json>` | array | No | — |
-| `--detachNotployNetwork [boolean]` | boolean | No | — |
-| `--no-detachNotployNetwork` | boolean | No | — |
+| `--detachAstronCollectionNetwork [boolean]` | boolean | No | — |
+| `--no-detachAstronCollectionNetwork` | boolean | No | — |
 | `--createdAt <value>` | string | No | — |
 | `--environmentId <value>` | string | No | — |
 | `--profile <name>` | string | No | — |

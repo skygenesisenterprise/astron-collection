@@ -10,7 +10,7 @@ import type {
 	IncidentSeverity,
 	IncidentState,
 	MaintenanceState,
-} from "@notploy/status";
+} from "@astron-collection/status";
 
 export type Tone = "green" | "amber" | "orange" | "red" | "blue" | "neutral";
 

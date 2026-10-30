@@ -2,7 +2,7 @@
  * Schema migrations.
  *
  * The status database is a dedicated SQLite file owned by this platform —
- * never the Notploy control-plane database. Migrations are applied in order,
+ * never the Astron Collection control-plane database. Migrations are applied in order,
  * each inside its own transaction, and recorded in `schema_migrations`.
  * Where technically possible a `down` is provided so the schema change can be
  * reversed before restoring a backup.

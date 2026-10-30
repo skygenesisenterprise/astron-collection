@@ -1,0 +1,13 @@
+http:
+  routers:
+    astron-collection-router-app:
+      rule: Host(`astron-collection.docker.localhost`) && PathPrefix(`/`)
+      service: astron-collection-service-app
+      entryPoints:
+        - web
+  services:
+    astron-collection-service-app:
+      loadBalancer:
+        servers:
+          - url: http://astron-collection:3000
+        passHostHeader: true

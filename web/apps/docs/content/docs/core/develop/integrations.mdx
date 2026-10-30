@@ -3,11 +3,11 @@ title: Integrations
 description: "Git providers, CI/CD workflows and common automation patterns."
 ---
 
-**Purpose** — Notploy is meant to fit into your existing pipeline, not replace it. This page covers the two ways deployments are triggered from outside the dashboard and how to wire them up.
+**Purpose** — Astron Collection is meant to fit into your existing pipeline, not replace it. This page covers the two ways deployments are triggered from outside the dashboard and how to wire them up.
 
 ## Git providers
 
-Connect providers so Notploy can read repositories and receive push webhooks:
+Connect providers so Astron Collection can read repositories and receive push webhooks:
 
 - [GitHub](/docs/core/github)
 - [GitLab](/docs/core/gitlab)
@@ -24,10 +24,10 @@ There are two integration patterns:
 
 ### 1. Push-to-deploy (webhook)
 
-Notploy exposes a webhook per service. When the provider notifies Notploy of a push, Notploy deploys. This keeps the pipeline out of the loop entirely:
+Astron Collection exposes a webhook per service. When the provider notifies Astron Collection of a push, Astron Collection deploys. This keeps the pipeline out of the loop entirely:
 
 ```text
-git push ──► Git provider ──► webhook ──► Notploy deploy
+git push ──► Git provider ──► webhook ──► Astron Collection deploy
 ```
 
 Best when your build is fully described by the [build type](/docs/core/applications/build-type) and you do not need CI steps beyond building.
@@ -39,12 +39,12 @@ When you need CI steps — tests, migrations, extra checks — run them in your 
 ```bash
 # after your tests pass
 curl -X POST 'https://your-panel.example.com/api/application.deploy' \
-  -H 'x-api-key: '"$NOTPLOY_API_KEY" \
+  -H 'x-api-key: '"$ASTRON_COLLECTION_API_KEY" \
   -H 'content-type: application/json' \
   -d '{"applicationId":"'"$APP_ID"'"}'
 ```
 
-Store `NOTPLOY_API_KEY` in your CI secret store. See [API keys](/docs/core/security/api-keys).
+Store `ASTRON_COLLECTION_API_KEY` in your CI secret store. See [API keys](/docs/core/security/api-keys).
 
 On GitHub Actions, use the official [GitHub Actions](/docs/core/github-actions) action instead of hand-writing the call: it triggers the deployment, waits for the result and fails the job when the deployment fails.
 

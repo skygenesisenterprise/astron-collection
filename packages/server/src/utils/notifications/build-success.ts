@@ -1,7 +1,7 @@
-import { db } from "@notploy/server/db";
-import { notifications } from "@notploy/server/db/schema";
-import BuildSuccessEmail from "@notploy/server/emails/emails/build-success";
-import type { Domain } from "@notploy/server/services/domain";
+import { db } from "@astron-collection/server/db";
+import { notifications } from "@astron-collection/server/db/schema";
+import BuildSuccessEmail from "@astron-collection/server/emails/emails/build-success";
+import type { Domain } from "@astron-collection/server/services/domain";
 import { render } from "@react-email/components";
 import { format } from "date-fns";
 import { and, eq } from "drizzle-orm";
@@ -93,7 +93,7 @@ export const sendBuildSuccessNotifications = async ({
 				if (email) {
 					await sendEmailNotification(
 						email,
-						"Build success for notploy",
+						"Build success for astron-collection",
 						template,
 					);
 				}
@@ -101,7 +101,7 @@ export const sendBuildSuccessNotifications = async ({
 				if (resend) {
 					await sendResendNotification(
 						resend,
-						"Build success for notploy",
+						"Build success for astron-collection",
 						template,
 					);
 				}
@@ -157,7 +157,7 @@ export const sendBuildSuccessNotifications = async ({
 					],
 					timestamp: date.toISOString(),
 					footer: {
-						text: "Notploy Build Notification",
+						text: "Astron Collection Build Notification",
 					},
 				});
 			}
@@ -272,7 +272,7 @@ export const sendBuildSuccessNotifications = async ({
 				await sendMattermostNotification(mattermost, {
 					text: `**✅ Build Success**\n\n**Project:** ${projectName}\n**Application:** ${applicationName}\n**Type:** ${applicationType}\n**Date:** ${format(date, "PP")}\n**Time:** ${format(date, "pp")}\n\n[View Build Details](${buildLink})`,
 					channel: mattermost.channel,
-					username: mattermost.username || "Notploy",
+					username: mattermost.username || "Astron Collection",
 				});
 			}
 

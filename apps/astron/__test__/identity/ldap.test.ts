@@ -2,11 +2,11 @@ import { describe, expect, it } from "vitest";
 import {
 	getIdentityProviderHealth,
 	resolveIdentityProviderProtocol,
-} from "@notploy/server/services/identity-provider";
+} from "@astron-collection/server/services/identity-provider";
 import {
 	escapeLdapFilter,
 	parseLdapConfig,
-} from "@notploy/server/utils/identity/ldap";
+} from "@astron-collection/server/utils/identity/ldap";
 
 describe("escapeLdapFilter", () => {
 	it("escapes LDAP filter metacharacters (RFC 4515)", () => {

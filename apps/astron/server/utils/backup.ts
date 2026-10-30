@@ -2,7 +2,7 @@ import {
 	type BackupScheduleList,
 	isExternalJobsEnabled,
 	removeScheduleBackup,
-} from "@notploy/server/index";
+} from "@astron-collection/server/index";
 
 type QueueJob =
 	| {

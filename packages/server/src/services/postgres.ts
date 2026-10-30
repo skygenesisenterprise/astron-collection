@@ -1,17 +1,17 @@
-import { db } from "@notploy/server/db";
+import { db } from "@astron-collection/server/db";
 import {
 	type apiCreatePostgres,
 	backups,
 	buildAppName,
 	postgres,
-} from "@notploy/server/db/schema";
-import { generatePassword } from "@notploy/server/templates";
-import { buildPostgres } from "@notploy/server/utils/databases/postgres";
+} from "@astron-collection/server/db/schema";
+import { generatePassword } from "@astron-collection/server/templates";
+import { buildPostgres } from "@astron-collection/server/utils/databases/postgres";
 import {
 	pullImage,
 	waitForSwarmServiceConvergence,
-} from "@notploy/server/utils/docker/utils";
-import { execAsyncRemote } from "@notploy/server/utils/process/execAsync";
+} from "@astron-collection/server/utils/docker/utils";
+import { execAsyncRemote } from "@astron-collection/server/utils/process/execAsync";
 import { TRPCError } from "@trpc/server";
 import { eq, getTableColumns } from "drizzle-orm";
 import { quote } from "shell-quote";

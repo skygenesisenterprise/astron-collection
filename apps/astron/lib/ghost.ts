@@ -1,7 +1,7 @@
 import GhostContentAPI from "@tryghost/content-api";
 
 const ghostConfig = {
-	url: process.env.GHOST_URL || "https://notploy.com",
+	url: process.env.GHOST_URL || "https://astron-collection.com",
 	key: process.env.GHOST_KEY || "42424242424242424242424242424242",
 	version: "v5.0",
 };

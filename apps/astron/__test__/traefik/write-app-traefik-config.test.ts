@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { writeAppTraefikConfig } from "@notploy/server/utils/traefik/application";
+import { writeAppTraefikConfig } from "@astron-collection/server/utils/traefik/application";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
@@ -9,10 +9,10 @@ const mocks = vi.hoisted(() => ({
 	writeFileRemote: vi.fn(),
 }));
 
-vi.mock("@notploy/server/utils/process/execAsync", async (importOriginal) => {
+vi.mock("@astron-collection/server/utils/process/execAsync", async (importOriginal) => {
 	const actual =
 		await importOriginal<
-			typeof import("@notploy/server/utils/process/execAsync")
+			typeof import("@astron-collection/server/utils/process/execAsync")
 		>();
 	return {
 		...actual,
@@ -26,7 +26,7 @@ describe("writeAppTraefikConfig", () => {
 	let dynamicPath: string;
 
 	beforeEach(() => {
-		cwd = fs.mkdtempSync(path.join(os.tmpdir(), "notploy-traefik-"));
+		cwd = fs.mkdtempSync(path.join(os.tmpdir(), "astron-collection-traefik-"));
 		dynamicPath = path.join(cwd, ".docker", "traefik", "dynamic");
 		fs.mkdirSync(dynamicPath, { recursive: true });
 		vi.spyOn(process, "cwd").mockReturnValue(cwd);

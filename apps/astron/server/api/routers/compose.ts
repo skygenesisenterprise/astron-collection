@@ -33,25 +33,25 @@ import {
 	stopCompose,
 	updateCompose,
 	updateDeploymentStatus,
-} from "@notploy/server";
-import { paths } from "@notploy/server/constants";
-import { db } from "@notploy/server/db";
-import { canEditDeployGitSource } from "@notploy/server/services/git-provider";
+} from "@astron-collection/server";
+import { paths } from "@astron-collection/server/constants";
+import { db } from "@astron-collection/server/db";
+import { canEditDeployGitSource } from "@astron-collection/server/services/git-provider";
 import {
 	addNewService,
 	checkServiceAccess,
 	checkServicePermissionAndAccess,
 	findMemberByUserId,
-} from "@notploy/server/services/permission";
-import { assertServiceMoveAllowed } from "@notploy/server/services/service-move";
-import { processTemplate } from "@notploy/server/templates/processors";
+} from "@astron-collection/server/services/permission";
+import { assertServiceMoveAllowed } from "@astron-collection/server/services/service-move";
+import { processTemplate } from "@astron-collection/server/templates/processors";
 import {
 	type CompleteTemplate,
 	getTemplatesLogoBaseUrl,
 	resolveTemplateFiles,
 	resolveTemplateLogo,
 	resolveTemplatesList,
-} from "@notploy/server/templates/resolver";
+} from "@astron-collection/server/templates/resolver";
 import { TRPCError } from "@trpc/server";
 import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
 import _ from "lodash";

@@ -1,27 +1,27 @@
 ---
 title: "Status page"
-description: "Publish incidents and maintenance windows to the public status page. Generated from the `notploy` command surface."
+description: "Publish incidents and maintenance windows to the public status page. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Publish incidents and maintenance windows to the public status page.
 
-`notploy status` exposes **12 commands**. They map one-to-one onto the `status.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection status` exposes **12 commands**. They map one-to-one onto the `status.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy status --help` to list these commands in your terminal, or
-	`notploy status <command> --help` for a single command.
+	Run `astron-collection status --help` to list these commands in your terminal, or
+	`astron-collection status <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy status add-incident-update`
+### `astron-collection status add-incident-update`
 
 Calls `POST /api/trpc/status.addIncidentUpdate`.
 
 ```bash
-notploy status add-incident-update --incidentId <value> --message <value> [options]
+astron-collection status add-incident-update --incidentId <value> --message <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -32,12 +32,12 @@ notploy status add-incident-update --incidentId <value> --message <value> [optio
 | `--visibility <value>` | string | No | `public`, `private` |
 | `--profile <name>` | string | No | — |
 
-### `notploy status create-incident`
+### `astron-collection status create-incident`
 
 Calls `POST /api/trpc/status.createIncident`.
 
 ```bash
-notploy status create-incident --pageRef <value> --title <value> [options]
+astron-collection status create-incident --pageRef <value> --title <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -55,12 +55,12 @@ notploy status create-incident --pageRef <value> --title <value> [options]
 | `--updateMessage <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy status create-maintenance`
+### `astron-collection status create-maintenance`
 
 Calls `POST /api/trpc/status.createMaintenance`.
 
 ```bash
-notploy status create-maintenance --pageRef <value> --title <value> --startAt <value> --endAt <value> [options]
+astron-collection status create-maintenance --pageRef <value> --title <value> --startAt <value> --endAt <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -77,12 +77,12 @@ notploy status create-maintenance --pageRef <value> --title <value> --startAt <v
 | `--no-published` | boolean | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy status delete-incident`
+### `astron-collection status delete-incident`
 
 Calls `POST /api/trpc/status.deleteIncident`.
 
 ```bash
-notploy status delete-incident --incidentId <value> [options]
+astron-collection status delete-incident --incidentId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -90,12 +90,12 @@ notploy status delete-incident --incidentId <value> [options]
 | `--incidentId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy status delete-maintenance`
+### `astron-collection status delete-maintenance`
 
 Calls `POST /api/trpc/status.deleteMaintenance`.
 
 ```bash
-notploy status delete-maintenance --maintenanceId <value> [options]
+astron-collection status delete-maintenance --maintenanceId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -103,24 +103,24 @@ notploy status delete-maintenance --maintenanceId <value> [options]
 | `--maintenanceId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy status overview`
+### `astron-collection status overview`
 
 Calls `GET /api/trpc/status.overview`.
 
 ```bash
-notploy status overview [options]
+astron-collection status overview [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy status publish-incident`
+### `astron-collection status publish-incident`
 
 Calls `POST /api/trpc/status.publishIncident`.
 
 ```bash
-notploy status publish-incident --incidentId <value> --published [options]
+astron-collection status publish-incident --incidentId <value> --published [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -130,12 +130,12 @@ notploy status publish-incident --incidentId <value> --published [options]
 | `--visibility <value>` | string | No | `public`, `private` |
 | `--profile <name>` | string | No | — |
 
-### `notploy status publish-maintenance`
+### `astron-collection status publish-maintenance`
 
 Calls `POST /api/trpc/status.publishMaintenance`.
 
 ```bash
-notploy status publish-maintenance --maintenanceId <value> --published [options]
+astron-collection status publish-maintenance --maintenanceId <value> --published [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -145,12 +145,12 @@ notploy status publish-maintenance --maintenanceId <value> --published [options]
 | `--visibility <value>` | string | No | `public`, `private` |
 | `--profile <name>` | string | No | — |
 
-### `notploy status set-incident-state`
+### `astron-collection status set-incident-state`
 
 Calls `POST /api/trpc/status.setIncidentState`.
 
 ```bash
-notploy status set-incident-state --incidentId <value> --state <value> [options]
+astron-collection status set-incident-state --incidentId <value> --state <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -160,12 +160,12 @@ notploy status set-incident-state --incidentId <value> --state <value> [options]
 | `--message <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy status set-maintenance-state`
+### `astron-collection status set-maintenance-state`
 
 Calls `POST /api/trpc/status.setMaintenanceState`.
 
 ```bash
-notploy status set-maintenance-state --maintenanceId <value> --state <value> [options]
+astron-collection status set-maintenance-state --maintenanceId <value> --state <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -175,12 +175,12 @@ notploy status set-maintenance-state --maintenanceId <value> --state <value> [op
 | `--message <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy status timeline`
+### `astron-collection status timeline`
 
 Calls `GET /api/trpc/status.timeline`.
 
 ```bash
-notploy status timeline --incidentId <value> [options]
+astron-collection status timeline --incidentId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -188,12 +188,12 @@ notploy status timeline --incidentId <value> [options]
 | `--incidentId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy status update-incident`
+### `astron-collection status update-incident`
 
 Calls `POST /api/trpc/status.updateIncident`.
 
 ```bash
-notploy status update-incident --incidentId <value> [options]
+astron-collection status update-incident --incidentId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |

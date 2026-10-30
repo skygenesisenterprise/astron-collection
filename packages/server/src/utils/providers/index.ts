@@ -1,4 +1,4 @@
-import type { gitProvider } from "@notploy/server/db/schema";
+import type { gitProvider } from "@astron-collection/server/db/schema";
 import { bitbucketGitProviderAdapter } from "./bitbucket";
 import { giteaGitProviderAdapter } from "./gitea";
 import { githubGitProviderAdapter } from "./github";

@@ -1,4 +1,4 @@
-import type { PublicIncidentDto } from "@notploy/status";
+import type { PublicIncidentDto } from "@astron-collection/status";
 import { cn } from "@/lib/utils";
 import { incidentStateLabel, severityTone } from "@/lib/view-model";
 import { RelativeTime } from "./relative-time";

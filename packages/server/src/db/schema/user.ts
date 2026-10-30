@@ -1,4 +1,4 @@
-import { paths } from "@notploy/server/constants";
+import { paths } from "@astron-collection/server/constants";
 import { relations, sql } from "drizzle-orm";
 import {
 	boolean,

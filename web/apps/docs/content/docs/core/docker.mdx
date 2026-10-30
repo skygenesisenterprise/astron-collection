@@ -3,7 +3,7 @@ title: Docker Registry
 description: 'Configure your Docker Registry repositories for deployments. This includes setting up access tokens, repository names, and authentication.'
 ---
 
-Notploy provides seamless integration with Docker Registry repositories, allowing you to deploy applications directly from your container images. This feature is available for single applications and supports both public and private registries.
+Astron Collection provides seamless integration with Docker Registry repositories, allowing you to deploy applications directly from your container images. This feature is available for single applications and supports both public and private registries.
 
 ## Configuration Overview
 
@@ -40,11 +40,11 @@ Using access tokens is more secure and allows fine-grained permissions:
 1. **Create Access Token**:
    - Go to [Docker Hub Settings](https://hub.docker.com/settings/security) → **Personal Access Tokens**
    - Click **Generate New Token**
-   - Set description: `Notploy-Docker-Hub-Token`
+   - Set description: `Astron Collection-Docker-Hub-Token`
    - Select **Read-only** permissions
    - Click **Generate**
 
-2. **Configure in Notploy**:
+2. **Configure in Astron Collection**:
    - **Username**: Your Docker Hub username
    - **Password**: Paste the generated access token
    - **Registry URL**: Leave empty (defaults to Docker Hub)
@@ -65,7 +65,7 @@ GHCR allows you to store container images alongside your GitHub repositories.
 1. **Create GitHub Personal Access Token**:
    - Go to [GitHub Settings](https://github.com/settings/tokens) → **Personal Access Tokens**
    - Click **Generate new token (classic)**
-   - Set token name: `Notploy-GHCR-Token`
+   - Set token name: `Astron Collection-GHCR-Token`
    - Select the following scopes:
      - `repo` - Access to repositories
      - `workflow` - Access to GitHub Actions
@@ -73,7 +73,7 @@ GHCR allows you to store container images alongside your GitHub repositories.
      - `delete:packages` - Delete packages
    - Click **Generate token**
 
-2. **Configure in Notploy**:
+2. **Configure in Astron Collection**:
    - **Docker Image**: `ghcr.io/username/repository:tag`
    - **Registry URL**: `ghcr.io`
    - **Username**: Your GitHub username
@@ -108,7 +108,7 @@ Common issues and solutions:
 - **Authentication Failed**: Verify your credentials and token permissions
 - **Image Not Found**: Check the image name and tag spelling
 - **Pull Rate Limits**: Consider using authenticated requests or private registries
-- **Registry Timeout**: Verify the registry URL is accessible from your Notploy instance
+- **Registry Timeout**: Verify the registry URL is accessible from your Astron Collection instance
 
 
 

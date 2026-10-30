@@ -1,6 +1,6 @@
-# Notploy MCP Server
+# Astron Collection MCP Server
 
-[![npm version](https://img.shields.io/npm/v/@notploy/mcp.svg)](https://www.npmjs.com/package/@notploy/mcp)
+[![npm version](https://img.shields.io/npm/v/@astron-collection/mcp.svg)](https://www.npmjs.com/package/@astron-collection/mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js 24](https://img.shields.io/badge/Node.js-24-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org)
 [![pnpm 10](https://img.shields.io/badge/pnpm-10-F69220?logo=pnpm&logoColor=white)](https://pnpm.io)
@@ -9,19 +9,19 @@
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](../../.github/CONTRIBUTING.md)
 [![Discord](https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white)](https://discord.gg/GUkDugVh34)
 
-> Give agents a safe, understandable way to operate Notploy.
+> Give agents a safe, understandable way to operate Astron Collection.
 
-**Notploy MCP Server** (`@notploy/mcp`) is the official Notploy integration for agents and Model Context Protocol clients. It exposes a **business catalog** — discovery, diagnostics and controlled deployments — as the default experience, and keeps the full generated API surface behind an explicit, filtered opt-in mode.
+**Astron Collection MCP Server** (`@astron-collection/mcp`) is the official Astron Collection integration for agents and Model Context Protocol clients. It exposes a **business catalog** — discovery, diagnostics and controlled deployments — as the default experience, and keeps the full generated API surface behind an explicit, filtered opt-in mode.
 
 It is not a one-to-one mirror of the REST API. Every call is re-authorized against the credential's effective permissions, classified by risk, bounded by limits, and recorded in a redacted audit trail.
 
-**Perfect for:** platform and DevOps teams who want an agent to inspect and deploy Notploy services, and anyone wiring Notploy into Cursor, VS Code, Claude, Zed or a custom MCP client.
+**Perfect for:** platform and DevOps teams who want an agent to inspect and deploy Astron Collection services, and anyone wiring Astron Collection into Cursor, VS Code, Claude, Zed or a custom MCP client.
 
 ## Contents
 
-- [Notploy MCP Server](#notploy-mcp-server)
+- [Astron Collection MCP Server](#astron-collection-mcp-server)
   - [Contents](#contents)
-  - [Why the Notploy MCP server matters](#why-the-notploy-mcp-server-matters)
+  - [Why the Astron Collection MCP server matters](#why-the-astron-collection-mcp-server-matters)
   - [What you can do](#what-you-can-do)
     - [Discover](#discover)
     - [Diagnose](#diagnose)
@@ -49,7 +49,7 @@ It is not a one-to-one mirror of the REST API. Every call is re-authorized again
     - [Transports and endpoints](#transports-and-endpoints)
     - [Long-running operations](#long-running-operations)
     - [Error codes](#error-codes)
-  - [How Notploy MCP is built](#how-notploy-mcp-is-built)
+  - [How Astron Collection MCP is built](#how-astron-collection-mcp-is-built)
     - [Source layout](#source-layout)
     - [Generated catalog](#generated-catalog)
   - [Development](#development)
@@ -73,11 +73,11 @@ It is not a one-to-one mirror of the REST API. Every call is re-authorized again
   - [License](#license)
   - [Note](#note)
 
-## Why the Notploy MCP server matters
+## Why the Astron Collection MCP server matters
 
 🧠 **Agent-first, not endpoint-first** — Tool names express intent (`diagnose_deployment`, `prepare_deployment`), descriptions state the expected result, and results use one structured envelope instead of raw API payloads.
 
-🔒 **Permissions are checked at execution time** — The server resolves the API key's identity and effective permissions from Notploy (`user.session`, `user.getPermissions`) on every call. Catalog filters and MCP annotations are never treated as an authorization boundary.
+🔒 **Permissions are checked at execution time** — The server resolves the API key's identity and effective permissions from Astron Collection (`user.session`, `user.getPermissions`) on every call. Catalog filters and MCP annotations are never treated as an authorization boundary.
 
 🛡️ **Secure by default** — Tasks carry a risk level. High-impact actions require an operator approval token, destructive actions stay disabled until explicitly allowed, and remote HTTP transports require a bearer token.
 
@@ -114,7 +114,7 @@ It is not a one-to-one mirror of the REST API. Every call is re-authorized again
 
 ### Administer
 
-- `delete_application` — destructive and irreversible: requires permission, `confirm: true`, an approval token and `NOTPLOY_MCP_ALLOW_DESTRUCTIVE=true`. Disabled by default.
+- `delete_application` — destructive and irreversible: requires permission, `confirm: true`, an approval token and `ASTRON_COLLECTION_MCP_ALLOW_DESTRUCTIVE=true`. Disabled by default.
 
 ## Quick start
 
@@ -122,7 +122,7 @@ It is not a one-to-one mirror of the REST API. Every call is re-authorized again
 
 - Node.js 24.4 or later in the 24.x line
 - An MCP client: Cursor, VS Code, Claude Desktop, Claude Code, Zed, Windsurf, or another Streamable HTTP / SSE client
-- A reachable Notploy instance and an API key for it
+- A reachable Astron Collection instance and an API key for it
 
 ### Install in Cursor
 
@@ -131,12 +131,12 @@ Go to `Settings` → `Cursor Settings` → `MCP` → `Add new global MCP server`
 ```json
 {
   "mcpServers": {
-    "notploy-mcp": {
+    "astron-collection-mcp": {
       "command": "npx",
-      "args": ["-y", "@notploy/mcp"],
+      "args": ["-y", "@astron-collection/mcp"],
       "env": {
-        "NOTPLOY_URL": "https://your-notploy-server.com",
-        "NOTPLOY_API_KEY": "your-notploy-api-token"
+        "ASTRON_COLLECTION_URL": "https://your-astron-collection-server.com",
+        "ASTRON_COLLECTION_API_KEY": "your-astron-collection-api-token"
       }
     }
   }
@@ -153,13 +153,13 @@ Add this to your VS Code MCP configuration:
 ```json
 {
   "servers": {
-    "notploy-mcp": {
+    "astron-collection-mcp": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@notploy/mcp"],
+      "args": ["-y", "@astron-collection/mcp"],
       "env": {
-        "NOTPLOY_URL": "https://your-notploy-server.com",
-        "NOTPLOY_API_KEY": "your-notploy-api-token"
+        "ASTRON_COLLECTION_URL": "https://your-astron-collection-server.com",
+        "ASTRON_COLLECTION_API_KEY": "your-astron-collection-api-token"
       }
     }
   }
@@ -172,8 +172,8 @@ Add this to your VS Code MCP configuration:
 <summary>Claude Code</summary>
 
 ```bash
-claude mcp add notploy-mcp -- npx -y @notploy/mcp
-NOTPLOY_URL=https://your-notploy-server.com NOTPLOY_API_KEY=your-token claude
+claude mcp add astron-collection-mcp -- npx -y @astron-collection/mcp
+ASTRON_COLLECTION_URL=https://your-astron-collection-server.com ASTRON_COLLECTION_API_KEY=your-token claude
 ```
 
 </details>
@@ -186,12 +186,12 @@ Add this to `claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "notploy-mcp": {
+    "astron-collection-mcp": {
       "command": "npx",
-      "args": ["-y", "@notploy/mcp"],
+      "args": ["-y", "@astron-collection/mcp"],
       "env": {
-        "NOTPLOY_URL": "https://your-notploy-server.com",
-        "NOTPLOY_API_KEY": "your-notploy-api-token"
+        "ASTRON_COLLECTION_URL": "https://your-astron-collection-server.com",
+        "ASTRON_COLLECTION_API_KEY": "your-astron-collection-api-token"
       }
     }
   }
@@ -206,12 +206,12 @@ Add this to `claude_desktop_config.json`:
 ```json
 {
   "context_servers": {
-    "notploy-mcp": {
+    "astron-collection-mcp": {
       "command": "npx",
-      "args": ["-y", "@notploy/mcp"],
+      "args": ["-y", "@astron-collection/mcp"],
       "env": {
-        "NOTPLOY_URL": "https://your-notploy-server.com",
-        "NOTPLOY_API_KEY": "your-notploy-api-token"
+        "ASTRON_COLLECTION_URL": "https://your-astron-collection-server.com",
+        "ASTRON_COLLECTION_API_KEY": "your-astron-collection-api-token"
       }
     }
   }
@@ -226,12 +226,12 @@ Add this to `claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "notploy-mcp": {
+    "astron-collection-mcp": {
       "command": "npx",
-      "args": ["-y", "@notploy/mcp"],
+      "args": ["-y", "@astron-collection/mcp"],
       "env": {
-        "NOTPLOY_URL": "https://your-notploy-server.com",
-        "NOTPLOY_API_KEY": "your-notploy-api-token"
+        "ASTRON_COLLECTION_URL": "https://your-astron-collection-server.com",
+        "ASTRON_COLLECTION_API_KEY": "your-astron-collection-api-token"
       }
     }
   }
@@ -246,12 +246,12 @@ Add this to `claude_desktop_config.json`:
 ```json
 {
   "mcp": {
-    "notploy": {
+    "astron-collection": {
       "type": "local",
-      "command": ["npx", "-y", "@notploy/mcp"],
+      "command": ["npx", "-y", "@astron-collection/mcp"],
       "environment": {
-        "NOTPLOY_URL": "https://your-notploy-server.com",
-        "NOTPLOY_API_KEY": "your-notploy-api-token"
+        "ASTRON_COLLECTION_URL": "https://your-astron-collection-server.com",
+        "ASTRON_COLLECTION_API_KEY": "your-astron-collection-api-token"
       },
       "enabled": true
     }
@@ -269,12 +269,12 @@ Use `cmd` as the command wrapper:
 ```json
 {
   "mcpServers": {
-    "notploy-mcp": {
+    "astron-collection-mcp": {
       "command": "cmd",
-      "args": ["/c", "npx", "-y", "@notploy/mcp"],
+      "args": ["/c", "npx", "-y", "@astron-collection/mcp"],
       "env": {
-        "NOTPLOY_URL": "https://your-notploy-server.com",
-        "NOTPLOY_API_KEY": "your-notploy-api-token"
+        "ASTRON_COLLECTION_URL": "https://your-astron-collection-server.com",
+        "ASTRON_COLLECTION_API_KEY": "your-astron-collection-api-token"
       }
     }
   }
@@ -285,27 +285,27 @@ Use `cmd` as the command wrapper:
 
 ### Self-host with Docker Compose
 
-The HTTP transport must authenticate: `docker-compose.yml` requires `NOTPLOY_MCP_HTTP_TOKEN` and binds the container to `0.0.0.0` so the published port is reachable.
+The HTTP transport must authenticate: `docker-compose.yml` requires `ASTRON_COLLECTION_MCP_HTTP_TOKEN` and binds the container to `0.0.0.0` so the published port is reachable.
 
 ```bash
 # Generate a strong token first
-export NOTPLOY_MCP_HTTP_TOKEN="$(openssl rand -hex 32)"
-export NOTPLOY_URL="https://your-notploy-server.com"
-export NOTPLOY_API_KEY="your-notploy-api-token"
+export ASTRON_COLLECTION_MCP_HTTP_TOKEN="$(openssl rand -hex 32)"
+export ASTRON_COLLECTION_URL="https://your-astron-collection-server.com"
+export ASTRON_COLLECTION_API_KEY="your-astron-collection-api-token"
 
-docker compose up -d --build notploy-mcp-http
-docker compose logs -f notploy-mcp-http
+docker compose up -d --build astron-collection-mcp-http
+docker compose logs -f astron-collection-mcp-http
 ```
 
-Point your client at `http://localhost:3000/mcp` with `Authorization: Bearer $NOTPLOY_MCP_HTTP_TOKEN`. Stdio over Docker is also available (`docker compose run --rm notploy-mcp-stdio`).
+Point your client at `http://localhost:3000/mcp` with `Authorization: Bearer $ASTRON_COLLECTION_MCP_HTTP_TOKEN`. Stdio over Docker is also available (`docker compose run --rm astron-collection-mcp-stdio`).
 
 ## Catalog modes
 
-`NOTPLOY_MCP_MODE` selects what the server exposes. Catalogs decide what is *listed*; the executor decides what is *allowed*.
+`ASTRON_COLLECTION_MCP_MODE` selects what the server exposes. Catalogs decide what is *listed*; the executor decides what is *allowed*.
 
 | Mode | Contents | Use it when |
 | --- | --- | --- |
-| `business` (default) | 19 workflow-oriented capabilities | An agent should understand and operate Notploy without noise |
+| `business` (default) | 19 workflow-oriented capabilities | An agent should understand and operate Astron Collection without noise |
 | `advanced` | Generated OpenAPI operations, filtered by profile and tags | You need a specific low-level endpoint |
 | `all` | Both catalogs | You want business workflows and API coverage |
 
@@ -324,25 +324,25 @@ Each capability declares its input schema, output envelope, environments, requir
 ### Advanced API mode (opt-in)
 
 ```bash
-NOTPLOY_MCP_MODE=advanced
-NOTPLOY_MCP_ADVANCED_PROFILE=read-only   # read-only (default) | deploy | full
+ASTRON_COLLECTION_MCP_MODE=advanced
+ASTRON_COLLECTION_MCP_ADVANCED_PROFILE=read-only   # read-only (default) | deploy | full
 ```
 
 - `read-only` exposes only `GET` operations.
 - `deploy` adds non-destructive mutations on project, environment, application, compose, deployment, domain, server and git/registry tags.
 - `full` exposes every generated operation.
 
-High-impact operations in this catalog advertise an `approvalToken` argument and are subject to the same policy, permission and audit path as business capabilities. Generated operations do not declare MCP permissions of their own: the Notploy API remains the authority for them, which is stated in the capability description.
+High-impact operations in this catalog advertise an `approvalToken` argument and are subject to the same policy, permission and audit path as business capabilities. Generated operations do not declare MCP permissions of their own: the Astron Collection API remains the authority for them, which is stated in the capability description.
 
 ### Filters and profiles
 
 | Variable | Effect |
 | --- | --- |
-| `NOTPLOY_MCP_ADVANCED_TAGS` | Only expose these OpenAPI tags (comma-separated) |
-| `NOTPLOY_MCP_ADVANCED_DISABLED_TAGS` | Remove these tags from the selection |
-| `NOTPLOY_MCP_ADVANCED_EXCLUDE` | Remove specific operations by name |
+| `ASTRON_COLLECTION_MCP_ADVANCED_TAGS` | Only expose these OpenAPI tags (comma-separated) |
+| `ASTRON_COLLECTION_MCP_ADVANCED_DISABLED_TAGS` | Remove these tags from the selection |
+| `ASTRON_COLLECTION_MCP_ADVANCED_EXCLUDE` | Remove specific operations by name |
 
-**Deprecated but honored:** `NOTPLOY_TOOL_PRESET`, `NOTPLOY_ENABLED_TAGS` and `NOTPLOY_DISABLED_TAGS` are the pre-1.0 selection variables. When one of them is set and `NOTPLOY_MCP_MODE` is not, the server runs in `advanced` mode with the `full` profile so existing configurations keep working. Migrate to the `NOTPLOY_MCP_*` variables.
+**Deprecated but honored:** `ASTRON_COLLECTION_TOOL_PRESET`, `ASTRON_COLLECTION_ENABLED_TAGS` and `ASTRON_COLLECTION_DISABLED_TAGS` are the pre-1.0 selection variables. When one of them is set and `ASTRON_COLLECTION_MCP_MODE` is not, the server runs in `advanced` mode with the `full` profile so existing configurations keep working. Migrate to the `ASTRON_COLLECTION_MCP_*` variables.
 
 ## Security model
 
@@ -350,14 +350,14 @@ High-impact operations in this catalog advertise an `approvalToken` argument and
 
 Every tool call runs through one path, in this order:
 
-1. **Environment** — reject capabilities unavailable in the configured Notploy environment.
+1. **Environment** — reject capabilities unavailable in the configured Astron Collection environment.
 2. **Schema** — validate the input; invalid submissions are refused without echoing values.
-3. **Identity** — resolve the credential's user and organization from Notploy (cached briefly).
+3. **Identity** — resolve the credential's user and organization from Astron Collection (cached briefly).
 4. **Effective permissions** — fetch `user.getPermissions`; missing permissions refuse the call.
 5. **Policy** — evaluate blocked capabilities, risk level, destructive opt-in and approval.
 6. **Limits** — per-identity rate limit and concurrency cap.
 7. **Idempotency** — replay or refuse a reused idempotency key before any mutation.
-8. **Execution** — call Notploy with a timeout, no blind retries for mutations.
+8. **Execution** — call Astron Collection with a timeout, no blind retries for mutations.
 9. **Verification** — run the declared post-condition check when the capability has one.
 10. **Audit** — record the decision, identity, capability, risk, duration and target ids.
 
@@ -366,8 +366,8 @@ Every tool call runs through one path, in this order:
 | Level | Meaning | Default policy |
 | --- | --- | --- |
 | `0` | Read-only inspection | Allowed |
-| `1` | Reversible write with limited impact | Allowed (`NOTPLOY_MCP_MAX_RISK=1`) |
-| `2` | High impact, destructive or infrastructure-affecting | Denied unless a valid `approvalToken` is supplied; destructive actions also require `NOTPLOY_MCP_ALLOW_DESTRUCTIVE=true` |
+| `1` | Reversible write with limited impact | Allowed (`ASTRON_COLLECTION_MCP_MAX_RISK=1`) |
+| `2` | High impact, destructive or infrastructure-affecting | Denied unless a valid `approvalToken` is supplied; destructive actions also require `ASTRON_COLLECTION_MCP_ALLOW_DESTRUCTIVE=true` |
 | `3` | Forbidden in every context | Always denied |
 
 A destructive capability that is misdeclared as risk 1 is still treated as risk 2: classification mistakes fail closed.
@@ -375,30 +375,30 @@ A destructive capability that is misdeclared as risk 1 is still treated as risk 
 ### Permissions, approvals and environments
 
 - The effective permissions come from the API key's user in the active organization. An approval token never substitutes for a permission.
-- `NOTPLOY_MCP_APPROVAL_TOKEN` (minimum 16 characters) is shared with the operator out of band; it is verified with a constant-time comparison, never logged and never returned.
-- `NOTPLOY_MCP_ENVIRONMENT` selects `self`, `cloud` or `console` **server-side**. No tool argument can change the environment, tenant or privilege set, and the API still enforces its own workspace isolation.
-- `NOTPLOY_MCP_BLOCKED_CAPABILITIES` refuses specific capabilities by name regardless of risk.
+- `ASTRON_COLLECTION_MCP_APPROVAL_TOKEN` (minimum 16 characters) is shared with the operator out of band; it is verified with a constant-time comparison, never logged and never returned.
+- `ASTRON_COLLECTION_MCP_ENVIRONMENT` selects `self`, `cloud` or `console` **server-side**. No tool argument can change the environment, tenant or privilege set, and the API still enforces its own workspace isolation.
+- `ASTRON_COLLECTION_MCP_BLOCKED_CAPABILITIES` refuses specific capabilities by name regardless of risk.
 
 ### Secrets, logs and audit
 
 - Field-based redaction removes known secret-bearing keys (`env`, passwords, tokens, keys, …) from results and logs; a second pass removes literal credential values wherever they appear, including in error text echoed by the server.
-- `NOTPLOY_URL` must be an absolute `http(s)` URL without embedded credentials, query string or fragment.
-- The audit trail records request id, identity, organization, environment, capability, mode, risk, decision, code, duration, approval usage and target resource ids. It never records tool inputs. Persist it with `NOTPLOY_MCP_AUDIT_LOG`.
-- Set `NOTPLOY_REDACT_ENV=false` only if you consciously want raw secret values in model context.
+- `ASTRON_COLLECTION_URL` must be an absolute `http(s)` URL without embedded credentials, query string or fragment.
+- The audit trail records request id, identity, organization, environment, capability, mode, risk, decision, code, duration, approval usage and target resource ids. It never records tool inputs. Persist it with `ASTRON_COLLECTION_MCP_AUDIT_LOG`.
+- Set `ASTRON_COLLECTION_REDACT_ENV=false` only if you consciously want raw secret values in model context.
 
 ### Remote transport security
 
-- The HTTP transport refuses to start without `NOTPLOY_MCP_HTTP_TOKEN`. The only opt-out is `NOTPLOY_MCP_HTTP_ALLOW_UNAUTHENTICATED=true` combined with a loopback bind address, for local development.
-- It binds `127.0.0.1` by default; set `NOTPLOY_MCP_HTTP_HOST=0.0.0.0` explicitly behind a trusted network or proxy.
-- Sessions are bound to the credential fingerprint, capped by `NOTPLOY_MCP_HTTP_MAX_SESSIONS`, expire after `NOTPLOY_MCP_HTTP_SESSION_TTL_MS` and are closed on shutdown. Requests with an unknown or mismatched session id are rejected.
-- Requests larger than `NOTPLOY_MCP_HTTP_MAX_BODY_BYTES` are rejected before parsing.
+- The HTTP transport refuses to start without `ASTRON_COLLECTION_MCP_HTTP_TOKEN`. The only opt-out is `ASTRON_COLLECTION_MCP_HTTP_ALLOW_UNAUTHENTICATED=true` combined with a loopback bind address, for local development.
+- It binds `127.0.0.1` by default; set `ASTRON_COLLECTION_MCP_HTTP_HOST=0.0.0.0` explicitly behind a trusted network or proxy.
+- Sessions are bound to the credential fingerprint, capped by `ASTRON_COLLECTION_MCP_HTTP_MAX_SESSIONS`, expire after `ASTRON_COLLECTION_MCP_HTTP_SESSION_TTL_MS` and are closed on shutdown. Requests with an unknown or mismatched session id are rejected.
+- Requests larger than `ASTRON_COLLECTION_MCP_HTTP_MAX_BODY_BYTES` are rejected before parsing.
 - `/health` is intentionally public and exposes only status, version, catalog mode and tool count.
 
 ### Limits and failure behavior
 
-- `NOTPLOY_MCP_TIMEOUT_MS` bounds each tool call; verification has its own timeout.
-- `NOTPLOY_MCP_RATE_LIMIT` and `NOTPLOY_MCP_MAX_CONCURRENCY` bound usage per identity. They are enforced per process: run one instance per credential, or treat the configured numbers as per-instance limits.
-- `NOTPLOY_MCP_MAX_RESULT_BYTES` truncates oversized results and reports `meta.truncated` with the original size instead of failing.
+- `ASTRON_COLLECTION_MCP_TIMEOUT_MS` bounds each tool call; verification has its own timeout.
+- `ASTRON_COLLECTION_MCP_RATE_LIMIT` and `ASTRON_COLLECTION_MCP_MAX_CONCURRENCY` bound usage per identity. They are enforced per process: run one instance per credential, or treat the configured numbers as per-instance limits.
+- `ASTRON_COLLECTION_MCP_MAX_RESULT_BYTES` truncates oversized results and reports `meta.truncated` with the original size instead of failing.
 - Mutations are retried only when a capability marks them idempotent; `GET` requests use bounded exponential backoff with jitter.
 
 ## Reference
@@ -417,71 +417,71 @@ Required:
 
 | Variable | Description |
 | --- | --- |
-| `NOTPLOY_URL` | Notploy instance base URL (absolute `http(s)` URL, no credentials, query or fragment) |
-| `NOTPLOY_API_KEY` | API key used for every API call |
+| `ASTRON_COLLECTION_URL` | Astron Collection instance base URL (absolute `http(s)` URL, no credentials, query or fragment) |
+| `ASTRON_COLLECTION_API_KEY` | API key used for every API call |
 
 Catalog:
 
 | Variable | Default | Description |
 | --- | --- | --- |
-| `NOTPLOY_MCP_MODE` | `business` | `business`, `advanced` or `all` |
-| `NOTPLOY_MCP_ADVANCED_PROFILE` | `read-only` | `read-only`, `deploy` or `full` |
-| `NOTPLOY_MCP_ADVANCED_TAGS` | — | Comma-separated tags to expose |
-| `NOTPLOY_MCP_ADVANCED_DISABLED_TAGS` | — | Comma-separated tags to remove |
-| `NOTPLOY_MCP_ADVANCED_EXCLUDE` | — | Operation names to remove |
-| `NOTPLOY_MCP_ENVIRONMENT` | `self` | `self`, `cloud` or `console` |
-| `NOTPLOY_MCP_BLOCKED_CAPABILITIES` | — | Capability names always refused |
+| `ASTRON_COLLECTION_MCP_MODE` | `business` | `business`, `advanced` or `all` |
+| `ASTRON_COLLECTION_MCP_ADVANCED_PROFILE` | `read-only` | `read-only`, `deploy` or `full` |
+| `ASTRON_COLLECTION_MCP_ADVANCED_TAGS` | — | Comma-separated tags to expose |
+| `ASTRON_COLLECTION_MCP_ADVANCED_DISABLED_TAGS` | — | Comma-separated tags to remove |
+| `ASTRON_COLLECTION_MCP_ADVANCED_EXCLUDE` | — | Operation names to remove |
+| `ASTRON_COLLECTION_MCP_ENVIRONMENT` | `self` | `self`, `cloud` or `console` |
+| `ASTRON_COLLECTION_MCP_BLOCKED_CAPABILITIES` | — | Capability names always refused |
 
 Policy and limits:
 
 | Variable | Default | Description |
 | --- | --- | --- |
-| `NOTPLOY_MCP_MAX_RISK` | `1` | Highest risk allowed without approval (`0`–`3`) |
-| `NOTPLOY_MCP_ALLOW_HIGH_RISK` | `true` | Allow risk 2 with a valid approval token |
-| `NOTPLOY_MCP_ALLOW_DESTRUCTIVE` | `false` | Allow destructive capabilities (still requires approval) |
-| `NOTPLOY_MCP_APPROVAL_TOKEN` | — | Shared approval secret (≥ 16 characters) |
-| `NOTPLOY_MCP_TIMEOUT_MS` | `30000` | Per-call deadline (1000–120000) |
-| `NOTPLOY_MCP_MAX_RESULT_BYTES` | `262144` | Result budget before truncation |
-| `NOTPLOY_MCP_RATE_LIMIT` | `120` | Tool calls per minute per identity |
-| `NOTPLOY_MCP_MAX_CONCURRENCY` | `4` | In-flight calls per identity |
-| `NOTPLOY_MCP_VERIFICATION_TIMEOUT_MS` | `600000` | Post-condition verification budget |
-| `NOTPLOY_MCP_VERIFICATION_INTERVAL_MS` | `5000` | Verification poll interval |
-| `NOTPLOY_MCP_OPERATION_RETENTION_MS` | `86400000` | How long an operation stays queryable |
+| `ASTRON_COLLECTION_MCP_MAX_RISK` | `1` | Highest risk allowed without approval (`0`–`3`) |
+| `ASTRON_COLLECTION_MCP_ALLOW_HIGH_RISK` | `true` | Allow risk 2 with a valid approval token |
+| `ASTRON_COLLECTION_MCP_ALLOW_DESTRUCTIVE` | `false` | Allow destructive capabilities (still requires approval) |
+| `ASTRON_COLLECTION_MCP_APPROVAL_TOKEN` | — | Shared approval secret (≥ 16 characters) |
+| `ASTRON_COLLECTION_MCP_TIMEOUT_MS` | `30000` | Per-call deadline (1000–120000) |
+| `ASTRON_COLLECTION_MCP_MAX_RESULT_BYTES` | `262144` | Result budget before truncation |
+| `ASTRON_COLLECTION_MCP_RATE_LIMIT` | `120` | Tool calls per minute per identity |
+| `ASTRON_COLLECTION_MCP_MAX_CONCURRENCY` | `4` | In-flight calls per identity |
+| `ASTRON_COLLECTION_MCP_VERIFICATION_TIMEOUT_MS` | `600000` | Post-condition verification budget |
+| `ASTRON_COLLECTION_MCP_VERIFICATION_INTERVAL_MS` | `5000` | Verification poll interval |
+| `ASTRON_COLLECTION_MCP_OPERATION_RETENTION_MS` | `86400000` | How long an operation stays queryable |
 
 Operations, audit and logging:
 
 | Variable | Default | Description |
 | --- | --- | --- |
-| `NOTPLOY_MCP_OPERATION_STORE` | — | JSON file that makes operations survive restarts |
-| `NOTPLOY_MCP_AUDIT_LOG` | — | JSONL file receiving audit events |
-| `NOTPLOY_MCP_LOG_LEVEL` | `info` | `error`, `warn`, `info` or `debug` (diagnostics go to stderr) |
-| `NOTPLOY_REDACT_ENV` | `true` | Redact secret-bearing response fields |
-| `NOTPLOY_REDACT_FIELDS` | built-in list | Override the field names to redact (suffix match, case-insensitive) |
-| `NOTPLOY_TIMEOUT` | `30000` | Upstream HTTP timeout |
-| `NOTPLOY_RETRY_ATTEMPTS` | `2` | Retries for idempotent requests (0–5) |
-| `NOTPLOY_RETRY_DELAY` | `1000` | Base retry delay in milliseconds |
-| `NOTPLOY_CUSTOM_HEADERS` | — | JSON object of extra upstream headers; reserved auth/transport/content headers are rejected |
+| `ASTRON_COLLECTION_MCP_OPERATION_STORE` | — | JSON file that makes operations survive restarts |
+| `ASTRON_COLLECTION_MCP_AUDIT_LOG` | — | JSONL file receiving audit events |
+| `ASTRON_COLLECTION_MCP_LOG_LEVEL` | `info` | `error`, `warn`, `info` or `debug` (diagnostics go to stderr) |
+| `ASTRON_COLLECTION_REDACT_ENV` | `true` | Redact secret-bearing response fields |
+| `ASTRON_COLLECTION_REDACT_FIELDS` | built-in list | Override the field names to redact (suffix match, case-insensitive) |
+| `ASTRON_COLLECTION_TIMEOUT` | `30000` | Upstream HTTP timeout |
+| `ASTRON_COLLECTION_RETRY_ATTEMPTS` | `2` | Retries for idempotent requests (0–5) |
+| `ASTRON_COLLECTION_RETRY_DELAY` | `1000` | Base retry delay in milliseconds |
+| `ASTRON_COLLECTION_CUSTOM_HEADERS` | — | JSON object of extra upstream headers; reserved auth/transport/content headers are rejected |
 
 HTTP transport:
 
 | Variable | Default | Description |
 | --- | --- | --- |
-| `NOTPLOY_MCP_HTTP_TOKEN` | — | Bearer token required from clients (≥ 16 characters) |
-| `NOTPLOY_MCP_HTTP_HOST` | `127.0.0.1` | Bind address |
-| `NOTPLOY_MCP_HTTP_ALLOW_UNAUTHENTICATED` | `false` | Loopback-only opt-out for local development |
-| `NOTPLOY_MCP_HTTP_SESSION_TTL_MS` | `1800000` | Idle session expiry |
-| `NOTPLOY_MCP_HTTP_MAX_SESSIONS` | `50` | Maximum concurrent sessions |
-| `NOTPLOY_MCP_HTTP_MAX_BODY_BYTES` | `1048576` | Maximum request body size |
+| `ASTRON_COLLECTION_MCP_HTTP_TOKEN` | — | Bearer token required from clients (≥ 16 characters) |
+| `ASTRON_COLLECTION_MCP_HTTP_HOST` | `127.0.0.1` | Bind address |
+| `ASTRON_COLLECTION_MCP_HTTP_ALLOW_UNAUTHENTICATED` | `false` | Loopback-only opt-out for local development |
+| `ASTRON_COLLECTION_MCP_HTTP_SESSION_TTL_MS` | `1800000` | Idle session expiry |
+| `ASTRON_COLLECTION_MCP_HTTP_MAX_SESSIONS` | `50` | Maximum concurrent sessions |
+| `ASTRON_COLLECTION_MCP_HTTP_MAX_BODY_BYTES` | `1048576` | Maximum request body size |
 | `MCP_PORT` / `PORT` | `3000` | HTTP listen port |
 | `MCP_TRANSPORT` | `stdio` | Set to `http` or `sse` to run the HTTP transport |
-| `NOTPLOY_MCP_PUBLIC_BASE_URL` | — | Public base URL for RFC 9728 metadata (e.g. `https://mcp.example.com`) |
-| `NOTPLOY_MCP_OAUTH_ISSUER` | — | OAuth authorization-server issuer; when unset, `/.well-known/oauth-protected-resource` honestly reports bearer-only auth |
-| `NOTPLOY_MCP_OAUTH_AUDIENCE` | — | Expected OAuth audience (defaults to the resource URL) |
+| `ASTRON_COLLECTION_MCP_PUBLIC_BASE_URL` | — | Public base URL for RFC 9728 metadata (e.g. `https://mcp.example.com`) |
+| `ASTRON_COLLECTION_MCP_OAUTH_ISSUER` | — | OAuth authorization-server issuer; when unset, `/.well-known/oauth-protected-resource` honestly reports bearer-only auth |
+| `ASTRON_COLLECTION_MCP_OAUTH_AUDIENCE` | — | Expected OAuth audience (defaults to the resource URL) |
 
-For Notploy behind Cloudflare Access or a similar proxy, pass service-token headers:
+For Astron Collection behind Cloudflare Access or a similar proxy, pass service-token headers:
 
 ```bash
-NOTPLOY_CUSTOM_HEADERS='{"CF-Access-Client-Id":"your-client-id.access","CF-Access-Client-Secret":"your-client-secret"}'
+ASTRON_COLLECTION_CUSTOM_HEADERS='{"CF-Access-Client-Id":"your-client-id.access","CF-Access-Client-Secret":"your-client-secret"}'
 ```
 
 ### Transports and endpoints
@@ -489,9 +489,9 @@ NOTPLOY_CUSTOM_HEADERS='{"CF-Access-Client-Id":"your-client-id.access","CF-Acces
 Stdio is the default and is what desktop clients use:
 
 ```bash
-npx -y @notploy/mcp
-npx -y @notploy/mcp --http     # or: MCP_TRANSPORT=http
-npx -y @notploy/mcp --sse      # legacy SSE only
+npx -y @astron-collection/mcp
+npx -y @astron-collection/mcp --http     # or: MCP_TRANSPORT=http
+npx -y @astron-collection/mcp --sse      # legacy SSE only
 ```
 
 | Endpoint | Method | Purpose |
@@ -511,7 +511,7 @@ npx -y @notploy/mcp --sse      # legacy SSE only
 { "operationId": "<id from the pending result>" }
 ```
 
-State is kept in memory by default. Set `NOTPLOY_MCP_OPERATION_STORE` to a JSON file to survive restarts; operations running when the process stopped are marked `interrupted`. Operation ids are scoped to the authenticated identity and organization, and expire after the retention window. Because the store is not a distributed queue, run one MCP instance per `NOTPLOY_MCP_OPERATION_STORE` file.
+State is kept in memory by default. Set `ASTRON_COLLECTION_MCP_OPERATION_STORE` to a JSON file to survive restarts; operations running when the process stopped are marked `interrupted`. Operation ids are scoped to the authenticated identity and organization, and expire after the retention window. Because the store is not a distributed queue, run one MCP instance per `ASTRON_COLLECTION_MCP_OPERATION_STORE` file.
 
 ### Error codes
 
@@ -532,15 +532,15 @@ Results and errors use one envelope: `ok`, `capability`, `status` (`succeeded`, 
 | `timeout`, `cancelled` | Deadline exceeded or request aborted |
 | `api_error`, `network_error`, `internal_error` | Upstream or server failure; inspect `requestId` |
 
-## How Notploy MCP is built
+## How Astron Collection MCP is built
 
-`@notploy/mcp` is part of the [Notploy monorepo](../../README.md) and uses the shared root toolchain: Node.js 24.4+, pnpm 10.22+ and Biome. It is built on `@modelcontextprotocol/sdk`, TypeScript and Zod.
+`@astron-collection/mcp` is part of the [Astron Collection monorepo](../../README.md) and uses the shared root toolchain: Node.js 24.4+, pnpm 10.22+ and Biome. It is built on `@modelcontextprotocol/sdk`, TypeScript and Zod.
 
 ### Source layout
 
 ```text
 packages/mcp/
-├── openapi.json              # Canonical Notploy OpenAPI document
+├── openapi.json              # Canonical Astron Collection OpenAPI document
 ├── src/
 │   ├── contracts/            # Capability, context, policy, result and operation types
 │   ├── config.ts             # Validated environment configuration
@@ -549,7 +549,7 @@ packages/mcp/
 │   ├── advanced-api/         # Risk classification and opt-in generated catalog
 │   ├── policies/engine.ts    # Authorization, risk and approval decisions
 │   ├── execution/            # Executor, limits, idempotency and operation store
-│   ├── adapters/             # Notploy HTTP client and identity/permission resolution
+│   ├── adapters/             # Astron Collection HTTP client and identity/permission resolution
 │   ├── observability/        # Audit trail and secret registry
 │   ├── protocol/             # MCP server and JSON Schema 2020-12 generation
 │   ├── entrypoints/          # stdio and HTTP transports
@@ -565,7 +565,7 @@ packages/mcp/
 `openapi.json` is the single source of truth for the advanced catalog. Regeneration is deterministic — operations are sorted by name, no timestamp is embedded, and risk classification comes from one module used by both the runtime and the documentation.
 
 ```bash
-pnpm fetch-openapi   # refresh openapi.json from the Notploy documentation
+pnpm fetch-openapi   # refresh openapi.json from the Astron Collection documentation
 pnpm generate        # rewrite src/generated/operations.ts, meta.ts and TOOLS.md
 pnpm generate:check  # fail if the committed artifacts are stale (CI)
 ```
@@ -577,14 +577,14 @@ pnpm generate:check  # fail if the committed artifacts are stale (CI)
 Clone the monorepo and install dependencies from the repository root:
 
 ```bash
-git clone https://github.com/skygenesisenterprise/notploy.git
-cd notploy
+git clone https://github.com/skygenesisenterprise/astron-collection.git
+cd astron-collection
 pnpm install --frozen-lockfile
 ```
 
 ### Package commands
 
-Run these from `packages/mcp` (or with `pnpm --filter @notploy/mcp run <script>`):
+Run these from `packages/mcp` (or with `pnpm --filter @astron-collection/mcp run <script>`):
 
 | Command | Purpose |
 | --- | --- |
@@ -602,13 +602,13 @@ Run these from `packages/mcp` (or with `pnpm --filter @notploy/mcp run <script>`
 ```json
 {
   "mcpServers": {
-    "notploy-mcp": {
+    "astron-collection-mcp": {
       "command": "npx",
-      "args": ["tsx", "/path/to/notploy/packages/mcp/src/index.ts"],
+      "args": ["tsx", "/path/to/astron-collection/packages/mcp/src/index.ts"],
       "env": {
-        "NOTPLOY_URL": "https://your-notploy-server.com",
-        "NOTPLOY_API_KEY": "your-notploy-api-token",
-        "NOTPLOY_MCP_MODE": "business"
+        "ASTRON_COLLECTION_URL": "https://your-astron-collection-server.com",
+        "ASTRON_COLLECTION_API_KEY": "your-astron-collection-api-token",
+        "ASTRON_COLLECTION_MCP_MODE": "business"
       }
     }
   }
@@ -618,52 +618,52 @@ Run these from `packages/mcp` (or with `pnpm --filter @notploy/mcp run <script>`
 ### Testing with MCP Inspector
 
 ```bash
-npx -y @modelcontextprotocol/inspector npx @notploy/mcp
+npx -y @modelcontextprotocol/inspector npx @astron-collection/mcp
 ```
 
 ### Troubleshooting
 
-1. **The server exits at startup** — check `NOTPLOY_URL` and `NOTPLOY_API_KEY`; invalid URLs and missing keys fail fast with an explicit error.
-2. **HTTP mode refuses to start** — set `NOTPLOY_MCP_HTTP_TOKEN` (≥ 16 characters), or run locally with `NOTPLOY_MCP_HTTP_ALLOW_UNAUTHENTICATED=true` and a loopback host.
+1. **The server exits at startup** — check `ASTRON_COLLECTION_URL` and `ASTRON_COLLECTION_API_KEY`; invalid URLs and missing keys fail fast with an explicit error.
+2. **HTTP mode refuses to start** — set `ASTRON_COLLECTION_MCP_HTTP_TOKEN` (≥ 16 characters), or run locally with `ASTRON_COLLECTION_MCP_HTTP_ALLOW_UNAUTHENTICATED=true` and a loopback host.
 3. **`permission_denied` from a tool** — the API key's user lacks that permission in the active organization; the error names the missing permission.
-4. **`approval_required`** — the capability is high impact. Ask the Notploy operator for the approval token and pass it as `approvalToken`.
-5. **The provider times out on `tools/list`** — you are likely in `advanced` mode. Keep the default `business` mode, use `NOTPLOY_MCP_ADVANCED_PROFILE=read-only`, or narrow with tags.
-6. **Pinned old behavior** — set `NOTPLOY_MCP_MODE=advanced` and `NOTPLOY_MCP_ADVANCED_PROFILE=full` (or keep a legacy preset variable, which implies the same).
-7. **Large results** — results are truncated at `NOTPLOY_MCP_MAX_RESULT_BYTES`; narrow the request (for example with `limit` or `tail`).
+4. **`approval_required`** — the capability is high impact. Ask the Astron Collection operator for the approval token and pass it as `approvalToken`.
+5. **The provider times out on `tools/list`** — you are likely in `advanced` mode. Keep the default `business` mode, use `ASTRON_COLLECTION_MCP_ADVANCED_PROFILE=read-only`, or narrow with tags.
+6. **Pinned old behavior** — set `ASTRON_COLLECTION_MCP_MODE=advanced` and `ASTRON_COLLECTION_MCP_ADVANCED_PROFILE=full` (or keep a legacy preset variable, which implies the same).
+7. **Large results** — results are truncated at `ASTRON_COLLECTION_MCP_MAX_RESULT_BYTES`; narrow the request (for example with `limit` or `tail`).
 
 ## FAQ
 
 ### Is the MCP server free?
 
-Yes. `@notploy/mcp` is published under the MIT license as part of the open-source Notploy platform, and the self-hosted edition is free to run.
+Yes. `@astron-collection/mcp` is published under the MIT license as part of the open-source Astron Collection platform, and the self-hosted edition is free to run.
 
 ### How many tools does it expose?
 
-19 business capabilities by default. The opt-in advanced catalog exposes the 724 operations generated from the Notploy OpenAPI document, filtered by profile, tag and exclusions. [`TOOLS.md`](TOOLS.md) is generated from both catalogs.
+19 business capabilities by default. The opt-in advanced catalog exposes the 724 operations generated from the Astron Collection OpenAPI document, filtered by profile, tag and exclusions. [`TOOLS.md`](TOOLS.md) is generated from both catalogs.
 
 ### Can an agent delete my infrastructure?
 
-Only if you allow it. Read-only and reversible actions work by default; high-impact actions require a valid approval token, and destructive actions additionally require `NOTPLOY_MCP_ALLOW_DESTRUCTIVE=true`. The effective permissions of the API key are always enforced first, and every attempt — including refusals — is audited.
+Only if you allow it. Read-only and reversible actions work by default; high-impact actions require a valid approval token, and destructive actions additionally require `ASTRON_COLLECTION_MCP_ALLOW_DESTRUCTIVE=true`. The effective permissions of the API key are always enforced first, and every attempt — including refusals — is audited.
 
 ### Can I still load every API endpoint?
 
-Yes. Run `NOTPLOY_MCP_MODE=advanced NOTPLOY_MCP_ADVANCED_PROFILE=full`. The pre-1.0 preset variables are still honored and imply the same configuration.
+Yes. Run `ASTRON_COLLECTION_MCP_MODE=advanced ASTRON_COLLECTION_MCP_ADVANCED_PROFILE=full`. The pre-1.0 preset variables are still honored and imply the same configuration.
 
 ### What do I need to run it?
 
-Node.js 24.4+, an MCP client, and a reachable Notploy instance with an API key. Docker Compose is supported for the HTTP transport.
+Node.js 24.4+, an MCP client, and a reachable Astron Collection instance with an API key. Docker Compose is supported for the HTTP transport.
 
 ### How do I get help or report a bug?
 
-Join the [Notploy Discord](https://discord.gg/GUkDugVh34) for questions, or open a [GitHub issue](https://github.com/skygenesisenterprise/notploy/issues). Never report a security vulnerability in a public issue — see [Security](#security).
+Join the [Astron Collection Discord](https://discord.gg/GUkDugVh34) for questions, or open a [GitHub issue](https://github.com/skygenesisenterprise/astron-collection/issues). Never report a security vulnerability in a public issue — see [Security](#security).
 
 ## Distribution
 
-- npm: `npx -y @notploy/mcp` runs the published package. `build/` is the only shipped directory (`files: ["build"]`), with `notploy-mcp` as the binary entrypoint. Requires Node.js 24.4+ in the 24.x line.
+- npm: `npx -y @astron-collection/mcp` runs the published package. `build/` is the only shipped directory (`files: ["build"]`), with `astron-collection-mcp` as the binary entrypoint. Requires Node.js 24.4+ in the 24.x line.
 - MCP Registry: `server.json` in this directory is the registry metadata source. It pins the package name, version, transports (`stdio`, `streamable-http`) and the `business` default catalog. Keep it in sync with `package.json` and `src/version.ts` before publishing.
-- Claude: use the stdio configuration in [Install in other clients](#install-in-other-clients) for Claude Code / Claude Desktop (local), or point a remote connector at `POST /mcp` with `Authorization: Bearer $NOTPLOY_MCP_HTTP_TOKEN` for hosted use. Do not expose localhost or a private LAN address directly; use a secure tunnel or reverse proxy.
+- Claude: use the stdio configuration in [Install in other clients](#install-in-other-clients) for Claude Code / Claude Desktop (local), or point a remote connector at `POST /mcp` with `Authorization: Bearer $ASTRON_COLLECTION_MCP_HTTP_TOKEN` for hosted use. Do not expose localhost or a private LAN address directly; use a secure tunnel or reverse proxy.
 - ChatGPT: connect via the custom/developer MCP workflow against the remote HTTP endpoint (`/mcp`, Streamable HTTP). Private workspace installation and public directory listing are separate review tracks; store approval is never guaranteed. Never publish credentials, private endpoint details or SGE-internal infrastructure configuration.
-- Network reachability: a cloud-hosted assistant cannot reach `localhost` or a private network. For homelab/private deployments, run the HTTP transport behind an authenticated, TLS-terminated reverse proxy or tunnel, keep `NOTPLOY_MCP_MODE=business`, and scope the API key to least privilege.
+- Network reachability: a cloud-hosted assistant cannot reach `localhost` or a private network. For homelab/private deployments, run the HTTP transport behind an authenticated, TLS-terminated reverse proxy or tunnel, keep `ASTRON_COLLECTION_MCP_MODE=business`, and scope the API key to least privilege.
 
 ### Connection health
 
@@ -671,23 +671,23 @@ Join the [Notploy Discord](https://discord.gg/GUkDugVh34) for questions, or open
 { "name": "get_connection_status", "arguments": {} }
 ```
 
-Validates `NOTPLOY_URL` / `NOTPLOY_API_KEY`, resolves user, organization and effective permissions server-side, and reports environment, catalog mode and revocation guidance. Use it before any mutating workflow and after key rotation.
+Validates `ASTRON_COLLECTION_URL` / `ASTRON_COLLECTION_API_KEY`, resolves user, organization and effective permissions server-side, and reports environment, catalog mode and revocation guidance. Use it before any mutating workflow and after key rotation.
 
 ## Related resources
 
 ### Official
 
-- Product docs: [docs.notploy.com](https://docs.notploy.com)
-- Website: [notploy.com](https://notploy.com)
-- Hosted platform: [app.notploy.com](https://app.notploy.com)
+- Product docs: [docs.astron-collection.com](https://docs.astron-collection.com)
+- Website: [astron-collection.com](https://astron-collection.com)
+- Hosted platform: [app.astron-collection.com](https://app.astron-collection.com)
 - CLI: [`packages/cli`](../cli/readme.md)
 - TypeScript SDK: [`packages/sdk`](../sdk/README.md)
 - Monorepo overview: [`README.md`](../../README.md)
 
 ### Community
 
-- Questions and discussions: [Notploy Discord](https://discord.gg/GUkDugVh34)
-- Bugs and feature requests: [GitHub Issues](https://github.com/skygenesisenterprise/notploy/issues)
+- Questions and discussions: [Astron Collection Discord](https://discord.gg/GUkDugVh34)
+- Bugs and feature requests: [GitHub Issues](https://github.com/skygenesisenterprise/astron-collection/issues)
 - Contribution guide: [`.github/CONTRIBUTING.md`](../../.github/CONTRIBUTING.md)
 
 ### Commercial
@@ -712,4 +712,4 @@ This package is licensed under the [MIT License](LICENSE).
 
 ## Note
 
-`@notploy/mcp` is an open-source package maintained by [Sky Genesis Enterprise](https://skygenesisenterprise.com). Links to external services are provided for convenience and do not imply endorsement. Check each service's own terms before relying on it in production.
+`@astron-collection/mcp` is an open-source package maintained by [Sky Genesis Enterprise](https://skygenesisenterprise.com). Links to external services are provided for convenience and do not imply endorsement. Check each service's own terms before relying on it in production.

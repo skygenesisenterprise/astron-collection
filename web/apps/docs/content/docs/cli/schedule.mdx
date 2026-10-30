@@ -1,27 +1,27 @@
 ---
 title: "Schedules"
-description: "Cron jobs that run a shell command inside a deployed service. Generated from the `notploy` command surface."
+description: "Cron jobs that run a shell command inside a deployed service. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Cron jobs that run a shell command inside a deployed service.
 
-`notploy schedule` exposes **6 commands**. They map one-to-one onto the `schedule.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection schedule` exposes **6 commands**. They map one-to-one onto the `schedule.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy schedule --help` to list these commands in your terminal, or
-	`notploy schedule <command> --help` for a single command.
+	Run `astron-collection schedule --help` to list these commands in your terminal, or
+	`astron-collection schedule <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy schedule create`
+### `astron-collection schedule create`
 
 Calls `POST /api/trpc/schedule.create`.
 
 ```bash
-notploy schedule create --name <value> --cronExpression <value> --command <value> [options]
+astron-collection schedule create --name <value> --cronExpression <value> --command <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -33,7 +33,7 @@ notploy schedule create --name <value> --cronExpression <value> --command <value
 | `--appName <value>` | string | No | — |
 | `--serviceName <value>` | string | No | — |
 | `--shellType <value>` | string | No | `bash`, `sh` |
-| `--scheduleType <value>` | string | No | `application`, `compose`, `server`, `notploy-server` |
+| `--scheduleType <value>` | string | No | `application`, `compose`, `server`, `astron-collection-server` |
 | `--command <value>` | string | Yes | — |
 | `--script <value>` | string | No | — |
 | `--applicationId <value>` | string | No | — |
@@ -46,12 +46,12 @@ notploy schedule create --name <value> --cronExpression <value> --command <value
 | `--createdAt <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy schedule delete`
+### `astron-collection schedule delete`
 
 Calls `POST /api/trpc/schedule.delete`.
 
 ```bash
-notploy schedule delete --scheduleId <value> [options]
+astron-collection schedule delete --scheduleId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -59,26 +59,26 @@ notploy schedule delete --scheduleId <value> [options]
 | `--scheduleId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy schedule list`
+### `astron-collection schedule list`
 
 Calls `GET /api/trpc/schedule.list`.
 
 ```bash
-notploy schedule list --id <value> --scheduleType <value> [options]
+astron-collection schedule list --id <value> --scheduleType <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--id <value>` | string | Yes | — |
-| `--scheduleType <value>` | string | Yes | `application`, `compose`, `server`, `notploy-server` |
+| `--scheduleType <value>` | string | Yes | `application`, `compose`, `server`, `astron-collection-server` |
 | `--profile <name>` | string | No | — |
 
-### `notploy schedule one`
+### `astron-collection schedule one`
 
 Calls `GET /api/trpc/schedule.one`.
 
 ```bash
-notploy schedule one --scheduleId <value> [options]
+astron-collection schedule one --scheduleId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -86,12 +86,12 @@ notploy schedule one --scheduleId <value> [options]
 | `--scheduleId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy schedule run-manually`
+### `astron-collection schedule run-manually`
 
 Calls `POST /api/trpc/schedule.runManually`.
 
 ```bash
-notploy schedule run-manually --scheduleId <value> [options]
+astron-collection schedule run-manually --scheduleId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -99,12 +99,12 @@ notploy schedule run-manually --scheduleId <value> [options]
 | `--scheduleId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy schedule update`
+### `astron-collection schedule update`
 
 Calls `POST /api/trpc/schedule.update`.
 
 ```bash
-notploy schedule update --scheduleId <value> --name <value> --cronExpression <value> --command <value> [options]
+astron-collection schedule update --scheduleId <value> --name <value> --cronExpression <value> --command <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -116,7 +116,7 @@ notploy schedule update --scheduleId <value> --name <value> --cronExpression <va
 | `--appName <value>` | string | No | — |
 | `--serviceName <value>` | string | No | — |
 | `--shellType <value>` | string | No | `bash`, `sh` |
-| `--scheduleType <value>` | string | No | `application`, `compose`, `server`, `notploy-server` |
+| `--scheduleType <value>` | string | No | `application`, `compose`, `server`, `astron-collection-server` |
 | `--command <value>` | string | Yes | — |
 | `--script <value>` | string | No | — |
 | `--applicationId <value>` | string | No | — |

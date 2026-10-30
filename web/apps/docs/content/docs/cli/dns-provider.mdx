@@ -1,39 +1,39 @@
 ---
 title: "DNS providers"
-description: "Zones and records for connected DNS providers such as Cloudflare and Route 53. Generated from the `notploy` command surface."
+description: "Zones and records for connected DNS providers such as Cloudflare and Route 53. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Zones and records for connected DNS providers such as Cloudflare and Route 53.
 
-`notploy dns-provider` exposes **15 commands**. They map one-to-one onto the `dns-provider.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection dns-provider` exposes **15 commands**. They map one-to-one onto the `dns-provider.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy dns-provider --help` to list these commands in your terminal, or
-	`notploy dns-provider <command> --help` for a single command.
+	Run `astron-collection dns-provider --help` to list these commands in your terminal, or
+	`astron-collection dns-provider <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy dns-provider all`
+### `astron-collection dns-provider all`
 
 Calls `GET /api/trpc/dnsProvider.all`.
 
 ```bash
-notploy dns-provider all [options]
+astron-collection dns-provider all [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy dns-provider create`
+### `astron-collection dns-provider create`
 
 Calls `POST /api/trpc/dnsProvider.create`.
 
 ```bash
-notploy dns-provider create --name <value> --config <json> [options]
+astron-collection dns-provider create --name <value> --config <json> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -42,12 +42,12 @@ notploy dns-provider create --name <value> --config <json> [options]
 | `--config <json>` | object | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy dns-provider create-record`
+### `astron-collection dns-provider create-record`
 
 Calls `POST /api/trpc/dnsProvider.createRecord`.
 
 ```bash
-notploy dns-provider create-record --type <value> --name <value> --content <value> --dnsProviderId <value> --zoneId <value> [options]
+astron-collection dns-provider create-record --type <value> --name <value> --content <value> --dnsProviderId <value> --zoneId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -64,12 +64,12 @@ notploy dns-provider create-record --type <value> --name <value> --content <valu
 | `--zoneId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy dns-provider delete-record`
+### `astron-collection dns-provider delete-record`
 
 Calls `POST /api/trpc/dnsProvider.deleteRecord`.
 
 ```bash
-notploy dns-provider delete-record --dnsProviderId <value> --zoneId <value> --recordId <value> [options]
+astron-collection dns-provider delete-record --dnsProviderId <value> --zoneId <value> --recordId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -79,24 +79,24 @@ notploy dns-provider delete-record --dnsProviderId <value> --zoneId <value> --re
 | `--recordId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy dns-provider descriptors`
+### `astron-collection dns-provider descriptors`
 
 Calls `GET /api/trpc/dnsProvider.descriptors`.
 
 ```bash
-notploy dns-provider descriptors [options]
+astron-collection dns-provider descriptors [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy dns-provider export-zone`
+### `astron-collection dns-provider export-zone`
 
 Calls `GET /api/trpc/dnsProvider.exportZone`.
 
 ```bash
-notploy dns-provider export-zone --dnsProviderId <value> --zoneId <value> [options]
+astron-collection dns-provider export-zone --dnsProviderId <value> --zoneId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -105,12 +105,12 @@ notploy dns-provider export-zone --dnsProviderId <value> --zoneId <value> [optio
 | `--zoneId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy dns-provider health`
+### `astron-collection dns-provider health`
 
 Calls `GET /api/trpc/dnsProvider.health`.
 
 ```bash
-notploy dns-provider health --dnsProviderId <value> [options]
+astron-collection dns-provider health --dnsProviderId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -118,12 +118,12 @@ notploy dns-provider health --dnsProviderId <value> [options]
 | `--dnsProviderId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy dns-provider import-zone`
+### `astron-collection dns-provider import-zone`
 
 Calls `POST /api/trpc/dnsProvider.importZone`.
 
 ```bash
-notploy dns-provider import-zone --dnsProviderId <value> --zoneId <value> --content <value> [options]
+astron-collection dns-provider import-zone --dnsProviderId <value> --zoneId <value> --content <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -133,12 +133,12 @@ notploy dns-provider import-zone --dnsProviderId <value> --zoneId <value> --cont
 | `--content <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy dns-provider list-records`
+### `astron-collection dns-provider list-records`
 
 Calls `GET /api/trpc/dnsProvider.listRecords`.
 
 ```bash
-notploy dns-provider list-records --dnsProviderId <value> --zoneId <value> [options]
+astron-collection dns-provider list-records --dnsProviderId <value> --zoneId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -147,12 +147,12 @@ notploy dns-provider list-records --dnsProviderId <value> --zoneId <value> [opti
 | `--zoneId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy dns-provider list-zones`
+### `astron-collection dns-provider list-zones`
 
 Calls `GET /api/trpc/dnsProvider.listZones`.
 
 ```bash
-notploy dns-provider list-zones --dnsProviderId <value> [options]
+astron-collection dns-provider list-zones --dnsProviderId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -160,12 +160,12 @@ notploy dns-provider list-zones --dnsProviderId <value> [options]
 | `--dnsProviderId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy dns-provider one`
+### `astron-collection dns-provider one`
 
 Calls `GET /api/trpc/dnsProvider.one`.
 
 ```bash
-notploy dns-provider one --dnsProviderId <value> [options]
+astron-collection dns-provider one --dnsProviderId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -173,12 +173,12 @@ notploy dns-provider one --dnsProviderId <value> [options]
 | `--dnsProviderId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy dns-provider remove`
+### `astron-collection dns-provider remove`
 
 Calls `POST /api/trpc/dnsProvider.remove`.
 
 ```bash
-notploy dns-provider remove --dnsProviderId <value> [options]
+astron-collection dns-provider remove --dnsProviderId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -186,12 +186,12 @@ notploy dns-provider remove --dnsProviderId <value> [options]
 | `--dnsProviderId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy dns-provider test-connection`
+### `astron-collection dns-provider test-connection`
 
 Calls `POST /api/trpc/dnsProvider.testConnection`.
 
 ```bash
-notploy dns-provider test-connection [options]
+astron-collection dns-provider test-connection [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -200,12 +200,12 @@ notploy dns-provider test-connection [options]
 | `--config <json>` | object | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy dns-provider update`
+### `astron-collection dns-provider update`
 
 Calls `POST /api/trpc/dnsProvider.update`.
 
 ```bash
-notploy dns-provider update --dnsProviderId <value> --name <value> --config <json> [options]
+astron-collection dns-provider update --dnsProviderId <value> --name <value> --config <json> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -215,12 +215,12 @@ notploy dns-provider update --dnsProviderId <value> --name <value> --config <jso
 | `--config <json>` | object | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy dns-provider update-record`
+### `astron-collection dns-provider update-record`
 
 Calls `POST /api/trpc/dnsProvider.updateRecord`.
 
 ```bash
-notploy dns-provider update-record --type <value> --name <value> --content <value> --dnsProviderId <value> --zoneId <value> --recordId <value> [options]
+astron-collection dns-provider update-record --type <value> --name <value> --content <value> --dnsProviderId <value> --zoneId <value> --recordId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |

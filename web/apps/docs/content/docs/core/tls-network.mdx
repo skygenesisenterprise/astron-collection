@@ -1,9 +1,9 @@
 ---
 title: TLS & network hardening
-description: "Reduce the network attack surface of a Notploy installation."
+description: "Reduce the network attack surface of a Astron Collection installation."
 ---
 
-**Purpose** — Notploy necessarily exposes services to the internet. This page explains how to keep that exposure intentional and minimal.
+**Purpose** — Astron Collection necessarily exposes services to the internet. This page explains how to keep that exposure intentional and minimal.
 
 ## TLS
 
@@ -11,7 +11,7 @@ description: "Reduce the network attack surface of a Notploy installation."
 - **Custom certificates** — bring your own certificate as a [resource](/docs/core/certificates) for domains that need it.
 - **Panel TLS** — put the dashboard itself behind a domain with TLS before exposing it.
 
-Redirect HTTP to HTTPS so credentials and tokens never travel in clear text. Notploy's generated Application routes include an HTTPS redirect middleware by default.
+Redirect HTTP to HTTPS so credentials and tokens never travel in clear text. Astron Collection's generated Application routes include an HTTPS redirect middleware by default.
 
 ## Inventory what is exposed
 

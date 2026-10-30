@@ -15,7 +15,7 @@ import {
 	trackCommunityRepository,
 	untrackCommunityRepository,
 	updateCommunitySource,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createTRPCRouter, withPermission } from "@/server/api/trpc";

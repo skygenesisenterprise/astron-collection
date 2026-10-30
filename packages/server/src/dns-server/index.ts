@@ -1,14 +1,14 @@
 import dgram from "node:dgram";
 import net from "node:net";
-import { db } from "@notploy/server/db";
-import { dnsRecord } from "@notploy/server/db/schema";
+import { db } from "@astron-collection/server/db";
+import { dnsRecord } from "@astron-collection/server/db/schema";
 import { and, eq } from "drizzle-orm";
 
 /**
  * Minimal authoritative-forwarding DNS server. Names that fall inside a
- * Notploy Internal DNS zone (`dns_zone` rows owned by a `notploy-internal`
+ * Astron Collection Internal DNS zone (`dns_zone` rows owned by a `astron-collection-internal`
  * provider) are answered from `dns_record`; every other name is forwarded to
- * the configured upstream resolvers. That is what makes `gitlab.notploy.lan`
+ * the configured upstream resolvers. That is what makes `gitlab.astron-collection.lan`
  * resolve for LAN clients while the rest of DNS keeps working.
  */
 
@@ -215,7 +215,7 @@ const getInternalZones = async (): Promise<InternalZone[]> => {
 	}
 	const zones = await db.query.dnsZone.findMany({ with: { provider: true } });
 	const internal = zones
-		.filter((zone) => zone.provider?.providerType === "notploy-internal")
+		.filter((zone) => zone.provider?.providerType === "astron-collection-internal")
 		.map((zone) => ({ dnsZoneId: zone.dnsZoneId, name: normalizeName(zone.name) }));
 	zoneCache = { at: Date.now(), zones: internal };
 	return internal;
@@ -262,7 +262,7 @@ const resolveInternal = async (
 };
 
 const parseUpstreams = () =>
-	(process.env.NOTPLOY_DNS_UPSTREAM ?? "1.1.1.1,8.8.8.8")
+	(process.env.ASTRON_COLLECTION_DNS_UPSTREAM ?? "1.1.1.1,8.8.8.8")
 		.split(",")
 		.map((server) => server.trim())
 		.filter(Boolean);
@@ -316,16 +316,16 @@ export interface InternalDnsServerOptions {
 /**
  * Starts the UDP and TCP listeners. Binding is best-effort: an unavailable
  * port (for example 53 in a container without the capability) is logged and
- * never crashes the main Notploy server.
+ * never crashes the main Astron Collection server.
  */
 export const startInternalDnsServer = (options: InternalDnsServerOptions = {}) => {
 	const enabled =
-		options.enabled ?? process.env.NOTPLOY_DNS_SERVER !== "false";
+		options.enabled ?? process.env.ASTRON_COLLECTION_DNS_SERVER !== "false";
 	if (!enabled) {
 		return;
 	}
-	const host = options.host ?? process.env.NOTPLOY_DNS_HOST ?? "0.0.0.0";
-	const port = options.port ?? Number.parseInt(process.env.NOTPLOY_DNS_PORT ?? "53", 10);
+	const host = options.host ?? process.env.ASTRON_COLLECTION_DNS_HOST ?? "0.0.0.0";
+	const port = options.port ?? Number.parseInt(process.env.ASTRON_COLLECTION_DNS_PORT ?? "53", 10);
 
 	const udp = dgram.createSocket("udp4");
 	udp.on("message", (message, remote) => {

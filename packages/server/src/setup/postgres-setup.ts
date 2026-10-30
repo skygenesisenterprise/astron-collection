@@ -3,26 +3,26 @@ import { docker } from "../constants";
 import { pullImage } from "../utils/docker/utils";
 export const initializePostgres = async () => {
 	const imageName = "postgres:16";
-	const containerName = "notploy-postgres";
+	const containerName = "astron-collection-postgres";
 	const settings: CreateServiceOptions = {
 		Name: containerName,
 		TaskTemplate: {
 			ContainerSpec: {
 				Image: imageName,
 				Env: [
-					"POSTGRES_USER=notploy",
-					"POSTGRES_DB=notploy",
+					"POSTGRES_USER=astron-collection",
+					"POSTGRES_DB=astron-collection",
 					"POSTGRES_PASSWORD=amukds4wi9001583845717ad2",
 				],
 				Mounts: [
 					{
 						Type: "volume",
-						Source: "notploy-postgres",
+						Source: "astron-collection-postgres",
 						Target: "/var/lib/postgresql/data",
 					},
 				],
 			},
-			Networks: [{ Target: "notploy-network" }],
+			Networks: [{ Target: "astron-collection-network" }],
 			Placement: {
 				Constraints: ["node.role==manager"],
 			},

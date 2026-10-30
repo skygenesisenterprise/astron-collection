@@ -1,19 +1,19 @@
 /**
  * Product the instance runs as, as seen by the UI. Mirrors the server's
- * `NotployProduct` without importing the server barrel (which is server-only).
+ * `AstronCollectionProduct` without importing the server barrel (which is server-only).
  */
 export type AppProduct = "self" | "cloud" | "console";
 
 /**
- * Branded names for the three Notploy environments:
- *   self    → "Notploy"
- *   cloud   → "Notploy Cloud"
- *   console → "Notploy Console"
+ * Branded names for the three Astron Collection environments:
+ *   self    → "Astron Collection"
+ *   cloud   → "Astron Collection Cloud"
+ *   console → "Astron Collection Console"
  */
 export const PRODUCT_BRAND_NAMES: Record<AppProduct, string> = {
-	self: "Notploy",
-	cloud: "Notploy Cloud",
-	console: "Notploy Console",
+	self: "Astron Collection",
+	cloud: "Astron Collection Cloud",
+	console: "Astron Collection Console",
 };
 
 /** Brand name of a product; falls back to self-hosted while loading/unknown. */

@@ -1,6 +1,6 @@
 {
 	"title": "Core",
-	"description": "Everything about deploying and operating Notploy.",
+	"description": "Everything about deploying and operating Astron Collection.",
 	"icon": "Package",
 	"root": true,
 	"pages": [

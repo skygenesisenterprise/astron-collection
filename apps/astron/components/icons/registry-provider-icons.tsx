@@ -21,7 +21,7 @@ import {
  * Providers are described by the server catalogue; this module only decides how
  * each one is drawn. Brands published by simple-icons are used where they exist
  * (`lib/registry-provider-brand-icons.ts`); the rest fall back to a neutral
- * glyph, and any provider Notploy has no mark for renders as the generic OCI
+ * glyph, and any provider Astron Collection has no mark for renders as the generic OCI
  * icon — the same adapter that serves it.
  */
 type IconProps = { className?: string };

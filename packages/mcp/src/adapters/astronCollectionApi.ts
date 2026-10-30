@@ -6,7 +6,7 @@ import { getRegisteredSecrets } from "../observability/secrets.js";
 import { createLogger } from "../utils/logger.js";
 import { redactKnownSecrets } from "../utils/redactSensitive.js";
 
-const logger = createLogger("NotployApi");
+const logger = createLogger("AstronCollectionApi");
 
 const PACKAGE_VERSION = "0.31.0";
 const MAX_RESPONSE_BYTES = 16 * 1024 * 1024;
@@ -80,8 +80,8 @@ export function normalizeApiError(error: unknown): ApiError {
     const serverMessage = extractServerMessage(axiosError.response.data);
     const message =
       status >= 500
-        ? `Notploy API returned HTTP ${status}`
-        : (serverMessage ?? `Notploy API returned HTTP ${status}`);
+        ? `Astron Collection API returned HTTP ${status}`
+        : (serverMessage ?? `Astron Collection API returned HTTP ${status}`);
 
     return new ApiError({
       message: redactKnownSecrets(message, getRegisteredSecrets()),
@@ -93,14 +93,14 @@ export function normalizeApiError(error: unknown): ApiError {
 
   if (axiosError.code === "ECONNABORTED" || axiosError.code === "ETIMEDOUT") {
     return new ApiError({
-      message: "The Notploy API did not respond before the timeout",
+      message: "The Astron Collection API did not respond before the timeout",
       code: "timeout",
       retryable: true,
     });
   }
 
   return new ApiError({
-    message: "Could not reach the Notploy API",
+    message: "Could not reach the Astron Collection API",
     code: "network_error",
     retryable: true,
   });
@@ -131,7 +131,7 @@ function abortableDelay(ms: number, signal?: AbortSignal): Promise<void> {
   });
 }
 
-export class NotployApi implements ApiPort {
+export class AstronCollectionApi implements ApiPort {
   private readonly http: AxiosInstance;
   private readonly config: McpConfig;
 
@@ -140,7 +140,7 @@ export class NotployApi implements ApiPort {
     this.http =
       http ??
       axios.create({
-        baseURL: `${config.notployUrl}/api`,
+        baseURL: `${config.astronCollectionUrl}/api`,
         timeout: Math.min(config.timeoutMs, config.limits.toolTimeoutMs),
         maxContentLength: MAX_RESPONSE_BYTES,
         maxBodyLength: MAX_BODY_BYTES,
@@ -148,7 +148,7 @@ export class NotployApi implements ApiPort {
           "Content-Type": "application/json",
           Accept: "application/json",
           "x-api-key": config.apiKey,
-          "User-Agent": `notploy-mcp/${PACKAGE_VERSION}`,
+          "User-Agent": `astron-collection-mcp/${PACKAGE_VERSION}`,
           ...config.customHeaders,
         },
       });

@@ -5,7 +5,7 @@ import { source } from "@/lib/source";
 // no-op change for the standalone server.
 export const dynamic = "force-static";
 
-const baseUrl = "https://docs.notploy.com";
+const baseUrl = "https://docs.astron-collection.com";
 
 export function GET() {
 	const pages = source.getPages();
@@ -14,9 +14,9 @@ export function GET() {
 	);
 
 	const lines = [
-		"# Notploy Documentation",
+		"# Astron Collection Documentation",
 		"",
-		"> Notploy is an open-source, self-hostable Platform as a Service (PaaS) that simplifies the deployment and management of applications, databases, and services.",
+		"> Astron Collection is an open-source, self-hostable Platform as a Service (PaaS) that simplifies the deployment and management of applications, databases, and services.",
 		"",
 		"## Docs",
 		"",

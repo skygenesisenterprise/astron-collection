@@ -1,7 +1,7 @@
 import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
-const OPENAPI_URL = process.env.NOTPLOY_OPENAPI_URL ?? "https://docs.notploy.com/openapi.json";
+const OPENAPI_URL = process.env.ASTRON_COLLECTION_OPENAPI_URL ?? "https://docs.astron-collection.com/openapi.json";
 const OUTPUT_PATH = resolve(import.meta.dirname, "../openapi.json");
 
 async function main() {

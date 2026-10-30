@@ -22,9 +22,9 @@ const LOGO_MIME_TYPES: Record<string, string> = {
 /**
  * Walks up from the working directory until a `templates/blueprints` directory
  * is found, so the monorepo layout works whether we run from packages/server,
- * from apps/notploy, or through the standalone esbuild bundle.
+ * from apps/astron-collection, or through the standalone esbuild bundle.
  *
- * In a production image only apps/notploy artifacts are shipped (/app), so no
+ * In a production image only apps/astron-collection artifacts are shipped (/app), so no
  * blueprints directory exists and callers keep using the remote gallery.
  */
 function discoverBlueprintsDir(): string | null {
@@ -49,8 +49,8 @@ let cachedDir: string | null | undefined;
  */
 export function getLocalBlueprintsDir(): string | null {
 	if (cachedDir !== undefined) return cachedDir;
-	cachedDir = process.env.NOTPLOY_TEMPLATES_DIR
-		? path.resolve(process.env.NOTPLOY_TEMPLATES_DIR)
+	cachedDir = process.env.ASTRON_COLLECTION_TEMPLATES_DIR
+		? path.resolve(process.env.ASTRON_COLLECTION_TEMPLATES_DIR)
 		: discoverBlueprintsDir();
 	if (cachedDir && !existsSync(cachedDir)) {
 		cachedDir = null;

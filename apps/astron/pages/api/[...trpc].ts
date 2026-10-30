@@ -2,8 +2,8 @@ import {
 	OPENAPI_MAX_JSON_BODY_SIZE,
 	OPENAPI_MAX_UPLOAD_SIZE,
 	validateRequest,
-} from "@notploy/server";
-import { createOpenApiNextHandler } from "@notploy/trpc-openapi";
+} from "@astron-collection/server";
+import { createOpenApiNextHandler } from "@astron-collection/trpc-openapi";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { appRouter } from "@/server/api/root";
 import { createTRPCContext } from "@/server/api/trpc";

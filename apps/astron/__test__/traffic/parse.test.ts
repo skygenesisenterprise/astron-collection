@@ -4,14 +4,14 @@ import {
 	deviceTypeOf,
 	normalizeHost,
 	normalizeRoute,
-	NOTPLOY_SERVICE_NAME,
+	ASTRON_COLLECTION_SERVICE_NAME,
 	parseTraefikAccessLog,
 	parseTraefikAccessLogLine,
 	referrerHostOf,
 	resolvePropertyId,
 	statusClassOf,
 	stripQueryAndHash,
-} from "@notploy/server/utils/traffic/parse";
+} from "@astron-collection/server/utils/traffic/parse";
 import { describe, expect, it } from "vitest";
 
 const traefikLine = (overrides: Record<string, unknown> = {}) =>
@@ -23,12 +23,12 @@ const traefikLine = (overrides: Record<string, unknown> = {}) =>
 		Duration: 45_000_000,
 		OriginStatus: 200,
 		RequestContentSize: 12,
-		RequestHost: "notploy.com",
+		RequestHost: "astron-collection.com",
 		RequestMethod: "get",
 		RequestPath: "/pricing?token=super-secret#anchor",
 		RequestProtocol: "HTTP/2.0",
-		RouterName: "notploy-com-web@file",
-		ServiceName: NOTPLOY_SERVICE_NAME,
+		RouterName: "astron-collection-com-web@file",
+		ServiceName: ASTRON_COLLECTION_SERVICE_NAME,
 		StartUTC: "2026-10-12T09:04:05.123456789Z",
 		entryPointName: "websecure",
 		level: "info",
@@ -93,8 +93,8 @@ describe("normalizeRoute", () => {
 
 describe("host and referrer normalisation", () => {
 	it("lowercases hosts and drops the port", () => {
-		expect(normalizeHost("NotPloy.COM:8443")).toBe("notploy.com");
-		expect(normalizeHost("notploy.com.")).toBe("notploy.com");
+		expect(normalizeHost("astron-collection.COM:8443")).toBe("astron-collection.com");
+		expect(normalizeHost("astron-collection.com.")).toBe("astron-collection.com");
 		expect(normalizeHost("[::1]:3000")).toBe("::1");
 		expect(normalizeHost(null)).toBe("");
 	});
@@ -142,7 +142,7 @@ describe("parseTraefikAccessLogLine", () => {
 		const event = parseTraefikAccessLogLine(traefikLine());
 		expect(event).not.toBeNull();
 		expect(event).toMatchObject({
-			host: "notploy.com",
+			host: "astron-collection.com",
 			route: "/pricing",
 			method: "GET",
 			status: 200,
@@ -150,7 +150,7 @@ describe("parseTraefikAccessLogLine", () => {
 			bytesIn: 12,
 			bytesOut: 4096,
 			durationMs: 45,
-			serviceName: NOTPLOY_SERVICE_NAME,
+			serviceName: ASTRON_COLLECTION_SERVICE_NAME,
 			protocol: "HTTP/2.0",
 		});
 		expect(event?.timestamp.toISOString()).toBe("2026-10-12T09:04:05.123Z");
@@ -172,7 +172,7 @@ describe("parseTraefikAccessLogLine", () => {
 		// A record truncated by log rotation must be dropped, not guessed at.
 		expect(
 			parseTraefikAccessLogLine(
-				'{"StartUTC":"2026-01-01","RequestHost":"notploy.com"',
+				'{"StartUTC":"2026-01-01","RequestHost":"astron-collection.com"',
 			),
 		).toBeNull();
 	});
@@ -216,17 +216,17 @@ describe("parseTraefikAccessLog", () => {
 
 describe("resolvePropertyId", () => {
 	const properties = [
-		{ id: "apex", domain: "notploy.com", matchesSubdomains: true },
-		{ id: "docs", domain: "docs.notploy.com", matchesSubdomains: false },
-		{ id: "api", domain: "api.notploy.com", matchesSubdomains: false },
+		{ id: "apex", domain: "astron-collection.com", matchesSubdomains: true },
+		{ id: "docs", domain: "docs.astron-collection.com", matchesSubdomains: false },
+		{ id: "api", domain: "api.astron-collection.com", matchesSubdomains: false },
 	];
 
 	it("prefers the most specific declared domain", () => {
-		expect(resolvePropertyId("notploy.com", properties)).toBe("apex");
-		expect(resolvePropertyId("www.notploy.com", properties)).toBe("apex");
-		expect(resolvePropertyId("docs.notploy.com", properties)).toBe("docs");
+		expect(resolvePropertyId("astron-collection.com", properties)).toBe("apex");
+		expect(resolvePropertyId("www.astron-collection.com", properties)).toBe("apex");
+		expect(resolvePropertyId("docs.astron-collection.com", properties)).toBe("docs");
 		expect(
-			resolvePropertyId("deep.docs.notploy.com", properties),
+			resolvePropertyId("deep.docs.astron-collection.com", properties),
 		).toBe("apex");
 	});
 
@@ -237,8 +237,8 @@ describe("resolvePropertyId", () => {
 
 	it("ignores sub-domains when the property forbids them", () => {
 		expect(
-			resolvePropertyId("extra.api.notploy.com", [
-				{ id: "api", domain: "api.notploy.com", matchesSubdomains: false },
+			resolvePropertyId("extra.api.astron-collection.com", [
+				{ id: "api", domain: "api.astron-collection.com", matchesSubdomains: false },
 			]),
 		).toBeUndefined();
 	});

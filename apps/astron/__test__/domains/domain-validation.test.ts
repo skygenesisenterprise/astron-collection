@@ -2,7 +2,7 @@ import os from "node:os";
 import {
 	getServerIpCandidates,
 	validateDomain,
-} from "@notploy/server/services/domain";
+} from "@astron-collection/server/services/domain";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
@@ -21,19 +21,19 @@ vi.mock("node:dns", () => ({
 	},
 }));
 
-vi.mock("@notploy/server/utils/process/execAsync", () => ({
+vi.mock("@astron-collection/server/utils/process/execAsync", () => ({
 	execAsyncRemote: mocks.execAsyncRemote,
 }));
 
-vi.mock("@notploy/server/services/server", () => ({
+vi.mock("@astron-collection/server/services/server", () => ({
 	findServerById: mocks.findServerById,
 }));
 
-vi.mock("@notploy/server/services/web-server-settings", () => ({
+vi.mock("@astron-collection/server/services/web-server-settings", () => ({
 	getWebServerSettings: mocks.getWebServerSettings,
 }));
 
-vi.mock("@notploy/server/wss/utils", () => ({
+vi.mock("@astron-collection/server/wss/utils", () => ({
 	getPublicIpWithFallback: mocks.getPublicIpWithFallback,
 }));
 
@@ -67,7 +67,7 @@ describe("getServerIpCandidates", () => {
 		);
 	});
 
-	it("includes every address assigned to the local Notploy host", async () => {
+	it("includes every address assigned to the local Astron Collection host", async () => {
 		mocks.getWebServerSettings.mockResolvedValue({
 			serverIp: "10.0.0.10",
 		});
@@ -158,7 +158,7 @@ describe("validateDomain", () => {
 			reason: expect.stringContaining("local DNS"),
 		});
 		await expect(
-			validateDomain("gitlab.notploy.local"),
+			validateDomain("gitlab.astron-collection.local"),
 		).resolves.toMatchObject({
 			isValid: true,
 			skipped: true,

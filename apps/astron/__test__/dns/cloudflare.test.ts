@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const mockFetch = vi.fn();
 global.fetch = mockFetch as typeof fetch;
 
-import { cloudflareClient } from "@notploy/server/utils/dns/cloudflare";
+import { cloudflareClient } from "@astron-collection/server/utils/dns/cloudflare";
 
 const jsonResponse = (body: unknown, ok = true, status = 200) =>
 	({

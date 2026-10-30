@@ -1,7 +1,7 @@
-import { db } from "@notploy/server/db";
-import { notifications } from "@notploy/server/db/schema";
-import BuildFailedEmail from "@notploy/server/emails/emails/build-failed";
-import { redactSecrets } from "@notploy/server/utils/security/redact";
+import { db } from "@astron-collection/server/db";
+import { notifications } from "@astron-collection/server/db/schema";
+import BuildFailedEmail from "@astron-collection/server/emails/emails/build-failed";
+import { redactSecrets } from "@astron-collection/server/utils/security/redact";
 import { render } from "@react-email/components";
 import { format } from "date-fns";
 import { and, eq } from "drizzle-orm";
@@ -95,7 +95,7 @@ export const sendBuildErrorNotifications = async ({
 				if (email) {
 					await sendEmailNotification(
 						email,
-						"Build failed for notploy",
+						"Build failed for astron-collection",
 						template,
 					);
 				}
@@ -103,7 +103,7 @@ export const sendBuildErrorNotifications = async ({
 				if (resend) {
 					await sendResendNotification(
 						resend,
-						"Build failed for notploy",
+						"Build failed for astron-collection",
 						template,
 					);
 				}
@@ -160,7 +160,7 @@ export const sendBuildErrorNotifications = async ({
 					],
 					timestamp: date.toISOString(),
 					footer: {
-						text: "Notploy Build Notification",
+						text: "Astron Collection Build Notification",
 					},
 				});
 			}
@@ -273,7 +273,7 @@ ${errorMessage}
 
 [View Build Details](${buildLink})`,
 					channel: mattermost.channel,
-					username: mattermost.username || "Notploy Bot",
+					username: mattermost.username || "Astron Collection Bot",
 				});
 			}
 

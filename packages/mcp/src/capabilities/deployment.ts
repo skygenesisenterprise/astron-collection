@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ApiError } from "../adapters/notployApi.js";
+import { ApiError } from "../adapters/astronCollectionApi.js";
 import type {
   CapabilityExecutionContext,
   CapabilityOutcome,
@@ -21,7 +21,7 @@ const applicationId = z
   .string()
   .min(1)
   .max(128)
-  .describe("Notploy application identifier (not the application name)");
+  .describe("Astron Collection application identifier (not the application name)");
 
 const approvalToken = z
   .string()
@@ -183,7 +183,7 @@ export const executeDeploymentCapability = defineCapability({
   name: "execute_deployment",
   title: "Execute deployment",
   description:
-    "Queues a deployment for an application after permission, policy and approval checks. Returns immediately with an operationId; poll get_operation_status for the verified outcome. This is a high-impact capability: it requires deployment create permission, a valid approval token (NOTPLOY_MCP_APPROVAL_TOKEN) and, when retried, an idempotencyKey.",
+    "Queues a deployment for an application after permission, policy and approval checks. Returns immediately with an operationId; poll get_operation_status for the verified outcome. This is a high-impact capability: it requires deployment create permission, a valid approval token (ASTRON_COLLECTION_MCP_APPROVAL_TOKEN) and, when retried, an idempotencyKey.",
   category: "deployment",
   mode: "business",
   source: "business",
@@ -201,7 +201,7 @@ export const executeDeploymentCapability = defineCapability({
   },
   inputSchema: z.object({
     applicationId,
-    title: z.string().min(1).max(200).optional().describe("Deployment title shown in Notploy"),
+    title: z.string().min(1).max(200).optional().describe("Deployment title shown in Astron Collection"),
     description: z.string().max(2_000).optional().describe("Optional deployment description"),
     idempotencyKey,
     approvalToken,
@@ -216,7 +216,7 @@ export const executeDeploymentCapability = defineCapability({
   },
   preconditions: [
     "The identity needs deployment create permission and access to the application.",
-    "A valid approval token must be configured by the Notploy operator.",
+    "A valid approval token must be configured by the Astron Collection operator.",
     "No other deployment should be running; run prepare_deployment first.",
   ],
   verify: async (input, context, outcome) => {
@@ -314,7 +314,7 @@ export const restartApplicationCapability = defineCapability({
     if (!appName) {
       throw new ApiError({
         code: "api_error",
-        message: "The application has no appName; Notploy cannot reload it",
+        message: "The application has no appName; Astron Collection cannot reload it",
       });
     }
 

@@ -938,7 +938,7 @@ describe("external navigation", () => {
 			"support",
 		]);
 		expect(navigation.external.map((item) => item.href)).toEqual([
-			"https://docs.notploy.com/docs/core",
+			"https://docs.astron-collection.com/docs/core",
 			"https://discord.gg/GUkDugVh34",
 		]);
 	});

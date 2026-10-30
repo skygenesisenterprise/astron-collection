@@ -1,4 +1,4 @@
-import type { gcpVaultConfigSchema } from "@notploy/server/db/schema";
+import type { gcpVaultConfigSchema } from "@astron-collection/server/db/schema";
 import { createSign } from "node:crypto";
 import type { z } from "zod";
 import { type VaultClient, vaultFetch } from "./types";

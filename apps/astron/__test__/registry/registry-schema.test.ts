@@ -1,4 +1,4 @@
-import { apiCreateRegistry, apiTestRegistry } from "@notploy/server/db/schema";
+import { apiCreateRegistry, apiTestRegistry } from "@astron-collection/server/db/schema";
 import { describe, expect, it } from "vitest";
 
 describe("Registry Schema - Username case preservation (#4632)", () => {

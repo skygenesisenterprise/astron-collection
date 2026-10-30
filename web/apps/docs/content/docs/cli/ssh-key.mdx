@@ -1,51 +1,51 @@
 ---
 title: "SSH keys"
-description: "SSH keys used to reach servers and clone private repositories. Generated from the `notploy` command surface."
+description: "SSH keys used to reach servers and clone private repositories. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 SSH keys used to reach servers and clone private repositories.
 
-`notploy ssh-key` exposes **7 commands**. They map one-to-one onto the `ssh-key.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection ssh-key` exposes **7 commands**. They map one-to-one onto the `ssh-key.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy ssh-key --help` to list these commands in your terminal, or
-	`notploy ssh-key <command> --help` for a single command.
+	Run `astron-collection ssh-key --help` to list these commands in your terminal, or
+	`astron-collection ssh-key <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy ssh-key all`
+### `astron-collection ssh-key all`
 
 Calls `GET /api/trpc/sshKey.all`.
 
 ```bash
-notploy ssh-key all [options]
+astron-collection ssh-key all [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy ssh-key all-for-apps`
+### `astron-collection ssh-key all-for-apps`
 
 Calls `GET /api/trpc/sshKey.allForApps`.
 
 ```bash
-notploy ssh-key all-for-apps [options]
+astron-collection ssh-key all-for-apps [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy ssh-key create`
+### `astron-collection ssh-key create`
 
 Calls `POST /api/trpc/sshKey.create`.
 
 ```bash
-notploy ssh-key create --name <value> --privateKey <value> --publicKey <value> --organizationId <value> [options]
+astron-collection ssh-key create --name <value> --privateKey <value> --publicKey <value> --organizationId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -57,12 +57,12 @@ notploy ssh-key create --name <value> --privateKey <value> --publicKey <value> -
 | `--organizationId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy ssh-key generate`
+### `astron-collection ssh-key generate`
 
 Calls `POST /api/trpc/sshKey.generate`.
 
 ```bash
-notploy ssh-key generate [options]
+astron-collection ssh-key generate [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -70,12 +70,12 @@ notploy ssh-key generate [options]
 | `--type <value>` | string | No | `rsa`, `ed25519` |
 | `--profile <name>` | string | No | — |
 
-### `notploy ssh-key one`
+### `astron-collection ssh-key one`
 
 Calls `GET /api/trpc/sshKey.one`.
 
 ```bash
-notploy ssh-key one --sshKeyId <value> [options]
+astron-collection ssh-key one --sshKeyId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -83,12 +83,12 @@ notploy ssh-key one --sshKeyId <value> [options]
 | `--sshKeyId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy ssh-key remove`
+### `astron-collection ssh-key remove`
 
 Calls `POST /api/trpc/sshKey.remove`.
 
 ```bash
-notploy ssh-key remove --sshKeyId <value> [options]
+astron-collection ssh-key remove --sshKeyId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -96,12 +96,12 @@ notploy ssh-key remove --sshKeyId <value> [options]
 | `--sshKeyId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy ssh-key update`
+### `astron-collection ssh-key update`
 
 Calls `POST /api/trpc/sshKey.update`.
 
 ```bash
-notploy ssh-key update --sshKeyId <value> [options]
+astron-collection ssh-key update --sshKeyId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |

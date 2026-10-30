@@ -1,16 +1,16 @@
-import { db } from "@notploy/server/db";
+import { db } from "@astron-collection/server/db";
 import {
 	type apiCreateRedis,
 	buildAppName,
 	redis,
-} from "@notploy/server/db/schema";
-import { generatePassword } from "@notploy/server/templates";
-import { buildRedis } from "@notploy/server/utils/databases/redis";
+} from "@astron-collection/server/db/schema";
+import { generatePassword } from "@astron-collection/server/templates";
+import { buildRedis } from "@astron-collection/server/utils/databases/redis";
 import {
 	pullImage,
 	waitForSwarmServiceConvergence,
-} from "@notploy/server/utils/docker/utils";
-import { execAsyncRemote } from "@notploy/server/utils/process/execAsync";
+} from "@astron-collection/server/utils/docker/utils";
+import { execAsyncRemote } from "@astron-collection/server/utils/process/execAsync";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import { quote } from "shell-quote";

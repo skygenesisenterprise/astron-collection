@@ -27,7 +27,7 @@
 		/* Path Aliases */
 		"paths": {
 			"@/*": ["./*"],
-			"@notploy/server/*": ["../../packages/server/src/*"]
+			"@astron-collection/server/*": ["../../packages/server/src/*"]
 		}
 	},
 	"include": [
@@ -42,7 +42,7 @@
 	],
 	"exclude": [
 		"node_modules",
-		"notploy",
+		"astron-collection",
 		"config",
 		"dist",
 		"electron",

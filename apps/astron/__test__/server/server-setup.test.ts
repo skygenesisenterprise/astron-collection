@@ -2,7 +2,7 @@ import { execFileSync, execSync } from "node:child_process";
 import { chmodSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { defaultCommand, reportDockerVersion } from "@notploy/server";
+import { defaultCommand, reportDockerVersion } from "@astron-collection/server";
 import { describe, expect, it } from "vitest";
 
 const resolveBin = (name: string) =>
@@ -13,7 +13,7 @@ const resolveBin = (name: string) =>
  * binary (or nothing), regardless of what the host has installed.
  */
 const makeSandbox = (dockerShim?: string) => {
-	const dir = mkdtempSync(path.join(tmpdir(), "notploy-server-setup-"));
+	const dir = mkdtempSync(path.join(tmpdir(), "astron-collection-server-setup-"));
 	for (const tool of ["awk", "tr"]) {
 		const shim = path.join(dir, tool);
 		writeFileSync(shim, `#!/bin/sh\nexec ${resolveBin(tool)} "$@"\n`);

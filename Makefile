@@ -1,4 +1,4 @@
-# Notploy — developer & operator interface.
+# Astron Collection — developer & operator interface.
 #
 # A thin layer over the tools that already exist in the repository (pnpm,
 # docker, docker compose). No build or deployment logic is duplicated here:
@@ -10,22 +10,22 @@ SHELL := /bin/bash
 .DEFAULT_GOAL := help
 
 # --- Selectable configuration ---------------------------------------------
-# NOTPLOY_VERSION overrides the image tag, NOTPLOY_REGISTRY the registry.
-# NOTPLOY_PORT is left unset on purpose so docker-compose.yml keeps resolving
-# it from .env (or from the 3000 default); pass NOTPLOY_PORT=8080 to override.
+# ASTRON_COLLECTION_VERSION overrides the image tag, ASTRON_COLLECTION_REGISTRY the registry.
+# ASTRON_COLLECTION_PORT is left unset on purpose so docker-compose.yml keeps resolving
+# it from .env (or from the 3000 default); pass ASTRON_COLLECTION_PORT=8080 to override.
 #
 # The product (self | cloud | console) is deliberately NOT one of them: it can
 # only be chosen with a make goal, never by editing this file or .env — see
-# "Inline product flag" below. NOTPLOY_FLAVOR / NOTPLOY_PRODUCT / IS_CLOUD are
+# "Inline product flag" below. ASTRON_COLLECTION_FLAVOR / ASTRON_COLLECTION_PRODUCT / IS_CLOUD are
 # derived from it and must not be set by hand.
-NOTPLOY_VERSION ?= latest
-NOTPLOY_REGISTRY ?= ghcr.io/skygenesisenterprise
+ASTRON_COLLECTION_VERSION ?= latest
+ASTRON_COLLECTION_REGISTRY ?= ghcr.io/skygenesisenterprise
 # Image of the standalone status page (see the "status" product below).
-STATUS_IMAGE ?= $(NOTPLOY_REGISTRY)/notploy-status
+STATUS_IMAGE ?= $(ASTRON_COLLECTION_REGISTRY)/astron-collection-status
 # Protected products (cloud/console) need a signed entitlement.
-NOTPLOY_ENTITLEMENT ?=
-NOTPLOY_ENTITLEMENT_FILE ?=
-NOTPLOY_ENTITLEMENT_PUBLIC_KEY_FILE ?=
+ASTRON_COLLECTION_ENTITLEMENT ?=
+ASTRON_COLLECTION_ENTITLEMENT_FILE ?=
+ASTRON_COLLECTION_ENTITLEMENT_PUBLIC_KEY_FILE ?=
 
 # --- Inline product flag ---------------------------------------------------
 # Select the product for one invocation, without editing .env or exporting
@@ -50,7 +50,7 @@ NOTPLOY_ENTITLEMENT_PUBLIC_KEY_FILE ?=
 #   make docker-down      # stop the stack — the image is kept for the next start
 #
 # Precedence: inline product flag > the product recorded by the last build >
-# selfhosted. NOTPLOY_FLAVOR= / NOTPLOY_PRODUCT= passed by hand are rejected
+# selfhosted. ASTRON_COLLECTION_FLAVOR= / ASTRON_COLLECTION_PRODUCT= passed by hand are rejected
 # (see the warnings below): the flavor only follows the product.
 PRODUCT_STATE := .make-product
 
@@ -66,37 +66,37 @@ else
 SELECTED_PRODUCT := self
 endif
 
-# NOTPLOY_FLAVOR / NOTPLOY_PRODUCT are derived below: refuse a direct
+# ASTRON_COLLECTION_FLAVOR / ASTRON_COLLECTION_PRODUCT are derived below: refuse a direct
 # assignment instead of silently running a product that was not selected.
-ifneq ($(filter $(origin NOTPLOY_FLAVOR),command line environment),)
-$(warning NOTPLOY_FLAVOR is derived from the product — use 'make <goal> self|cloud|console' instead; ignoring 'NOTPLOY_FLAVOR=$(NOTPLOY_FLAVOR)')
+ifneq ($(filter $(origin ASTRON_COLLECTION_FLAVOR),command line environment),)
+$(warning ASTRON_COLLECTION_FLAVOR is derived from the product — use 'make <goal> self|cloud|console' instead; ignoring 'ASTRON_COLLECTION_FLAVOR=$(ASTRON_COLLECTION_FLAVOR)')
 endif
-ifneq ($(filter $(origin NOTPLOY_PRODUCT),command line environment),)
-$(warning NOTPLOY_PRODUCT is derived from the product — use 'make <goal> self|cloud|console' instead; ignoring 'NOTPLOY_PRODUCT=$(NOTPLOY_PRODUCT)')
+ifneq ($(filter $(origin ASTRON_COLLECTION_PRODUCT),command line environment),)
+$(warning ASTRON_COLLECTION_PRODUCT is derived from the product — use 'make <goal> self|cloud|console' instead; ignoring 'ASTRON_COLLECTION_PRODUCT=$(ASTRON_COLLECTION_PRODUCT)')
 endif
 
-override NOTPLOY_PRODUCT := $(SELECTED_PRODUCT)
+override ASTRON_COLLECTION_PRODUCT := $(SELECTED_PRODUCT)
 # `override` so the selection cannot be bypassed by a command-line assignment:
 # the flavor always stays in sync with the chosen product.
 ifeq ($(SELECTED_PRODUCT),self)
-override NOTPLOY_FLAVOR := selfhosted
+override ASTRON_COLLECTION_FLAVOR := selfhosted
 else ifeq ($(SELECTED_PRODUCT),status)
 # The status page is its own application, not a control-plane flavor. It reuses
 # the self-hosted flavor so the shared variables stay defined; the compose
-# services it starts never read NOTPLOY_FLAVOR.
-override NOTPLOY_FLAVOR := selfhosted
+# services it starts never read ASTRON_COLLECTION_FLAVOR.
+override ASTRON_COLLECTION_FLAVOR := selfhosted
 else ifeq ($(SELECTED_PRODUCT),console)
-override NOTPLOY_FLAVOR := console
+override ASTRON_COLLECTION_FLAVOR := console
 else
-override NOTPLOY_FLAVOR := cloud
+override ASTRON_COLLECTION_FLAVOR := cloud
 endif
 
 # Word form of the selected product, written to / read from PRODUCT_STATE.
 ifeq ($(SELECTED_PRODUCT),status)
 PRODUCT_WORD := status
-else ifeq ($(NOTPLOY_FLAVOR),cloud)
+else ifeq ($(ASTRON_COLLECTION_FLAVOR),cloud)
 PRODUCT_WORD := cloud
-else ifeq ($(NOTPLOY_FLAVOR),console)
+else ifeq ($(ASTRON_COLLECTION_FLAVOR),console)
 PRODUCT_WORD := console
 else
 PRODUCT_WORD := self
@@ -105,18 +105,18 @@ endif
 # Four products: selfhosted (default, also spelled `self`), cloud, console and
 # status. Cloud and console are protected products: they publish a
 # cloud/console image and run with IS_CLOUD=true, and the PKI layer requires a
-# signed entitlement. `status` publishes the notploy-status image.
+# signed entitlement. `status` publishes the astron-collection-status image.
 ifeq ($(SELECTED_PRODUCT),status)
-override NOTPLOY_IMAGE := $(STATUS_IMAGE)
+override ASTRON_COLLECTION_IMAGE := $(STATUS_IMAGE)
 override IS_CLOUD := false
-else ifeq ($(NOTPLOY_FLAVOR),cloud)
-NOTPLOY_IMAGE ?= $(NOTPLOY_REGISTRY)/notploy-cloud
+else ifeq ($(ASTRON_COLLECTION_FLAVOR),cloud)
+ASTRON_COLLECTION_IMAGE ?= $(ASTRON_COLLECTION_REGISTRY)/astron-collection-cloud
 override IS_CLOUD := true
-else ifeq ($(NOTPLOY_FLAVOR),console)
-NOTPLOY_IMAGE ?= $(NOTPLOY_REGISTRY)/notploy-console
+else ifeq ($(ASTRON_COLLECTION_FLAVOR),console)
+ASTRON_COLLECTION_IMAGE ?= $(ASTRON_COLLECTION_REGISTRY)/astron-collection-console
 override IS_CLOUD := false
 else
-NOTPLOY_IMAGE ?= $(NOTPLOY_REGISTRY)/notploy
+ASTRON_COLLECTION_IMAGE ?= $(ASTRON_COLLECTION_REGISTRY)/astron-collection
 override IS_CLOUD := false
 endif
 
@@ -125,8 +125,8 @@ COMPOSE ?= docker compose
 
 # --- Host ports the stack publishes -----------------------------------------
 # The container always listens on 53; only the host side differs per mode:
-#   production (`notploy`)      -> NOTPLOY_DNS_HOST_PORT,     default 53
-#   development (`notploy-dev`) -> NOTPLOY_DNS_DEV_HOST_PORT, default 5300
+#   production (`astron-collection`)      -> ASTRON_COLLECTION_DNS_HOST_PORT,     default 53
+#   development (`astron-collection-dev`) -> ASTRON_COLLECTION_DNS_DEV_HOST_PORT, default 5300
 # Port 53 is taken on most developer machines (systemd-resolved, dnsmasq or
 # libvirt, Pi-hole) and publishing it aborts the whole stack before a single
 # container starts: "Error starting userland proxy: listen tcp4 0.0.0.0:53:
@@ -143,8 +143,8 @@ ifeq ($(SELECTED_PRODUCT),status)
 CHECK_PORTS_UP := $(call env-file-default,STATUS_PORT,4100)
 CHECK_PORTS_DEV := $(call env-file-default,STATUS_PORT,4100)
 else
-CHECK_PORTS_UP := $(call env-file-default,NOTPLOY_DNS_HOST_PORT,53) $(call env-file-default,NOTPLOY_PORT,3000) 80 443 8080
-CHECK_PORTS_DEV := $(call env-file-default,NOTPLOY_DNS_DEV_HOST_PORT,5300) $(call env-file-default,NOTPLOY_PORT,3000) 80 443 8080
+CHECK_PORTS_UP := $(call env-file-default,ASTRON_COLLECTION_DNS_HOST_PORT,53) $(call env-file-default,ASTRON_COLLECTION_PORT,3000) 80 443 8080
+CHECK_PORTS_DEV := $(call env-file-default,ASTRON_COLLECTION_DNS_DEV_HOST_PORT,5300) $(call env-file-default,ASTRON_COLLECTION_PORT,3000) 80 443 8080
 endif
 
 # One recipe line: report every port about to be published that something else
@@ -156,29 +156,29 @@ dns-ports-check = busy() { command -v ss >/dev/null 2>&1 && ss -lntu "sport = :$
 
 # Exported to every compose invocation so build target and image tag stay in
 # sync with the selected flavor.
-COMPOSE_ENV = NOTPLOY_FLAVOR=$(NOTPLOY_FLAVOR) NOTPLOY_IMAGE=$(NOTPLOY_IMAGE) NOTPLOY_VERSION=$(NOTPLOY_VERSION) IS_CLOUD=$(IS_CLOUD) \
+COMPOSE_ENV = ASTRON_COLLECTION_FLAVOR=$(ASTRON_COLLECTION_FLAVOR) ASTRON_COLLECTION_IMAGE=$(ASTRON_COLLECTION_IMAGE) ASTRON_COLLECTION_VERSION=$(ASTRON_COLLECTION_VERSION) IS_CLOUD=$(IS_CLOUD) \
 	STATUS_IMAGE=$(STATUS_IMAGE) \
-	NOTPLOY_PRODUCT=$(NOTPLOY_PRODUCT) NOTPLOY_ENTITLEMENT=$(NOTPLOY_ENTITLEMENT) \
-	NOTPLOY_ENTITLEMENT_FILE=$(NOTPLOY_ENTITLEMENT_FILE) NOTPLOY_ENTITLEMENT_PUBLIC_KEY_FILE=$(NOTPLOY_ENTITLEMENT_PUBLIC_KEY_FILE)
+	ASTRON_COLLECTION_PRODUCT=$(ASTRON_COLLECTION_PRODUCT) ASTRON_COLLECTION_ENTITLEMENT=$(ASTRON_COLLECTION_ENTITLEMENT) \
+	ASTRON_COLLECTION_ENTITLEMENT_FILE=$(ASTRON_COLLECTION_ENTITLEMENT_FILE) ASTRON_COLLECTION_ENTITLEMENT_PUBLIC_KEY_FILE=$(ASTRON_COLLECTION_ENTITLEMENT_PUBLIC_KEY_FILE)
 
-# A legacy `notploy-traefik` created outside Compose (install.sh, or the app's
+# A legacy `astron-collection-traefik` created outside Compose (install.sh, or the app's
 # own traefik-setup) carries no `com.docker.compose.project` label, yet it
-# occupies the fixed `container_name: notploy-traefik` the Compose `traefik`
+# occupies the fixed `container_name: astron-collection-traefik` the Compose `traefik`
 # service needs — so `docker compose up` aborts with "Conflict. The container
 # name ... is already in use". Remove it, but only when no Compose label is
 # present, so a Compose-managed traefik is left untouched.
-CLEAN_EXTERNAL_TRAEFIK = [ -z "$$(docker ps -aq -f 'name=^notploy-traefik$$')" ] || docker inspect -f '{{ index .Config.Labels "com.docker.compose.project" }}' notploy-traefik 2>/dev/null | grep -q . || { echo "==> removing non-Compose notploy-traefik container"; docker rm -f notploy-traefik >/dev/null; }
+CLEAN_EXTERNAL_TRAEFIK = [ -z "$$(docker ps -aq -f 'name=^astron-collection-traefik$$')" ] || docker inspect -f '{{ index .Config.Labels "com.docker.compose.project" }}' astron-collection-traefik 2>/dev/null | grep -q . || { echo "==> removing non-Compose astron-collection-traefik container"; docker rm -f astron-collection-traefik >/dev/null; }
 
-# `notploy-network` is `external` in docker-compose.yml (it must not be deleted
+# `astron-collection-network` is `external` in docker-compose.yml (it must not be deleted
 # by `docker compose down` while deployed apps are attached to it), so Compose no
 # longer creates it. Create it here — exactly like install.sh / the server setup
 # — before starting the stack on a fresh host.
-ENSURE_NETWORK = docker network inspect notploy-network >/dev/null 2>&1 || { echo "==> creating notploy-network"; docker network create --driver overlay --attachable notploy-network >/dev/null; }
+ENSURE_NETWORK = docker network inspect astron-collection-network >/dev/null 2>&1 || { echo "==> creating astron-collection-network"; docker network create --driver overlay --attachable astron-collection-network >/dev/null; }
 
 # --- Compose selection per product ------------------------------------------
 # The status page has its own services and no support stack (no PostgreSQL,
 # Redis, Traefik or shared overlay network), so the compose invocations below
-# are parameterized instead of hardcoding `notploy` / `notploy-dev`.
+# are parameterized instead of hardcoding `astron-collection` / `astron-collection-dev`.
 ifeq ($(SELECTED_PRODUCT),status)
 COMPOSE_BUILD_SERVICE := status
 # The service lives in the `status` profile, so the profile is enabled and the
@@ -191,13 +191,13 @@ COMPOSE_DEV_SERVICE := status-dev
 # does not need the host-wide overlay network or a Traefik cleanup.
 STACK_PREPARE = true
 else
-COMPOSE_BUILD_SERVICE := notploy
+COMPOSE_BUILD_SERVICE := astron-collection
 COMPOSE_UP_PROFILES :=
 COMPOSE_UP_SERVICES :=
 COMPOSE_DEV_PROFILES := --profile dev
-COMPOSE_DEV_SERVICE := notploy-dev
-# Only `notploy` joins the external overlay network and competes for the
-# notploy-traefik container name.
+COMPOSE_DEV_SERVICE := astron-collection-dev
+# Only `astron-collection` joins the external overlay network and competes for the
+# astron-collection-traefik container name.
 STACK_PREPARE = $(CLEAN_EXTERNAL_TRAEFIK) ; $(ENSURE_NETWORK)
 endif
 
@@ -217,17 +217,17 @@ self cloud console --self --cloud --console:
 # Help
 # ---------------------------------------------------------------------------
 help: ## Show this help
-	@echo "Notploy — available commands:"
+	@echo "Astron Collection — available commands:"
 	@echo ""
 	@grep -hE '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) \
 		| awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2}'
 	@echo ""
-	@echo "Variables: NOTPLOY_FLAVOR=$(NOTPLOY_FLAVOR) NOTPLOY_VERSION=$(NOTPLOY_VERSION) NOTPLOY_IMAGE=$(NOTPLOY_IMAGE)"
-	@echo "           IS_CLOUD=$(IS_CLOUD) NOTPLOY_PRODUCT=$(PRODUCT_WORD) NOTPLOY_PORT=$${NOTPLOY_PORT:-3000}"
+	@echo "Variables: ASTRON_COLLECTION_FLAVOR=$(ASTRON_COLLECTION_FLAVOR) ASTRON_COLLECTION_VERSION=$(ASTRON_COLLECTION_VERSION) ASTRON_COLLECTION_IMAGE=$(ASTRON_COLLECTION_IMAGE)"
+	@echo "           IS_CLOUD=$(IS_CLOUD) ASTRON_COLLECTION_PRODUCT=$(PRODUCT_WORD) ASTRON_COLLECTION_PORT=$${ASTRON_COLLECTION_PORT:-3000}"
 	@echo "           STATUS_PORT=$${STATUS_PORT:-4100} STATUS_IMAGE=$(STATUS_IMAGE)"
 	@echo "Product:   $(PRODUCT_WORD)$$(test -f $(PRODUCT_STATE) && echo ' (saved by the last build)')"
 	@echo "Identity:  the container bootstraps the instance identity into the"
-	@echo "           notploy-config volume at startup (self-hosted needs no network)."
+	@echo "           astron-collection-config volume at startup (self-hosted needs no network)."
 	@echo "Examples:  make docker-up self              # build a fresh image + start self-hosted"
 	@echo "           make docker-up                   # restart the image built last, no rebuild"
 	@echo "           make docker-up cloud             # build a fresh cloud image + start"
@@ -238,7 +238,7 @@ help: ## Show this help
 	@echo "           make docker-dev console           # dev, console (needs entitlement)"
 	@echo "           make docker-up status             # build + start the status page (localhost:4100)"
 	@echo "           make docker-dev status            # status page with hot reload (localhost:4100)"
-	@echo "           make status-seed                  # create the Notploy status page + components"
+	@echo "           make status-seed                  # create the Astron Collection status page + components"
 
 # ---------------------------------------------------------------------------
 # Local development (host toolchain)
@@ -264,8 +264,8 @@ lint: ## Lint/format check (pnpm lint)
 # ---------------------------------------------------------------------------
 # Docker (root Dockerfile + docker-compose.yml)
 #
-# `notploy` (production) and `notploy-dev` (development) both publish the
-# dashboard on NOTPLOY_PORT (3000 by default): http://localhost:3000 in both
+# `astron-collection` (production) and `astron-collection-dev` (development) both publish the
+# dashboard on ASTRON_COLLECTION_PORT (3000 by default): http://localhost:3000 in both
 # modes. They share the port, so only one of them runs at a time — stop the
 # other first with `make docker-down`.
 # ---------------------------------------------------------------------------
@@ -282,13 +282,13 @@ lint: ## Lint/format check (pnpm lint)
 # removes the containers, the image stays, so the next plain `make docker-up`
 # relaunches instantly. Use `make docker-build <product>` to rebuild ignoring
 # PRODUCT_STATE.
-docker-build: ## Build one image only (add: self | cloud | console | status, NOTPLOY_VERSION=<tag>)
-	@echo "==> building product=$(PRODUCT_WORD) flavor=$(NOTPLOY_FLAVOR) image=$(NOTPLOY_IMAGE):$(NOTPLOY_VERSION)"
+docker-build: ## Build one image only (add: self | cloud | console | status, ASTRON_COLLECTION_VERSION=<tag>)
+	@echo "==> building product=$(PRODUCT_WORD) flavor=$(ASTRON_COLLECTION_FLAVOR) image=$(ASTRON_COLLECTION_IMAGE):$(ASTRON_COLLECTION_VERSION)"
 	$(COMPOSE_ENV) $(COMPOSE) build $(COMPOSE_BUILD_SERVICE)
 	@printf '%s\n' '$(PRODUCT_WORD)' > $(PRODUCT_STATE)
 
 docker-up: ## Start the stack (add: self | cloud | console | status to build a fresh image first)
-	@echo "==> starting product=$(PRODUCT_WORD) flavor=$(NOTPLOY_FLAVOR) image=$(NOTPLOY_IMAGE):$(NOTPLOY_VERSION)"
+	@echo "==> starting product=$(PRODUCT_WORD) flavor=$(ASTRON_COLLECTION_FLAVOR) image=$(ASTRON_COLLECTION_IMAGE):$(ASTRON_COLLECTION_VERSION)"
 	@$(STACK_PREPARE)
 	@$(call dns-ports-check,$(CHECK_PORTS_UP))
 	$(COMPOSE_ENV) $(COMPOSE) $(COMPOSE_UP_PROFILES) up -d $(COMPOSE_UP_SERVICES)
@@ -298,11 +298,11 @@ docker-up: docker-build
 endif
 
 # Stops whatever is actually running. Compose only removes the containers of the
-# enabled profiles, so the dev profile has to be added as soon as a notploy-dev
+# enabled profiles, so the dev profile has to be added as soon as a astron-collection-dev
 # container exists — otherwise `docker compose down` leaves it running and fails
 # to release the shared network ("Resource is still in use").
 docker-down: ## Stop the running stack, dev containers included (volumes are preserved)
-	@if [ -n "$$($(COMPOSE) --profile dev --profile status ps -aq notploy-dev status-dev 2>/dev/null)" ]; then \
+	@if [ -n "$$($(COMPOSE) --profile dev --profile status ps -aq astron-collection-dev status-dev 2>/dev/null)" ]; then \
 		echo "==> dev container found, stopping the whole stack"; \
 		$(COMPOSE) --profile dev --profile status down --remove-orphans --timeout 15; \
 	else \
@@ -323,21 +323,21 @@ docker-config: ## Validate and print the resolved Compose configuration
 	$(COMPOSE_ENV) $(COMPOSE) config
 
 # ---------------------------------------------------------------------------
-# Status page (Notploy Cloud, API, MCP Server, GitHub App, Website, Docs)
+# Status page (Astron Collection Cloud, API, MCP Server, GitHub App, Website, Docs)
 #
 # The seed is idempotent: existing components are left untouched, so it is safe
 # to re-run. It writes to STATUS_DATA_DIR (default ./data), the same override
 # the status services use, e.g.:
-#   STATUS_DATA_DIR=/var/lib/notploy-status make status-seed
+#   STATUS_DATA_DIR=/var/lib/astron-collection-status make status-seed
 # ---------------------------------------------------------------------------
 ifeq ($(CONTAINER),1)
 status-seed: ## Seed the catalog inside the running status container (add CONTAINER=1)
 	@echo "==> seeding the catalog inside the running status container"
 	$(COMPOSE) --profile status exec status node engine-dist/seed.js $(SEED_ARGS)
 else
-status-seed: ## Create the Notploy status page and its six components (idempotent)
+status-seed: ## Create the Astron Collection status page and its six components (idempotent)
 	@echo "==> seeding the catalog into STATUS_DATA_DIR=$${STATUS_DATA_DIR:-./data}"
-	$(PNPM) --filter @notploy/status run seed -- $(SEED_ARGS)
+	$(PNPM) --filter @astron-collection/status run seed -- $(SEED_ARGS)
 endif
 
 docker-dev: ## Run the containerized dev server with hot reload (add: status for the status page)
@@ -361,11 +361,11 @@ clean: ## Remove local build artifacts (.next, dist, tsbuildinfo, saved product)
 # ---------------------------------------------------------------------------
 .PHONY: install-production install-server status logs restart start stop update doctor backup uninstall
 
-install-production: ## Install Notploy using Docker Swarm (production-ready, multi-node support)
+install-production: ## Install Astron Collection using Docker Swarm (production-ready, multi-node support)
 	@chmod +x scripts/install-production.sh
 	@./scripts/install-production.sh
 
-install: ## Install Notploy locally for development/self-hosted (docker compose)
+install: ## Install Astron Collection locally for development/self-hosted (docker compose)
 	@chmod +x scripts/make-install-helper.sh
 	@./scripts/make-install-helper.sh
 
@@ -382,7 +382,7 @@ restart: ## Restart the stack
 status: ## Show stack status
 	@$(COMPOSE_ENV) $(COMPOSE) ps
 
-logs: ## Follow logs (optionally: make logs SERVICE=notploy)
+logs: ## Follow logs (optionally: make logs SERVICE=astron-collection)
 	@if [ -n "$(SERVICE)" ]; then \
 		$(COMPOSE_ENV) $(COMPOSE) logs -f $(SERVICE); \
 	else \
@@ -395,7 +395,7 @@ update: ## Update to latest version (pull and rebuild/restart)
 	@$(COMPOSE_ENV) $(COMPOSE) up -d --build
 
 doctor: ## Check installation health
-	@echo "Notploy Doctor"
+	@echo "Astron Collection Doctor"
 	@echo "==============="
 	@echo ""
 	@echo "System:"
@@ -409,13 +409,13 @@ doctor: ## Check installation health
 	@docker compose ps 2>&1 | tail -5
 	@echo ""
 	@echo "Storage:"
-	@docker volume ls | grep notploy && echo "✓ Notploy volumes present" || echo "✗ No volumes found"
+	@docker volume ls | grep astron-collection && echo "✓ Astron Collection volumes present" || echo "✗ No volumes found"
 
 backup: ## Create backup of data volumes (not implemented yet)
 	@echo "Backup functionality - requires tar/rsync"
 	@echo "To backup manually:"
-	@echo "  docker run --rm -v notploy-postgres-data:/data -v \$PWD:/backup alpine tar czf /backup/postgres-$(shell date +%Y%m%d_%H%M%S).tar.gz -C /data ."
+	@echo "  docker run --rm -v astron-collection-postgres-data:/data -v \$PWD:/backup alpine tar czf /backup/postgres-$(shell date +%Y%m%d_%H%M%S).tar.gz -C /data ."
 
-uninstall: ## Remove Notploy (data preserved)
+uninstall: ## Remove Astron Collection (data preserved)
 	@chmod +x scripts/cleanup.sh
 	@./scripts/cleanup.sh

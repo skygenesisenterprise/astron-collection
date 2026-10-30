@@ -4,18 +4,18 @@ import {
 	getCloudDomainForApplication,
 	releaseCloudDomain,
 	toCloudDomainView,
-} from "@notploy/server";
-import { checkServicePermissionAndAccess } from "@notploy/server/services/permission";
+} from "@astron-collection/server";
+import { checkServicePermissionAndAccess } from "@astron-collection/server/services/permission";
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { audit } from "@/server/api/utils/audit";
 import { apiFindOneApplication } from "@/server/db/schema";
 
 /**
- * Notploy Cloud generated hostnames (issue #113).
+ * Astron Collection Cloud generated hostnames (issue #113).
  *
  * Custom domains keep using `domain.*`; this router only exposes the managed
- * `*.notploy.app` allocation: read its status, retry provisioning, release it.
+ * `*.astron-collection.app` allocation: read its status, retry provisioning, release it.
  * Allocation itself happens after a successful deployment.
  */
 export const cloudDomainRouter = createTRPCRouter({
@@ -72,7 +72,7 @@ const requireCloudDomains = () => {
 	if (!getCloudDomainBase()) {
 		throw new TRPCError({
 			code: "PRECONDITION_FAILED",
-			message: "Notploy Cloud domains are not enabled on this instance",
+			message: "Astron Collection Cloud domains are not enabled on this instance",
 		});
 	}
 };

@@ -1,20 +1,20 @@
-import { db } from "@notploy/server/db";
+import { db } from "@astron-collection/server/db";
 import {
 	type DnsRecordType,
-	type notployInternalDnsConfigSchema,
+	type astronCollectionInternalDnsConfigSchema,
 	dnsRecord,
 	dnsZone,
-} from "@notploy/server/db/schema";
+} from "@astron-collection/server/db/schema";
 import { TRPCError } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
 import type { z } from "zod";
 import type { DnsClient, DnsRecord, DnsZone } from "./types";
 
-type InternalConfig = z.infer<typeof notployInternalDnsConfigSchema>;
+type InternalConfig = z.infer<typeof astronCollectionInternalDnsConfigSchema>;
 
 /**
  * The first-party adapter is scoped to a single provider row: zones and records
- * are stored by Notploy itself, so the provider id has to travel with the
+ * are stored by Astron Collection itself, so the provider id has to travel with the
  * config. It is attached by the service layer before the client is called.
  */
 export interface InternalConfigWithProvider extends InternalConfig {

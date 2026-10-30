@@ -12,7 +12,7 @@ export default function Page() {
 	return (
 		<main className="flex min-h-screen flex-col items-center justify-center gap-4">
 			<meta httpEquiv="refresh" content={`0;url=${DESTINATION}`} />
-			<h1 className="text-2xl font-semibold">Notploy Documentation</h1>
+			<h1 className="text-2xl font-semibold">Astron Collection Documentation</h1>
 			<p>
 				The documentation moved to{" "}
 				<a className="underline" href={DESTINATION}>

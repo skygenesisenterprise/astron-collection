@@ -3,7 +3,7 @@ import {
 	cleanupAll,
 	isExternalJobsEnabled,
 	sendDockerCleanupNotifications,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import { scheduledJobs, scheduleJob } from "node-schedule";
 import { removeJob, schedule } from "./backup";
 

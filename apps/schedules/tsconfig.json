@@ -8,7 +8,7 @@
 		"jsx": "react-jsx",
 		"declaration": false,
 		"paths": {
-			"@notploy/server/*": ["../../packages/server/src/*"]
+			"@astron-collection/server/*": ["../../packages/server/src/*"]
 		}
 	},
 	"exclude": ["node_modules", "dist"],

@@ -1,7 +1,7 @@
 import {
 	getBackupOverviewIcon,
 	getServiceOverviewIcon,
-} from "@notploy/server/services/overview";
+} from "@astron-collection/server/services/overview";
 import { describe, expect, test } from "vitest";
 
 describe("getServiceOverviewIcon", () => {

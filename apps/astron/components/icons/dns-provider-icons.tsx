@@ -196,12 +196,12 @@ export const CustomDnsIcon = ({ className }: Props) => (
 );
 
 /**
- * First-party Notploy Internal DNS. Uses the Notploy brand mark published in
- * `public/notploy.png`.
+ * First-party Astron Collection Internal DNS. Uses the Astron Collection brand mark published in
+ * `public/astron-collection.png`.
  */
-export const NotployInternalIcon = ({ className }: Props) => (
+export const AstronCollectionInternalIcon = ({ className }: Props) => (
 	<Image
-		src="/notploy.png"
+		src="/astron-collection.png"
 		alt=""
 		aria-hidden="true"
 		width={1254}
@@ -233,7 +233,7 @@ export const dnsProviderIcons = {
 	coredns: CorednsIcon,
 	unbound: UnboundIcon,
 	custom: CustomDnsIcon,
-	"notploy-internal": NotployInternalIcon,
+	"astron-collection-internal": AstronCollectionInternalIcon,
 } as const;
 
 export type DnsProviderIconKey = keyof typeof dnsProviderIcons;

@@ -1,10 +1,10 @@
 ---
 title: Command reference
-description: "Every group and command the Notploy CLI exposes — 63 groups, 717 commands."
+description: "Every group and command the Astron Collection CLI exposes — 63 groups, 717 commands."
 ---
 
 This reference is generated from the CLI source (`packages/cli`), so it lists exactly what
-`notploy 1.0.2` registers with its command parser — no more, no less.
+`astron-collection 1.0.2` registers with its command parser — no more, no less.
 
 **63 groups · 717 commands.**
 
@@ -13,7 +13,7 @@ their flags, required inputs and allowed values.
 
 <Callout>
 	Every command accepts `--json` to print the raw API response, and
-	`notploy auth` — the one command that is not part of the generated groups — is covered in
+	`astron-collection auth` — the one command that is not part of the generated groups — is covered in
 	[Authentication](/docs/cli/authentication).
 </Callout>
 
@@ -23,128 +23,128 @@ their flags, required inputs and allowed values.
 
 | Group | Command | Commands | Description |
 | --- | --- | --- | --- |
-| [Operational events](/docs/cli/operational-event) | `notploy operational-event` | 2 | Timeline of instance-level events used by alerts, audits and the activity feed. |
-| [Overview](/docs/cli/overview) | `notploy overview` | 3 | Aggregated counters for the dashboard: services, backups and domains. |
-| [Traffic analytics](/docs/cli/traffic) | `notploy traffic` | 11 | Traffic sources and properties, HTTP reports and the audience overview built from access logs. |
+| [Operational events](/docs/cli/operational-event) | `astron-collection operational-event` | 2 | Timeline of instance-level events used by alerts, audits and the activity feed. |
+| [Overview](/docs/cli/overview) | `astron-collection overview` | 3 | Aggregated counters for the dashboard: services, backups and domains. |
+| [Traffic analytics](/docs/cli/traffic) | `astron-collection traffic` | 11 | Traffic sources and properties, HTTP reports and the audience overview built from access logs. |
 
 ### Projects
 
 | Group | Command | Commands | Description |
 | --- | --- | --- | --- |
-| [Deployments](/docs/cli/deployment) | `notploy deployment` | 11 | Inspect deployment history and queues, read deployment logs and kill a running build. |
-| [Environments](/docs/cli/environment) | `notploy environment` | 7 | Applications and databases live inside an environment, and environments belong to a project. |
-| [Projects](/docs/cli/project) | `notploy project` | 11 | Create, update, search and remove projects, and read the onboarding state of an instance. |
-| [Rollbacks](/docs/cli/rollback) | `notploy rollback` | 2 | Roll a deployment back to a previously built image. |
-| [Tags](/docs/cli/tag) | `notploy tag` | 8 | Label projects and filter the dashboard by tag. |
+| [Deployments](/docs/cli/deployment) | `astron-collection deployment` | 11 | Inspect deployment history and queues, read deployment logs and kill a running build. |
+| [Environments](/docs/cli/environment) | `astron-collection environment` | 7 | Applications and databases live inside an environment, and environments belong to a project. |
+| [Projects](/docs/cli/project) | `astron-collection project` | 11 | Create, update, search and remove projects, and read the onboarding state of an instance. |
+| [Rollbacks](/docs/cli/rollback) | `astron-collection rollback` | 2 | Roll a deployment back to a previously built image. |
+| [Tags](/docs/cli/tag) | `astron-collection tag` | 8 | Label projects and filter the dashboard by tag. |
 
 ### Applications
 
 | Group | Command | Commands | Description |
 | --- | --- | --- | --- |
-| [Applications](/docs/cli/application) | `notploy application` | 32 | Create applications, connect a source, configure the build and drive the whole lifecycle. |
-| [Compose](/docs/cli/compose) | `notploy compose` | 31 | Docker Compose projects: templates, imports, isolated deployments and previews. |
-| [Mounts](/docs/cli/mounts) | `notploy mounts` | 6 | Bind mounts and named volumes attached to applications and Compose services. |
-| [Patches](/docs/cli/patch) | `notploy patch` | 12 | Versioned file overrides applied to an application at deploy time. |
-| [Preview deployments](/docs/cli/preview-deployment) | `notploy preview-deployment` | 4 | Per-branch deployments created when preview deployments are enabled. |
-| [Schedules](/docs/cli/schedule) | `notploy schedule` | 6 | Cron jobs that run a shell command inside a deployed service. |
-| [Security](/docs/cli/security) | `notploy security` | 4 | Per-application HTTP basic auth and response security headers. |
-| [Vault providers](/docs/cli/vault-provider) | `notploy vault-provider` | 13 | External secret managers connected to the platform to resolve secrets at deploy time. |
+| [Applications](/docs/cli/application) | `astron-collection application` | 32 | Create applications, connect a source, configure the build and drive the whole lifecycle. |
+| [Compose](/docs/cli/compose) | `astron-collection compose` | 31 | Docker Compose projects: templates, imports, isolated deployments and previews. |
+| [Mounts](/docs/cli/mounts) | `astron-collection mounts` | 6 | Bind mounts and named volumes attached to applications and Compose services. |
+| [Patches](/docs/cli/patch) | `astron-collection patch` | 12 | Versioned file overrides applied to an application at deploy time. |
+| [Preview deployments](/docs/cli/preview-deployment) | `astron-collection preview-deployment` | 4 | Per-branch deployments created when preview deployments are enabled. |
+| [Schedules](/docs/cli/schedule) | `astron-collection schedule` | 6 | Cron jobs that run a shell command inside a deployed service. |
+| [Security](/docs/cli/security) | `astron-collection security` | 4 | Per-application HTTP basic auth and response security headers. |
+| [Vault providers](/docs/cli/vault-provider) | `astron-collection vault-provider` | 13 | External secret managers connected to the platform to resolve secrets at deploy time. |
 
 ### Databases
 
 | Group | Command | Commands | Description |
 | --- | --- | --- | --- |
-| [libSQL](/docs/cli/libsql) | `notploy libsql` | 14 | Provision and operate libSQL (SQLite-compatible) databases. |
-| [MariaDB](/docs/cli/mariadb) | `notploy mariadb` | 16 | Provision and operate MariaDB databases, including backups and external ports. |
-| [MongoDB](/docs/cli/mongo) | `notploy mongo` | 16 | Provision and operate MongoDB databases, including backups and external ports. |
-| [MySQL](/docs/cli/mysql) | `notploy mysql` | 16 | Provision and operate MySQL databases, including backups and external ports. |
-| [PostgreSQL](/docs/cli/postgres) | `notploy postgres` | 16 | Provision and operate PostgreSQL databases, including backups and external ports. |
-| [Redis](/docs/cli/redis) | `notploy redis` | 16 | Provision and operate Redis instances, including backups and external ports. |
+| [libSQL](/docs/cli/libsql) | `astron-collection libsql` | 14 | Provision and operate libSQL (SQLite-compatible) databases. |
+| [MariaDB](/docs/cli/mariadb) | `astron-collection mariadb` | 16 | Provision and operate MariaDB databases, including backups and external ports. |
+| [MongoDB](/docs/cli/mongo) | `astron-collection mongo` | 16 | Provision and operate MongoDB databases, including backups and external ports. |
+| [MySQL](/docs/cli/mysql) | `astron-collection mysql` | 16 | Provision and operate MySQL databases, including backups and external ports. |
+| [PostgreSQL](/docs/cli/postgres) | `astron-collection postgres` | 16 | Provision and operate PostgreSQL databases, including backups and external ports. |
+| [Redis](/docs/cli/redis) | `astron-collection redis` | 16 | Provision and operate Redis instances, including backups and external ports. |
 
 ### Backups
 
 | Group | Command | Commands | Description |
 | --- | --- | --- | --- |
-| [Backups](/docs/cli/backup) | `notploy backup` | 12 | Scheduled and manual backups for databases, Compose services and the web server. |
-| [Destinations](/docs/cli/destination) | `notploy destination` | 7 | S3-compatible storage destinations that backups are uploaded to. |
-| [Object storage](/docs/cli/object-storage) | `notploy object-storage` | 15 | S3-compatible providers and buckets used as backup destinations, including usage and health. |
-| [Volume backups](/docs/cli/volume-backups) | `notploy volume-backups` | 6 | Back up Docker volumes on a schedule and download the resulting archives. |
+| [Backups](/docs/cli/backup) | `astron-collection backup` | 12 | Scheduled and manual backups for databases, Compose services and the web server. |
+| [Destinations](/docs/cli/destination) | `astron-collection destination` | 7 | S3-compatible storage destinations that backups are uploaded to. |
+| [Object storage](/docs/cli/object-storage) | `astron-collection object-storage` | 15 | S3-compatible providers and buckets used as backup destinations, including usage and health. |
+| [Volume backups](/docs/cli/volume-backups) | `astron-collection volume-backups` | 6 | Back up Docker volumes on a schedule and download the resulting archives. |
 
 ### Domains & networking
 
 | Group | Command | Commands | Description |
 | --- | --- | --- | --- |
-| [Certificates](/docs/cli/certificates) | `notploy certificates` | 8 | Custom TLS certificates loaded by Traefik alongside automatic Let's Encrypt ones. |
-| [DNS providers](/docs/cli/dns-provider) | `notploy dns-provider` | 15 | Zones and records for connected DNS providers such as Cloudflare and Route 53. |
-| [Domains](/docs/cli/domain) | `notploy domain` | 11 | Attach domains to applications and Compose stacks, and generate or validate them. |
-| [Forward auth](/docs/cli/forward-auth) | `notploy forward-auth` | 10 | Deploy an authentication proxy in front of applications and manage its domains. |
-| [Networks](/docs/cli/network) | `notploy network` | 10 | Docker networks: create, import, inspect and resynchronise them across servers. |
-| [Onion services](/docs/cli/onion) | `notploy onion` | 9 | Tor onion services attached to a Compose stack: create, start, stop and inspect their status. |
-| [Ports](/docs/cli/port) | `notploy port` | 4 | Publish container ports directly, without routing them through a domain. |
-| [Redirects](/docs/cli/redirects) | `notploy redirects` | 4 | HTTP redirects served by Traefik for an application's domains. |
+| [Certificates](/docs/cli/certificates) | `astron-collection certificates` | 8 | Custom TLS certificates loaded by Traefik alongside automatic Let's Encrypt ones. |
+| [DNS providers](/docs/cli/dns-provider) | `astron-collection dns-provider` | 15 | Zones and records for connected DNS providers such as Cloudflare and Route 53. |
+| [Domains](/docs/cli/domain) | `astron-collection domain` | 11 | Attach domains to applications and Compose stacks, and generate or validate them. |
+| [Forward auth](/docs/cli/forward-auth) | `astron-collection forward-auth` | 10 | Deploy an authentication proxy in front of applications and manage its domains. |
+| [Networks](/docs/cli/network) | `astron-collection network` | 10 | Docker networks: create, import, inspect and resynchronise them across servers. |
+| [Onion services](/docs/cli/onion) | `astron-collection onion` | 9 | Tor onion services attached to a Compose stack: create, start, stop and inspect their status. |
+| [Ports](/docs/cli/port) | `astron-collection port` | 4 | Publish container ports directly, without routing them through a domain. |
+| [Redirects](/docs/cli/redirects) | `astron-collection redirects` | 4 | HTTP redirects served by Traefik for an application's domains. |
 
 ### Git providers
 
 | Group | Command | Commands | Description |
 | --- | --- | --- | --- |
-| [Bitbucket](/docs/cli/bitbucket) | `notploy bitbucket` | 7 | Bitbucket connections, plus branch and repository lookups. |
-| [Git providers](/docs/cli/git-provider) | `notploy git-provider` | 4 | List, share and remove every Git provider connected to an organization. |
-| [Gitea](/docs/cli/gitea) | `notploy gitea` | 8 | Gitea connections, plus branch and repository lookups. |
-| [GitHub](/docs/cli/github) | `notploy github` | 6 | GitHub app connections, plus branch and repository lookups. |
-| [GitLab](/docs/cli/gitlab) | `notploy gitlab` | 7 | GitLab connections, plus branch and repository lookups. |
+| [Bitbucket](/docs/cli/bitbucket) | `astron-collection bitbucket` | 7 | Bitbucket connections, plus branch and repository lookups. |
+| [Git providers](/docs/cli/git-provider) | `astron-collection git-provider` | 4 | List, share and remove every Git provider connected to an organization. |
+| [Gitea](/docs/cli/gitea) | `astron-collection gitea` | 8 | Gitea connections, plus branch and repository lookups. |
+| [GitHub](/docs/cli/github) | `astron-collection github` | 6 | GitHub app connections, plus branch and repository lookups. |
+| [GitLab](/docs/cli/gitlab) | `astron-collection gitlab` | 7 | GitLab connections, plus branch and repository lookups. |
 
 ### Servers & infrastructure
 
 | Group | Command | Commands | Description |
 | --- | --- | --- | --- |
-| [Cluster](/docs/cli/cluster) | `notploy cluster` | 4 | Add and remove Swarm workers and managers. |
-| [Docker](/docs/cli/docker) | `notploy docker` | 20 | Containers, the Docker daemon configuration, events and container files. |
-| [Docker disk usage](/docs/cli/docker-disk-usage) | `notploy docker-disk-usage` | 3 | Disk usage per Docker object type, and build cache pruning. |
-| [Docker images](/docs/cli/docker-image) | `notploy docker-image` | 3 | List, inspect and remove images stored on a server. |
-| [Docker volumes](/docs/cli/docker-volume) | `notploy docker-volume` | 8 | Inspect volumes, their size and the files inside them. |
-| [Network providers](/docs/cli/network-provider) | `notploy network-provider` | 9 | External network providers (overlay networks and peers) plus their health checks. |
-| [Registries](/docs/cli/registry) | `notploy registry` | 17 | Container registries used to pull private images. |
-| [Servers](/docs/cli/server) | `notploy server` | 21 | Add remote servers over SSH, validate them and read their metrics and services. |
-| [SSH keys](/docs/cli/ssh-key) | `notploy ssh-key` | 7 | SSH keys used to reach servers and clone private repositories. |
-| [Swarm](/docs/cli/swarm) | `notploy swarm` | 5 | Inspect Docker Swarm nodes, node workloads and container statistics. |
+| [Cluster](/docs/cli/cluster) | `astron-collection cluster` | 4 | Add and remove Swarm workers and managers. |
+| [Docker](/docs/cli/docker) | `astron-collection docker` | 20 | Containers, the Docker daemon configuration, events and container files. |
+| [Docker disk usage](/docs/cli/docker-disk-usage) | `astron-collection docker-disk-usage` | 3 | Disk usage per Docker object type, and build cache pruning. |
+| [Docker images](/docs/cli/docker-image) | `astron-collection docker-image` | 3 | List, inspect and remove images stored on a server. |
+| [Docker volumes](/docs/cli/docker-volume) | `astron-collection docker-volume` | 8 | Inspect volumes, their size and the files inside them. |
+| [Network providers](/docs/cli/network-provider) | `astron-collection network-provider` | 9 | External network providers (overlay networks and peers) plus their health checks. |
+| [Registries](/docs/cli/registry) | `astron-collection registry` | 17 | Container registries used to pull private images. |
+| [Servers](/docs/cli/server) | `astron-collection server` | 21 | Add remote servers over SSH, validate them and read their metrics and services. |
+| [SSH keys](/docs/cli/ssh-key) | `astron-collection ssh-key` | 7 | SSH keys used to reach servers and clone private repositories. |
+| [Swarm](/docs/cli/swarm) | `astron-collection swarm` | 5 | Inspect Docker Swarm nodes, node workloads and container statistics. |
 
 ### Notifications
 
 | Group | Command | Commands | Description |
 | --- | --- | --- | --- |
-| [Notifications](/docs/cli/notification) | `notploy notification` | 41 | Notification channels — Slack, Discord, Telegram, email and others — plus test deliveries. |
+| [Notifications](/docs/cli/notification) | `astron-collection notification` | 41 | Notification channels — Slack, Discord, Telegram, email and others — plus test deliveries. |
 
 ### Team & access
 
 | Group | Command | Commands | Description |
 | --- | --- | --- | --- |
-| [Audit log](/docs/cli/audit-log) | `notploy audit-log` | 1 | Every recorded action performed in the organization. |
-| [Custom roles](/docs/cli/custom-role) | `notploy custom-role` | 6 | Organization roles built from a set of permission statements. |
-| [Organizations](/docs/cli/organization) | `notploy organization` | 11 | Organizations, members, invitations and the active organization. |
-| [SCIM](/docs/cli/scim) | `notploy scim` | 3 | SCIM provisioning providers and tokens used for directory sync. |
-| [SSO](/docs/cli/sso) | `notploy sso` | 16 | Single sign-on providers, enforcement and trusted origins. |
-| [Users](/docs/cli/user) | `notploy user` | 25 | Accounts, API keys, sessions, permissions and per-user metrics. |
+| [Audit log](/docs/cli/audit-log) | `astron-collection audit-log` | 1 | Every recorded action performed in the organization. |
+| [Custom roles](/docs/cli/custom-role) | `astron-collection custom-role` | 6 | Organization roles built from a set of permission statements. |
+| [Organizations](/docs/cli/organization) | `astron-collection organization` | 11 | Organizations, members, invitations and the active organization. |
+| [SCIM](/docs/cli/scim) | `astron-collection scim` | 3 | SCIM provisioning providers and tokens used for directory sync. |
+| [SSO](/docs/cli/sso) | `astron-collection sso` | 16 | Single sign-on providers, enforcement and trusted origins. |
+| [Users](/docs/cli/user) | `astron-collection user` | 25 | Accounts, API keys, sessions, permissions and per-user metrics. |
 
 ### Platform
 
 | Group | Command | Commands | Description |
 | --- | --- | --- | --- |
-| [Admin](/docs/cli/admin) | `notploy admin` | 1 | Administrative operations that apply to the whole instance. |
-| [Community](/docs/cli/community) | `notploy community` | 14 | Community sources, repositories, releases and the health report of the instance's community presence. |
-| [Settings](/docs/cli/settings) | `notploy settings` | 57 | Instance-wide settings: Traefik, Docker cleanup, monitoring, GPUs, updates and SSH. |
-| [Status page](/docs/cli/status) | `notploy status` | 12 | Publish incidents and maintenance windows to the public status page. |
-| [Stripe](/docs/cli/stripe) | `notploy stripe` | 15 | Billing for Notploy Cloud: plans, invoices, checkout and the customer portal. |
-| [Whitelabeling](/docs/cli/whitelabeling) | `notploy whitelabeling` | 4 | Rebrand the instance: application name, logos, favicon and links. |
+| [Admin](/docs/cli/admin) | `astron-collection admin` | 1 | Administrative operations that apply to the whole instance. |
+| [Community](/docs/cli/community) | `astron-collection community` | 14 | Community sources, repositories, releases and the health report of the instance's community presence. |
+| [Settings](/docs/cli/settings) | `astron-collection settings` | 57 | Instance-wide settings: Traefik, Docker cleanup, monitoring, GPUs, updates and SSH. |
+| [Status page](/docs/cli/status) | `astron-collection status` | 12 | Publish incidents and maintenance windows to the public status page. |
+| [Stripe](/docs/cli/stripe) | `astron-collection stripe` | 15 | Billing for Astron Collection Cloud: plans, invoices, checkout and the customer portal. |
+| [Whitelabeling](/docs/cli/whitelabeling) | `astron-collection whitelabeling` | 4 | Rebrand the instance: application name, logos, favicon and links. |
 
 ### Automation
 
 | Group | Command | Commands | Description |
 | --- | --- | --- | --- |
-| [AI](/docs/cli/ai) | `notploy ai` | 14 | AI providers and models, plus log analysis and configuration suggestions. |
+| [AI](/docs/cli/ai) | `astron-collection ai` | 14 | AI providers and models, plus log analysis and configuration suggestions. |
 
 ## Naming
 
-Groups are the first argument and commands the second: `notploy <group> <command>`. Both are
+Groups are the first argument and commands the second: `astron-collection <group> <command>`. Both are
 lowercase and hyphenated, matching the API namespace they call (`docker-disk-usage` →
 `dockerDiskUsage.*`).
 
@@ -154,4 +154,4 @@ when it is missing, so it always has to be provided; the others are omitted from
 leave them out, which lets the server apply its defaults.
 
 Flag names, required flags and allowed values are read from the CLI itself, so this page cannot drift
-from what `notploy --help` reports.
+from what `astron-collection --help` reports.

@@ -1,4 +1,4 @@
-import type { ns1DnsConfigSchema } from "@notploy/server/db/schema";
+import type { ns1DnsConfigSchema } from "@astron-collection/server/db/schema";
 import type { z } from "zod";
 import { createDnsHttp, stripTrailingDot } from "../http";
 import type { DnsClient } from "../types";

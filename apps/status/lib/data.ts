@@ -20,7 +20,7 @@ import {
 	type PublicIncidentDto,
 	type PublicMaintenanceDto,
 	type PublicPageDto,
-} from "@notploy/status";
+} from "@astron-collection/status";
 import { getPlatform } from "./engine";
 
 export interface PageSummary {

@@ -55,7 +55,7 @@ describe("OperationStore", () => {
   });
 
   it("persists operations and marks interrupted runs after a restart", async () => {
-    const directory = await mkdtemp(join(tmpdir(), "notploy-mcp-operations-"));
+    const directory = await mkdtemp(join(tmpdir(), "astron-collection-mcp-operations-"));
     cleanups.push(() => rm(directory, { recursive: true, force: true }));
     const path = join(directory, "operations.json");
 

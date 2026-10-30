@@ -48,7 +48,7 @@ export function evaluatePolicy(config: PolicyConfig, input: PolicyEvaluationInpu
   if (config.blockedCapabilities.has(capability.name)) {
     return deny(
       "policy_denied",
-      `The capability "${capability.name}" is blocked by NOTPLOY_MCP_BLOCKED_CAPABILITIES`,
+      `The capability "${capability.name}" is blocked by ASTRON_COLLECTION_MCP_BLOCKED_CAPABILITIES`,
       risk,
     );
   }
@@ -76,7 +76,7 @@ export function evaluatePolicy(config: PolicyConfig, input: PolicyEvaluationInpu
   if (risk !== 2) {
     return deny(
       "policy_denied",
-      `Risk level ${risk} exceeds NOTPLOY_MCP_MAX_RISK (${config.maxAutomaticRisk})`,
+      `Risk level ${risk} exceeds ASTRON_COLLECTION_MCP_MAX_RISK (${config.maxAutomaticRisk})`,
       risk,
     );
   }
@@ -88,7 +88,7 @@ export function evaluatePolicy(config: PolicyConfig, input: PolicyEvaluationInpu
   if (capability.effects.destructive && !config.allowDestructive) {
     return deny(
       "policy_denied",
-      "Destructive capabilities are disabled. Set NOTPLOY_MCP_ALLOW_DESTRUCTIVE=true to opt in",
+      "Destructive capabilities are disabled. Set ASTRON_COLLECTION_MCP_ALLOW_DESTRUCTIVE=true to opt in",
       risk,
     );
   }
@@ -96,7 +96,7 @@ export function evaluatePolicy(config: PolicyConfig, input: PolicyEvaluationInpu
   if (!config.approvalToken) {
     return deny(
       "approval_required",
-      "This capability requires an approval token, but NOTPLOY_MCP_APPROVAL_TOKEN is not configured",
+      "This capability requires an approval token, but ASTRON_COLLECTION_MCP_APPROVAL_TOKEN is not configured",
       risk,
       true,
     );

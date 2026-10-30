@@ -1,6 +1,6 @@
-import type { apiRestoreBackup } from "@notploy/server/db/schema";
-import type { Destination } from "@notploy/server/services/destination";
-import type { Mongo } from "@notploy/server/services/mongo";
+import type { apiRestoreBackup } from "@astron-collection/server/db/schema";
+import type { Destination } from "@astron-collection/server/services/destination";
+import type { Mongo } from "@astron-collection/server/services/mongo";
 import { quote } from "shell-quote";
 import type { z } from "zod";
 import { getS3Credentials } from "../backups/utils";

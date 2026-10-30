@@ -10,7 +10,7 @@ import {
 	initSchedules,
 	initializeSwarm,
 	initVolumeBackupsCronJobs,
-	sendNotployRestartNotifications,
+	sendAstronCollectionRestartNotifications,
 	setupDirectories,
 	setupGatewayErrors,
 	startCommunitySync,
@@ -18,7 +18,7 @@ import {
 	startTrafficCollector,
 	validateInstallation,
 	writeGatewayErrorsConfig,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import { config } from "dotenv";
 import next from "next";
 import packageInfo from "../package.json";
@@ -37,7 +37,7 @@ const dev = process.env.NODE_ENV !== "production";
 // Initialize critical directories and Traefik config BEFORE Next.js starts.
 // This prevents race conditions with the install script and, in development,
 // makes sure the Compose-managed Traefik service has a config file to read from
-// the shared config path (NOTPLOY_CONFIG_PATH).
+// the shared config path (ASTRON_COLLECTION_CONFIG_PATH).
 if (!IS_CLOUD) {
 	setupDirectories();
 	createDefaultTraefikConfig();
@@ -48,16 +48,16 @@ if (!IS_CLOUD) {
 
 /**
  * Deployments attach their services (and Traefik) to the shared
- * `notploy-network`, so it must exist before the first deploy. Production calls
+ * `astron-collection-network`, so it must exist before the first deploy. Production calls
  * this from the bootstrap block below; development needs it too because the
  * Compose dev stack starts the app without running `pnpm setup`.
  */
-const ensureNotployNetwork = async () => {
+const ensureAstronCollectionNetwork = async () => {
 	try {
 		await initializeSwarm();
 		await initializeNetwork();
 	} catch (error) {
-		console.error("Failed to initialize notploy-network", error);
+		console.error("Failed to initialize astron-collection-network", error);
 	}
 };
 
@@ -97,7 +97,7 @@ const app = next({ dev, turbopack: process.env.TURBOPACK === "1" });
 const handle = app.getRequestHandler();
 void app.prepare().then(async () => {
 	try {
-		console.log("Running NotployVersion: ", packageInfo.version);
+		console.log("Running AstronCollectionVersion: ", packageInfo.version);
 		const server = http.createServer((req, res) => {
 			if (dev && req.url?.includes("_clientMiddlewareManifest.js")) {
 				const originalSetHeader = res.setHeader.bind(res);
@@ -147,8 +147,8 @@ void app.prepare().then(async () => {
 		server.listen(PORT, HOST);
 		console.log(`Server Started on: http://${HOST}:${PORT}`);
 
-		// Serves the Notploy Internal DNS zones to the local network and forwards
-		// everything else upstream. Disabled with NOTPLOY_DNS_SERVER=false.
+		// Serves the Astron Collection Internal DNS zones to the local network and forwards
+		// everything else upstream. Disabled with ASTRON_COLLECTION_DNS_SERVER=false.
 		startInternalDnsServer();
 		// Community Console: refresh the cached GitHub activity of the followed
 		// repositories. Registered in every environment so the console is never
@@ -156,7 +156,7 @@ void app.prepare().then(async () => {
 		// source is configured.
 		await startCommunitySync();
 		if (!IS_CLOUD) {
-			await ensureNotployNetwork();
+			await ensureAstronCollectionNetwork();
 			await setupGatewayErrors();
 			await writeGatewayErrorsConfig();
 		}
@@ -169,7 +169,7 @@ void app.prepare().then(async () => {
 			// Traffic Manager: incremental Traefik access-log collection plus the
 			// retention job of the traffic aggregates.
 			await startTrafficCollector();
-			await sendNotployRestartNotifications();
+			await sendAstronCollectionRestartNotifications();
 		}
 
 		// Same condition as the queue backend: the local worker must run

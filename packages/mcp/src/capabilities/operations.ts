@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ApiError } from "../adapters/notployApi.js";
+import { ApiError } from "../adapters/astronCollectionApi.js";
 import { defineCapability } from "../contracts/capability.js";
 import { toOperationView } from "../contracts/operation.js";
 import { toolResultEnvelopeShape } from "../contracts/result.js";
@@ -40,7 +40,7 @@ export const getOperationStatusCapability = defineCapability({
     openWorldHint: true,
   },
   limitations: [
-    "Operations are stored per MCP server process; they are shared across instances only when NOTPLOY_MCP_OPERATION_STORE is configured on a shared volume.",
+    "Operations are stored per MCP server process; they are shared across instances only when ASTRON_COLLECTION_MCP_OPERATION_STORE is configured on a shared volume.",
   ],
   execute: async (input, context) => {
     const operation = await context.operations.getScoped(input.operationId, {

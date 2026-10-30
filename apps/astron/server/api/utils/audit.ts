@@ -1,5 +1,5 @@
-import type { AuditAction, AuditResourceType } from "@notploy/server/db/schema";
-import { createAuditLog } from "@notploy/server/services/proprietary/audit-log";
+import type { AuditAction, AuditResourceType } from "@astron-collection/server/db/schema";
+import { createAuditLog } from "@astron-collection/server/services/proprietary/audit-log";
 
 interface AuditCtx {
 	user: { id: string; email: string; role: string };

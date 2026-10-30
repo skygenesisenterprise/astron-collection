@@ -1,6 +1,6 @@
 {
 	"title": "Templates",
-	"description": "Blueprints and application examples you can deploy on Notploy.",
+	"description": "Blueprints and application examples you can deploy on Astron Collection.",
 	"icon": "LayoutTemplate",
 	"root": true,
 	"pages": [

@@ -1,5 +1,5 @@
 {
-	"name": "@notploy/emails",
+	"name": "@astron-collection/emails",
 	"version": "0.0.19",
 	"private": true,
 	"type": "module",

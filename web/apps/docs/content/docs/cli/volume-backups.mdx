@@ -1,27 +1,27 @@
 ---
 title: "Volume backups"
-description: "Back up Docker volumes on a schedule and download the resulting archives. Generated from the `notploy` command surface."
+description: "Back up Docker volumes on a schedule and download the resulting archives. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Back up Docker volumes on a schedule and download the resulting archives.
 
-`notploy volume-backups` exposes **6 commands**. They map one-to-one onto the `volume-backups.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection volume-backups` exposes **6 commands**. They map one-to-one onto the `volume-backups.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy volume-backups --help` to list these commands in your terminal, or
-	`notploy volume-backups <command> --help` for a single command.
+	Run `astron-collection volume-backups --help` to list these commands in your terminal, or
+	`astron-collection volume-backups <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy volume-backups create`
+### `astron-collection volume-backups create`
 
 Calls `POST /api/trpc/volumeBackups.create`.
 
 ```bash
-notploy volume-backups create --name <value> --volumeName <value> --prefix <value> --cronExpression <value> --destinationId <value> [options]
+astron-collection volume-backups create --name <value> --volumeName <value> --prefix <value> --cronExpression <value> --destinationId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -50,12 +50,12 @@ notploy volume-backups create --name <value> --volumeName <value> --prefix <valu
 | `--destinationId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy volume-backups delete`
+### `astron-collection volume-backups delete`
 
 Calls `POST /api/trpc/volumeBackups.delete`.
 
 ```bash
-notploy volume-backups delete --volumeBackupId <value> [options]
+astron-collection volume-backups delete --volumeBackupId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -63,12 +63,12 @@ notploy volume-backups delete --volumeBackupId <value> [options]
 | `--volumeBackupId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy volume-backups list`
+### `astron-collection volume-backups list`
 
 Calls `GET /api/trpc/volumeBackups.list`.
 
 ```bash
-notploy volume-backups list --id <value> --volumeBackupType <value> [options]
+astron-collection volume-backups list --id <value> --volumeBackupType <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -77,12 +77,12 @@ notploy volume-backups list --id <value> --volumeBackupType <value> [options]
 | `--volumeBackupType <value>` | string | Yes | `application`, `postgres`, `mysql`, `mariadb`, `mongo`, `redis`, `compose`, `libsql` |
 | `--profile <name>` | string | No | — |
 
-### `notploy volume-backups one`
+### `astron-collection volume-backups one`
 
 Calls `GET /api/trpc/volumeBackups.one`.
 
 ```bash
-notploy volume-backups one --volumeBackupId <value> [options]
+astron-collection volume-backups one --volumeBackupId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -90,12 +90,12 @@ notploy volume-backups one --volumeBackupId <value> [options]
 | `--volumeBackupId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy volume-backups run-manually`
+### `astron-collection volume-backups run-manually`
 
 Calls `POST /api/trpc/volumeBackups.runManually`.
 
 ```bash
-notploy volume-backups run-manually --volumeBackupId <value> [options]
+astron-collection volume-backups run-manually --volumeBackupId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -103,12 +103,12 @@ notploy volume-backups run-manually --volumeBackupId <value> [options]
 | `--volumeBackupId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy volume-backups update`
+### `astron-collection volume-backups update`
 
 Calls `POST /api/trpc/volumeBackups.update`.
 
 ```bash
-notploy volume-backups update --name <value> --volumeName <value> --prefix <value> --cronExpression <value> --destinationId <value> --volumeBackupId <value> [options]
+astron-collection volume-backups update --name <value> --volumeName <value> --prefix <value> --cronExpression <value> --destinationId <value> --volumeBackupId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |

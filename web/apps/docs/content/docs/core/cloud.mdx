@@ -1,22 +1,22 @@
 ---
-title: Notploy Cloud
+title: Astron Collection Cloud
 description: "Deploy your apps to multiple servers remotely without worrying about the underlying infrastructure."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-Notploy Cloud is the managed version of Notploy. Instead of installing and maintaining Notploy on your own server, the **control plane** (UI, database, and management layer) is hosted by us — you just connect your own servers and deploy.
+Astron Collection Cloud is the managed version of Astron Collection. Instead of installing and maintaining Astron Collection on your own server, the **control plane** (UI, database, and management layer) is hosted by us — you just connect your own servers and deploy.
 
 ## How it works
 
-With **Self-Hosted** Notploy, everything runs on a single server: the UI, the database (PostgreSQL), Redis, Traefik, and your applications — all on the same machine. This works well for small setups, but as you scale, your management layer competes for resources with your actual workloads.
+With **Self-Hosted** Astron Collection, everything runs on a single server: the UI, the database (PostgreSQL), Redis, Traefik, and your applications — all on the same machine. This works well for small setups, but as you scale, your management layer competes for resources with your actual workloads.
 
-**Notploy Cloud** separates these concerns:
+**Astron Collection Cloud** separates these concerns:
 
 ```
 ┌──────────────────────────────┐       ┌─────────────────────────┐
-│       Notploy Cloud          │       │    Your Server(s)       │
-│    (managed by Notploy)      │       │  (any cloud provider)   │
+│       Astron Collection Cloud          │       │    Your Server(s)       │
+│    (managed by Astron Collection)      │       │  (any cloud provider)   │
 │                              │       │                         │
 │  ┌────────────┐              │       │  ┌───────────────────┐  │
 │  │  Dashboard  │─── deploy ──┼──────►│  │  Your apps        │  │
@@ -36,21 +36,21 @@ With **Self-Hosted** Notploy, everything runs on a single server: the UI, the da
 - **Control plane** (Cloud): Dashboard, user management, deployment orchestration, monitoring dashboard, and notifications.
 - **Data plane** (Your servers): Your actual applications, databases, Traefik, and a lightweight monitoring agent.
 
-Your code and data **never leave your servers**. Notploy Cloud only manages the orchestration.
+Your code and data **never leave your servers**. Astron Collection Cloud only manages the orchestration.
 
 ## Key benefits
 
 | Benefit | Description |
 |---------|-------------|
-| **No management overhead** | No need to maintain the Notploy instance itself — updates, backups, and uptime are handled for you |
+| **No management overhead** | No need to maintain the Astron Collection instance itself — updates, backups, and uptime are handled for you |
 | **100% server resources for your apps** | The UI and management database don't compete with your workloads |
 | **Multi-server from day one** | Connect as many servers as you need from any provider (AWS, GCP, Azure, DigitalOcean, Hetzner, etc.) |
-| **Automatic updates** | Always on the latest version of Notploy without manual upgrades |
+| **Automatic updates** | Always on the latest version of Astron Collection without manual upgrades |
 | **Support** | Direct support via email/chat (Startup) or priority SLA (Enterprise) |
 
 ## Getting started
 
-Register at [app.notploy.com](https://app.notploy.com), connect a server over SSH, and deploy — Cloud prepares the server (Docker, Traefik, monitoring agent) for you. The full walkthrough is in [Cloud onboarding](/docs/core/cloud-onboarding).
+Register at [app.astron-collection.com](https://app.astron-collection.com), connect a server over SSH, and deploy — Cloud prepares the server (Docker, Traefik, monitoring agent) for you. The full walkthrough is in [Cloud onboarding](/docs/core/cloud-onboarding).
 
 <Callout type="info">
 You can connect servers from **any provider** — they just need to be reachable via SSH. You can even mix providers (e.g., Hetzner for production, DigitalOcean for staging).
@@ -58,13 +58,13 @@ You can connect servers from **any provider** — they just need to be reachable
 
 ## Pricing
 
-Cloud plans differ by server count, team size, backups, governance and support. Plan names, prices and limits are kept current on the [Pricing](https://notploy.com/pricing) page; see [Plans](/docs/core/cloud-plans) for how to choose.
+Cloud plans differ by server count, team size, backups, governance and support. Plan names, prices and limits are kept current on the [Pricing](https://astron-collection.com/pricing) page; see [Plans](/docs/core/cloud-plans) for how to choose.
 
 ## When to use Cloud vs Self-Hosted
 
 | Use Cloud when... | Use Self-Hosted when... |
 |-------------------|------------------------|
-| You don't want to maintain the Notploy instance | You want full control over everything |
+| You don't want to maintain the Astron Collection instance | You want full control over everything |
 | You need multi-server from the start | You have a single server and want to keep it simple |
 | You want built-in monitoring without extra config | You already have your own monitoring stack |
 | You prefer automatic updates | You want to control when updates happen |

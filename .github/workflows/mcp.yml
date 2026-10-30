@@ -45,16 +45,16 @@ jobs:
           cache: pnpm
 
       - name: Install MCP dependencies
-        run: pnpm install --frozen-lockfile --filter "@notploy/mcp..."
+        run: pnpm install --frozen-lockfile --filter "@astron-collection/mcp..."
 
       - name: Check generated catalog is current
-        run: pnpm --filter @notploy/mcp run generate:check
+        run: pnpm --filter @astron-collection/mcp run generate:check
 
       - name: Lint and format check
-        run: pnpm --filter @notploy/mcp run lint:ci
+        run: pnpm --filter @astron-collection/mcp run lint:ci
 
       - name: Type-check
-        run: pnpm --filter @notploy/mcp run typecheck
+        run: pnpm --filter @astron-collection/mcp run typecheck
 
       - name: Test
-        run: pnpm --filter @notploy/mcp run test
+        run: pnpm --filter @astron-collection/mcp run test

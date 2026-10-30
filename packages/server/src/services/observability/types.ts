@@ -1,7 +1,7 @@
 /**
  * Phase 1 — shared observability contracts for Prometheus/Grafana.
  *
- * These types are intentionally transport-agnostic: the Notploy console must
+ * These types are intentionally transport-agnostic: the Astron Collection console must
  * not be coupled to whether metrics come from the managed stack or from an
  * external Prometheus/Grafana pair. Adapters (Phase 3) implement these
  * contracts; the console (Phase 4) only consumes them.
@@ -12,7 +12,7 @@
  * - Prometheus read paths must not depend on Grafana at runtime.
  */
 
-/** Stable resource identity used to join Notploy objects to metric series. */
+/** Stable resource identity used to join Astron Collection objects to metric series. */
 export interface ObservableResourceRef {
 	organizationId: string;
 	serverId?: string;
@@ -32,30 +32,30 @@ export interface ObservableResourceRef {
 }
 
 /**
- * Mastered Prometheus label set for Notploy series.
+ * Mastered Prometheus label set for Astron Collection series.
  * Keep cardinality bounded: no secrets, no unbounded/free-form values.
  */
 export type ObservabilityLabelKey =
-	| "notploy_org_id"
-	| "notploy_server_id"
-	| "notploy_project_id"
-	| "notploy_environment_id"
-	| "notploy_service_id"
-	| "notploy_service_type"
-	| "notploy_container_name";
+	| "astron_collectionorg_id"
+	| "astron_collectionserver_id"
+	| "astron_collectionproject_id"
+	| "astron_collectionenvironment_id"
+	| "astron_collectionservice_id"
+	| "astron_collectionservice_type"
+	| "astron_collectioncontainer_name";
 
 export type ObservabilityLabels = Partial<
 	Record<ObservabilityLabelKey, string>
 >;
 
 const OBSERVABILITY_LABEL_KEYS: ReadonlySet<string> = new Set([
-	"notploy_org_id",
-	"notploy_server_id",
-	"notploy_project_id",
-	"notploy_environment_id",
-	"notploy_service_id",
-	"notploy_service_type",
-	"notploy_container_name",
+	"astron_collectionorg_id",
+	"astron_collectionserver_id",
+	"astron_collectionproject_id",
+	"astron_collectionenvironment_id",
+	"astron_collectionservice_id",
+	"astron_collectionservice_type",
+	"astron_collectioncontainer_name",
 ]);
 
 /** Guard against secret, high-cardinality, or unbounded label keys. */
@@ -66,13 +66,13 @@ export const toObservabilityLabels = (
 	ref: ObservableResourceRef,
 ): ObservabilityLabels => {
 	const labels: ObservabilityLabels = {};
-	if (ref.organizationId) labels.notploy_org_id = ref.organizationId;
-	if (ref.serverId) labels.notploy_server_id = ref.serverId;
-	if (ref.projectId) labels.notploy_project_id = ref.projectId;
-	if (ref.environmentId) labels.notploy_environment_id = ref.environmentId;
-	if (ref.serviceId) labels.notploy_service_id = ref.serviceId;
-	if (ref.serviceType) labels.notploy_service_type = ref.serviceType;
-	if (ref.containerName) labels.notploy_container_name = ref.containerName;
+	if (ref.organizationId) labels.astron_collectionorg_id = ref.organizationId;
+	if (ref.serverId) labels.astron_collectionserver_id = ref.serverId;
+	if (ref.projectId) labels.astron_collectionproject_id = ref.projectId;
+	if (ref.environmentId) labels.astron_collectionenvironment_id = ref.environmentId;
+	if (ref.serviceId) labels.astron_collectionservice_id = ref.serviceId;
+	if (ref.serviceType) labels.astron_collectionservice_type = ref.serviceType;
+	if (ref.containerName) labels.astron_collectioncontainer_name = ref.containerName;
 	return labels;
 };
 

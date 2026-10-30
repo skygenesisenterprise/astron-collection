@@ -1,6 +1,6 @@
 {
 	"title": "API",
-	"description": "RESTful API reference for programmatic access to Notploy.",
+	"description": "RESTful API reference for programmatic access to Astron Collection.",
 	"icon": "Code",
 	"root": true,
 	"pages": [

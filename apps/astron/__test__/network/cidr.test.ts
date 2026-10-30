@@ -5,7 +5,7 @@ import {
 	isValidCidr,
 	isValidIp,
 	parseCidr,
-} from "@notploy/server/utils/network/cidr";
+} from "@astron-collection/server/utils/network/cidr";
 import { describe, expect, it } from "vitest";
 
 describe("isValidCidr", () => {

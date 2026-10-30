@@ -12,13 +12,13 @@ import {
 	removeForwardAuthProxy,
 	removeForwardAuthSettings,
 	setForwardAuthSettings,
-} from "@notploy/server";
+} from "@astron-collection/server";
 import {
 	apiDeployForwardAuthOnServer,
 	apiForwardAuthDomainTarget,
 	apiForwardAuthServerTarget,
 	apiSetForwardAuthSettings,
-} from "@notploy/server/db/schema";
+} from "@astron-collection/server/db/schema";
 import { TRPCError } from "@trpc/server";
 import {
 	createTRPCRouter,

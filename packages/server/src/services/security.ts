@@ -1,9 +1,9 @@
-import { db } from "@notploy/server/db";
-import { type apiCreateSecurity, security } from "@notploy/server/db/schema";
+import { db } from "@astron-collection/server/db";
+import { type apiCreateSecurity, security } from "@astron-collection/server/db/schema";
 import {
 	createSecurityMiddleware,
 	removeSecurityMiddleware,
-} from "@notploy/server/utils/traefik/security";
+} from "@astron-collection/server/utils/traefik/security";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import type { z } from "zod";

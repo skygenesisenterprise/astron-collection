@@ -1,63 +1,63 @@
 ---
 title: "Organizations"
-description: "Organizations, members, invitations and the active organization. Generated from the `notploy` command surface."
+description: "Organizations, members, invitations and the active organization. Generated from the `astron-collection` command surface."
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 Organizations, members, invitations and the active organization.
 
-`notploy organization` exposes **11 commands**. They map one-to-one onto the `organization.*` API operations, so anything reachable from the dashboard is reachable from here.
+`astron-collection organization` exposes **11 commands**. They map one-to-one onto the `organization.*` API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run `notploy organization --help` to list these commands in your terminal, or
-	`notploy organization <command> --help` for a single command.
+	Run `astron-collection organization --help` to list these commands in your terminal, or
+	`astron-collection organization <command> --help` for a single command.
 </Callout>
 
 ## Commands
 
-### `notploy organization active`
+### `astron-collection organization active`
 
 Calls `GET /api/trpc/organization.active`.
 
 ```bash
-notploy organization active [options]
+astron-collection organization active [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy organization all`
+### `astron-collection organization all`
 
 Calls `GET /api/trpc/organization.all`.
 
 ```bash
-notploy organization all [options]
+astron-collection organization all [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy organization all-invitations`
+### `astron-collection organization all-invitations`
 
 Calls `GET /api/trpc/organization.allInvitations`.
 
 ```bash
-notploy organization all-invitations [options]
+astron-collection organization all-invitations [options]
 ```
 
 | Option | Type | Required | Allowed values |
 | --- | --- | --- | --- |
 | `--profile <name>` | string | No | — |
 
-### `notploy organization create`
+### `astron-collection organization create`
 
 Calls `POST /api/trpc/organization.create`.
 
 ```bash
-notploy organization create --name <value> [options]
+astron-collection organization create --name <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -66,12 +66,12 @@ notploy organization create --name <value> [options]
 | `--logo <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy organization delete`
+### `astron-collection organization delete`
 
 Calls `POST /api/trpc/organization.delete`.
 
 ```bash
-notploy organization delete --organizationId <value> [options]
+astron-collection organization delete --organizationId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -79,12 +79,12 @@ notploy organization delete --organizationId <value> [options]
 | `--organizationId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy organization invite-member`
+### `astron-collection organization invite-member`
 
 Calls `POST /api/trpc/organization.inviteMember`.
 
 ```bash
-notploy organization invite-member --email <value> --role <value> [options]
+astron-collection organization invite-member --email <value> --role <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -93,12 +93,12 @@ notploy organization invite-member --email <value> --role <value> [options]
 | `--role <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy organization one`
+### `astron-collection organization one`
 
 Calls `GET /api/trpc/organization.one`.
 
 ```bash
-notploy organization one --organizationId <value> [options]
+astron-collection organization one --organizationId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -106,12 +106,12 @@ notploy organization one --organizationId <value> [options]
 | `--organizationId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy organization remove-invitation`
+### `astron-collection organization remove-invitation`
 
 Calls `POST /api/trpc/organization.removeInvitation`.
 
 ```bash
-notploy organization remove-invitation --invitationId <value> [options]
+astron-collection organization remove-invitation --invitationId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -119,12 +119,12 @@ notploy organization remove-invitation --invitationId <value> [options]
 | `--invitationId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy organization set-default`
+### `astron-collection organization set-default`
 
 Calls `POST /api/trpc/organization.setDefault`.
 
 ```bash
-notploy organization set-default --organizationId <value> [options]
+astron-collection organization set-default --organizationId <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -132,12 +132,12 @@ notploy organization set-default --organizationId <value> [options]
 | `--organizationId <value>` | string | Yes | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy organization update`
+### `astron-collection organization update`
 
 Calls `POST /api/trpc/organization.update`.
 
 ```bash
-notploy organization update --organizationId <value> --name <value> [options]
+astron-collection organization update --organizationId <value> --name <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |
@@ -148,12 +148,12 @@ notploy organization update --organizationId <value> --name <value> [options]
 | `--defaultRole <value>` | string | No | — |
 | `--profile <name>` | string | No | — |
 
-### `notploy organization update-member-role`
+### `astron-collection organization update-member-role`
 
 Calls `POST /api/trpc/organization.updateMemberRole`.
 
 ```bash
-notploy organization update-member-role --memberId <value> --role <value> [options]
+astron-collection organization update-member-role --memberId <value> --role <value> [options]
 ```
 
 | Option | Type | Required | Allowed values |

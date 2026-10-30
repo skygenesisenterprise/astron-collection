@@ -1,19 +1,19 @@
 import { parse } from "yaml";
 import { describe, expect, it, vi } from "vitest";
 
-import { toDockerHostPath } from "@notploy/server/utils/docker/host-path";
+import { toDockerHostPath } from "@astron-collection/server/utils/docker/host-path";
 
 // Simulate a development stack whose configuration tree lives in a Docker
 // volume: every container path handed to the daemon is rebased under the
 // volume's host directory.
-vi.mock("@notploy/server/utils/docker/host-path", async (importOriginal) => ({
+vi.mock("@astron-collection/server/utils/docker/host-path", async (importOriginal) => ({
 	...(await importOriginal<
-		typeof import("@notploy/server/utils/docker/host-path")
+		typeof import("@astron-collection/server/utils/docker/host-path")
 	>()),
 	toDockerHostPath: vi.fn(async (containerPath: string) => `/host-tree${containerPath}`),
 }));
 
-import { writeDomainsToCompose } from "@notploy/server/utils/docker/domain";
+import { writeDomainsToCompose } from "@astron-collection/server/utils/docker/domain";
 
 const baseCompose = {
 	appName: "my-app",
@@ -29,8 +29,8 @@ const baseCompose = {
       - prometheus-data:/prometheus
       - /:/host:ro,rslave
       - type: bind
-        source: ../files/notploy-alerts.yml
-        target: /etc/prometheus/notploy-alerts.yml
+        source: ../files/astron-collection-alerts.yml
+        target: /etc/prometheus/astron-collection-alerts.yml
       - type: volume
         source: grafana-storage
         target: /var/lib/grafana
@@ -62,8 +62,8 @@ describe("writeDomainsToCompose local bind-mount remapping", () => {
 		// Absolute host path outside the config tree → untouched.
 		expect(volumes[2]).toBe("/:/host:ro,rslave");
 		// Long-syntax bind → source rewritten.
-		expect(volumes[3].source).toMatch(/^\/host-tree\/.*\/files\/notploy-alerts\.yml$/);
-		expect(volumes[3].target).toBe("/etc/prometheus/notploy-alerts.yml");
+		expect(volumes[3].source).toMatch(/^\/host-tree\/.*\/files\/astron-collection-alerts\.yml$/);
+		expect(volumes[3].target).toBe("/etc/prometheus/astron-collection-alerts.yml");
 		// Long-syntax named volume → untouched.
 		expect(volumes[4]).toEqual({
 			type: "volume",
@@ -86,7 +86,7 @@ describe("writeDomainsToCompose local bind-mount remapping", () => {
 		expect(volumes[0]).toBe(
 			"../files/prometheus.yml:/etc/prometheus/prometheus.yml",
 		);
-		expect(volumes[3].source).toBe("../files/notploy-alerts.yml");
+		expect(volumes[3].source).toBe("../files/astron-collection-alerts.yml");
 		expect(vi.mocked(toDockerHostPath)).not.toHaveBeenCalled();
 	});
 });
