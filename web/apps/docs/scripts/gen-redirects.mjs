@@ -1,0 +1,135 @@
+/**
+ * Generates the legacy-URL redirect table for the documentation refactor.
+ *
+ * After restoring the Dokploy-style chassis (core / cli / api / templates), most
+ * legacy URLs are unchanged. This script reads the pre-refactor file list from
+ * git HEAD, computes each old URL and its new URL, and emits redirects only for
+ * the URLs that actually changed (removed pages and case fixes).
+ *
+ * Run with: node scripts/gen-redirects.mjs
+ */
+import { execSync } from "node:child_process";
+import { existsSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { pathToFileURL } from "node:url";
+
+const REPO_ROOT = join(import.meta.dirname, "..", "..", "..", "..");
+const DOCS_PREFIX = "web/apps/docs/content/docs/";
+
+// Explicit renames / removals introduced by the refactor.
+const FIXES = {
+	"core/goodies": "core/index",
+	"core/videos": "core/index",
+	"core/(Git-Sources)/Docker": "core/(Git-Sources)/docker",
+	// The hand-written CLI guides were replaced by the generated group pages,
+	// which document the same areas with the real command surface. Groups keep
+	// their URL (`cli/project`, `cli/application`), so only the guides without a
+	// generated counterpart move.
+	"cli/databases": "cli/reference",
+	"cli/enviroment": "cli/environment",
+};
+
+function toUrl(rel) {
+	// Drop route-group segments `(...)` — they never appear in public URLs — and
+	// normalise index files / extensions.
+	let r = rel.replace(/\.(mdx?|json)$/, "");
+	r = r.replace(/\([^)]*\)\//g, "");
+	r = r.replace(/\/index$/, "");
+	r = r.replace(/^index$/, "");
+	return r;
+}
+
+function mapPath(rel) {
+	const key = rel.replace(/\.(mdx?|json)$/, "");
+	if (FIXES[key]) return FIXES[key];
+	// The examples moved out of Core into the Templates pole.
+	if (key.startsWith("core/(examples)/")) {
+		return "templates/examples/" + key.slice("core/(examples)/".length);
+	}
+	return key;
+}
+
+const headFiles = execSync(
+	`git ls-tree -r --name-only HEAD -- ${DOCS_PREFIX}`,
+	{ cwd: REPO_ROOT, encoding: "utf8" },
+)
+	.split("\n")
+	.filter((f) => /\.mdx?$/.test(f));
+
+const redirects = [];
+for (const file of headFiles) {
+	const rel = file.slice(DOCS_PREFIX.length);
+	const oldUrl = "/docs/" + toUrl(rel);
+	const newUrl = "/docs/" + toUrl(mapPath(rel));
+	if (oldUrl !== newUrl) {
+		redirects.push({ source: oldUrl, destination: newUrl, permanent: true });
+	}
+}
+
+// The list is cumulative: URLs from layouts older than HEAD cannot be derived
+// from the tree any more, so previously generated entries are kept and merged
+// with the ones this run computes.
+const outPath = join(import.meta.dirname, "redirects.mjs");
+const existing = existsSync(outPath)
+	? (await import(pathToFileURL(outPath).href)).legacyDocRedirects
+	: [];
+
+const merged = new Map(existing.map((redirect) => [redirect.source, redirect]));
+for (const redirect of redirects) merged.set(redirect.source, redirect);
+
+// URLs from layouts older than HEAD. These sections were flattened into Core,
+// and the pages themselves were already linked with the old prefixes, so the
+// redirect table keeps both external bookmarks and existing MDX links working.
+const LEGACY_REDIRECTS = {
+	"/docs/core/enterprise/audit-logs": "/docs/core/audit-logs",
+	"/docs/core/enterprise/custom-roles": "/docs/core/permissions",
+	"/docs/core/enterprise/license-keys": "/docs/core/enterprise",
+	"/docs/core/enterprise/scim": "/docs/core/scim",
+	"/docs/core/enterprise/sso": "/docs/core/sso",
+	"/docs/core/enterprise/sso/application-authentication":
+		"/docs/core/sso/application-authentication",
+	"/docs/core/enterprise/sso/auth0": "/docs/core/sso/auth0",
+	"/docs/core/enterprise/sso/azure": "/docs/core/sso/azure",
+	"/docs/core/enterprise/sso/keycloak": "/docs/core/sso/keycloak",
+	"/docs/core/enterprise/sso/okta": "/docs/core/sso/okta",
+	"/docs/core/enterprise/sso/zitadel": "/docs/core/sso/zitadel",
+	"/docs/core/enterprise/whitelabeling": "/docs/core/whitelabeling",
+	"/docs/core/guides/cloudflare-tunnels": "/docs/core/cloudflare-tunnels",
+	"/docs/core/guides/production-hardening": "/docs/core/production-hardening",
+	"/docs/core/guides/tailscale": "/docs/core/tailscale",
+	"/docs/core/migration": "/docs/core/compatibility",
+	"/docs/core/migration/compatibility": "/docs/core/compatibility",
+	"/docs/core/migration/from-dokploy": "/docs/core/from-dokploy",
+	"/docs/core/reference": "/docs/core/features",
+	"/docs/core/reference/changelog": "/docs/core/changelog",
+	"/docs/core/reference/feature-matrix": "/docs/core/feature-matrix",
+	"/docs/core/reference/limitations": "/docs/core/limitations",
+	"/docs/core/reference/platform-support": "/docs/core/platform-support",
+	"/docs/core/security": "/docs/core/account-security",
+	"/docs/core/security/api-keys": "/docs/core/api-keys",
+	"/docs/core/security/authentication": "/docs/core/authentication",
+	"/docs/core/security/secrets": "/docs/core/secrets",
+	"/docs/core/security/ssh-access": "/docs/core/ssh-access",
+	"/docs/core/security/tls-network": "/docs/core/tls-network",
+	"/docs/core/security/vulnerability-disclosure":
+		"/docs/core/vulnerability-disclosure",
+	"/docs/core/troubleshooting/domains": "/docs/core/troubleshooting",
+	"/docs/core/troubleshooting/instance": "/docs/core/troubleshooting",
+	"/docs/core/troubleshooting/logs-monitoring": "/docs/core/logs-monitoring",
+	"/docs/core/troubleshooting/networking": "/docs/core/troubleshooting",
+	"/docs/core/troubleshooting/volumes-mounts": "/docs/core/troubleshooting",
+};
+for (const [source, destination] of Object.entries(LEGACY_REDIRECTS)) {
+	merged.set(source, { source, destination, permanent: true });
+}
+
+const all = [...merged.values()].sort((a, b) => a.source.localeCompare(b.source));
+
+const out = `// AUTO-GENERATED by scripts/gen-redirects.mjs — do not edit by hand.
+// Legacy documentation URLs mapped to the refactored Notploy documentation.
+export const legacyDocRedirects = ${JSON.stringify(all, null, "\t")};
+`;
+writeFileSync(outPath, out);
+console.log(
+	`wrote ${all.length} redirects (${redirects.length} from HEAD, ${all.length - redirects.length} kept)`,
+);

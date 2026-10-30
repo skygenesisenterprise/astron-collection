@@ -1,0 +1,50 @@
+{
+	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+	"files": {
+		// CSS is excluded on purpose: web/apps/website is Tailwind v3 (@tailwind
+		// base/components/utilities) while web/apps/docs is Tailwind v4 (@theme,
+		// @custom-variant, @plugin). Biome's `css.parser.tailwindDirectives`
+		// understands only the v4 syntax, so no single setting parses both —
+		// enabling it turns the v3 file into ~79k parse errors. Revisit once the
+		// website is on Tailwind v4.
+		"includes": [
+			"**",
+			"!**/node_modules/**",
+			"!**/.source",
+			"!**/.next/**",
+			"!**/drizzle/**",
+			"!**/.docker",
+			"!**/dist",
+			"!**/*.css"
+		]
+	},
+	"assist": { "actions": { "source": { "organizeImports": "on" } } },
+	"linter": {
+		"rules": {
+			"security": {
+				"noDangerouslySetInnerHtml": "off"
+			},
+			"complexity": {
+				"noUselessCatch": "off",
+				"noBannedTypes": "off"
+			},
+			"correctness": {
+				"useExhaustiveDependencies": "off",
+				"noUnsafeOptionalChaining": "off"
+			},
+			"style": {
+				"noNonNullAssertion": "off"
+			},
+			"suspicious": {
+				"noArrayIndexKey": "off",
+				"noExplicitAny": "off",
+				"noRedeclare": "off"
+			},
+			"a11y": {
+				"noSvgWithoutTitle": "off",
+				"useKeyWithClickEvents": "off",
+				"useAriaPropsForRole": "off"
+			}
+		}
+	}
+}

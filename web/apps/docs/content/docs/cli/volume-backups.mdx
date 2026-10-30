@@ -1,0 +1,139 @@
+---
+title: "Volume backups"
+description: "Back up Docker volumes on a schedule and download the resulting archives. Generated from the `notploy` command surface."
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Back up Docker volumes on a schedule and download the resulting archives.
+
+`notploy volume-backups` exposes **6 commands**. They map one-to-one onto the `volume-backups.*` API operations, so anything reachable from the dashboard is reachable from here.
+
+<Callout>
+	Run `notploy volume-backups --help` to list these commands in your terminal, or
+	`notploy volume-backups <command> --help` for a single command.
+</Callout>
+
+## Commands
+
+### `notploy volume-backups create`
+
+Calls `POST /api/trpc/volumeBackups.create`.
+
+```bash
+notploy volume-backups create --name <value> --volumeName <value> --prefix <value> --cronExpression <value> --destinationId <value> [options]
+```
+
+| Option | Type | Required | Allowed values |
+| --- | --- | --- | --- |
+| `--name <value>` | string | Yes | — |
+| `--volumeName <value>` | string | Yes | — |
+| `--prefix <value>` | string | Yes | — |
+| `--serviceType <value>` | string | No | `application`, `postgres`, `mysql`, `mariadb`, `mongo`, `redis`, `compose`, `libsql` |
+| `--appName <value>` | string | No | — |
+| `--serviceName <value>` | string | No | — |
+| `--turnOff [boolean]` | boolean | No | — |
+| `--no-turnOff` | boolean | No | — |
+| `--cronExpression <value>` | string | Yes | — |
+| `--keepLatestCount <value>` | number | No | — |
+| `--enabled [boolean]` | boolean | No | — |
+| `--no-enabled` | boolean | No | — |
+| `--applicationId <value>` | string | No | — |
+| `--postgresId <value>` | string | No | — |
+| `--mariadbId <value>` | string | No | — |
+| `--mongoId <value>` | string | No | — |
+| `--mysqlId <value>` | string | No | — |
+| `--redisId <value>` | string | No | — |
+| `--libsqlId <value>` | string | No | — |
+| `--composeId <value>` | string | No | — |
+| `--createdAt <value>` | string | No | — |
+| `--destinationId <value>` | string | Yes | — |
+| `--profile <name>` | string | No | — |
+
+### `notploy volume-backups delete`
+
+Calls `POST /api/trpc/volumeBackups.delete`.
+
+```bash
+notploy volume-backups delete --volumeBackupId <value> [options]
+```
+
+| Option | Type | Required | Allowed values |
+| --- | --- | --- | --- |
+| `--volumeBackupId <value>` | string | Yes | — |
+| `--profile <name>` | string | No | — |
+
+### `notploy volume-backups list`
+
+Calls `GET /api/trpc/volumeBackups.list`.
+
+```bash
+notploy volume-backups list --id <value> --volumeBackupType <value> [options]
+```
+
+| Option | Type | Required | Allowed values |
+| --- | --- | --- | --- |
+| `--id <value>` | string | Yes | — |
+| `--volumeBackupType <value>` | string | Yes | `application`, `postgres`, `mysql`, `mariadb`, `mongo`, `redis`, `compose`, `libsql` |
+| `--profile <name>` | string | No | — |
+
+### `notploy volume-backups one`
+
+Calls `GET /api/trpc/volumeBackups.one`.
+
+```bash
+notploy volume-backups one --volumeBackupId <value> [options]
+```
+
+| Option | Type | Required | Allowed values |
+| --- | --- | --- | --- |
+| `--volumeBackupId <value>` | string | Yes | — |
+| `--profile <name>` | string | No | — |
+
+### `notploy volume-backups run-manually`
+
+Calls `POST /api/trpc/volumeBackups.runManually`.
+
+```bash
+notploy volume-backups run-manually --volumeBackupId <value> [options]
+```
+
+| Option | Type | Required | Allowed values |
+| --- | --- | --- | --- |
+| `--volumeBackupId <value>` | string | Yes | — |
+| `--profile <name>` | string | No | — |
+
+### `notploy volume-backups update`
+
+Calls `POST /api/trpc/volumeBackups.update`.
+
+```bash
+notploy volume-backups update --name <value> --volumeName <value> --prefix <value> --cronExpression <value> --destinationId <value> --volumeBackupId <value> [options]
+```
+
+| Option | Type | Required | Allowed values |
+| --- | --- | --- | --- |
+| `--name <value>` | string | Yes | — |
+| `--volumeName <value>` | string | Yes | — |
+| `--prefix <value>` | string | Yes | — |
+| `--serviceType <value>` | string | No | `application`, `postgres`, `mysql`, `mariadb`, `mongo`, `redis`, `compose`, `libsql` |
+| `--appName <value>` | string | No | — |
+| `--serviceName <value>` | string | No | — |
+| `--turnOff [boolean]` | boolean | No | — |
+| `--no-turnOff` | boolean | No | — |
+| `--cronExpression <value>` | string | Yes | — |
+| `--keepLatestCount <value>` | number | No | — |
+| `--enabled [boolean]` | boolean | No | — |
+| `--no-enabled` | boolean | No | — |
+| `--applicationId <value>` | string | No | — |
+| `--postgresId <value>` | string | No | — |
+| `--mariadbId <value>` | string | No | — |
+| `--mongoId <value>` | string | No | — |
+| `--mysqlId <value>` | string | No | — |
+| `--redisId <value>` | string | No | — |
+| `--libsqlId <value>` | string | No | — |
+| `--composeId <value>` | string | No | — |
+| `--createdAt <value>` | string | No | — |
+| `--destinationId <value>` | string | Yes | — |
+| `--volumeBackupId <value>` | string | Yes | — |
+| `--profile <name>` | string | No | — |

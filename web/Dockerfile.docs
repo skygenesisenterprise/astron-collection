@@ -1,0 +1,36 @@
+# Build from the repository root (the root pnpm-workspace.yaml is the single
+# workspace for the whole monorepo):
+#   docker build -f web/Dockerfile.docs .
+FROM node:24.4-alpine AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN npm install -g pnpm@10.22.0
+
+FROM base AS build
+COPY . /usr/src/app
+WORKDIR /usr/src/app
+
+# Install dependencies (docs + its workspace deps only)
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --filter=@notploy/docs... --frozen-lockfile
+
+# Generate OpenAPI documentation from web/apps/docs/public/openapi.json
+RUN pnpm --filter=@notploy/docs run build:docs
+
+ENV NODE_ENV=production
+RUN pnpm --filter=@notploy/docs run build
+
+FROM base AS notploy
+WORKDIR /app
+
+# Set production
+ENV NODE_ENV=production
+
+# Copy standalone output (includes all traced dependencies, traced from the
+# repository root so the app keeps its `web/apps/docs` path inside the output)
+COPY --from=build /usr/src/app/web/apps/docs/.next/standalone ./
+# Copy static assets and public files
+COPY --from=build /usr/src/app/web/apps/docs/.next/static ./web/apps/docs/.next/static
+COPY --from=build /usr/src/app/web/apps/docs/public ./web/apps/docs/public
+
+EXPOSE 3000
+CMD HOSTNAME=0.0.0.0 node web/apps/docs/server.js

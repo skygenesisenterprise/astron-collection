@@ -1,0 +1,4 @@
+{
+	"title": "Secrets Providers",
+	"pages": ["index", "hashicorp", "infisical", "aws", "doppler", "azure", "scaleway"]
+}

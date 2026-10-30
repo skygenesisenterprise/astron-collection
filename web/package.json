@@ -1,0 +1,42 @@
+{
+	"name": "@notploy/web",
+	"private": true,
+	"scripts": {
+		"docs:dev": "pnpm --filter=@notploy/docs run dev",
+		"docs:build": "pnpm --filter=@notploy/docs run build",
+		"docs:typecheck": "pnpm --filter=@notploy/docs run typecheck",
+		"website:dev": "pnpm --filter=@notploy/website run dev",
+		"website:build": "pnpm --filter=@notploy/website run build",
+		"website:typecheck": "pnpm --filter=@notploy/website run typecheck",
+		"typecheck": "pnpm --filter=@notploy/website --filter=@notploy/docs run typecheck",
+		"format": "prettier --write \"**/*.{ts,tsx,md}\"",
+		"build": "pnpm --filter=@notploy/website --filter=@notploy/docs run build",
+		"format-and-lint": "biome check .",
+		"check": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
+		"format-and-lint:fix": "biome check . --write"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.5.15",
+		"@commitlint/cli": "^19.3.0",
+		"@commitlint/config-conventional": "^19.2.2",
+		"@types/node": "^20.9.0",
+		"lint-staged": "^15.2.7"
+	},
+	"packageManager": "pnpm@10.22.0",
+	"engines": {
+		"node": "^24.4.0",
+		"pnpm": ">=10.22.0"
+	},
+	"lint-staged": {
+		"*": [
+			"biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
+		]
+	},
+	"commitlint": {
+		"extends": ["@commitlint/config-conventional"]
+	},
+	"resolutions": {
+		"@types/react": "19.2.2",
+		"@types/react-dom": "19.2.2"
+	}
+}

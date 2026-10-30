@@ -1,0 +1,110 @@
+---
+title: Capabilities
+description: "What Notploy can do today, organized by the jobs it does: deploy, operate, automate and scale."
+---
+
+This page is an inventory of what Notploy does, grouped by intent rather than by screen. Each capability links to the page that explains it. Features that are experimental or edition-specific are labelled where they appear in the detailed pages.
+
+## Deploy
+
+- **Applications** built from a Git provider, any Git URL, a container image, or an uploaded archive.
+- **Build types**: Dockerfile, Nixpacks, Railpack, Heroku/Paketo buildpacks, or a prebuilt image (no build).
+- **Docker Compose** stacks from a repository or a raw `docker-compose.yml`, edited in-app.
+- **Blueprints** from the [Notploy Templates gallery](https://templates.notploy.com) for one-click starting points.
+- **Databases**: PostgreSQL, MySQL, MariaDB, MongoDB and Redis.
+- **[Preview deployments](/docs/core/applications/preview-deployments)** for pull requests and branches.
+- **[Auto-deploy](/docs/core/auto-deploy)** from Git webhooks and CI.
+
+→ [Applications & deployment](/docs/core/applications)
+
+## Operate
+
+- **Domains and TLS** with automatic Let's Encrypt certificates and a generated-domain option for quick tests.
+- **Environment variables and secrets** at project, environment and service scope, plus external [secret managers](/docs/core/secrets-providers).
+- **Volumes and mounts** for persistent data, with [volume backups](/docs/core/volume-backups) for Docker named volumes.
+- **Scheduled backups** for databases and volumes to S3-compatible storage, with [restore](/docs/core/databases/restore).
+- **Scheduled jobs** (cron) against your services.
+- **Logs and resource monitoring** per service and per server.
+- **Notifications** to Slack, Discord, Telegram, Teams, email and others.
+- **[Rollbacks](/docs/core/applications/rollbacks)** to a previous deployment.
+
+→ [Operate & administer](/docs/core/administration)
+
+## Automate
+
+- **REST API** covering the management model.
+- **CLI** for terminal-driven workflows.
+- **TypeScript SDK** for programmatic use.
+- **MCP server** for AI-assisted tooling.
+- **VS Code extension** for editor integration.
+- **CI/CD** integration for deploying from your pipelines.
+
+→ [Develop & integrate](/docs/core/develop) · [API reference](/docs/api)
+
+## Scale
+
+- **Local server** (single machine) as the default topology.
+- **Remote deployment servers** over SSH for isolation and distribution.
+- **Dedicated build servers** to offload builds and push to a registry.
+- **Docker Swarm cluster** to replicate the same application across nodes with load balancing.
+
+→ [Deployment options](/docs/core/deployment-options)
+
+## Govern
+
+- **Organizations, members and roles**, with [custom roles](/docs/core/enterprise/custom-roles) in Enterprise.
+- **SSO** (OIDC / SAML) and **SCIM provisioning** in Enterprise.
+- **Audit logs** in Enterprise.
+- **Whitelabeling** in Enterprise Self-Hosted.
+- **Multi-tenancy** for running several isolated organizations.
+
+→ [Permissions](/docs/core/permissions) · [Enterprise](/docs/core/enterprise)
+
+<Callout type="info" title="Availability">
+Some capabilities above are edition-specific. See [Editions & scope](/docs/core/differences)
+for the full breakdown, and the individual pages for status labels (available, experimental,
+planned, unsupported).
+</Callout>
+
+## Implementation map
+
+This table is generated from the router registration and the feature mapping, so the API namespace
+and CLI group listed for a capability are the ones that actually implement it.
+
+{/* BEGIN GENERATED: core-features */}
+| Area | API namespaces | CLI | Guide |
+| --- | --- | --- | --- |
+| Applications | `application` | `notploy application` | [Applications](/docs/core/applications) (+6) |
+| Projects | `project`, `environment`, `tag` | `notploy project`, `notploy environment`, `notploy tag` | [Projects](/docs/core/concepts) (+6) |
+| Deployments | `deployment` | `notploy deployment` | [Deployments](/docs/core/first-deployment) (+3) |
+| Docker Compose | `compose` | `notploy compose` | [Docker Compose](/docs/core/docker-compose) (+3) |
+| Databases | `postgres`, `mysql`, `mariadb`, `mongo`, `redis`, `libsql` | `notploy postgres`, `notploy mysql`, `notploy mariadb`, `notploy mongo`, `notploy redis`, `notploy libsql` | [Databases](/docs/core/databases) (+3) |
+| Backups | `backup`, `volumeBackups`, `destination`, `objectStorage` | `notploy backup`, `notploy volume-backups`, `notploy destination`, `notploy object-storage` | [Backups](/docs/core/backups) (+3) |
+| Domains & TLS | `domain`, `certificates` | `notploy domain`, `notploy certificates` | [Domains & TLS](/docs/core/domains) (+3) |
+| DNS | `dnsProvider` | `notploy dns-provider` | [DNS](/docs/core/dns-providers) (+2) |
+| Git sources | `github`, `gitlab`, `bitbucket`, `gitea`, `gitProvider` | `notploy github`, `notploy gitlab`, `notploy bitbucket`, `notploy gitea`, `notploy git-provider` | [Git sources](/docs/core/github) (+4) |
+| Servers | `server` | `notploy server` | [Servers](/docs/core/infrastructure) (+5) |
+| Swarm | `swarm` | `notploy swarm` | [Swarm](/docs/core/cluster) |
+| Docker | `docker`, `dockerImage`, `dockerVolume`, `dockerDiskUsage`, `registry` | `notploy docker`, `notploy docker-image`, `notploy docker-volume`, `notploy docker-disk-usage`, `notploy registry` | [Docker](/docs/core/docker) (+2) |
+| Notifications | `notification` | `notploy notification` | [Notifications](/docs/core/overview) (+2) |
+| Secrets | `vaultProvider` | `notploy vault-provider` | [Secrets](/docs/core/secrets) (+2) |
+| AI | `ai` | `notploy ai` | [AI](/docs/core/ai) |
+| SSO | `sso` | `notploy sso` | [SSO](/docs/core/sso) (+6) |
+| SCIM | `scim` | `notploy scim` | [SCIM](/docs/core/scim) |
+| Audit logs | `auditLog` | `notploy audit-log` | [Audit logs](/docs/core/audit-logs) |
+| Custom roles | `customRole` | `notploy custom-role` | [Custom roles](/docs/core/permissions) |
+| Whitelabeling | `whitelabeling` | `notploy whitelabeling` | [Whitelabeling](/docs/core/whitelabeling) |
+| Cicd | `cicd` | — | [Cicd](/docs/core/github-actions) (+1) |
+| Traffic | `traffic` | `notploy traffic` | [Traffic](/docs/core/traffic-manager) |
+| Monitoring | `operationalEvent`, `status` | `notploy operational-event`, `notploy status` | [Monitoring](/docs/core/monitoring) (+1) |
+| Security | `security` | `notploy security` | [Security](/docs/core/account-security) (+3) |
+| Organizations | `organization`, `user` | `notploy organization`, `notploy user` | [Organizations](/docs/core/multi-tenancy) (+1) |
+| Cloud | `stripe` | `notploy stripe` | [Cloud](/docs/core/cloud) (+1) |
+| Administration | `admin`, `settings` | `notploy admin`, `notploy settings` | [Administration](/docs/core/administration) |
+{/* END GENERATED: core-features */}
+
+## Related
+
+- [Ecosystem](/docs/core/ecosystem) — how these capabilities combine.
+- [Feature support matrix](/docs/core/reference/feature-matrix) — capability by edition.
+- [Known limitations](/docs/core/reference/limitations) — constraints worth knowing up front.

@@ -1,0 +1,4 @@
+{
+	"title": "DNS Providers",
+	"pages": ["index", "cloudflare", "route53"]
+}

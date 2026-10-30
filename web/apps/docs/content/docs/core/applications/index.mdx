@@ -1,0 +1,69 @@
+---
+title: Applications & deployment
+description: "How services are defined, built, released and exposed on Notploy."
+---
+
+This section covers everything about turning a source into a running service: choosing where code comes from, how it is built, how it is configured and exposed, and how the deployment lifecycle behaves.
+
+A **service** in Notploy is one of three kinds — an **Application**, a **Database**, or a **Docker Compose** stack — and all three share the same operational surface. This section is organized around that surface.
+
+## Start here
+
+<Cards>
+  <Card href="/docs/core/providers" title="Sources & providers" description="GitHub, GitLab, Bitbucket, Gitea, Git URLs, images and uploads." />
+  <Card href="/docs/core/applications/build-type" title="Build types" description="Dockerfile, Nixpacks, Railpack, buildpacks, or prebuilt images." />
+  <Card href="/docs/core/docker-compose" title="Docker Compose" description="Multi-service stacks from a compose file." />
+  <Card href="/docs/core/databases" title="Databases" description="PostgreSQL, MySQL, MariaDB, MongoDB and Redis with backups." />
+</Cards>
+
+## Projects, environments and services
+
+A [project](/docs/core/concepts#project) groups related services; an [environment](/docs/core/concepts#environment) is the deployment context inside it (for example `production` and `staging`); a [service](/docs/core/concepts#service) is what actually runs. Configuration resolves from broad to specific — project, then environment, then service.
+
+## The deployment lifecycle
+
+Every service moves through the same lifecycle:
+
+1. **Source** is fetched (Git clone, image pull, or upload).
+2. **Build** produces an image according to the service's [build type](/docs/core/applications/build-type).
+3. **Release** starts the new container as a Swarm service; the old one is drained.
+4. **Route** — Traefik exposes the service on its [domains](/docs/core/domains).
+5. **Record** — the [deployment](/docs/core/concepts#deployment) is stored with its logs and status.
+
+Health checks, logs, [rollbacks](/docs/core/applications/rollbacks) and [zero-downtime](/docs/core/applications/zero-downtime) behavior all attach to this lifecycle.
+
+## What you can configure on a service
+
+All service types share these tabs, with the same meaning everywhere:
+
+| Tab | Purpose |
+| --- | --- |
+| **General** | Source, build configuration and lifecycle actions (deploy, stop, delete). |
+| **Environment** | Variables and secrets, addressed by scope. |
+| **Domains** | Hostnames, ports and TLS. |
+| **Deployments** | History, logs, cancel and rollback. |
+| **Logs** | Real-time runtime output. |
+| **Monitoring** | CPU, memory, disk and network. |
+| **Advanced** | Commands, resources, volumes, ports, Traefik and cluster settings. |
+
+Learn this surface once on an Application, and it applies to Databases and Compose unchanged.
+
+## Going further
+
+- **[Environment variables](/docs/core/variables)** and secrets across scopes.
+- **[Domains](/docs/core/domains)** and routing for Applications vs. Compose.
+- **[Advanced settings](/docs/core/applications/advanced)** for resources, volumes, ports and Traefik.
+- **[Preview deployments](/docs/core/applications/preview-deployments)** and **[auto-deploy](/docs/core/auto-deploy)** for automation.
+- **[Scheduled jobs](/docs/core/schedule-jobs)**, **[watch paths](/docs/core/watch-paths)** and **[patches](/docs/core/patches)**.
+- **[Going to production](/docs/core/applications/going-production)** — a checklist before you ship.
+
+<Callout type="info" title="Keyboard shortcuts">
+Service pages support GitHub-style shortcuts: press `g` then a letter to jump to a tab
+(`g` General, `e` Environment, `u` Domains, `d` Deployments, `l` Logs, `m` Monitoring, `a` Advanced).
+</Callout>
+
+## Related
+
+- [Core concepts](/docs/core/concepts)
+- [Infrastructure](/docs/core/infrastructure)
+- [Example projects](/docs/templates/examples)

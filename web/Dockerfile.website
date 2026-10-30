@@ -1,0 +1,36 @@
+# Build from the repository root (the root pnpm-workspace.yaml is the single
+# workspace for the whole monorepo):
+#   docker build -f web/Dockerfile.website .
+FROM node:24.4-alpine AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN npm install -g pnpm@10.22.0
+
+FROM base AS build
+COPY . /usr/src/app
+WORKDIR /usr/src/app
+
+# Install dependencies (website + its workspace deps only)
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --filter=@notploy/website... --frozen-lockfile
+
+# Deploy only the website app
+ENV NODE_ENV=production
+RUN pnpm --filter=@notploy/website run build
+RUN pnpm --filter=@notploy/website --prod deploy --legacy /prod/website
+
+RUN cp -R /usr/src/app/web/apps/website/.next /prod/website/.next
+
+FROM base AS notploy
+WORKDIR /app
+
+# Set production
+ENV NODE_ENV=production
+
+# Copy only the necessary files
+COPY --from=build /prod/website/.next ./.next
+COPY --from=build /prod/website/public ./public
+COPY --from=build /prod/website/package.json ./package.json
+COPY --from=build /prod/website/node_modules ./node_modules
+
+EXPOSE 3000
+CMD HOSTNAME=0.0.0.0 && pnpm start

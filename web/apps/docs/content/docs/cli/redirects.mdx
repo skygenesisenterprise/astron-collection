@@ -1,0 +1,75 @@
+---
+title: "Redirects"
+description: "HTTP redirects served by Traefik for an application's domains. Generated from the `notploy` command surface."
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+HTTP redirects served by Traefik for an application's domains.
+
+`notploy redirects` exposes **4 commands**. They map one-to-one onto the `redirects.*` API operations, so anything reachable from the dashboard is reachable from here.
+
+<Callout>
+	Run `notploy redirects --help` to list these commands in your terminal, or
+	`notploy redirects <command> --help` for a single command.
+</Callout>
+
+## Commands
+
+### `notploy redirects create`
+
+Calls `POST /api/trpc/redirects.create`.
+
+```bash
+notploy redirects create --regex <value> --replacement <value> --permanent --applicationId <value> [options]
+```
+
+| Option | Type | Required | Allowed values |
+| --- | --- | --- | --- |
+| `--regex <value>` | string | Yes | — |
+| `--replacement <value>` | string | Yes | — |
+| `--permanent [boolean]` | boolean | Yes | — |
+| `--applicationId <value>` | string | Yes | — |
+| `--profile <name>` | string | No | — |
+
+### `notploy redirects delete`
+
+Calls `POST /api/trpc/redirects.delete`.
+
+```bash
+notploy redirects delete --redirectId <value> [options]
+```
+
+| Option | Type | Required | Allowed values |
+| --- | --- | --- | --- |
+| `--redirectId <value>` | string | Yes | — |
+| `--profile <name>` | string | No | — |
+
+### `notploy redirects one`
+
+Calls `GET /api/trpc/redirects.one`.
+
+```bash
+notploy redirects one --redirectId <value> [options]
+```
+
+| Option | Type | Required | Allowed values |
+| --- | --- | --- | --- |
+| `--redirectId <value>` | string | Yes | — |
+| `--profile <name>` | string | No | — |
+
+### `notploy redirects update`
+
+Calls `POST /api/trpc/redirects.update`.
+
+```bash
+notploy redirects update --redirectId <value> --regex <value> --replacement <value> --permanent [options]
+```
+
+| Option | Type | Required | Allowed values |
+| --- | --- | --- | --- |
+| `--redirectId <value>` | string | Yes | — |
+| `--regex <value>` | string | Yes | — |
+| `--replacement <value>` | string | Yes | — |
+| `--permanent [boolean]` | boolean | Yes | — |
+| `--profile <name>` | string | No | — |

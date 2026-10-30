@@ -1,0 +1,85 @@
+---
+title: Uninstall
+description: "Learn how to uninstall Notploy on your server"
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Follow these steps to completely remove Notploy and its components from your server.
+
+<Steps>
+<Step>
+Remove the docker swarm services created by Notploy:
+
+   ```bash
+   docker service remove notploy notploy-traefik notploy-postgres notploy-redis
+   docker container remove -f notploy-traefik
+   ```
+ 
+</Step>
+ 
+<Step>
+ 
+Remove the docker volumes created by Notploy:
+
+   ```bash
+   docker volume remove -f notploy notploy-postgres notploy-redis
+   ```
+ 
+</Step>
+
+<Step>
+ 
+Remove the docker network created by Notploy:
+
+   ```bash
+   docker network remove -f notploy-network
+   docker network remove -f ingress
+   ```
+ 
+</Step>
+
+<Step>
+
+If you were running a Cluster, then for each worker node, remove all it's services and make it leave the swarm:
+
+   ```bash
+   docker service rm $(docker service ls -q)
+   docker system prune -a -f
+   docker swarm leave
+   ```
+</Step>
+
+<Step>
+
+Make the manager node (where Notploy is installed) leave the swarm (run it on all manager nodes if you had more than one):
+
+   ```bash
+   docker swarm leave --force
+   ```
+</Step>
+
+<Step>
+
+Docker cleanup to remove leftovers:
+
+   ```bash
+   docker container prune --force
+   docker image prune --all --force
+   docker volume prune --all --force
+   docker builder prune --all --force
+   docker system prune --all --volumes --force
+   ```
+ 
+</Step>
+ 
+<Step>
+
+Remove the notploy files and directories from your server:
+
+   ```bash
+   sudo rm -rf /etc/notploy
+   ```
+ 
+</Step>
+</Steps>

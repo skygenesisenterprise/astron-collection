@@ -1,0 +1,99 @@
+---
+title: Templates
+description: "Start from a blueprint or an example instead of a blank project."
+---
+
+import { Card, Cards } from 'fumadocs-ui/components/card';
+
+**Purpose** — Templates give you a working starting point. Instead of configuring an application or Compose stack from scratch, you deploy a blueprint and adapt it, or follow an example that matches your framework.
+
+## Two kinds of starting point
+
+| | Use when |
+| --- | --- |
+| **Templates gallery** | You want a ready-made Compose stack for a known open-source app (databases, CMS, analytics, tools). |
+| **Framework examples** | You are deploying your own application and want the recommended settings for its framework. |
+
+## Templates gallery
+
+The [Notploy Templates gallery](https://templates.notploy.com) is a catalogue of more than 500 one-click open-source blueprints. Each blueprint ships a Docker Compose definition plus a small configuration that tells Notploy which secrets to generate, which domains to route and which files to mount, so you can stand up a service without authoring the compose file yourself.
+
+Deploy one straight from a project environment:
+
+1. **Create Service → Template** — search the catalogue.
+2. **Create** — Notploy builds a Compose service from the blueprint.
+3. **Deploy** — open the generated domain.
+
+→ Full walkthrough in [Templates gallery](/docs/templates/gallery)
+
+<Callout type="info">
+Templates deploy as [Docker Compose](/docs/core/docker-compose) services. Once deployed, they behave like
+any other Compose stack — you can edit the compose file, set variables and add domains.
+</Callout>
+
+## Anatomy of a blueprint
+
+Every blueprint is a self-contained folder under `templates/blueprints/` in the Notploy repository. Four pieces make it work:
+
+| Piece | Role |
+| --- | --- |
+| `docker-compose.yml` | The stack Notploy deploys. |
+| `template.toml` | Variables, environment, domains and file mounts resolved when the service is created. |
+| `meta.json` + logo | Catalogue metadata: name, version, description, links and tags. |
+| `instructions.md` | Optional setup guide shown in the gallery. |
+
+<Cards>
+  <Card href="/docs/templates/blueprint" title="Blueprint anatomy" description="The files a blueprint contains and the Compose rules it must follow." />
+  <Card href="/docs/templates/configuration" title="Template configuration" description="Reference for template.toml: variables, helpers, domains, env and mounts." />
+  <Card href="/docs/templates/contributing" title="Contribute a template" description="Add or fix a blueprint, validate it and open a pull request." />
+</Cards>
+
+## Framework examples
+
+Examples show how to deploy common frameworks on Notploy, including the recommended **build type** and any framework-specific settings (for example the port to expose, or a build command). They are reference pages, not files you deploy directly.
+
+<Cards>
+  <Card href="/docs/templates/examples/nextjs" title="Next.js" />
+  <Card href="/docs/templates/examples/vite-react" title="Vite + React" />
+  <Card href="/docs/templates/examples/remix" title="Remix" />
+  <Card href="/docs/templates/examples/nestjs" title="NestJS" />
+  <Card href="/docs/templates/examples/astro" title="Astro" />
+  <Card href="/docs/templates/examples/svelte" title="Svelte" />
+  <Card href="/docs/templates/examples/vuejs" title="Vue.js" />
+  <Card href="/docs/templates/examples/turborepo" title="Turborepo" />
+</Cards>
+
+→ All framework examples: [Examples](/docs/templates/examples)
+
+## Related
+
+- [Templates gallery](/docs/templates/gallery)
+- [Docker Compose](/docs/core/docker-compose)
+- [Build types](/docs/core/applications/build-type)
+- [Deploy your first application](/docs/core/first-deployment)
+
+## Catalogue at a glance
+
+The counts below come from the blueprint folders in `templates/blueprints/` and their `meta.json`
+tags, so this summary changes when the catalogue does.
+
+{/* BEGIN GENERATED: template-catalog */}
+**532 blueprints** are available from the catalogue, filtered by 636 tags.
+
+Most used tags:
+
+| Tag | Blueprints |
+| --- | --- |
+| `self-hosted` | 157 |
+| `monitoring` | 47 |
+| `database` | 41 |
+| `ai` | 39 |
+| `automation` | 33 |
+| `productivity` | 30 |
+| `media` | 28 |
+| `analytics` | 25 |
+| `api` | 24 |
+| `storage` | 22 |
+| `open-source` | 20 |
+| `security` | 18 |
+{/* END GENERATED: template-catalog */}
