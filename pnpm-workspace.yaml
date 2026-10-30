@@ -3,8 +3,7 @@ packages:
   - packages/*
   - web
   - web/apps/*
-  - templates/app
-  - templates/build-scripts
+
 
 allowBuilds:
   '@scarf/scarf': true
