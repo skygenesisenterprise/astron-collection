@@ -1,0 +1,2022 @@
+import { standardSchemaResolver as zodResolver } from "@hookform/resolvers/standard-schema";
+import { PenBoxIcon, PlusIcon } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { vaultProviderIcons } from "@/components/icons/vault-provider-icons";
+import { AlertBlock } from "@/components/shared/alert-block";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+	Form,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { api } from "@/utils/api";
+import {
+	vaultProviderCategoryDescriptions,
+	vaultProviderCategoryLabels,
+	vaultProviderCategoryOrder,
+	vaultProviderIconKey,
+	vaultProviderLabel,
+} from "./vault-provider-meta";
+
+const PROVIDER_TYPES = [
+	"hashicorp",
+	"infisical",
+	"aws",
+	"aws-parameter-store",
+	"doppler",
+	"azure",
+	"scaleway",
+	"phase",
+	"gcp",
+	"oci",
+	"onepassword",
+	"vaultwarden",
+	"kubernetes",
+	"docker",
+	"generic",
+] as const;
+
+type ProviderType = (typeof PROVIDER_TYPES)[number];
+
+const CATEGORY_BY_TYPE: Record<ProviderType, string> = {
+	hashicorp: "self-hosted",
+	infisical: "self-hosted",
+	phase: "self-hosted",
+	onepassword: "self-hosted",
+	vaultwarden: "self-hosted",
+	generic: "self-hosted",
+	aws: "managed",
+	"aws-parameter-store": "managed",
+	azure: "managed",
+	doppler: "managed",
+	scaleway: "managed",
+	gcp: "managed",
+	oci: "managed",
+	kubernetes: "internal",
+	docker: "internal",
+};
+
+const VaultProviderSchema = z
+	.object({
+		name: z
+			.string()
+			.min(1, { message: "Name is required" })
+			.regex(/^[a-zA-Z0-9_-]+$/, {
+				message:
+					// biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template
+					"Only letters, numbers, dashes and underscores (used in ${{vault.<name>.<secret>}})",
+			}),
+		providerType: z.enum(PROVIDER_TYPES),
+		url: z.string(),
+		token: z.string(),
+		namespace: z.string(),
+		mount: z.string(),
+		siteUrl: z.string(),
+		clientId: z.string(),
+		clientSecret: z.string(),
+		projectId: z.string(),
+		environmentSlug: z.string(),
+		secretPath: z.string(),
+		region: z.string(),
+		accessKeyId: z.string(),
+		secretAccessKey: z.string(),
+		parameterPath: z.string(),
+		serviceToken: z.string(),
+		awsEndpoint: z.string(),
+		vaultUri: z.string(),
+		tenantId: z.string(),
+		azureClientId: z.string(),
+		azureClientSecret: z.string(),
+		dopplerProject: z.string(),
+		dopplerConfig: z.string(),
+		scalewayRegion: z.string(),
+		scalewayProjectId: z.string(),
+		scalewaySecretKey: z.string(),
+		scalewayApiUrl: z.string(),
+		phaseToken: z.string(),
+		phaseAppId: z.string(),
+		phaseEnv: z.string(),
+		phasePath: z.string(),
+		phaseApiUrl: z.string(),
+		gcpProjectId: z.string(),
+		gcpClientEmail: z.string(),
+		gcpPrivateKey: z.string(),
+		ociRegion: z.string(),
+		ociTenancyId: z.string(),
+		ociUserId: z.string(),
+		ociFingerprint: z.string(),
+		ociPrivateKey: z.string(),
+		ociCompartmentId: z.string(),
+		opConnectUrl: z.string(),
+		opToken: z.string(),
+		vwIdentityUrl: z.string(),
+		vwApiUrl: z.string(),
+		vwClientId: z.string(),
+		vwClientSecret: z.string(),
+		vwOrganizationId: z.string(),
+		kubeApiUrl: z.string(),
+		kubeToken: z.string(),
+		kubeNamespace: z.string(),
+		dockerMountPath: z.string(),
+		genericBaseUrl: z.string(),
+		genericToken: z.string(),
+		assignments: z.array(
+			z.object({
+				projectId: z.string(),
+				environmentIds: z.array(z.string()),
+			}),
+		),
+	})
+	.superRefine((data, ctx) => {
+		const isValidUrl = (value: string) => {
+			try {
+				new URL(value);
+				return true;
+			} catch {
+				return false;
+			}
+		};
+
+		if (
+			data.providerType === "hashicorp" &&
+			data.url &&
+			!isValidUrl(data.url)
+		) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "Enter a valid URL (e.g. https://vault.example.com:8200)",
+				path: ["url"],
+			});
+		}
+		if (
+			data.providerType === "azure" &&
+			data.vaultUri &&
+			!isValidUrl(data.vaultUri)
+		) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "Enter a valid URL (e.g. https://my-vault.vault.azure.net)",
+				path: ["vaultUri"],
+			});
+		}
+		if (
+			(data.providerType === "aws" ||
+				data.providerType === "aws-parameter-store") &&
+			data.awsEndpoint &&
+			!isValidUrl(data.awsEndpoint)
+		) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "Enter a valid URL",
+				path: ["awsEndpoint"],
+			});
+		}
+		if (
+			data.providerType === "aws-parameter-store" &&
+			data.parameterPath &&
+			!data.parameterPath.trim().startsWith("/")
+		) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "Parameter discovery path must start with /",
+				path: ["parameterPath"],
+			});
+		}
+		if (
+			data.providerType === "scaleway" &&
+			data.scalewayApiUrl &&
+			!isValidUrl(data.scalewayApiUrl)
+		) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "Enter a valid URL (e.g. https://api.scaleway.com)",
+				path: ["scalewayApiUrl"],
+			});
+		}
+		if (
+			data.providerType === "infisical" &&
+			data.siteUrl &&
+			!isValidUrl(data.siteUrl)
+		) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "Enter a valid URL (e.g. https://app.infisical.com)",
+				path: ["siteUrl"],
+			});
+		}
+		if (
+			data.providerType === "phase" &&
+			data.phaseApiUrl &&
+			!isValidUrl(data.phaseApiUrl)
+		) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "Enter a valid URL (e.g. https://api.phase.dev)",
+				path: ["phaseApiUrl"],
+			});
+		}
+		if (
+			data.providerType === "onepassword" &&
+			data.opConnectUrl &&
+			!isValidUrl(data.opConnectUrl)
+		) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "Enter a valid URL (e.g. http://op-connect-server:8080)",
+				path: ["opConnectUrl"],
+			});
+		}
+		if (
+			data.providerType === "vaultwarden" &&
+			data.vwIdentityUrl &&
+			!isValidUrl(data.vwIdentityUrl)
+		) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "Enter a valid URL (e.g. https://identity.bitwarden.com)",
+				path: ["vwIdentityUrl"],
+			});
+		}
+		if (
+			data.providerType === "vaultwarden" &&
+			data.vwApiUrl &&
+			!isValidUrl(data.vwApiUrl)
+		) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "Enter a valid URL (e.g. https://api.bitwarden.com)",
+				path: ["vwApiUrl"],
+			});
+		}
+		if (
+			data.providerType === "kubernetes" &&
+			data.kubeApiUrl &&
+			!isValidUrl(data.kubeApiUrl)
+		) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "Enter a valid URL (e.g. https://kubernetes.default.svc)",
+				path: ["kubeApiUrl"],
+			});
+		}
+		if (
+			data.providerType === "generic" &&
+			data.genericBaseUrl &&
+			!isValidUrl(data.genericBaseUrl)
+		) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "Enter a valid URL (e.g. https://secrets.internal/api)",
+				path: ["genericBaseUrl"],
+			});
+		}
+
+		const required: Partial<
+			Record<ProviderType, [keyof typeof data, string][]>
+		> = {
+			hashicorp: [
+				["url", "Vault URL is required"],
+				["token", "Token is required"],
+				["mount", "Mount is required"],
+			],
+			infisical: [
+				["siteUrl", "Site URL is required"],
+				["clientId", "Client ID is required"],
+				["clientSecret", "Client Secret is required"],
+				["projectId", "Project ID is required"],
+				["environmentSlug", "Environment is required"],
+			],
+			aws: [
+				["region", "Region is required"],
+				["accessKeyId", "Access Key ID is required"],
+				["secretAccessKey", "Secret Access Key is required"],
+			],
+			"aws-parameter-store": [
+				["region", "Region is required"],
+				["accessKeyId", "Access Key ID is required"],
+				["secretAccessKey", "Secret Access Key is required"],
+			],
+			doppler: [["serviceToken", "Service Token is required"]],
+			azure: [
+				["vaultUri", "Vault URI is required"],
+				["tenantId", "Tenant ID is required"],
+				["azureClientId", "Client ID is required"],
+				["azureClientSecret", "Client Secret is required"],
+			],
+			scaleway: [
+				["scalewayRegion", "Region is required"],
+				["scalewayProjectId", "Project ID is required"],
+				["scalewaySecretKey", "Secret Key is required"],
+			],
+			phase: [
+				["phaseToken", "Service Account REST API token is required"],
+				["phaseAppId", "App ID is required"],
+				["phaseEnv", "Environment is required"],
+			],
+			gcp: [
+				["gcpProjectId", "Project ID is required"],
+				["gcpClientEmail", "Service account email is required"],
+				["gcpPrivateKey", "Service account private key is required"],
+			],
+			oci: [
+				["ociRegion", "Region is required"],
+				["ociTenancyId", "Tenancy OCID is required"],
+				["ociUserId", "User OCID is required"],
+				["ociFingerprint", "Key fingerprint is required"],
+				["ociPrivateKey", "API signing key is required"],
+				["ociCompartmentId", "Compartment OCID is required"],
+			],
+			onepassword: [
+				["opConnectUrl", "Connect URL is required"],
+				["opToken", "Connect access token is required"],
+			],
+			vaultwarden: [
+				["vwIdentityUrl", "Identity URL is required"],
+				["vwApiUrl", "API URL is required"],
+				["vwClientId", "Client ID is required"],
+				["vwClientSecret", "Client secret is required"],
+				["vwOrganizationId", "Organization ID is required"],
+			],
+			kubernetes: [
+				["kubeApiUrl", "API URL is required"],
+				["kubeToken", "Service account token is required"],
+				["kubeNamespace", "Namespace is required"],
+			],
+			docker: [["dockerMountPath", "Mount path is required"]],
+			generic: [["genericBaseUrl", "Base URL is required"]],
+		};
+
+		for (const [field, message] of required[data.providerType] ?? []) {
+			if (!data[field]) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message,
+					path: [field],
+				});
+			}
+		}
+
+		if (
+			data.providerType === "doppler" &&
+			data.serviceToken &&
+			!data.serviceToken.startsWith("dp.st.") &&
+			data.serviceToken !== "********"
+		) {
+			for (const field of ["dopplerProject", "dopplerConfig"] as const) {
+				if (!data[field]) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: "Required for personal/CLI tokens (dp.pt. / dp.ct.)",
+						path: [field],
+					});
+				}
+			}
+		}
+	});
+
+type VaultProviderForm = z.infer<typeof VaultProviderSchema>;
+
+const defaultValues: VaultProviderForm = {
+	name: "",
+	providerType: "hashicorp",
+	url: "",
+	token: "",
+	namespace: "",
+	mount: "secret",
+	siteUrl: "https://app.infisical.com",
+	clientId: "",
+	clientSecret: "",
+	projectId: "",
+	environmentSlug: "",
+	secretPath: "/",
+	region: "",
+	accessKeyId: "",
+	secretAccessKey: "",
+	parameterPath: "",
+	serviceToken: "",
+	awsEndpoint: "",
+	vaultUri: "",
+	tenantId: "",
+	azureClientId: "",
+	azureClientSecret: "",
+	dopplerProject: "",
+	dopplerConfig: "",
+	scalewayRegion: "fr-par",
+	scalewayProjectId: "",
+	scalewaySecretKey: "",
+	scalewayApiUrl: "https://api.scaleway.com",
+	phaseToken: "",
+	phaseAppId: "",
+	phaseEnv: "",
+	phasePath: "/",
+	phaseApiUrl: "https://api.phase.dev",
+	gcpProjectId: "",
+	gcpClientEmail: "",
+	gcpPrivateKey: "",
+	ociRegion: "",
+	ociTenancyId: "",
+	ociUserId: "",
+	ociFingerprint: "",
+	ociPrivateKey: "",
+	ociCompartmentId: "",
+	opConnectUrl: "http://op-connect-server:8080",
+	opToken: "",
+	vwIdentityUrl: "https://identity.bitwarden.com",
+	vwApiUrl: "https://api.bitwarden.com",
+	vwClientId: "",
+	vwClientSecret: "",
+	vwOrganizationId: "",
+	kubeApiUrl: "https://kubernetes.default.svc",
+	kubeToken: "",
+	kubeNamespace: "default",
+	dockerMountPath: "/run/secrets",
+	genericBaseUrl: "",
+	genericToken: "",
+	assignments: [],
+};
+
+const buildConfig = (data: VaultProviderForm) => {
+	switch (data.providerType) {
+		case "hashicorp":
+			return {
+				providerType: "hashicorp" as const,
+				url: data.url,
+				token: data.token,
+				namespace: data.namespace || undefined,
+				mount: data.mount || "secret",
+			};
+		case "infisical":
+			return {
+				providerType: "infisical" as const,
+				siteUrl: data.siteUrl || "https://app.infisical.com",
+				clientId: data.clientId,
+				clientSecret: data.clientSecret,
+				projectId: data.projectId,
+				environmentSlug: data.environmentSlug,
+				secretPath: data.secretPath || "/",
+			};
+		case "aws":
+			return {
+				providerType: "aws" as const,
+				region: data.region,
+				accessKeyId: data.accessKeyId,
+				secretAccessKey: data.secretAccessKey,
+				endpoint: data.awsEndpoint || undefined,
+			};
+		case "aws-parameter-store":
+			return {
+				providerType: "aws-parameter-store" as const,
+				region: data.region,
+				accessKeyId: data.accessKeyId,
+				secretAccessKey: data.secretAccessKey,
+				endpoint: data.awsEndpoint || undefined,
+				parameterPath: data.parameterPath.trim() || undefined,
+			};
+		case "doppler":
+			return {
+				providerType: "doppler" as const,
+				serviceToken: data.serviceToken,
+				project: data.dopplerProject || undefined,
+				config: data.dopplerConfig || undefined,
+			};
+		case "azure":
+			return {
+				providerType: "azure" as const,
+				vaultUri: data.vaultUri,
+				tenantId: data.tenantId,
+				clientId: data.azureClientId,
+				clientSecret: data.azureClientSecret,
+			};
+		case "scaleway":
+			return {
+				providerType: "scaleway" as const,
+				region: data.scalewayRegion || "fr-par",
+				projectId: data.scalewayProjectId,
+				secretKey: data.scalewaySecretKey,
+				apiUrl: data.scalewayApiUrl || "https://api.scaleway.com",
+			};
+		case "phase":
+			return {
+				providerType: "phase" as const,
+				token: data.phaseToken,
+				appId: data.phaseAppId,
+				env: data.phaseEnv,
+				path: data.phasePath || "/",
+				apiUrl: data.phaseApiUrl || "https://api.phase.dev",
+			};
+		case "gcp":
+			return {
+				providerType: "gcp" as const,
+				projectId: data.gcpProjectId,
+				clientEmail: data.gcpClientEmail,
+				privateKey: data.gcpPrivateKey,
+			};
+		case "oci":
+			return {
+				providerType: "oci" as const,
+				region: data.ociRegion,
+				tenancyId: data.ociTenancyId,
+				userId: data.ociUserId,
+				fingerprint: data.ociFingerprint,
+				privateKey: data.ociPrivateKey,
+				compartmentId: data.ociCompartmentId,
+			};
+		case "onepassword":
+			return {
+				providerType: "onepassword" as const,
+				connectUrl: data.opConnectUrl,
+				token: data.opToken,
+			};
+		case "vaultwarden":
+			return {
+				providerType: "vaultwarden" as const,
+				identityUrl: data.vwIdentityUrl || "https://identity.bitwarden.com",
+				apiUrl: data.vwApiUrl || "https://api.bitwarden.com",
+				clientId: data.vwClientId,
+				clientSecret: data.vwClientSecret,
+				organizationId: data.vwOrganizationId,
+			};
+		case "kubernetes":
+			return {
+				providerType: "kubernetes" as const,
+				apiUrl: data.kubeApiUrl,
+				token: data.kubeToken,
+				namespace: data.kubeNamespace || "default",
+			};
+		case "docker":
+			return {
+				providerType: "docker" as const,
+				mountPath: data.dockerMountPath || "/run/secrets",
+			};
+		case "generic":
+			return {
+				providerType: "generic" as const,
+				baseUrl: data.genericBaseUrl,
+				token: data.genericToken || undefined,
+			};
+	}
+};
+
+const extractErrorMessage = (err: unknown) => {
+	if (!(err instanceof Error)) return undefined;
+	try {
+		const issues = JSON.parse(err.message) as { message?: string }[];
+		if (Array.isArray(issues)) {
+			return issues
+				.map((issue) => issue.message)
+				.filter(Boolean)
+				.join(", ");
+		}
+	} catch {}
+	return err.message;
+};
+
+interface Props {
+	vaultProviderId?: string;
+}
+
+export const HandleVaultProvider = ({ vaultProviderId }: Props) => {
+	const utils = api.useUtils();
+	const [isOpen, setIsOpen] = useState(false);
+
+	const { data: provider } = api.vaultProvider.one.useQuery(
+		{ vaultProviderId: vaultProviderId || "" },
+		{ enabled: !!vaultProviderId && isOpen },
+	);
+
+	const updateMutation = api.vaultProvider.update.useMutation();
+	const createMutation = api.vaultProvider.create.useMutation();
+	const { mutateAsync, isPending, error, isError } = vaultProviderId ? updateMutation : createMutation;
+
+	const { mutateAsync: testConnection, isPending: isTesting } =
+		api.vaultProvider.testConnection.useMutation();
+
+	const form = useForm<VaultProviderForm>({
+		defaultValues,
+		resolver: zodResolver(VaultProviderSchema),
+	});
+
+	const providerType = form.watch("providerType");
+	const assignments = form.watch("assignments");
+
+	const providerGroups = useMemo(
+		() =>
+			vaultProviderCategoryOrder
+				.map((category) => ({
+					category,
+					types: PROVIDER_TYPES.filter(
+						(type) => CATEGORY_BY_TYPE[type] === category,
+					),
+				}))
+				.filter((group) => group.types.length > 0),
+		[],
+	);
+	const { data: orgProjects } = api.project.all.useQuery();
+
+	const setAssignments = (
+		next: { projectId: string; environmentIds: string[] }[],
+	) => form.setValue("assignments", next, { shouldValidate: true });
+
+	const toggleProject = (targetProjectId: string) => {
+		const exists = assignments.some((a) => a.projectId === targetProjectId);
+		setAssignments(
+			exists
+				? assignments.filter((a) => a.projectId !== targetProjectId)
+				: [...assignments, { projectId: targetProjectId, environmentIds: [] }],
+		);
+	};
+
+	const toggleEnvironment = (
+		targetProjectId: string,
+		environmentId: string,
+	) => {
+		setAssignments(
+			assignments.map((a) => {
+				if (a.projectId !== targetProjectId) return a;
+				const has = a.environmentIds.includes(environmentId);
+				return {
+					...a,
+					environmentIds: has
+						? a.environmentIds.filter((e) => e !== environmentId)
+						: [...a.environmentIds, environmentId],
+				};
+			}),
+		);
+	};
+
+	useEffect(() => {
+		if (provider) {
+			form.reset({
+				...defaultValues,
+				name: provider.name,
+				providerType: provider.config.providerType,
+				assignments: provider.assignments ?? [],
+				...(provider.config.providerType === "hashicorp" && {
+					url: provider.config.url,
+					token: provider.config.token,
+					namespace: provider.config.namespace ?? "",
+					mount: provider.config.mount,
+				}),
+				...(provider.config.providerType === "infisical" && {
+					siteUrl: provider.config.siteUrl,
+					clientId: provider.config.clientId,
+					clientSecret: provider.config.clientSecret,
+					projectId: provider.config.projectId,
+					environmentSlug: provider.config.environmentSlug,
+					secretPath: provider.config.secretPath,
+				}),
+				...((provider.config.providerType === "aws" ||
+					provider.config.providerType === "aws-parameter-store") && {
+					region: provider.config.region,
+					accessKeyId: provider.config.accessKeyId,
+					secretAccessKey: provider.config.secretAccessKey,
+					awsEndpoint: provider.config.endpoint ?? "",
+				}),
+				...(provider.config.providerType === "aws-parameter-store" && {
+					parameterPath: provider.config.parameterPath ?? "",
+				}),
+				...(provider.config.providerType === "doppler" && {
+					serviceToken: provider.config.serviceToken,
+					dopplerProject: provider.config.project ?? "",
+					dopplerConfig: provider.config.config ?? "",
+				}),
+				...(provider.config.providerType === "azure" && {
+					vaultUri: provider.config.vaultUri,
+					tenantId: provider.config.tenantId,
+					azureClientId: provider.config.clientId,
+					azureClientSecret: provider.config.clientSecret,
+				}),
+				...(provider.config.providerType === "scaleway" && {
+					scalewayRegion: provider.config.region,
+					scalewayProjectId: provider.config.projectId,
+					scalewaySecretKey: provider.config.secretKey,
+					scalewayApiUrl: provider.config.apiUrl,
+				}),
+				...(provider.config.providerType === "phase" && {
+					phaseToken: provider.config.token,
+					phaseAppId: provider.config.appId,
+					phaseEnv: provider.config.env,
+					phasePath: provider.config.path,
+					phaseApiUrl: provider.config.apiUrl,
+				}),
+				...(provider.config.providerType === "gcp" && {
+					gcpProjectId: provider.config.projectId,
+					gcpClientEmail: provider.config.clientEmail,
+					gcpPrivateKey: provider.config.privateKey,
+				}),
+				...(provider.config.providerType === "oci" && {
+					ociRegion: provider.config.region,
+					ociTenancyId: provider.config.tenancyId,
+					ociUserId: provider.config.userId,
+					ociFingerprint: provider.config.fingerprint,
+					ociPrivateKey: provider.config.privateKey,
+					ociCompartmentId: provider.config.compartmentId,
+				}),
+				...(provider.config.providerType === "onepassword" && {
+					opConnectUrl: provider.config.connectUrl,
+					opToken: provider.config.token,
+				}),
+				...(provider.config.providerType === "vaultwarden" && {
+					vwIdentityUrl: provider.config.identityUrl,
+					vwApiUrl: provider.config.apiUrl,
+					vwClientId: provider.config.clientId,
+					vwClientSecret: provider.config.clientSecret,
+					vwOrganizationId: provider.config.organizationId,
+				}),
+				...(provider.config.providerType === "kubernetes" && {
+					kubeApiUrl: provider.config.apiUrl,
+					kubeToken: provider.config.token,
+					kubeNamespace: provider.config.namespace,
+				}),
+				...(provider.config.providerType === "docker" && {
+					dockerMountPath: provider.config.mountPath,
+				}),
+				...(provider.config.providerType === "generic" && {
+					genericBaseUrl: provider.config.baseUrl,
+					genericToken: provider.config.token ?? "",
+				}),
+			});
+		} else if (!vaultProviderId) {
+			form.reset(defaultValues);
+		}
+	}, [provider, vaultProviderId, form, isOpen]);
+
+	const onSubmit = async (data: VaultProviderForm) => {
+		const payload: any = {
+			name: data.name,
+			config: buildConfig(data),
+			assignments: data.assignments,
+			...(vaultProviderId && { vaultProviderId }),
+		};
+		await mutateAsync(payload)
+			.then(() => {
+				toast.success(
+					vaultProviderId ? "Vault provider updated" : "Vault provider created",
+				);
+			utils.vaultProvider.all.invalidate();
+			utils.vaultProvider.health.invalidate();
+			utils.vaultProvider.listSecrets.invalidate();
+			setIsOpen(false);
+			})
+			.catch(() => {});
+	};
+
+	const onTestConnection = async () => {
+		const isValid = await form.trigger();
+		if (!isValid) {
+			return;
+		}
+		const data = form.getValues();
+		await testConnection({
+			config: buildConfig(data),
+			...(vaultProviderId && { vaultProviderId }),
+		})
+			.then(() => {
+				toast.success("Connection successful");
+			})
+			.catch((err) => {
+				toast.error("Connection failed", {
+					description: extractErrorMessage(err),
+				});
+			});
+	};
+
+	return (
+		<Dialog open={isOpen} onOpenChange={setIsOpen}>
+			<DialogTrigger asChild>
+				{vaultProviderId ? (
+					<Button
+						variant="ghost"
+						size="icon"
+						className="group hover:bg-blue-500/10"
+					>
+						<PenBoxIcon className="size-4 text-primary group-hover:text-blue-500" />
+					</Button>
+				) : (
+					<Button className="cursor-pointer space-x-3">
+						<PlusIcon className="h-4 w-4" />
+						Add Provider
+					</Button>
+				)}
+			</DialogTrigger>
+			<DialogContent className="max-h-screen overflow-y-auto sm:max-w-lg">
+				<DialogHeader>
+					<DialogTitle>
+						{vaultProviderId
+							? "Update Secrets Provider"
+							: "Add Secrets Provider"}
+					</DialogTitle>
+					<DialogDescription>
+						Reference secrets in your environment variables with{" "}
+						{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+						<code>{"${{vault.<name>.<secret>}}"}</code>. Secrets are fetched at
+						deploy time and never stored in Notploy.
+					</DialogDescription>
+				</DialogHeader>
+				{isError && <AlertBlock type="error">{error?.message}</AlertBlock>}
+				<Form {...form}>
+					<form
+						onSubmit={form.handleSubmit(onSubmit)}
+						className="grid w-full gap-4"
+					>
+						<FormField
+							control={form.control}
+							name="name"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Name</FormLabel>
+									<FormControl>
+										<Input placeholder="prod-vault" {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="providerType"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Provider</FormLabel>
+									<Select
+										onValueChange={field.onChange}
+										value={field.value}
+										disabled={!!vaultProviderId}
+									>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue placeholder="Select a provider" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											{providerGroups.map((group) => (
+												<SelectGroup key={group.category}>
+													<SelectLabel>
+														{vaultProviderCategoryLabels[group.category] ??
+															group.category}
+													</SelectLabel>
+													{group.types.map((value) => {
+														const ProviderIcon =
+															vaultProviderIcons[vaultProviderIconKey(value)];
+														return (
+															<SelectItem key={value} value={value}>
+																<div className="flex flex-row items-center gap-2">
+																	<ProviderIcon className="size-4 shrink-0" />
+																	{vaultProviderLabel(value)}
+																</div>
+															</SelectItem>
+														);
+													})}
+												</SelectGroup>
+											))}
+										</SelectContent>
+									</Select>
+									<FormDescription>
+										{
+											vaultProviderCategoryLabels[
+												CATEGORY_BY_TYPE[providerType]
+											]
+										}
+										{" · "}
+										{
+											vaultProviderCategoryDescriptions[
+												CATEGORY_BY_TYPE[providerType]
+											]
+										}
+									</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						{providerType === "hashicorp" && (
+							<>
+								<FormField
+									control={form.control}
+									name="url"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Vault URL</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="https://vault.example.com:8200"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="token"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Token</FormLabel>
+											<FormControl>
+												<Input type="password" {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<div className="grid grid-cols-2 gap-4">
+									<FormField
+										control={form.control}
+										name="mount"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>KV Mount</FormLabel>
+												<FormControl>
+													<Input placeholder="secret" {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="namespace"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Namespace (optional)</FormLabel>
+												<FormControl>
+													<Input placeholder="admin" {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								</div>
+								<FormDescription>
+									Reference format:{" "}
+									{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+									<code>{"${{vault.<name>.path/to/secret:FIELD}}"}</code>
+								</FormDescription>
+							</>
+						)}
+
+						{providerType === "infisical" && (
+							<>
+								<FormField
+									control={form.control}
+									name="siteUrl"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Site URL</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="https://app.infisical.com"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<div className="grid grid-cols-2 gap-4">
+									<FormField
+										control={form.control}
+										name="clientId"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Client ID</FormLabel>
+												<FormControl>
+													<Input {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="clientSecret"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Client Secret</FormLabel>
+												<FormControl>
+													<Input type="password" {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								</div>
+								<div className="grid grid-cols-2 gap-4">
+									<FormField
+										control={form.control}
+										name="projectId"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Project ID</FormLabel>
+												<FormControl>
+													<Input {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="environmentSlug"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Environment</FormLabel>
+												<FormControl>
+													<Input placeholder="prod" {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								</div>
+								<FormField
+									control={form.control}
+									name="secretPath"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Secret Path</FormLabel>
+											<FormControl>
+												<Input placeholder="/" {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</>
+						)}
+
+						{(providerType === "aws" ||
+							providerType === "aws-parameter-store") && (
+							<>
+								<FormField
+									control={form.control}
+									name="region"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Region</FormLabel>
+											<FormControl>
+												<Input placeholder="us-east-1" {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="accessKeyId"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Access Key ID</FormLabel>
+											<FormControl>
+												<Input {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="secretAccessKey"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Secret Access Key</FormLabel>
+											<FormControl>
+												<Input type="password" {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="awsEndpoint"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Endpoint (optional)</FormLabel>
+											<FormControl>
+												<Input placeholder="http://localhost:4566" {...field} />
+											</FormControl>
+											<FormDescription>
+												Custom endpoint for VPC endpoints or API-compatible
+												emulators
+											</FormDescription>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								{providerType === "aws-parameter-store" && (
+									<FormField
+										control={form.control}
+										name="parameterPath"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Discovery path (optional)</FormLabel>
+												<FormControl>
+													<Input placeholder="/production/my-app" {...field} />
+												</FormControl>
+												<FormDescription>
+													Limits parameter browsing and autocomplete to this
+													hierarchy. IAM permissions remain the security
+													boundary.
+												</FormDescription>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								)}
+								{providerType === "aws" ? (
+									<FormDescription>
+										Reference format:{" "}
+										{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+										<code>{"${{vault.<name>.secret-name}}"}</code> or{" "}
+										{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+										<code>{"${{vault.<name>.secret-name:field}}"}</code> for
+										JSON secrets
+									</FormDescription>
+								) : (
+									<FormDescription>
+										Reference format:{" "}
+										{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+										<code>{"${{vault.<name>./path/to/parameter}}"}</code>.
+										SecureString parameters are decrypted automatically.
+										Resolution requires <code>ssm:GetParameters</code>.
+										Discovery requires <code>ssm:DescribeParameters</code>.
+										Customer-managed KMS keys also require{" "}
+										<code>kms:Decrypt</code>.
+									</FormDescription>
+								)}
+							</>
+						)}
+
+						{providerType === "azure" && (
+							<>
+								<FormField
+									control={form.control}
+									name="vaultUri"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Vault URI</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="https://my-vault.vault.azure.net"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="tenantId"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Tenant ID</FormLabel>
+											<FormControl>
+												<Input {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<div className="grid grid-cols-2 gap-4">
+									<FormField
+										control={form.control}
+										name="azureClientId"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Client ID</FormLabel>
+												<FormControl>
+													<Input {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="azureClientSecret"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Client Secret</FormLabel>
+												<FormControl>
+													<Input type="password" {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								</div>
+								<FormDescription>
+									App Registration with the "Key Vault Secrets User" role on the
+									vault. Reference format:{" "}
+									{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+									<code>{"${{vault.<name>.secret-name}}"}</code>
+								</FormDescription>
+							</>
+						)}
+
+						{providerType === "doppler" && (
+							<>
+								<FormField
+									control={form.control}
+									name="serviceToken"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Token</FormLabel>
+											<FormControl>
+												<Input
+													type="password"
+													placeholder="dp.st..."
+													{...field}
+												/>
+											</FormControl>
+											<FormDescription>
+												Service tokens (dp.st.) are recommended: read-only and
+												scoped to a single project + config
+											</FormDescription>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<div className="grid grid-cols-2 gap-4">
+									<FormField
+										control={form.control}
+										name="dopplerProject"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Project (optional)</FormLabel>
+												<FormControl>
+													<Input placeholder="my-project" {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="dopplerConfig"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Config (optional)</FormLabel>
+												<FormControl>
+													<Input placeholder="prd" {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								</div>
+								<FormDescription>
+									Only needed for personal (dp.pt.) or CLI (dp.ct.) tokens —
+									service tokens already carry them
+								</FormDescription>
+							</>
+						)}
+
+						{providerType === "scaleway" && (
+							<>
+								<div className="grid grid-cols-2 gap-4">
+									<FormField
+										control={form.control}
+										name="scalewayRegion"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Region</FormLabel>
+												<Select
+													onValueChange={field.onChange}
+													value={field.value}
+												>
+													<FormControl>
+														<SelectTrigger>
+															<SelectValue placeholder="fr-par" />
+														</SelectTrigger>
+													</FormControl>
+													<SelectContent>
+														{["fr-par", "nl-ams", "pl-waw"].map((region) => (
+															<SelectItem key={region} value={region}>
+																{region}
+															</SelectItem>
+														))}
+													</SelectContent>
+												</Select>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="scalewayProjectId"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Project ID</FormLabel>
+												<FormControl>
+													<Input
+														placeholder="00000000-0000-0000-0000-000000000000"
+														{...field}
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								</div>
+								<FormField
+									control={form.control}
+									name="scalewaySecretKey"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Secret Key</FormLabel>
+											<FormControl>
+												<Input type="password" {...field} />
+											</FormControl>
+											<FormDescription>
+												The secret key of an API key with the{" "}
+												<code>SecretManagerReadOnly</code> permission set
+											</FormDescription>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="scalewayApiUrl"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>API URL</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="https://api.scaleway.com"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormDescription>
+									Reference format:{" "}
+									{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+									<code>{"${{vault.<name>.secret-name}}"}</code>,{" "}
+									{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+									<code>{"${{vault.<name>.folder/secret-name}}"}</code> for
+									secrets in a path, or{" "}
+									{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+									<code>{"${{vault.<name>.secret-name:field}}"}</code> for JSON
+									secrets
+								</FormDescription>
+							</>
+						)}
+
+						{providerType === "phase" && (
+							<>
+								<FormField
+									control={form.control}
+									name="phaseToken"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Service Account REST API Token</FormLabel>
+											<FormControl>
+												<Input type="password" {...field} />
+											</FormControl>
+											<FormDescription>
+												Use the REST API token from a Service Account — not the
+												CLI/SDK <code>pss_*</code> token. The Phase App must
+												have Server-side Encryption (SSE) enabled.
+											</FormDescription>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<div className="grid grid-cols-2 gap-4">
+									<FormField
+										control={form.control}
+										name="phaseAppId"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>App ID</FormLabel>
+												<FormControl>
+													<Input
+														placeholder="00000000-0000-0000-0000-000000000000"
+														{...field}
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="phaseEnv"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Environment</FormLabel>
+												<FormControl>
+													<Input placeholder="Production" {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								</div>
+								<FormField
+									control={form.control}
+									name="phasePath"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Secret Path</FormLabel>
+											<FormControl>
+												<Input placeholder="/" {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="phaseApiUrl"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>API URL</FormLabel>
+											<FormControl>
+												<Input placeholder="https://api.phase.dev" {...field} />
+											</FormControl>
+											<FormDescription>
+												Self-hosted Phase defaults to{" "}
+												{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+												<code>{"${HTTP_PROTOCOL}${HOST}/service/public"}</code>
+											</FormDescription>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormDescription>
+									Reference format:{" "}
+									{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+									<code>{"${{vault.<name>.SECRET_KEY}}"}</code>
+								</FormDescription>
+							</>
+						)}
+
+					{providerType === "gcp" && (
+						<>
+							<div className="grid grid-cols-2 gap-4">
+								<FormField
+									control={form.control}
+									name="gcpProjectId"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Project ID</FormLabel>
+											<FormControl>
+												<Input placeholder="my-project" {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="gcpClientEmail"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Service account</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="notploy@my-project.iam.gserviceaccount.com"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</div>
+							<FormField
+								control={form.control}
+								name="gcpPrivateKey"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Private key (PEM)</FormLabel>
+										<FormControl>
+											<Textarea
+												rows={4}
+												placeholder="-----BEGIN PRIVATE KEY-----"
+												{...field}
+											/>
+										</FormControl>
+										<FormDescription>
+											The <code>private_key</code> field of the service account JSON
+											key. Grant the account <code>roles/secretmanager.secretAccessor</code>
+											on the project.
+										</FormDescription>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormDescription>
+								{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+								Reference format: <code>{"${{vault.<name>.secret-id}}"}</code> or{" "}
+								{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+								<code>{"${{vault.<name>.secret-id:field}}"}</code> for JSON
+								payloads.
+							</FormDescription>
+						</>
+					)}
+
+					{providerType === "oci" && (
+						<>
+							<div className="grid grid-cols-2 gap-4">
+								<FormField
+									control={form.control}
+									name="ociRegion"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Region</FormLabel>
+											<FormControl>
+												<Input placeholder="us-ashburn-1" {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="ociFingerprint"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Key fingerprint</FormLabel>
+											<FormControl>
+												<Input placeholder="3b:42:...:c9" {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</div>
+							<div className="grid grid-cols-2 gap-4">
+								<FormField
+									control={form.control}
+									name="ociTenancyId"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Tenancy OCID</FormLabel>
+											<FormControl>
+												<Input placeholder="ocid1.tenancy.oc1.." {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="ociUserId"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>User OCID</FormLabel>
+											<FormControl>
+												<Input placeholder="ocid1.user.oc1.." {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</div>
+							<FormField
+								control={form.control}
+								name="ociCompartmentId"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Compartment OCID</FormLabel>
+										<FormControl>
+											<Input placeholder="ocid1.compartment.oc1.." {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="ociPrivateKey"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>API signing key (PEM)</FormLabel>
+										<FormControl>
+											<Textarea
+												rows={4}
+												placeholder="-----BEGIN PRIVATE KEY-----"
+												{...field}
+											/>
+										</FormControl>
+										<FormDescription>
+											The API signing key of a user with
+											<code> describe </code> and <code>use secret</code> rights on
+											the vault.
+										</FormDescription>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormDescription>
+								{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+								Reference format: <code>{"${{vault.<name>.display-name}}"}</code>,
+								{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+								the secret OCID, or <code>{"${{vault.<name>.name:field}}"}</code> for
+								JSON payloads.
+							</FormDescription>
+						</>
+					)}
+
+					{providerType === "onepassword" && (
+						<>
+							<div className="grid grid-cols-2 gap-4">
+								<FormField
+									control={form.control}
+									name="opConnectUrl"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Connect URL</FormLabel>
+											<FormControl>
+												<Input placeholder="http://op-connect:8080" {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="opToken"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Access token</FormLabel>
+											<FormControl>
+												<Input type="password" {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</div>
+							<FormDescription>
+								1Password Secrets Automation Connect server. Reference format:{" "}
+								{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+								<code>{"${{vault.<name>.vaultId/itemId}}"}</code> for the password
+								{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+								field, or <code>{"${{vault.<name>.vaultId/itemId/field}}"}</code>.
+							</FormDescription>
+						</>
+					)}
+
+					{providerType === "vaultwarden" && (
+						<>
+							<div className="grid grid-cols-2 gap-4">
+								<FormField
+									control={form.control}
+									name="vwIdentityUrl"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Identity URL</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="https://identity.bitwarden.com"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="vwApiUrl"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>API URL</FormLabel>
+											<FormControl>
+												<Input placeholder="https://api.bitwarden.com" {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</div>
+							<div className="grid grid-cols-2 gap-4">
+								<FormField
+									control={form.control}
+									name="vwClientId"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Machine account client ID</FormLabel>
+											<FormControl>
+												<Input placeholder="connector.example" {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="vwClientSecret"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Client secret</FormLabel>
+											<FormControl>
+												<Input type="password" {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</div>
+							<FormField
+								control={form.control}
+								name="vwOrganizationId"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Organization ID</FormLabel>
+										<FormControl>
+											<Input placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" {...field} />
+										</FormControl>
+										<FormDescription>
+											Machine account with the Secrets Manager "Read All"
+											role on the organization. Self-hosted Vaultwarden works by
+											pointing both URLs at your instance.
+										</FormDescription>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormDescription>
+								{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+								Reference format: <code>{"${{vault.<name>.SECRET_KEY}}"}</code>.
+							</FormDescription>
+						</>
+					)}
+
+					{providerType === "kubernetes" && (
+						<>
+							<div className="grid grid-cols-2 gap-4">
+								<FormField
+									control={form.control}
+									name="kubeApiUrl"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>API URL</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="https://kubernetes.default.svc"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="kubeNamespace"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Namespace</FormLabel>
+											<FormControl>
+												<Input placeholder="default" {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</div>
+							<FormField
+								control={form.control}
+								name="kubeToken"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Service account token</FormLabel>
+										<FormControl>
+											<Input type="password" {...field} />
+										</FormControl>
+										<FormDescription>
+											A token with <code>get</code>, <code>list</code> on
+											<code> secrets </code>in the namespace.
+										</FormDescription>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormDescription>
+								{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+								Reference format: <code>{"${{vault.<name>.secret-name}}"}</code> for
+								{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+								single-key secrets or <code>{"${{vault.<name>.secret-name:key}}"}</code>
+								for multi-key ones.
+							</FormDescription>
+						</>
+					)}
+
+					{providerType === "docker" && (
+						<>
+							<FormField
+								control={form.control}
+								name="dockerMountPath"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Mount path</FormLabel>
+										<FormControl>
+											<Input placeholder="/run/secrets" {...field} />
+										</FormControl>
+										<FormDescription>
+											Directory holding Docker/Swarm secrets (or any folder of
+											secret files) mounted into the Notploy service. Values are
+											read from these files — Docker never exposes Swarm secret
+											values through its API. The connection test uses the Docker
+											socket, so mount /var/run/docker.sock into Notploy too.
+										</FormDescription>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormDescription>
+								{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+								Reference format: <code>{"${{vault.<name>.file-name}}"}</code>.
+								Discovery lists the files in the mount path plus the Swarm
+								secrets and configs reachable through the Docker socket.
+							</FormDescription>
+						</>
+					)}
+
+					{providerType === "generic" && (
+						<>
+							<FormField
+								control={form.control}
+								name="genericBaseUrl"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Base URL</FormLabel>
+										<FormControl>
+											<Input placeholder="https://secrets.internal/api" {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="genericToken"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Bearer token (optional)</FormLabel>
+										<FormControl>
+											<Input type="password" {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormDescription>
+								Any JSON or text endpoint. Reference format:{" "}
+								{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+								<code>{"${{vault.<name>.path/to/document}}"}</code>, or{" "}
+								{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
+								<code>{"${{vault.<name>.path/to/document:field}}"}</code> to pick a
+								value inside a JSON document. Notploy issues{" "}
+								<code>GET</code> requests with the token as
+								<code> Authorization: Bearer</code>.
+							</FormDescription>
+						</>
+					)}
+
+					<div className="flex flex-col gap-2 rounded-lg border p-3">
+						<div className="flex flex-row items-center justify-between">
+							<FormLabel>Access</FormLabel>
+								<Button
+									type="button"
+									variant="ghost"
+									size="sm"
+									className="h-7 px-2 text-xs"
+									onClick={() =>
+										setAssignments(
+											assignments.length === orgProjects?.length
+												? []
+												: (orgProjects ?? []).map((project) => ({
+														projectId: project.projectId,
+														environmentIds: [],
+													})),
+										)
+									}
+								>
+									{assignments.length === orgProjects?.length
+										? "Clear all"
+										: "Access all"}
+								</Button>
+							</div>
+							<FormDescription>
+								This provider can only be referenced from the selected projects.
+								Pick environments to narrow it further — none selected means all
+								environments of that project.
+							</FormDescription>
+							<div className="flex flex-col gap-2">
+								{orgProjects?.map((project) => {
+									const assignment = assignments.find(
+										(a) => a.projectId === project.projectId,
+									);
+									return (
+										<div
+											key={project.projectId}
+											className="flex flex-col gap-1.5"
+										>											{/* biome-ignore lint/a11y/noLabelWithoutControl: label wraps the Radix Checkbox button (a labelable element), so they are associated */}
+											<label className="flex flex-row items-center gap-2 text-sm cursor-pointer">
+											<Checkbox
+													checked={!!assignment}
+													onCheckedChange={() =>
+														toggleProject(project.projectId)
+													}
+												/>
+												{project.name}
+											</label>
+											{assignment && (
+												<div className="flex flex-row flex-wrap gap-3 pl-6">													{project.environments?.map((environment) => (
+														<label
+															key={environment.environmentId}
+															htmlFor={`vault-env-${project.projectId}-${environment.environmentId}`}
+															className="flex flex-row items-center gap-1.5 text-xs text-muted-foreground cursor-pointer"
+														>
+															<Checkbox
+																id={`vault-env-${project.projectId}-${environment.environmentId}`}
+																checked={assignment.environmentIds.includes(
+																	environment.environmentId,
+																)}
+																onCheckedChange={() =>
+																	toggleEnvironment(
+																		project.projectId,
+																		environment.environmentId,
+																	)
+																}
+															/>
+															{environment.name}
+														</label>
+													))}
+													{assignment.environmentIds.length === 0 && (
+														<span className="text-xs text-muted-foreground italic self-center">
+															All environments
+														</span>
+													)}
+												</div>
+											)}
+										</div>
+									);
+								})}
+							</div>
+							{form.formState.errors.assignments && (
+								<p className="text-sm font-medium text-destructive">
+									{form.formState.errors.assignments.message}
+								</p>
+							)}
+						</div>
+
+						<DialogFooter className="flex w-full flex-row justify-between gap-2 sm:justify-between">
+							<Button
+								type="button"
+								variant="secondary"
+								isLoading={isTesting}
+								onClick={onTestConnection}
+							>
+								Test Connection
+							</Button>
+							<Button type="submit" isLoading={isPending}>
+								{vaultProviderId ? "Update" : "Create"}
+							</Button>
+						</DialogFooter>
+					</form>
+				</Form>
+			</DialogContent>
+		</Dialog>
+	);
+};
