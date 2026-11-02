@@ -1,5 +1,37 @@
 name: CodeQL
 
+# Static analysis of the repository, one CodeQL database per language the
+# repository actually contains.
+#
+# The project is a pnpm monorepo of independent products, so this workflow mirrors
+# that structure instead of assuming a single build:
+#
+#   TypeScript / JavaScript
+#     apps/{api,astron,schedules,status}      packages/{cli,mcp,server,status,trpc-openapi}
+#     web/apps/{docs,website}                 bot/{main,protect,logger,player,guild}
+#     -> build-mode: none. There is no single build command for the monorepo
+#        (Next.js apps, standalone Node services, esbuild bundles, plain-Node
+#        Discord bots) and `autobuild` guesses wrong; CodeQL reads the sources
+#        directly, so no dependency install is needed either.
+#
+#   Go
+#     apps/monitoring — its own Go module, outside the pnpm workspace.
+#     -> build-mode: manual with an explicit `go build ./...` in that directory:
+#        the module root is a subdirectory, which autobuild does not reliably
+#        locate, and the database is only populated from a real compile. The Go
+#        module restores its own dependencies, so nothing is installed here.
+#
+#   GitHub Actions
+#     .github/workflows -> build-mode: none.
+#
+# Python is deliberately absent: the only Python in the tree is the vendored
+# agent-skill tooling under `.agents`, which is not product code.
+#
+# Vendored and generated trees are kept out of the databases with `paths-ignore`
+# below (`.agents`, the MDX documentation content, Markdown). Trigger paths are
+# left alone on purpose: CodeQL is a required check on some branches, and a path
+# filter that skips the job would leave that check pending forever.
+
 on:
   push:
     branches: [master]
@@ -25,47 +57,70 @@ jobs:
     timeout-minutes: 60
     permissions:
       contents: read
+      # The `actions` language reads the workflow definitions.
       actions: read
+      # Publishing the SARIF results to the Security tab.
       security-events: write
-      packages: read
     strategy:
       fail-fast: false
       matrix:
         include:
-          # GitHub Actions workflows.
           - language: actions
             build-mode: none
-          # TypeScript/JS: the workspace is compiled ahead of the analysis and
-          # the sources are handed to CodeQL directly. `none` build mode is
-          # correct here — there is no single build command for the monorepo and
-          # an autobuild attempt is slow and unreliable. Scoped to the packages
-          # that contain TypeScript.
           - language: javascript-typescript
             build-mode: none
-          # Go: a single module, so autobuild works.
           - language: go
-            build-mode: autobuild
+            build-mode: manual
     steps:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
-
-      - name: Install dependencies
-        if: matrix.language == 'javascript-typescript'
-        run: |
-          npm install -g pnpm@10.22.0
-          pnpm install --frozen-lockfile
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
-          # Dependency vendoring is not used: the TypeScript analysis reads
-          # sources directly and the Go module downloads its own dependencies.
           queries: security-extended,security-and-quality
+          # Not product code: vendored agent skills (the only Python in the tree),
+          # the documentation content and prose.
+          config: |
+            paths-ignore:
+              - .agents
+              - web/apps/docs/content
+              - '**/*.md'
+
+      # `build-mode: manual` for Go: this step is what the extractor observes, so
+      # it must compile the module. Run from the module root, not the repo root.
+      - name: Build the monitoring module
+        if: matrix.language == 'go'
+        working-directory: apps/monitoring
+        run: |
+          set -euo pipefail
+          go version
+          go build ./...
+
+      # A pull request opened from a fork only receives a read-only GITHUB_TOKEN,
+      # so uploading its SARIF is refused by the API. The analysis still runs;
+      # its results are simply not published.
+      - name: Decide whether the results can be uploaded
+        id: upload
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
+          BASE_REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "pull_request" ] && [ "$HEAD_REPOSITORY" != "$BASE_REPOSITORY" ]; then
+            echo "mode=never" >> "$GITHUB_OUTPUT"
+            echo "::notice::Fork pull request: analysis runs, results are not uploaded (read-only token)."
+          else
+            echo "mode=always" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Perform CodeQL analysis
         uses: github/codeql-action/analyze@v4
         with:
           category: /language:${{ matrix.language }}
+          upload: ${{ steps.upload.outputs.mode }}
