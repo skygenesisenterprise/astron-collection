@@ -1,6 +1,10 @@
 #!/bin/sh
 set -e
 
+# Kept in sync with the Dockerfile layout: the bot lives in /app/bot/<name> and
+# imports the shared framework from ../../packages/discord-framework.
+BOT_DIR="${BOT_DIR:-/app/bot/guild}"
+
 export NODE_ENV="${NODE_ENV:-production}"
 export LOG_LEVEL="${LOG_LEVEL:-info}"
 export REDIS_ENABLED="${REDIS_ENABLED:-true}"
@@ -144,15 +148,15 @@ run_bot() {
     log_redis_configuration
     log_info "Discord bot starting"
 
-    cd /app/bot
+    cd "$BOT_DIR"
 
     if [ ! -f index.js ]; then
-        log_error "Bot entrypoint not found at /app/bot/index.js"
+        log_error "Bot entrypoint not found at $BOT_DIR/index.js"
         return 1
     fi
 
     if [ ! -d node_modules ]; then
-        log_error "Bot dependencies not found at /app/bot/node_modules"
+        log_error "Bot dependencies not found at $BOT_DIR/node_modules"
         return 1
     fi
 

@@ -25,9 +25,11 @@ services:
       - "6379"
 
   bot:
+    # Context is the repository root: the image needs bot/main (this catalogue)
+    # and packages/discord-framework (technical framework). See Dockerfile.
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ../..
+      dockerfile: bot/main/Dockerfile
       args:
         NODE_ENV: ${NODE_ENV:-production}
     # Published by .github/workflows/docker-publish.yml as
@@ -38,11 +40,30 @@ services:
     command: bot
     environment:
       NODE_ENV: ${NODE_ENV:-production}
+      # Credentials of THIS bot's Discord application. Each bot has its own
+      # token and Application ID; they are never meant to be shared.
+      ASTRON_MAIN_DISCORD_TOKEN: ${ASTRON_MAIN_DISCORD_TOKEN:-}
+      ASTRON_MAIN_DISCORD_CLIENT_ID: ${ASTRON_MAIN_DISCORD_CLIENT_ID:-}
+      # Deprecated shared fallback: only read when the two values above are empty.
       DISCORD_TOKEN: ${DISCORD_TOKEN:-}
       DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID:-}
       DISCORD_WELCOME_DM_ENABLED: ${DISCORD_WELCOME_DM_ENABLED:-true}
-      DISCORD_COMMAND_SCOPE: ${DISCORD_COMMAND_SCOPE:-global}
       DISCORD_ANNOUNCE_DEPLOYMENTS: ${DISCORD_ANNOUNCE_DEPLOYMENTS:-true}
+      DISCORD_LEVEL_CHANNEL_ID: ${DISCORD_LEVEL_CHANNEL_ID:-}
+      DISCORD_ROLE_AGENTS_ID: ${DISCORD_ROLE_AGENTS_ID:-}
+      # --- Command deployment ------------------------------------------------
+      # `global` replaces this application's global catalogue; `guild` scopes it
+      # to ASTRON_COMMAND_GUILD_ID; `none` disables deployment. Each bot must own
+      # a distinct Discord Application ID.
+      ASTRON_COMMAND_SCOPE: ${ASTRON_COMMAND_SCOPE:-global}
+      ASTRON_COMMAND_GUILD_ID: ${ASTRON_COMMAND_GUILD_ID:-}
+      DISCORD_COMMAND_SCOPE: ${DISCORD_COMMAND_SCOPE:-}
+      # --- Official voice presence -------------------------------------------
+      ASTRON_VOICE_PRESENCE_ENABLED: ${ASTRON_VOICE_PRESENCE_ENABLED:-true}
+      ASTRON_OFFICIAL_GUILD_ID: ${ASTRON_OFFICIAL_GUILD_ID:-1369779785273839749}
+      ASTRON_PRESENCE_VOICE_CHANNEL_ID: ${ASTRON_PRESENCE_VOICE_CHANNEL_ID:-1564590674194473000}
+      ASTRON_LOG_LEVEL: ${ASTRON_LOG_LEVEL:-info}
+      # --- Cache -------------------------------------------------------------
       REDIS_ENABLED: "true"
       REDIS_REQUIRED: "false"
       REDIS_HOST: redis
@@ -55,7 +76,7 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - bot-data:/app/bot/data
+      - bot-data:/app/bot/main/data
 
 volumes:
   redis:

@@ -1,6 +1,12 @@
 # ══════════════════════════════════════════════════════════════════════════════
-# Astron Collection — Discord Bot (unified image)
-# Builds only the bot from bot/main. Run alongside redis via docker-compose.yml.
+# Astron Collection — Discord bot (guild)
+#
+# Build context is the repository root, so the image contains both the bot's own
+# catalogue (bot/guild) and the shared technical framework
+# (packages/discord-framework).
+#
+# Build:
+#   docker build -f bot/guild/Dockerfile .
 # ══════════════════════════════════════════════════════════════════════════════
 FROM node:25-alpine
 
@@ -14,14 +20,18 @@ RUN apk add --no-cache \
     bash \
     wget
 
-WORKDIR /app/bot
+WORKDIR /app/bot/guild
 
-COPY package.json ./
+COPY bot/guild/package.json ./
 RUN npm install --no-audit --no-fund
 
-COPY . .
+COPY bot/guild/ ./
+COPY packages/discord-framework /app/packages/discord-framework
 
-COPY entrypoint.sh /entrypoint.sh
+RUN mkdir -p /app/packages \
+    && ln -sfn /app/bot/guild/node_modules /app/packages/node_modules
+
+COPY bot/guild/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]

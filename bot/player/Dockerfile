@@ -1,6 +1,16 @@
 # ══════════════════════════════════════════════════════════════════════════════
-# Astron Collection — Discord Bot (unified image)
-# Builds only the bot from bot/player. Run alongside redis via docker-compose.yml.
+# Astron Collection — Discord bot (player)
+#
+# Build context is the repository root, so the image contains both the bot's own
+# catalogue (bot/player) and the shared technical framework
+# (packages/discord-framework).
+#
+# The image ships no audio player of its own: voice presence is a connection
+# state, and an audio session would take a lease from the framework's session
+# coordinator (packages/discord-framework/src/voice/session.js).
+#
+# Build:
+#   docker build -f bot/player/Dockerfile .
 # ══════════════════════════════════════════════════════════════════════════════
 FROM node:25-alpine
 
@@ -14,14 +24,18 @@ RUN apk add --no-cache \
     bash \
     wget
 
-WORKDIR /app/bot
+WORKDIR /app/bot/player
 
-COPY package.json ./
+COPY bot/player/package.json ./
 RUN npm install --no-audit --no-fund
 
-COPY . .
+COPY bot/player/ ./
+COPY packages/discord-framework /app/packages/discord-framework
 
-COPY entrypoint.sh /entrypoint.sh
+RUN mkdir -p /app/packages \
+    && ln -sfn /app/bot/player/node_modules /app/packages/node_modules
+
+COPY bot/player/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]

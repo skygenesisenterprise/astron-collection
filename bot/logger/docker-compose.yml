@@ -25,24 +25,36 @@ services:
       - "6379"
 
   bot:
+    # Context is the repository root: the image needs bot/logger and
+    # packages/discord-framework. See Dockerfile.
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ../..
+      dockerfile: bot/logger/Dockerfile
       args:
         NODE_ENV: ${NODE_ENV:-production}
     # Published by .github/workflows/docker-publish.yml as
-    # ghcr.io/<owner>/astron-logger:v<version>. The `build:` above stays for local
-    # development (`make docker-dev logger`, `docker compose up --build`).
+    # ghcr.io/<owner>/astron-logger:v<version>.
     image: ${ASTRON_BOT_IMAGE:-ghcr.io/skygenesisenterprise/astron-logger}:${ASTRON_BOT_VERSION:-latest}
     restart: unless-stopped
     command: bot
     environment:
       NODE_ENV: ${NODE_ENV:-production}
+      ASTRON_LOGGER_DISCORD_TOKEN: ${ASTRON_LOGGER_DISCORD_TOKEN:-}
+      ASTRON_LOGGER_DISCORD_CLIENT_ID: ${ASTRON_LOGGER_DISCORD_CLIENT_ID:-}
+      # Deprecated shared fallback: only read when the two values above are empty.
       DISCORD_TOKEN: ${DISCORD_TOKEN:-}
       DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID:-}
       DISCORD_WELCOME_DM_ENABLED: ${DISCORD_WELCOME_DM_ENABLED:-true}
-      DISCORD_COMMAND_SCOPE: ${DISCORD_COMMAND_SCOPE:-global}
       DISCORD_ANNOUNCE_DEPLOYMENTS: ${DISCORD_ANNOUNCE_DEPLOYMENTS:-true}
+      DISCORD_LEVEL_CHANNEL_ID: ${DISCORD_LEVEL_CHANNEL_ID:-}
+      DISCORD_ROLE_AGENTS_ID: ${DISCORD_ROLE_AGENTS_ID:-}
+      ASTRON_COMMAND_SCOPE: ${ASTRON_COMMAND_SCOPE:-global}
+      ASTRON_COMMAND_GUILD_ID: ${ASTRON_COMMAND_GUILD_ID:-}
+      DISCORD_COMMAND_SCOPE: ${DISCORD_COMMAND_SCOPE:-}
+      ASTRON_VOICE_PRESENCE_ENABLED: ${ASTRON_VOICE_PRESENCE_ENABLED:-true}
+      ASTRON_OFFICIAL_GUILD_ID: ${ASTRON_OFFICIAL_GUILD_ID:-1369779785273839749}
+      ASTRON_PRESENCE_VOICE_CHANNEL_ID: ${ASTRON_PRESENCE_VOICE_CHANNEL_ID:-1564590674194473000}
+      ASTRON_LOG_LEVEL: ${ASTRON_LOG_LEVEL:-info}
       REDIS_ENABLED: "true"
       REDIS_REQUIRED: "false"
       REDIS_HOST: redis
@@ -55,7 +67,7 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - bot-data:/app/bot/data
+      - bot-data:/app/bot/logger/data
 
 volumes:
   redis:

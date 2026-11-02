@@ -1,6 +1,17 @@
 # ══════════════════════════════════════════════════════════════════════════════
-# Astron Collection — Discord Bot (unified image)
-# Builds only the bot from bot/main. Run alongside redis via docker-compose.yml.
+# Astron Collection — Discord bot (protect)
+#
+# Build context is the repository root, so the image contains both the bot's own
+# catalogue (bot/protect) and the shared technical framework
+# (packages/discord-framework). The layout is preserved:
+#
+#   /app/bot/protect                  the bot, its commands, events and data
+#   /app/packages/discord-framework   the framework, imported as ../../packages/…
+#   /app/packages/node_modules        symlink to the bot's node_modules, so the
+#                                     framework resolves discord.js from it
+#
+# Build:
+#   docker build -f bot/protect/Dockerfile .
 # ══════════════════════════════════════════════════════════════════════════════
 FROM node:25-alpine
 
@@ -14,14 +25,18 @@ RUN apk add --no-cache \
     bash \
     wget
 
-WORKDIR /app/bot
+WORKDIR /app/bot/protect
 
-COPY package.json ./
+COPY bot/protect/package.json ./
 RUN npm install --no-audit --no-fund
 
-COPY . .
+COPY bot/protect/ ./
+COPY packages/discord-framework /app/packages/discord-framework
 
-COPY entrypoint.sh /entrypoint.sh
+RUN mkdir -p /app/packages \
+    && ln -sfn /app/bot/protect/node_modules /app/packages/node_modules
+
+COPY bot/protect/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]

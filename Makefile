@@ -203,7 +203,7 @@ endif
 IMAGE_TAGS = -t $(IMAGE_NAME):$(IMAGE_VERSION) -t $(IMAGE_NAME):latest -t $(IMAGE_NAME):sha-$(GIT_SHA)
 IMAGE_PLATFORM_FLAG = $(if $(ASTRON_COLLECTION_PLATFORMS),--platform $(ASTRON_COLLECTION_PLATFORMS),)
 
-.PHONY: help install deps dev build test typecheck lint \
+.PHONY: help install deps dev build test test-bots check-bots typecheck lint \
         docker-build docker-up docker-down docker-restart docker-logs docker-ps docker-config docker-dev \
         image-build image-pull image-push image-inspect image-tags \
         migrate backup restore doctor update clean \
@@ -254,6 +254,12 @@ build: ## Build the workspace (pnpm build)
 
 test: ## Run the test suites (pnpm test)
 	$(PNPM) test
+
+test-bots: ## Run the Discord framework test suite
+	node --test packages/discord-framework/test/*.test.js
+
+check-bots: ## Check that each bot owns its catalogue and uses the framework
+	node scripts/check-bots.mjs
 
 typecheck: ## Type-check the workspace (pnpm typecheck)
 	$(PNPM) typecheck
@@ -350,9 +356,11 @@ ifeq ($(BOT_DIR),)
 else
 	@test -f $(BOT_DIR)/Dockerfile || { echo "==> $(BOT_DIR)/Dockerfile does not exist yet; nothing to build for '$(PRODUCT_WORD)'"; exit 1; }
 	@echo "==> building $(IMAGE_NAME) — bot=$(PRODUCT_WORD) version=$(IMAGE_VERSION) sha=$(GIT_SHA)"
+	# Context is the repository root: every bot image embeds the shared
+	# packages/discord-framework next to its own catalogue.
 	$(DOCKER) buildx build \
 		--file $(BOT_DIR)/Dockerfile \
-		$(IMAGE_PLATFORM_FLAG) $(IMAGE_TAGS) --load $(BOT_DIR)
+		$(IMAGE_PLATFORM_FLAG) $(IMAGE_TAGS) --load .
 endif
 
 image-pull: ## Pull the published image of the selected product

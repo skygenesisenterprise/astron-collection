@@ -1,0 +1,30 @@
+{
+  "applicationId": "1371454013262004344",
+  "scope": "global",
+  "guildId": null,
+  "hash": "5e8fb4d7ccef0d83e19d4d639107f148",
+  "count": 20,
+  "names": [
+    "8ball",
+    "automod",
+    "ban",
+    "config",
+    "dice",
+    "farewell",
+    "kick",
+    "levels",
+    "mute",
+    "ping",
+    "poll",
+    "prefix",
+    "purge",
+    "rank",
+    "remind",
+    "serverinfo",
+    "unmute",
+    "userinfo",
+    "warn",
+    "welcome"
+  ],
+  "deployedAt": "2026-11-02T16:10:33.484Z"
+}

@@ -210,8 +210,8 @@ jobs:
             {
               "image": "astron",
               "tag_suffix": "-main",
-              "context": "bot/main",
-              "file": "bot/main/Dockerfile",
+              "context": ".",
+              "file": "./bot/main/Dockerfile",
               "build_args": "ASTRON_COLLECTION_VERSION=${VERSION}",
               "description": "Astron Collection official Discord bot (main)",
               "release_name": "Main",
@@ -220,8 +220,8 @@ jobs:
             {
               "image": "astron-protect",
               "tag_suffix": "-protect",
-              "context": "bot/protect",
-              "file": "bot/protect/Dockerfile",
+              "context": ".",
+              "file": "./bot/protect/Dockerfile",
               "description": "Astron Collection official Discord bot (protect)",
               "release_name": "Protect",
               "release_assets": false
@@ -229,8 +229,8 @@ jobs:
             {
               "image": "astron-logger",
               "tag_suffix": "-logger",
-              "context": "bot/logger",
-              "file": "bot/logger/Dockerfile",
+              "context": ".",
+              "file": "./bot/logger/Dockerfile",
               "description": "Astron Collection official Discord bot (logger)",
               "release_name": "Logger",
               "release_assets": false
@@ -238,8 +238,8 @@ jobs:
             {
               "image": "astron-automation",
               "tag_suffix": "-automation",
-              "context": "bot/automation",
-              "file": "bot/automation/Dockerfile",
+              "context": ".",
+              "file": "./bot/automation/Dockerfile",
               "description": "Astron Collection official Discord bot (automation)",
               "release_name": "Automation",
               "release_assets": false
@@ -247,8 +247,8 @@ jobs:
             {
               "image": "astron-player",
               "tag_suffix": "-player",
-              "context": "bot/player",
-              "file": "bot/player/Dockerfile",
+              "context": ".",
+              "file": "./bot/player/Dockerfile",
               "description": "Astron Collection official Discord bot (player)",
               "release_name": "Player",
               "release_assets": false
@@ -256,11 +256,11 @@ jobs:
             {
               "image": "guild-center",
               "tag_suffix": "-guild-center",
-              "context": "bot/guild-center",
-              "file": "bot/guild-center/Dockerfile",
+              "context": ".",
+              "file": "./bot/guild-center/Dockerfile",
               "fallback": {
-                "context": "bot/guild",
-                "file": "bot/guild/Dockerfile"
+                "context": ".",
+                "file": "./bot/guild/Dockerfile"
               },
               "description": "Astron Collection official Discord bot (guild center)",
               "release_name": "Guild Center",

@@ -1,0 +1,36 @@
+{
+  "name": "@astron-collection/discord-framework",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared technical framework for the Astron Collection Discord bots: bootstrap, lifecycle, command registry, interaction routing, permissions, errors, logging, command deployment and official voice presence. Contains no business logic.",
+  "exports": {
+    ".": "./src/index.js",
+    "./config": "./src/config/env.js",
+    "./voice": "./src/voice/index.js"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "test": "node --test test/",
+    "test:watch": "node --test --watch test/",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write ."
+  },
+  "peerDependencies": {
+    "@discordjs/voice": "^0.18.0",
+    "discord.js": "^14.25.1"
+  },
+  "peerDependenciesMeta": {
+    "@discordjs/voice": {
+      "optional": true
+    },
+    "discord.js": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  }
+}
