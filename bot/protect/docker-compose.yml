@@ -30,7 +30,10 @@ services:
       dockerfile: Dockerfile
       args:
         NODE_ENV: ${NODE_ENV:-production}
-    image: astron-collection/astron-protect:${APP_IMAGE_TAG:-latest}
+    # Published by .github/workflows/docker-publish.yml as
+    # ghcr.io/<owner>/astron-protect:v<version>. The `build:` above stays for local
+    # development (`make docker-dev protect`, `docker compose up --build`).
+    image: ${ASTRON_BOT_IMAGE:-ghcr.io/skygenesisenterprise/astron-protect}:${ASTRON_BOT_VERSION:-latest}
     restart: unless-stopped
     command: bot
     environment:

@@ -9,6 +9,7 @@
 #   migrate   one-shot job: wait for PostgreSQL, apply the migrations, exit
 #   client    frontend: exec `next start` (or `next dev` in development)
 #   status    standalone status page (apps/status), independent from the stack
+#   healthcheck  probe the container role and exit (used by Docker HEALTHCHECK)
 #
 # Flow of the backend roles:
 #   1. resolve mode (development | production)
@@ -20,6 +21,7 @@
 #
 # Escape hatches:
 #   ASTRON_COLLECTION_ROLE=api|client|migrate|status  select the role explicitly
+#   ASTRON_COLLECTION_ROLE=healthcheck                the Docker health probe
 #   ASTRON_COLLECTION_MODE=development                force dev mode
 #   ASTRON_COLLECTION_SKIP_DB_WAIT=1                  skip the wait-for-postgres step
 #   ASTRON_COLLECTION_SKIP_MIGRATIONS=1               skip migrations
@@ -30,7 +32,7 @@ set -euo pipefail
 
 ROLE="${1:-${ASTRON_COLLECTION_ROLE:-api}}"
 case "$ROLE" in
-api | client | migrate | status) ;;
+api | client | migrate | status | healthcheck) ;;
 *)
 	ROLE="api"
 	;;
@@ -46,6 +48,27 @@ prod | production) MODE="production" ;;
 esac
 
 log() { printf '[astron-collection] %s\n' "$*"; }
+
+# --- Healthcheck ------------------------------------------------------------
+# One image serves every role, so the Docker HEALTHCHECK cannot hard-code a
+# single path: it asks the entrypoint, which probes the *container* role
+# (ASTRON_COLLECTION_ROLE) on its own port. Exits 0 when the app answers.
+if [ "$ROLE" = "healthcheck" ]; then
+	probe_role="${ASTRON_COLLECTION_ROLE:-api}"
+	case "$probe_role" in
+	client)
+		probe="http://127.0.0.1:${PORT:-3000}/"
+		exec node -e "fetch(process.argv[1]).then((r) => process.exit(r.status < 500 ? 0 : 1)).catch(() => process.exit(1))" "$probe"
+		;;
+	status)
+		probe="http://127.0.0.1:${PORT:-4200}/api/v1/pages"
+		;;
+	*)
+		probe="http://127.0.0.1:${PORT:-4000}/api/health"
+		;;
+	esac
+	exec node -e "fetch(process.argv[1]).then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))" "$probe"
+fi
 
 # --- Escape hatches --------------------------------------------------------
 if [ "${2:-}" = "shell" ] || [ "${1:-}" = "shell" ]; then

@@ -21,7 +21,7 @@
 #   dev    ASTRON_COLLECTION_MODE=development ASTRON_COLLECTION_BUILD_TARGET=dev \
 #          NODE_ENV=development docker compose --profile dev up --build --watch
 #
-# `make docker-up [self|cloud]` and `make docker-dev [self|cloud]` set that whole
+# `make docker-up [self|cloud|console]` and `make docker-dev [self|cloud|console]` set that whole
 # environment for you — they are the supported entry points, because a Compose file
 # cannot switch a service's build target from a profile.
 #
@@ -75,11 +75,13 @@ x-api-environment: &api-environment
   BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET is required — see .env.example}
   BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://localhost:3000}
   BETTER_AUTH_TRUSTED_ORIGINS: ${BETTER_AUTH_TRUSTED_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}
-  # --- Environment (self | cloud) ------------------------------------------
-  # `self` is the self-hosted platform; `cloud` is Astron Collection Cloud. Both
+  # --- Environment (self | cloud | console) --------------------------------
+  # `self` is the self-hosted platform, `cloud` is Astron Collection Cloud and
+  # `console` is Astron Collection Console (the cloud-side fleet manager). All three
   # run the exact same images and services: the environment only changes runtime
-  # behaviour (IS_CLOUD), never the container topology. Selected by the Makefile:
-  #   make docker-up self | make docker-up cloud
+  # behaviour (IS_CLOUD and ASTRON_COLLECTION_PRODUCT), never the container
+  # topology. Selected by the Makefile:
+  #   make docker-up self | make docker-up cloud | make docker-up console
   ASTRON_COLLECTION_FLAVOR: ${ASTRON_COLLECTION_FLAVOR:-selfhosted}
   ASTRON_COLLECTION_PRODUCT: ${ASTRON_COLLECTION_PRODUCT:-self}
   IS_CLOUD: ${IS_CLOUD:-false}
@@ -162,9 +164,10 @@ services:
   # -------------------------------------------------------------------------
   # GROUP 3 — FRONTEND
   #
-  # Next.js dashboard. `next start` in production (target `client`), `next dev` in
-  # development (target `dev`). Both are chosen by ASTRON_COLLECTION_BUILD_TARGET;
-  # the mode itself comes from ASTRON_COLLECTION_MODE.
+  # Next.js dashboard. `next start` in production, `next dev` in development. Both
+  # are the same platform image: `platform` is the production target, `dev` ships
+  # the sources and dependencies the dev server watches. The target comes from
+  # ASTRON_COLLECTION_BUILD_TARGET, the mode from ASTRON_COLLECTION_MODE.
   #
   # Deliberately without DATABASE_URL or REDIS_URL — even a mistakenly reached API
   # route cannot run backend work in this container.
@@ -174,11 +177,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: ${ASTRON_COLLECTION_BUILD_TARGET:-client}
+      target: ${ASTRON_COLLECTION_BUILD_TARGET:-platform}
       args:
         # Baked into the browser bundle: origin used for the WebSocket connection.
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4000}
-    image: ${ASTRON_COLLECTION_CLIENT_IMAGE:-ghcr.io/skygenesisenterprise/astron-collection-client}:${ASTRON_COLLECTION_VERSION:-latest}
+        ASTRON_COLLECTION_VERSION: ${ASTRON_COLLECTION_VERSION:-latest}
+    # The same image as `api`: the edition (self | cloud | console) picks the tag,
+    # the role decides what the container runs.
+    image: ${ASTRON_COLLECTION_IMAGE:-ghcr.io/skygenesisenterprise/astron-collection}:${ASTRON_COLLECTION_VERSION:-latest}
     container_name: astron-collection-client
     restart: unless-stopped
     environment:
@@ -204,17 +210,13 @@ services:
       api:
         condition: service_healthy
     healthcheck:
-      test:
-        [
-          "CMD",
-          "node",
-          "-e",
-          "fetch('http://127.0.0.1:3000/').then((r) => process.exit(r.status < 500 ? 0 : 1)).catch(() => process.exit(1))",
-        ]
+      # Role-aware probe baked into the image (entrypoint.sh healthcheck): the
+      # client checks `/`, the API checks `/api/health`.
+      test: ["CMD", "/usr/local/bin/entrypoint.sh", "healthcheck"]
       interval: 30s
-      timeout: 5s
+      timeout: 10s
       retries: 10
-      start_period: 60s
+      start_period: 90s
     develop:
       # Development only (`make docker-dev`, which runs `up --watch`): the sources
       # are synchronised into the container instead of being bind-mounted, so the
@@ -237,8 +239,9 @@ services:
   #
   # Node server: tRPC and OpenAPI routes, better-auth, WebSockets, BullMQ workers
   # and cron jobs. It owns both dependency connections and closes them on SIGTERM.
-  # `node dist/server.mjs` in production (target `api`), `tsx server/server.ts` in
-  # development (target `dev`), chosen by ASTRON_COLLECTION_BUILD_TARGET.
+  # Same image as `client` (`ASTRON_COLLECTION_IMAGE`), role `api`: `node
+  # dist/server.mjs` in production, `tsx server/server.ts` in development, chosen
+  # by ASTRON_COLLECTION_BUILD_TARGET.
   #
   # It is the only service with PostgreSQL and Redis credentials, and the only one
   # that applies migrations: once at startup (ASTRON_COLLECTION_RUN_MIGRATIONS=1,
@@ -250,8 +253,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: ${ASTRON_COLLECTION_BUILD_TARGET:-api}
-    image: ${ASTRON_COLLECTION_API_IMAGE:-ghcr.io/skygenesisenterprise/astron-collection-api}:${ASTRON_COLLECTION_VERSION:-latest}
+      target: ${ASTRON_COLLECTION_BUILD_TARGET:-platform}
+      args:
+        ASTRON_COLLECTION_VERSION: ${ASTRON_COLLECTION_VERSION:-latest}
+        ASTRON_COLLECTION_FLAVOR: ${ASTRON_COLLECTION_FLAVOR:-selfhosted}
+        ASTRON_COLLECTION_PRODUCT: ${ASTRON_COLLECTION_PRODUCT:-self}
+    image: ${ASTRON_COLLECTION_IMAGE:-ghcr.io/skygenesisenterprise/astron-collection}:${ASTRON_COLLECTION_VERSION:-latest}
     container_name: astron-collection-api
     restart: unless-stopped
     environment:
@@ -275,13 +282,8 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
-      test:
-        [
-          "CMD",
-          "node",
-          "-e",
-          "fetch('http://127.0.0.1:4000/api/health').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
-        ]
+      # Role-aware probe baked into the image (entrypoint.sh healthcheck).
+      test: ["CMD", "/usr/local/bin/entrypoint.sh", "healthcheck"]
       interval: 30s
       timeout: 10s
       retries: 10
