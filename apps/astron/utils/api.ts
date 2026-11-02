@@ -10,13 +10,36 @@ import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 import superjson from "superjson";
 import type { AppRouter } from "@/server/api/root";
 
+/**
+ * HTTP calls stay on the client origin: Next.js rewrites `/api/*` to the API
+ * service (see next.config.mjs), so session cookies remain first-party.
+ * Server-side calls (tests, SSR helpers) target the internal API service instead.
+ */
 const getBaseUrl = () => {
 	if (typeof window !== "undefined") return "";
-	return `http://localhost:${process.env.PORT ?? 3000}`;
+	return (
+		process.env.API_INTERNAL_URL ??
+		`http://localhost:${process.env.PORT ?? 3000}`
+	);
 };
 
+/**
+ * WebSockets cannot go through a Next.js rewrite: they connect directly to the
+ * API origin published as NEXT_PUBLIC_API_URL (baked in at build time), and fall
+ * back to the client origin when it is not configured.
+ */
 const getWsUrl = () => {
 	if (typeof window === "undefined") return null;
+
+	const configured = process.env.NEXT_PUBLIC_API_URL;
+	if (configured) {
+		try {
+			const { protocol, host } = new URL(configured);
+			return `${protocol === "https:" ? "wss" : "ws"}://${host}/drawer-logs`;
+		} catch {
+			// Not a valid URL: fall back to the current origin below.
+		}
+	}
 
 	const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
 	const host = window.location.host;

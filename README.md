@@ -196,26 +196,45 @@ docker compose down
 
 ### Self-host the full platform
 
-The root Compose stack runs PostgreSQL, Redis, Traefik and the Astron Collection control plane. The container needs access to the host Docker socket to build and manage workloads; treat this permission as highly privileged.
+The root Compose stack is made of four service groups only: **postgres** (database), **redis** (cache and queues), **client** (Next.js frontend) and **api** (backend: tRPC/OpenAPI, auth, WebSockets, workers). It needs no Traefik, no Docker Swarm and no host Docker socket.
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` before starting the stack. Replace the sample database URL, `SECRET_KEY`, Redis credentials and OAuth settings with your own values. Generate secrets with, for example:
+Edit `.env` before starting the stack and set `POSTGRES_PASSWORD`, `REDIS_PASSWORD` and `BETTER_AUTH_SECRET`. Generate each one with:
 
 ```bash
 openssl rand -hex 32
 ```
 
-Then start the stack:
+The stack refuses to start while one of them is missing, and the API refuses a weak or known `BETTER_AUTH_SECRET`. Then start it:
 
 ```bash
-docker compose up --build -d
-docker compose logs -f astron-collection
+docker compose up -d --build
+docker compose logs -f api
 ```
 
-Open [http://localhost:3000](http://localhost:3000) and complete the initial setup. Keep `.env` private and do not expose the dashboard publicly until authentication and HTTPS are configured.
+Open [http://localhost:3000](http://localhost:3000) and complete the initial setup. The API is published on [http://localhost:4000](http://localhost:4000); PostgreSQL and Redis are internal only. Keep `.env` private and do not expose the dashboard publicly until authentication and HTTPS are configured.
+
+The stack runs in two profiles on the same four services:
+
+```bash
+make docker-up self           # production profile, self-hosted
+make docker-up cloud          # production profile, Astron Collection Cloud
+docker compose down           # stop — data volumes are preserved
+make docker-dev self          # development profile: hot reload, same four services
+make migrate                  # apply the migrations once
+```
+
+`docker compose down` keeps the database; never run `docker compose down -v` in normal operation. Database backup and restore:
+
+```bash
+make backup                   # writes backups/astron-<date>.sql
+make restore FILE=backups/astron-<date>.sql
+```
+
+To update, pull the revision and rebuild: `git pull && make docker-up`. To develop against the sources on the host instead of containers, use `pnpm install --frozen-lockfile` followed by `pnpm dev` and `pnpm --filter=@astron-collection/api run dev`.
 
 ### Makefile shortcuts
 
@@ -341,7 +360,7 @@ The root `Dockerfile` exposes several targets:
 | `dev` | Development image with hot reload and deployment tooling |
 | `status` | Standalone status page image |
 
-The root Compose stack runs PostgreSQL 16, Redis, Traefik, the control plane and an optional status service. Both `astron-collection` and `astron-collection-dev` bind the host Docker socket; the platform manages the host Docker Engine and Traefik through mounted configuration, not Docker-in-Docker.
+The root Compose stack runs exactly four services: `postgres`, `redis`, `client` and `api`. The frontend and the backend are separate images: the client serves the UI and proxies `/api/*` to the API service, and only the API holds the database and Redis credentials and applies migrations. Neither container mounts the host Docker socket. The standalone status page keeps its own `status` image target and is deployed on its own.
 
 The bot images are independent and can be deployed one at a time. Each `bot/<name>/docker-compose.yml` starts its bot and a Redis cache, and persists bot data in a named volume.
 

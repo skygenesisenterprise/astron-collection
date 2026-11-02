@@ -1,31 +1,29 @@
 # syntax=docker/dockerfile:1
 #
-# Astron Collection — single canonical Dockerfile for the main product.
+# Astron Collection — single canonical Dockerfile for the platform.
 #
 # Built from the repository root: the whole monorepo is one pnpm workspace with
-# a single `pnpm-lock.yaml`, so only the root context is ever used.
+# a single `pnpm-lock.yaml`, so only the root context is ever used. Both runtime
+# images of the Compose stack are produced here, because they share the same
+# dependency install and the same sources: separating them into two files would
+# duplicate the install and lose the shared layer cache.
 #
-#   docker build -t astron-collection .                      # self-hosted (default target)
-#   docker build --target cloud -t astron-collection-cloud . # cloud (no build tooling)
-#   docker build --target dev -t astron-collection-dev .     # development image
-#   docker buildx build --target selfhosted .
+#   docker build -t astron-collection-api .                       # backend (default target)
+#   docker build --target client -t astron-collection-client .     # frontend
+#   docker build --target dev -t astron-collection-dev .          # development image
+#   docker buildx build --target api .
 #
 # Stages / targets
 #   base        Node + pnpm toolchain
-#   dev         dependencies only, runs `pnpm dev` (hot-reload via compose)
-#   builder     installs + compiles the app, deploys a pruned /prod/astron-collection
-#   runtime     shared production runtime (artifacts, healthcheck, entrypoint)
-#   cloud       FROM runtime; Astron Collection Cloud (same app, no self-hosted tooling)
-#   selfhosted  FROM runtime + Docker/nixpacks/railpack/pack (LAST => default)
+#   dev         dependencies only, runs `next dev` or the backend dev server
+#   builder     installs + compiles the app, deploys a pruned /prod/astron
+#   client      FROM base; Next.js frontend, started with `next start`
+#   status      standalone status page (separate product, not part of the stack)
+#   api         FROM base; backend (tRPC/OpenAPI, auth, WebSockets, workers) — LAST => default
 #
-# The deployment tooling (docker CLI, nixpacks, railpack, git-lfs, ...) is
-# installed by docker/install-deploy-tooling.sh, shared by the `dev` and
-# `selfhosted` stages so a dev container drives Docker exactly like production.
-#
-# Runtime note: Astron Collection manages the host Docker Engine through the mounted
-# /var/run/docker.sock and writes state to /etc/astron-collection and /root/.docker, both
-# of which require root inside the container. This is socket access to the host
-# engine, NOT Docker-in-Docker.
+# The production images never run as root and never carry build tooling: the
+# backend image is started by `entrypoint.sh` (role `api`), the frontend image by
+# `entrypoint.sh` (role `client`). Neither needs the host Docker socket.
 
 # ---------------------------------------------------------------------------
 # Toolchain
@@ -36,153 +34,125 @@ ENV PATH="$PNPM_HOME:$PATH"
 # Compile native addons (node-pty, bcrypt, ssh2, cpu-features) against the
 # headers already shipped in the Node image. Without this node-gyp downloads
 # node-v24.4.0-headers.tar.gz from nodejs.org during pnpm install, which fails
-# on networks that only allow the npm registry and breaks the dev build.
+# on networks that only allow the npm registry.
 ENV npm_config_nodedir=/usr/local
-RUN npm install -g pnpm@10.22.0
-# openssl signs the local instance identity at container start (see
-# entrypoint.sh) with the same code path as install.sh; ca-certificates keeps
-# outbound TLS verification working in the slim image.
-RUN apt-get update && apt-get install -y --no-install-recommends openssl ca-certificates \
+# Matches the `packageManager` field of the root package.json and therefore the
+# lockfile that `--frozen-lockfile` validates against.
+ARG PNPM_VERSION=12.16.1
+RUN npm install -g pnpm@${PNPM_VERSION}
+# ca-certificates keeps outbound TLS verification working in the slim image.
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 # ---------------------------------------------------------------------------
-# Development image (dependencies + the deployment tooling; never runs Next's
-# production build). The `dev` compose service bind-mounts apps/astron-collection and
-# packages over this stage's sources, so the server always runs the code on
-# the host and hot-reloads it.
+# Development image (dependencies + sources, never a production build). The
+# `dev` Compose services bind-mount apps/astron and packages over this stage's
+# sources, so the dev servers always run the code on the host and hot-reload it.
+# `ASTRON_COLLECTION_ROLE` selects which one the entrypoint starts.
 # ---------------------------------------------------------------------------
 FROM base AS dev
 COPY . /usr/src/app
 WORKDIR /usr/src/app
 
-# Build toolchain (native modules) plus the deployment tooling, so a dev
-# container behaves like the production one (docker CLI, nixpacks, railpack,
-# pack): without it every Docker page fails with `docker: not found`.
-RUN apt-get update && apt-get install -y python3 make g++ git python3-pip pkg-config libsecret-1-dev && rm -rf /var/lib/apt/lists/*
-
-COPY --chmod=0755 docker/install-deploy-tooling.sh /tmp/install-deploy-tooling.sh
-RUN /tmp/install-deploy-tooling.sh && rm -f /tmp/install-deploy-tooling.sh
-
-COPY --from=buildpacksio/pack:0.39.1 /usr/local/bin/pack /usr/local/bin/pack
+# Build toolchain for the native modules installed by pnpm.
+RUN apt-get update && apt-get install -y python3 make g++ git pkg-config libsecret-1-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 ENV NODE_ENV=development
+ENV NEXT_TELEMETRY_DISABLED=1
 
-# All launch logic (wait for DB, migrations, server) lives in entrypoint.sh.
+# All launch logic (wait for DB, optional migrations, server) lives in entrypoint.sh.
 COPY --chmod=0755 entrypoint.sh /usr/local/bin/entrypoint.sh
-# install.sh doubles as a library (ASTRON_COLLECTION_SOURCE_ONLY=1): the entrypoint sources
-# it to bootstrap the instance identity with a single source of truth.
-COPY --chmod=0755 install.sh /usr/local/bin/astron-collection-install.sh
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 # ---------------------------------------------------------------------------
-# Builder (production artifacts)
+# Builder (production artifacts, shared by the client and api images)
 # ---------------------------------------------------------------------------
 FROM base AS builder
 COPY . /usr/src/app
 WORKDIR /usr/src/app
 
-RUN apt-get update && apt-get install -y python3 make g++ git python3-pip pkg-config libsecret-1-dev && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y python3 make g++ git pkg-config libsecret-1-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install dependencies
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
-# Public build-time configuration (cloud builds only; empty for self-hosted).
-ARG NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-ENV NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=$NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-
-# The build reads .env.production (esbuild bakes its values as build-time
-# defines, and the file becomes /app/.env at runtime). The committed example
-# only carries safe defaults (PORT, NODE_ENV), which keeps this stage
-# reproducible and lets `docker build .` work with an unprepared context.
-COPY apps/astron-collection/.env.production.example ./.env.production
-
-# Next.js otherwise phones home (telemetry) and tries to enable its own
-# anonymous usage reporting during the build; disabling it removes a network
-# round-trip from every CI build without changing the produced artifacts.
+# Next.js otherwise phones home (telemetry) during the build; disabling it removes
+# a network round-trip from every build without changing the produced artifacts.
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN pnpm --filter=@astron-collection/server build
-RUN pnpm --filter=@astron-collection/status build
+
+# Server bundle (esbuild: dist/server.mjs, dist/migration.mjs, …) and Next build.
 RUN pnpm --filter=./apps/astron run build
 
+# Pruned production deployment: package.json + the node_modules subset the runtime
+# needs, with the workspace packages resolved. Both runtimes copy from here.
 RUN pnpm --filter=./apps/astron --prod deploy --legacy /prod/astron
 
-RUN cp -R /usr/src/app/apps/astron-collection/.next /prod/astron-collection/.next
-RUN cp -R /usr/src/app/apps/astron-collection/dist /prod/astron-collection/dist
-
 # ---------------------------------------------------------------------------
-# Shared production runtime
+# Client — the Next.js frontend, and only the frontend.
+#
+# `next start` serves the pages, the static assets and the `/api/*` rewrites that
+# point at the API service (API_INTERNAL_URL). No DATABASE_URL, no REDIS_URL, no
+# workers: this image cannot perform backend work even by mistake.
 # ---------------------------------------------------------------------------
-FROM base AS runtime
+FROM base AS client
 WORKDIR /app
-
 ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3000
 
-RUN apt-get update && apt-get install -y tini curl unzip zip apache2-utils && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends tini \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy only what the runtime needs
-COPY --from=builder /prod/astron-collection/.next ./.next
-COPY --from=builder /prod/astron-collection/dist ./dist
-COPY --from=builder /prod/astron-collection/next.config.mjs ./next.config.mjs
-COPY --from=builder /prod/astron-collection/public ./public
-COPY --from=builder /prod/astron-collection/package.json ./package.json
-COPY --from=builder /prod/astron-collection/drizzle ./drizzle
-COPY --from=builder /prod/astron-collection/components.json ./components.json
-COPY --from=builder /prod/astron-collection/node_modules ./node_modules
-# Safe defaults only (PORT, NODE_ENV); real configuration is injected at runtime.
-COPY apps/astron-collection/.env.production.example ./.env
+COPY --from=builder /prod/astron/package.json ./package.json
+COPY --from=builder /prod/astron/node_modules ./node_modules
+COPY --from=builder /prod/astron/next.config.mjs ./next.config.mjs
+COPY --from=builder /prod/astron/public ./public
+COPY --from=builder /usr/src/app/apps/astron/.next ./.next
 
-# rclone (backup destinations) and tsx (runtime scripts) are shared by both
-# cloud and self-hosted.
-RUN curl https://rclone.org/install.sh | bash && pnpm install -g tsx
+# Unprivileged runtime: the frontend needs no write access.
+RUN groupadd --system --gid 1001 astron \
+    && useradd --system --uid 1001 --gid astron --home-dir /app astron \
+    && chown -R astron:astron /app
 
 ARG ASTRON_COLLECTION_VERSION=dev
-LABEL org.opencontainers.image.title="astron-collection" \
-      org.opencontainers.image.description="Astron Collection (dashboard, server and build tooling)" \
+# Environment selected by the Makefile (`make docker-up self | make docker-up cloud`).
+# `self` and `cloud` deliberately share one image: they differ by runtime behaviour
+# (IS_CLOUD), not by the tooling baked in, so there is no flavor-specific build to keep
+# in sync. The flavor is baked in as a default and can be overridden at runtime.
+ARG ASTRON_COLLECTION_FLAVOR=selfhosted
+ENV ASTRON_COLLECTION_FLAVOR=${ASTRON_COLLECTION_FLAVOR}
+LABEL org.opencontainers.image.title="astron-collection-client" \
+      org.opencontainers.image.description="Astron Collection — Next.js dashboard (frontend)" \
       org.opencontainers.image.source="https://github.com/skygenesisenterprise/astron-collection" \
       org.opencontainers.image.version="${ASTRON_COLLECTION_VERSION}" \
       org.opencontainers.image.licenses="Apache-2.0"
 
 EXPOSE 3000
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=5 \
-  CMD curl -fs http://localhost:3000/api/trpc/settings.health || exit 1
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=5 \
+  CMD node -e "fetch('http://127.0.0.1:3000/').then((r) => process.exit(r.status < 500 ? 0 : 1)).catch(() => process.exit(1))"
 
-# All launch logic (wait for DB, migrations, server) lives in entrypoint.sh.
 COPY --chmod=0755 entrypoint.sh /usr/local/bin/entrypoint.sh
-# Same identity bootstrap as install.sh (see the dev stage above).
-COPY --chmod=0755 install.sh /usr/local/bin/astron-collection-install.sh
+ENV ASTRON_COLLECTION_ROLE=client
 
+USER astron
 # tini reaps child processes that the entrypoint/server leave defunct.
 ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]
 
 # ---------------------------------------------------------------------------
-# Astron Collection Cloud — same application without the self-hosted build tooling.
-# ---------------------------------------------------------------------------
-FROM runtime AS cloud
-
-# ---------------------------------------------------------------------------
-# Astron Collection Console — the instance/fleet management plane. Same runtime as Cloud;
-# what it may do is decided by its `console` product entitlement at runtime, not
-# by the image contents. Kept before `selfhosted` so `selfhosted` stays the
-# default target (the last stage in the file).
-# ---------------------------------------------------------------------------
-FROM runtime AS console
-
-# ---------------------------------------------------------------------------
-# Astron Collection Status — the standalone status page (apps/status + the packages/status
-# engine). Deliberately independent from the control plane: no PostgreSQL, no
-# Redis, no Docker socket, no instance identity. The engine owns a dedicated
-# SQLite file under STATUS_DATA_DIR, so the whole product is one container and
-# one volume.
+# Astron Collection Status — the standalone status page (apps/status + the
+# packages/status engine). Deliberately independent from the stack: no PostgreSQL,
+# no Redis, no workers. The engine owns a dedicated SQLite file under
+# STATUS_DATA_DIR, so the whole product is one container and one volume.
 #
-#   docker build --target status     -t astron-collection-status .      # production
-#   docker build --target status-dev -t astron-collection-status-dev .  # development
+#   docker build --target status -t astron-collection-status .
 #
-# The production image ships Next's `output: "standalone"` bundle, so it does
-# not carry the monorepo or its pnpm store.
+# Kept before `api` so `api` stays the default target (the last stage).
 # ---------------------------------------------------------------------------
 FROM base AS status-builder
 COPY . /usr/src/app
@@ -190,24 +160,26 @@ WORKDIR /usr/src/app
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-# Status app bundle: apps/status/.next/standalone (traced dependencies included).
-RUN pnpm --filter=./apps/status run build
-# Engine bundle: packs the seed CLI so the runtime image can bootstrap its
-# catalog without a TypeScript runner.
+# Status engine bundle (seed CLI included) and the Next status app.
 RUN pnpm --filter=@astron-collection/status run build
+RUN pnpm --filter=@astron-collection/status-app run build
+# Pruned production deployment of the status app.
+RUN pnpm --filter=./apps/status --prod deploy --legacy /prod/status
 
 FROM base AS status
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV PORT=4100
-ENV HOSTNAME=0.0.0.0
-RUN apt-get update && apt-get install -y --no-install-recommends tini curl ca-certificates \
+ENV PORT=4200
+RUN apt-get update && apt-get install -y --no-install-recommends tini \
     && rm -rf /var/lib/apt/lists/*
-# Self-contained server: node_modules is the traced subset, not the workspace.
-COPY --from=status-builder /usr/src/app/apps/status/.next/standalone ./
-COPY --from=status-builder /usr/src/app/apps/status/.next/static ./apps/status/.next/static
-# Seed CLI (bundled): resolves `zod`/`hono` from the traced node_modules above.
+
+COPY --from=status-builder /prod/status/package.json ./package.json
+COPY --from=status-builder /prod/status/node_modules ./node_modules
+COPY --from=status-builder /usr/src/app/apps/status/.next ./.next
+COPY --from=status-builder /usr/src/app/apps/status/public ./public
+COPY --from=status-builder /usr/src/app/apps/status/next.config.mjs ./next.config.mjs
+# Seed CLI (bundled): resolves its dependencies from the node_modules above.
 COPY --from=status-builder /usr/src/app/packages/status/dist ./engine-dist
 
 ARG ASTRON_COLLECTION_VERSION=dev
@@ -217,35 +189,60 @@ LABEL org.opencontainers.image.title="astron-collection-status" \
       org.opencontainers.image.version="${ASTRON_COLLECTION_VERSION}" \
       org.opencontainers.image.licenses="Apache-2.0"
 
-EXPOSE 4100
+EXPOSE 4200
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=5 \
-  CMD curl -fs http://localhost:4100/api/v1/pages || exit 1
+  CMD node -e "fetch('http://127.0.0.1:4200/api/v1/pages').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
 
-# Same entrypoint as every other image: it detects the status application
-# (ASTRON_COLLECTION_APP=status) and execs the standalone server.
 COPY --chmod=0755 entrypoint.sh /usr/local/bin/entrypoint.sh
+ENV ASTRON_COLLECTION_ROLE=status
 ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]
 
 # ---------------------------------------------------------------------------
-# Astron Collection Status (development) — reuses the `dev` stage (workspace sources +
-# dependencies + entrypoint) and only selects the status application. Compose
-# bind-mounts apps/status and packages/status over it for hot reload.
+# API — the backend: tRPC and OpenAPI routes, better-auth, WebSockets, BullMQ
+# workers and cron jobs. This is the default target (last stage in the file).
+#
+# It is the only image that receives PostgreSQL and Redis credentials, and the
+# only one that applies migrations (through the `migrate` job). It never talks to
+# the host Docker socket.
 # ---------------------------------------------------------------------------
-FROM dev AS status-dev
-ENV ASTRON_COLLECTION_APP=status
-ENV NEXT_TELEMETRY_DISABLED=1
+FROM base AS api
+WORKDIR /app
+ENV NODE_ENV=production
+ENV PORT=4000
 
-# ---------------------------------------------------------------------------
-# Astron Collection self-hosted — Cloud plus the tooling deployments need on the host.
-# This is the default target (last stage in the file).
-# ---------------------------------------------------------------------------
-FROM runtime AS selfhosted
+RUN apt-get update && apt-get install -y --no-install-recommends tini \
+    && rm -rf /var/lib/apt/lists/*
 
-# Cloud plus the tooling deployments need on the host — same script as the dev
-# image, so both flavours expose the same commands.
-COPY --chmod=0755 docker/install-deploy-tooling.sh /tmp/install-deploy-tooling.sh
-RUN /tmp/install-deploy-tooling.sh && rm -f /tmp/install-deploy-tooling.sh
+# Server bundle (dist/server.mjs + the migration/utility scripts it ships with).
+COPY --from=builder /prod/astron/package.json ./package.json
+COPY --from=builder /prod/astron/node_modules ./node_modules
+COPY --from=builder /prod/astron/drizzle ./drizzle
+COPY --from=builder /usr/src/app/apps/astron/dist ./dist
 
-# Install buildpacks
-COPY --from=buildpacksio/pack:0.39.1 /usr/local/bin/pack /usr/local/bin/pack
+# Unprivileged runtime: the backend writes nothing outside its temp directory.
+RUN groupadd --system --gid 1001 astron \
+    && useradd --system --uid 1001 --gid astron --home-dir /app astron \
+    && chown -R astron:astron /app
+
+ARG ASTRON_COLLECTION_VERSION=dev
+# Same flavor switch as the client stage (see above).
+ARG ASTRON_COLLECTION_FLAVOR=selfhosted
+ENV ASTRON_COLLECTION_FLAVOR=${ASTRON_COLLECTION_FLAVOR}
+LABEL org.opencontainers.image.title="astron-collection-api" \
+      org.opencontainers.image.description="Astron Collection — backend (tRPC, WebSockets, workers)" \
+      org.opencontainers.image.source="https://github.com/skygenesisenterprise/astron-collection" \
+      org.opencontainers.image.version="${ASTRON_COLLECTION_VERSION}" \
+      org.opencontainers.image.licenses="Apache-2.0"
+
+EXPOSE 4000
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=5 \
+  CMD node -e "fetch('http://127.0.0.1:4000/api/health').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+
+# All launch logic (wait for DB, migrations, server) lives in entrypoint.sh.
+COPY --chmod=0755 entrypoint.sh /usr/local/bin/entrypoint.sh
+ENV ASTRON_COLLECTION_ROLE=api
+
+USER astron
+ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]

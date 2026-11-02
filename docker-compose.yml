@@ -3,71 +3,154 @@
 # This is the single entry point for running Astron Collection from the repository root.
 # It builds the root `Dockerfile` and exposes the dashboard in the browser.
 #
-#   docker compose up -d          # self-hosted (build + run)  -> http://localhost:3000
-#   docker compose logs -f
-#   docker compose down
+# Exactly four services:
 #
-# Switching modes (three products, one Dockerfile):
+#   GROUP 1 — DATABASE   postgres   PostgreSQL, persistent storage of the platform
+#   GROUP 2 — CACHE      redis      Redis, cache, BullMQ queues and coordination
+#   GROUP 3 — FRONTEND   client     Next.js dashboard (UI only: no PostgreSQL, no Redis)
+#   GROUP 4 — BACKEND    api        Backend: tRPC/OpenAPI, auth, WebSockets, workers
 #
-#   self-hosted  docker compose up -d                                (default)
-#   cloud        ASTRON_COLLECTION_FLAVOR=cloud ASTRON_COLLECTION_IMAGE=ghcr.io/skygenesisenterprise/astron-collection-cloud docker compose up -d --build
-#   console      ASTRON_COLLECTION_FLAVOR=console ASTRON_COLLECTION_IMAGE=ghcr.io/skygenesisenterprise/astron-collection-console docker compose up -d --build
-#   pinned image ASTRON_COLLECTION_IMAGE=ghcr.io/skygenesisenterprise/astron-collection ASTRON_COLLECTION_VERSION=v0.30.6 docker compose up -d
-#   development  docker compose --profile dev up --watch astron-collection-dev  -> http://localhost:3000
+# There is no per-mode duplicate (`api-dev`, `client-dev`, …) and no sidecar: the
+# mode is an environment of these four services, set by the `prod` or `dev` profile.
+# Nothing here needs Traefik, Docker Swarm or the host Docker socket.
 #
-# Cloud and console are protected products: their container entrypoint requires
-# a Astron Collection-signed entitlement (see the identity section) and fails closed without
-# one. `make docker-up -- --<product>` sets the flavor, image and product for you.
+# ---------------------------------------------------------------------------
+# Profiles and environments
+# ---------------------------------------------------------------------------
+#   prod   docker compose --profile prod up -d --build    (default, COMPOSE_PROFILES)
+#   dev    ASTRON_COLLECTION_MODE=development ASTRON_COLLECTION_BUILD_TARGET=dev \
+#          NODE_ENV=development docker compose --profile dev up --build --watch
 #
-# The `dev` service bind-mounts `apps/astron-collection` and `packages` from the host and
-# restores the image's node_modules through anonymous volumes, so the dev
-# server always runs the sources on disk (and hot-reloads them) while keeping
-# the dependencies resolved from pnpm-lock.yaml.
+# `make docker-up [self|cloud]` and `make docker-dev [self|cloud]` set that whole
+# environment for you — they are the supported entry points, because a Compose file
+# cannot switch a service's build target from a profile.
 #
-# Both `astron-collection` and `astron-collection-dev` declare `depends_on: [postgres, redis, traefik]`,
-# so a single command (even a service-scoped one such as
-# `docker compose --profile dev up --watch astron-collection-dev`) always brings up the
-# whole support stack: PostgreSQL, Redis, Traefik and Astron Collection itself.
+# Each service belongs to both profiles and reads its mode from the environment:
 #
-# `astron-collection` (production) and `astron-collection-dev` (development) both publish the
-# dashboard on ${ASTRON_COLLECTION_PORT:-3000}, so the app is always reachable at
-# http://localhost:3000 whatever the mode. They are mutually exclusive: only
-# one of them can own the port at a time.
+#   ASTRON_COLLECTION_MODE          production | development (entrypoint behaviour)
+#   ASTRON_COLLECTION_BUILD_TARGET  api | client (prod) or dev (hot reload)
+#   NODE_ENV                        production | development
 #
-# Both also bind-mount `templates/blueprints` read-only and point
-# ASTRON_COLLECTION_TEMPLATES_DIR at it, so the template gallery keeps working when
-# https://templates.astron-collection.com is unreachable (the production image ships
-# without the blueprints, only the dev image carries the repo sources).
+# `ASTRON_COLLECTION_BUILD_TARGET` therefore has a different default per service:
+# unset means "build this service's production target", `dev` means "build the
+# development stage", which ships the sources and dependencies the dev servers need.
 #
-# Or use the Makefile wrappers: `make docker-up`, `make docker-up ASTRON_COLLECTION_FLAVOR=cloud`,
-# `make docker-dev`.
+# In development the sources are synchronised into the running container
+# (`develop.watch`, no bind mounts), so the image keeps its node_modules and a
+# plain `docker compose up` never accidentally mounts host files over a build.
 #
-# Architecture: Astron Collection talks to the *host* Docker Engine through the mounted
-# socket — it is not Docker-in-Docker. Traefik is declared natively below and
-# shares the `astron-collection-config` volume with the app, so Astron Collection writes its
-# Traefik/dynamic config where the Compose-managed Traefik can read it even when
-# Astron Collection itself runs in a container (ASTRON_COLLECTION_CONFIG_PATH points there).
+# Both modes publish the same two ports, so they are mutually exclusive: stop one
+# before starting the other with `make docker-down`.
+#
+# ---------------------------------------------------------------------------
+# How the client talks to the API
+# ---------------------------------------------------------------------------
+# The browser calls the client origin. Next.js rewrites `/api/*` to `API_INTERNAL_URL`
+# (the `api` service on the internal network), so session cookies stay first-party and
+# the client never needs database or Redis credentials. WebSockets cannot be proxied by
+# a rewrite: they connect straight to the published API port using
+# NEXT_PUBLIC_API_URL (baked into the browser bundle at build time).
+#
+# Only these two ports are published. PostgreSQL and Redis are reachable exclusively on
+# the `astron-collection-internal` network.
 
 name: astron-collection
 
+# Shared backend configuration: the `api` service owns the credentials and the
+# migrations, in both modes.
+x-api-environment: &api-environment
+  NODE_ENV: ${NODE_ENV:-production}
+  TZ: ${TZ:-UTC}
+  # --- PostgreSQL ----------------------------------------------------------
+  # `postgres` is the internal service name — never localhost from inside a container.
+  DATABASE_URL: postgres://${POSTGRES_USER:-astron-collection}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required — see .env.example}@postgres:5432/${POSTGRES_DB:-astron-collection}
+  POSTGRES_HOST: postgres
+  POSTGRES_PORT: "5432"
+  # --- Redis ---------------------------------------------------------------
+  REDIS_URL: redis://:${REDIS_PASSWORD:?REDIS_PASSWORD is required — see .env.example}@redis:6379
+  # --- Authentication ------------------------------------------------------
+  # The API refuses to boot with a missing, short or well-known secret, so a
+  # placeholder copied from .env.example stops the stack instead of shipping a
+  # forgeable session cookie.
+  BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET is required — see .env.example}
+  BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://localhost:3000}
+  BETTER_AUTH_TRUSTED_ORIGINS: ${BETTER_AUTH_TRUSTED_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}
+  # --- Environment (self | cloud) ------------------------------------------
+  # `self` is the self-hosted platform; `cloud` is Astron Collection Cloud. Both
+  # run the exact same images and services: the environment only changes runtime
+  # behaviour (IS_CLOUD), never the container topology. Selected by the Makefile:
+  #   make docker-up self | make docker-up cloud
+  ASTRON_COLLECTION_FLAVOR: ${ASTRON_COLLECTION_FLAVOR:-selfhosted}
+  ASTRON_COLLECTION_PRODUCT: ${ASTRON_COLLECTION_PRODUCT:-self}
+  IS_CLOUD: ${IS_CLOUD:-false}
+  # Browser-facing origin of the API, used for the WebSocket connection.
+  NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4000}
+  # --- Optional integrations (empty values disable them) -------------------
+  OAUTH_GOOGLE_CLIENT_ID: ${OAUTH_GOOGLE_CLIENT_ID:-}
+  OAUTH_GOOGLE_CLIENT_SECRET: ${OAUTH_GOOGLE_CLIENT_SECRET:-}
+  OAUTH_GITHUB_CLIENT_ID: ${OAUTH_GITHUB_CLIENT_ID:-}
+  OAUTH_GITHUB_CLIENT_SECRET: ${OAUTH_GITHUB_CLIENT_SECRET:-}
+  OAUTH_DISCORD_CLIENT_ID: ${OAUTH_DISCORD_CLIENT_ID:-}
+  OAUTH_DISCORD_CLIENT_SECRET: ${OAUTH_DISCORD_CLIENT_SECRET:-}
+
 services:
   # -------------------------------------------------------------------------
-  # PostgreSQL 16 — the database Astron Collection stores its state in.
+  # GROUP 1 — DATABASE
+  #
+  # PostgreSQL 16, official image. No host port is published: only the services
+  # attached to `astron-collection-internal` can reach it.
   # -------------------------------------------------------------------------
   postgres:
+    profiles: ["prod", "dev"]
     image: postgres:16-alpine
+    container_name: astron-collection-postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-astron-collection}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required — see .env.example}
       POSTGRES_DB: ${POSTGRES_DB:-astron-collection}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-astron-collection}
+      # Deterministic encoding, independent from the host locale.
+      POSTGRES_INITDB_ARGS: ${POSTGRES_INITDB_ARGS:---encoding=UTF8}
     volumes:
       - astron-collection-postgres-data:/var/lib/postgresql/data
     healthcheck:
       test:
         [
           "CMD-SHELL",
-          "pg_isready -U ${POSTGRES_USER:-astron-collection} -d ${POSTGRES_DB:-astron-collection}",
+          "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+    networks:
+      - astron-collection
+
+  # -------------------------------------------------------------------------
+  # GROUP 2 — CACHE / QUEUE
+  #
+  # Redis 7, official image. Cache, BullMQ queues and coordination. Append-only
+  # persistence keeps queued jobs across a restart; the volume makes it durable.
+  # Internal only: no host port is published.
+  # -------------------------------------------------------------------------
+  redis:
+    profiles: ["prod", "dev"]
+    image: redis:7-alpine
+    container_name: astron-collection-redis
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?REDIS_PASSWORD is required — see .env.example}
+    command:
+      - sh
+      - -c
+      - exec redis-server --appendonly yes --appendfsync everysec --requirepass "$${REDIS_PASSWORD}"
+    volumes:
+      - astron-collection-redis-data:/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'redis-cli --no-auth-warning -a "$${REDIS_PASSWORD}" ping | grep -q PONG',
         ]
       interval: 10s
       timeout: 5s
@@ -77,425 +160,158 @@ services:
       - astron-collection
 
   # -------------------------------------------------------------------------
-  # Redis 7 — queues and cache for the control plane (deployment queue,
-  # scheduled jobs, background work). Declared here (like `postgres` and
-  # `traefik`) so Compose owns its lifecycle instead of the app creating it on
-  # demand. It is internal only: no host port is published, so only services on
-  # the `astron-collection` network can reach it at redis://redis:6379. Persistence is
-  # enabled (append-only file) and kept in the `astron-collection-redis-data` volume.
+  # GROUP 3 — FRONTEND
+  #
+  # Next.js dashboard. `next start` in production (target `client`), `next dev` in
+  # development (target `dev`). Both are chosen by ASTRON_COLLECTION_BUILD_TARGET;
+  # the mode itself comes from ASTRON_COLLECTION_MODE.
+  #
+  # Deliberately without DATABASE_URL or REDIS_URL — even a mistakenly reached API
+  # route cannot run backend work in this container.
   # -------------------------------------------------------------------------
-  redis:
-    image: redis:7-alpine
-    container_name: astron-collection-redis
-    restart: unless-stopped
-    command:
-      - redis-server
-      - --appendonly
-      - "yes"
-    volumes:
-      - astron-collection-redis-data:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 10s
-    networks:
-      - astron-collection
-
-  # -------------------------------------------------------------------------
-  # Traefik — the edge router for every deployed application. Declared here so
-  # Compose creates it alongside Astron Collection (like `postgres`), instead of the app
-  # creating its own container on demand: bind sources created from inside a
-  # container resolve on the host and would not exist there. It reads its static
-  # config and dynamic files from the shared `astron-collection-config` volume.
-  # -------------------------------------------------------------------------
-  traefik:
-    image: traefik:v${TRAEFIK_VERSION:-3.6.25}
-    container_name: astron-collection-traefik
-    restart: unless-stopped
-    command:
-      - --configFile=/etc/astron-collection/traefik/traefik.yml
-    ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
-      # Traefik dashboard/API (api.insecure is enabled in the generated config).
-      - "8080:8080"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - astron-collection-config:/etc/astron-collection
-    networks:
-      - astron-collection
-
-  # -------------------------------------------------------------------------
-  # Astron Collection — the application. Flavor is selected by ASTRON_COLLECTION_FLAVOR
-  # (selfhosted | cloud), which maps to a Dockerfile target.
-  # -------------------------------------------------------------------------
-  astron-collection:
+  client:
+    profiles: ["prod", "dev"]
     build:
       context: .
       dockerfile: Dockerfile
-      target: ${ASTRON_COLLECTION_FLAVOR:-selfhosted}
-    image: ${ASTRON_COLLECTION_IMAGE:-ghcr.io/skygenesisenterprise/astron-collection}:${ASTRON_COLLECTION_VERSION:-latest}
+      target: ${ASTRON_COLLECTION_BUILD_TARGET:-client}
+      args:
+        # Baked into the browser bundle: origin used for the WebSocket connection.
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4000}
+    image: ${ASTRON_COLLECTION_CLIENT_IMAGE:-ghcr.io/skygenesisenterprise/astron-collection-client}:${ASTRON_COLLECTION_VERSION:-latest}
+    container_name: astron-collection-client
     restart: unless-stopped
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=astron-collection-network"
-      - "traefik.http.routers.astron-collection-app.rule=Host(`${ASTRON_COLLECTION_APP_HOST:-app.astron-collection.localhost}`)"
-      - "traefik.http.routers.astron-collection-app.entrypoints=web"
-      - "traefik.http.routers.astron-collection-app.service=astron-collection-app"
-      - "traefik.http.services.astron-collection-app.loadbalancer.server.port=3000"
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      # Same support stack in production and in development: the Compose-managed
-      # Traefik is always started, never left to be created on demand by the app.
-      traefik:
-        condition: service_started
     environment:
-      NODE_ENV: production
-      NODE_NO_WARNINGS: "1"
+      NODE_ENV: ${NODE_ENV:-production}
+      # Selects the frontend role in the shared entrypoint.
+      ASTRON_COLLECTION_ROLE: client
+      ASTRON_COLLECTION_MODE: ${ASTRON_COLLECTION_MODE:-production}
       PORT: 3000
       HOST: 0.0.0.0
-      # Internal service name — never localhost from inside the container.
-      POSTGRES_HOST: postgres
-      POSTGRES_PORT: 5432
-      DATABASE_URL: postgres://${POSTGRES_USER:-astron-collection}:${POSTGRES_PASSWORD:-astron-collection}@postgres:5432/${POSTGRES_DB:-astron-collection}
-      # Redis backs the control plane queues and cache (see the `redis` service).
-      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
-      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-astron-collection-insecure-default-change-me}
-      BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://${ASTRON_COLLECTION_APP_HOST:-app.astron-collection.localhost}}
-      BETTER_AUTH_TRUSTED_ORIGINS: ${BETTER_AUTH_TRUSTED_ORIGINS:-http://${ASTRON_COLLECTION_APP_HOST:-app.astron-collection.localhost},http://localhost:3000,http://127.0.0.1:3000}
-      # Cloud flavor (FLAVOR=cloud / ASTRON_COLLECTION_FLAVOR=cloud) sets this to true.
-      IS_CLOUD: ${IS_CLOUD:-false}
-      # --- Instance identity (PKI) ------------------------------------------
-      # The entrypoint bootstraps the local identity into the astron-collection-config
-      # volume before the app starts, using the same code as install.sh.
-      # Product defaults to self-hosted, or cloud when IS_CLOUD=true above;
-      # set ASTRON_COLLECTION_PRODUCT=console to override. Cloud/console additionally
-      # require a signed entitlement (ASTRON_COLLECTION_ENTITLEMENT / _FILE) verified
-      # against ASTRON_COLLECTION_ENTITLEMENT_PUBLIC_KEY_FILE and fail closed without it.
-      # ASTRON_COLLECTION_FLAVOR is the single mode switch: selfhosted (default), cloud or
-      # console. It also selects the Dockerfile build target above.
-      ASTRON_COLLECTION_FLAVOR: ${ASTRON_COLLECTION_FLAVOR:-selfhosted}
-      ASTRON_COLLECTION_PRODUCT: ${ASTRON_COLLECTION_PRODUCT:-}
-      ASTRON_COLLECTION_SKIP_IDENTITY: ${ASTRON_COLLECTION_SKIP_IDENTITY:-0}
-      ASTRON_COLLECTION_ENTITLEMENT: ${ASTRON_COLLECTION_ENTITLEMENT:-}
-      ASTRON_COLLECTION_ENTITLEMENT_FILE: ${ASTRON_COLLECTION_ENTITLEMENT_FILE:-}
-      ASTRON_COLLECTION_ENTITLEMENT_PUBLIC_KEY_FILE: ${ASTRON_COLLECTION_ENTITLEMENT_PUBLIC_KEY_FILE:-/etc/astron-collection/identity/entitlement-ca.pub}
       TZ: ${TZ:-UTC}
-      # Internal DNS: serves the Astron Collection Internal DNS zones (e.g.
-      # gitlab.astron-collection.lan) to the LAN and forwards the rest upstream.
-      ASTRON_COLLECTION_DNS_SERVER: ${ASTRON_COLLECTION_DNS_SERVER:-true}
-      ASTRON_COLLECTION_DNS_PORT: 53
-      ASTRON_COLLECTION_DNS_UPSTREAM: ${ASTRON_COLLECTION_DNS_UPSTREAM:-1.1.1.1,8.8.8.8}
-      # Share the Traefik config with the Compose-managed `traefik` service.
-      ASTRON_COLLECTION_CONFIG_PATH: /etc/astron-collection
-      # Branded gateway error pages (issue #142). The sidecar uses the same
-      # control-plane image by default so it also works offline.
-      ASTRON_COLLECTION_GATEWAY_ERRORS_IMAGE: ${ASTRON_COLLECTION_GATEWAY_ERRORS_IMAGE:-${ASTRON_COLLECTION_IMAGE:-ghcr.io/skygenesisenterprise/astron-collection}:${ASTRON_COLLECTION_VERSION:-latest}}
-      ASTRON_COLLECTION_GATEWAY_ERRORS_COMMAND: ${ASTRON_COLLECTION_GATEWAY_ERRORS_COMMAND:-}
-      # Blueprints bind-mounted read-only below: they are served locally
-      # instead of https://templates.astron-collection.com, so templates still resolve
-      # when that domain is down (same setup as `astron-collection-dev`).
-      ASTRON_COLLECTION_TEMPLATES_DIR: /app/templates/blueprints
+      # Server-side proxy target for `/api/*`. Internal service name, never localhost.
+      API_INTERNAL_URL: http://api:4000
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4000}
+      NEXT_TELEMETRY_DISABLED: "1"
+      # Inotify works through the synchronised sources on Linux. On Docker Desktop
+      # (macOS/Windows) set DEV_POLLING=true to use polling instead.
+      CHOKIDAR_USEPOLLING: ${DEV_POLLING:-false}
+      WATCHPACK_POLLING: ${DEV_POLLING:-false}
     ports:
       # Host port is configurable; the container always listens on 3000.
       - "${ASTRON_COLLECTION_PORT:-3000}:3000"
-      # DNS for LAN clients. Point your router/DHCP DNS at this host. The host
-      # side defaults to 53, so it must be free: systemd-resolved, dnsmasq or
-      # Pi-hole hold it on most distros and the container then fails with
-      # "listen tcp4 0.0.0.0:53: bind: address already in use". Shift the host
-      # port with ASTRON_COLLECTION_DNS_HOST_PORT in .env (the container always stays 53).
-      - "${ASTRON_COLLECTION_DNS_HOST_PORT:-53}:53/udp"
-      - "${ASTRON_COLLECTION_DNS_HOST_PORT:-53}:53/tcp"
-    volumes:
-      # Host Docker Engine access (required: Astron Collection deploys and manages
-      # containers). Socket access, not Docker-in-Docker.
-      - /var/run/docker.sock:/var/run/docker.sock
-      # Persistent Astron Collection state: Traefik config, applications, compose files,
-      # SSH keys, certificates, logs.
-      - astron-collection-config:/etc/astron-collection
-      # Docker registry/credential state used by the deployment pipeline.
-      - astron-collection-docker:/root/.docker
-      # Templates gallery blueprints from the checkout, read-only: the app
-      # reads them through ASTRON_COLLECTION_TEMPLATES_DIR (above) so template browsing
-      # and deployment fall back to local files when
-      # https://templates.astron-collection.com is unavailable.
-      - ./templates:/app/templates:ro
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/').then((r) => process.exit(r.status < 500 ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+    develop:
+      # Development only (`make docker-dev`, which runs `up --watch`): the sources
+      # are synchronised into the container instead of being bind-mounted, so the
+      # image keeps its node_modules and a plain `up` never mounts host files over a
+      # production build.
+      watch:
+        - action: sync+restart
+          path: ./apps/astron
+          target: /usr/src/app/apps/astron
+        - action: sync+restart
+          path: ./packages
+          target: /usr/src/app/packages
+        - action: rebuild
+          path: pnpm-lock.yaml
     networks:
       - astron-collection
 
   # -------------------------------------------------------------------------
-  # Astron Collection in development mode (hot reload). Opt-in via the `dev` profile and
-  # run explicitly so it never races the production service for the port:
-  #   docker compose --profile dev up --watch astron-collection-dev
+  # GROUP 4 — BACKEND
   #
-  # It publishes the very same URL as `astron-collection` (http://localhost:3000) so the
-  # dashboard behaves identically in dev and in production.
+  # Node server: tRPC and OpenAPI routes, better-auth, WebSockets, BullMQ workers
+  # and cron jobs. It owns both dependency connections and closes them on SIGTERM.
+  # `node dist/server.mjs` in production (target `api`), `tsx server/server.ts` in
+  # development (target `dev`), chosen by ASTRON_COLLECTION_BUILD_TARGET.
+  #
+  # It is the only service with PostgreSQL and Redis credentials, and the only one
+  # that applies migrations: once at startup (ASTRON_COLLECTION_RUN_MIGRATIONS=1,
+  # the default) so a deployment never starts against a stale schema. Scaling the
+  # API horizontally means setting that to 0 and running `make migrate` once.
   # -------------------------------------------------------------------------
-  astron-collection-dev:
-    profiles:
-      - dev
+  api:
+    profiles: ["prod", "dev"]
     build:
       context: .
       dockerfile: Dockerfile
-      target: dev
-    image: astron-collection-dev:local
-    working_dir: /usr/src/app
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=astron-collection-network"
-      # Route the cloud-style domain to the dev app to better match prod (app.astron-collection.com)
-      - "traefik.http.routers.astron-collection-dev-app.rule=Host(`app.astron-collection.localhost`)"
-      - "traefik.http.routers.astron-collection-dev-app.entrypoints=web"
-      - "traefik.http.routers.astron-collection-dev-app.service=astron-collection-dev-app"
-      - "traefik.http.services.astron-collection-dev-app.loadbalancer.server.port=3000"
-    # entrypoint.sh waits for PostgreSQL, applies migrations and starts the dev
-    # server (Next client + tRPC API).
+      target: ${ASTRON_COLLECTION_BUILD_TARGET:-api}
+    image: ${ASTRON_COLLECTION_API_IMAGE:-ghcr.io/skygenesisenterprise/astron-collection-api}:${ASTRON_COLLECTION_VERSION:-latest}
+    container_name: astron-collection-api
+    restart: unless-stopped
     environment:
-      NODE_ENV: development
-      NODE_NO_WARNINGS: "1"
-      ASTRON_COLLECTION_MODE: development
-      PORT: 3000
+      <<: *api-environment
+      # Selects the backend role in the shared entrypoint.
+      ASTRON_COLLECTION_ROLE: api
+      ASTRON_COLLECTION_MODE: ${ASTRON_COLLECTION_MODE:-production}
+      # Single API instance: it owns the migrations of this deployment.
+      ASTRON_COLLECTION_RUN_MIGRATIONS: ${ASTRON_COLLECTION_RUN_MIGRATIONS:-1}
+      PORT: 4000
       HOST: 0.0.0.0
-      POSTGRES_HOST: postgres
-      POSTGRES_PORT: 5432
-      DATABASE_URL: postgres://${POSTGRES_USER:-astron-collection}:${POSTGRES_PASSWORD:-astron-collection}@postgres:5432/${POSTGRES_DB:-astron-collection}
-      # Redis backs the control plane queues and cache (see the `redis` service).
-      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
-      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-astron-collection-insecure-default-change-me}
-      # Use app.astron-collection.localhost in cloud dev to closer match prod (app.astron-collection.com)
-      BETTER_AUTH_URL: ${BETTER_AUTH_URL:-${ASTRON_COLLECTION_DEV_BASE_URL:-http://app.astron-collection.localhost}}
-      # Also trust both domains for auth in dev
-      BETTER_AUTH_TRUSTED_ORIGINS: ${BETTER_AUTH_TRUSTED_ORIGINS:-http://app.astron-collection.localhost,http://localhost:3000,http://127.0.0.1:3000}
-      # Keep the dev logs free of Next.js' telemetry opt-out reminder.
       NEXT_TELEMETRY_DISABLED: "1"
-      # Same flavor switch as production, so `ASTRON_COLLECTION_FLAVOR=cloud make docker-dev`
-      # exercises the cloud code paths.
-      IS_CLOUD: ${IS_CLOUD:-false}
-      # --- Instance identity (PKI) ------------------------------------------
-      # The entrypoint bootstraps the local identity into the astron-collection-config
-      # volume before the app starts, using the same code as install.sh.
-      # Product defaults to self-hosted, or cloud when IS_CLOUD=true above;
-      # set ASTRON_COLLECTION_PRODUCT=console to override. Cloud/console additionally
-      # require a signed entitlement (ASTRON_COLLECTION_ENTITLEMENT / _FILE) verified
-      # against ASTRON_COLLECTION_ENTITLEMENT_PUBLIC_KEY_FILE and fail closed without it.
-      # ASTRON_COLLECTION_FLAVOR is the single mode switch: selfhosted (default), cloud or
-      # console. It also selects the Dockerfile build target above.
-      ASTRON_COLLECTION_FLAVOR: ${ASTRON_COLLECTION_FLAVOR:-selfhosted}
-      ASTRON_COLLECTION_PRODUCT: ${ASTRON_COLLECTION_PRODUCT:-}
-      ASTRON_COLLECTION_SKIP_IDENTITY: ${ASTRON_COLLECTION_SKIP_IDENTITY:-0}
-      ASTRON_COLLECTION_ENTITLEMENT: ${ASTRON_COLLECTION_ENTITLEMENT:-}
-      ASTRON_COLLECTION_ENTITLEMENT_FILE: ${ASTRON_COLLECTION_ENTITLEMENT_FILE:-}
-      ASTRON_COLLECTION_ENTITLEMENT_PUBLIC_KEY_FILE: ${ASTRON_COLLECTION_ENTITLEMENT_PUBLIC_KEY_FILE:-/etc/astron-collection/identity/entitlement-ca.pub}
-      # Development-only: lets this dev stack boot a protected product (cloud or
-      # console) without a Astron Collection-signed entitlement. Ignored when
-      # NODE_ENV=production, so it can never unlock the production service above.
-      # Set ASTRON_COLLECTION_ALLOW_UNLICENSED_DEV=0 to exercise the real entitlement gate.
-      ASTRON_COLLECTION_ALLOW_UNLICENSED_DEV: ${ASTRON_COLLECTION_ALLOW_UNLICENSED_DEV:-1}
-      TZ: ${TZ:-UTC}
-      # Serve templates from the bind-mounted blueprints directory instead of
-      # https://templates.astron-collection.com, so dev never depends on that domain.
-      ASTRON_COLLECTION_TEMPLATES_DIR: /usr/src/app/templates/blueprints
-      # Inotify works through bind mounts on Linux. On Docker Desktop
-      # (macOS/Windows) set DEV_POLLING=true to use polling instead.
       CHOKIDAR_USEPOLLING: ${DEV_POLLING:-false}
       WATCHPACK_POLLING: ${DEV_POLLING:-false}
-      # Internal DNS server (see the production service above).
-      ASTRON_COLLECTION_DNS_SERVER: ${ASTRON_COLLECTION_DNS_SERVER:-true}
-      ASTRON_COLLECTION_DNS_PORT: 53
-      ASTRON_COLLECTION_DNS_UPSTREAM: ${ASTRON_COLLECTION_DNS_UPSTREAM:-1.1.1.1,8.8.8.8}
-      # Share the Traefik config with the Compose-managed `traefik` service.
-      ASTRON_COLLECTION_CONFIG_PATH: /etc/astron-collection
-      # Run the gateway error sidecar from the dev image and its source tree.
-      ASTRON_COLLECTION_GATEWAY_ERRORS_IMAGE: ${ASTRON_COLLECTION_GATEWAY_ERRORS_IMAGE:-astron-collection-dev:local}
-      ASTRON_COLLECTION_GATEWAY_ERRORS_COMMAND: ${ASTRON_COLLECTION_GATEWAY_ERRORS_COMMAND:-pnpm exec tsx /usr/src/app/packages/server/src/gateway-errors/entry.ts}
-      ASTRON_COLLECTION_GATEWAY_ERRORS_WORKDIR: /usr/src/app
     ports:
-      # Same host port as production: the app is always on
-      # http://localhost:${ASTRON_COLLECTION_PORT:-3000}.
-      - "${ASTRON_COLLECTION_PORT:-3000}:3000"
-      # DNS for LAN clients, but on 5300 in development instead of 53: port 53
-      # is taken on most developer machines (systemd-resolved, dnsmasq/libvirt,
-      # Pi-hole) and publishing it aborts the whole dev stack with "Error
-      # starting userland proxy: listen tcp4 0.0.0.0:53: bind: address already
-      # in use" before a single container starts. Test the dev DNS server with
-      # `dig @127.0.0.1 -p 5300`; production keeps 53 (see the service above).
-      - "${ASTRON_COLLECTION_DNS_DEV_HOST_PORT:-5300}:53/udp"
-      - "${ASTRON_COLLECTION_DNS_DEV_HOST_PORT:-5300}:53/tcp"
+      # Published so the browser can open the WebSocket connection (and for API clients).
+      - "${ASTRON_COLLECTION_API_PORT:-4000}:4000"
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
-      traefik:
-        condition: service_started
-    volumes:
-      # The sources are bind-mounted from the host so that editing a file
-      # hot-reloads the dev server. `develop.watch` is deliberately not used for
-      # the sources: its `action: sync` is a no-op on several Compose releases
-      # (it silently leaves the image's baked sources in place).
-      - ./apps/astron-collection:/usr/src/app/apps/astron-collection
-      - ./packages:/usr/src/app/packages
-      - ./templates:/usr/src/app/templates
-      # Those bind mounts shadow the node_modules installed in the dev image.
-      # Anonymous volumes restore them from the image every time the container
-      # is created — unlike named volumes, they are never stale after a
-      # `docker compose build`. `make docker-dev` passes --build so the image
-      # always matches pnpm-lock.yaml.
-      - /usr/src/app/node_modules
-      - /usr/src/app/apps/astron-collection/node_modules
-      # Next's build output stays inside the container: the dev server runs as
-      # root, so a bind-mounted .next would leave root-owned files in the
-      # repository and break `make clean`.
-      - /usr/src/app/apps/astron-collection/.next
-      - /usr/src/app/packages/cli/node_modules
-      - /usr/src/app/packages/github/node_modules
-      - /usr/src/app/packages/mcp/node_modules
-      - /usr/src/app/packages/sdk/node_modules
-      - /usr/src/app/packages/server/node_modules
-      - /var/run/docker.sock:/var/run/docker.sock
-      - astron-collection-config:/etc/astron-collection
-      - astron-collection-docker:/root/.docker
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:4000/api/health').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 90s
     develop:
-      # Rebuilding on a lockfile change refreshes the node_modules anonymous
-      # volumes above as soon as a dependency is added or updated.
+      # Development only (see the client service above).
       watch:
+        - action: sync+restart
+          path: ./apps/astron
+          target: /usr/src/app/apps/astron
+        - action: sync+restart
+          path: ./packages
+          target: /usr/src/app/packages
         - action: rebuild
           path: pnpm-lock.yaml
     networks:
-      astron-collection:
-        # The control-plane Traefik router targets `astron-collection:3000` (the production
-        # service name). In dev that service is `astron-collection-dev`, so alias it as
-        # `astron-collection` too and the same generated config routes in both modes.
-        aliases:
-          - astron-collection
-
-  # -------------------------------------------------------------------------
-  # Astron Collection Status — the standalone status page (Astron Collection Cloud, API, MCP
-  # Server, GitHub App, Website, Docs). Opt-in via the `status` profile so it
-  # never starts with the control plane, and independent from it: no
-  # PostgreSQL, no Redis, no Traefik, no Docker socket. The engine keeps its
-  # state in a SQLite file inside the `status-data` volume.
-  #
-  #   docker compose --profile status up -d status   -> http://localhost:4100
-  #   make docker-up status / make docker-dev status
-  # -------------------------------------------------------------------------
-  status:
-    profiles:
-      - status
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: status
-    image: ${STATUS_IMAGE:-ghcr.io/skygenesisenterprise/astron-collection-status}:${ASTRON_COLLECTION_VERSION:-latest}
-    restart: unless-stopped
-    environment:
-      NODE_ENV: production
-      # Selects the status application in the shared entrypoint.
-      ASTRON_COLLECTION_APP: status
-      PORT: 4100
-      HOSTNAME: 0.0.0.0
-      # SQLite database, snapshot and backups all live in the mounted volume.
-      STATUS_DATA_DIR: /data
-      # Canonical public origin, used for absolute links and the RSS feed.
-      STATUS_PUBLIC_URL: ${STATUS_PUBLIC_URL:-http://localhost:4100}
-      # Slug rendered at `/`; empty falls back to the first status page.
-      STATUS_DEFAULT_PAGE: ${STATUS_DEFAULT_PAGE:-}
-      STATUS_LOG_LEVEL: ${STATUS_LOG_LEVEL:-info}
-      # Empty disables webhook signing (the channel is then reported as
-      # disabled instead of pretending deliveries succeeded).
-      STATUS_SECRET_KEY: ${STATUS_SECRET_KEY:-}
-      TZ: ${TZ:-UTC}
-    ports:
-      - "${STATUS_PORT:-4100}:4100"
-    volumes:
-      - status-data:/data
-
-  # -------------------------------------------------------------------------
-  # Astron Collection Status in development mode (hot reload). Opt-in via the `status`
-  # and `dev` profiles, and run explicitly so it never races the production
-  # service for the port:
-  #   docker compose --profile status --profile dev up --watch status-dev
-  # -------------------------------------------------------------------------
-  status-dev:
-    profiles:
-      - status
-      - dev
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: status-dev
-    image: astron-collection-status-dev:local
-    working_dir: /usr/src/app
-    environment:
-      NODE_ENV: development
-      ASTRON_COLLECTION_APP: status
-      PORT: 4100
-      STATUS_DATA_DIR: /data
-      STATUS_PUBLIC_URL: ${STATUS_PUBLIC_URL:-http://localhost:4100}
-      STATUS_DEFAULT_PAGE: ${STATUS_DEFAULT_PAGE:-}
-      STATUS_LOG_LEVEL: ${STATUS_LOG_LEVEL:-debug}
-      NEXT_TELEMETRY_DISABLED: "1"
-      # Inotify works through bind mounts on Linux. On Docker Desktop
-      # (macOS/Windows) set DEV_POLLING=true to use polling instead.
-      CHOKIDAR_USEPOLLING: ${DEV_POLLING:-false}
-      WATCHPACK_POLLING: ${DEV_POLLING:-false}
-      TZ: ${TZ:-UTC}
-    ports:
-      - "${STATUS_PORT:-4100}:4100"
-    volumes:
-      # The sources are bind-mounted from the host so that editing a file
-      # hot-reloads the dev server.
-      - ./apps/status:/usr/src/app/apps/status
-      - ./packages/status:/usr/src/app/packages/status
-      # Those bind mounts shadow the node_modules installed in the image;
-      # anonymous volumes restore them from the image every time the container
-      # is created. `make docker-dev status` passes --build so the image always
-      # matches pnpm-lock.yaml.
-      - /usr/src/app/node_modules
-      - /usr/src/app/apps/status/node_modules
-      - /usr/src/app/packages/status/node_modules
-      # Keep Next's output inside the container: the dev server runs as root,
-      # so a bind-mounted .next would leave root-owned files in the repository.
-      - /usr/src/app/apps/status/.next
-      - status-dev-data:/data
-    develop:
-      watch:
-        - action: rebuild
-          path: pnpm-lock.yaml
-
-# Shared deployment network. It is a long-lived, host-wide resource that
-# outlives this stack: deployed applications attach to it as
-# `external: astron-collection-network`, and Astron Collection creates it when missing (install.sh
-# and the server setup run `docker network create --driver overlay --attachable
-# astron-collection-network`). It is therefore declared `external` here so Compose never
-# tries to delete it — otherwise `docker compose down` fails with
-# "Network astron-collection-network Resource is still in use" as soon as a deployed app
-# is still attached. The Makefile's docker-up/docker-dev create it first when it
-# is absent. Its real name must stay `astron-collection-network`: the installer, the
-# Traefik config and the domain labels Astron Collection generates all hardcode it.
-networks:
-  astron-collection:
-    name: astron-collection-network
-    external: true
+      - astron-collection
 
 volumes:
+  # Application data. Deleting these volumes destroys the database and the queued
+  # jobs; `docker compose down` alone preserves them.
   astron-collection-postgres-data:
     name: astron-collection-postgres-data
   astron-collection-redis-data:
     name: astron-collection-redis-data
-  astron-collection-config:
-    name: astron-collection-config
-  astron-collection-docker:
-    name: astron-collection-docker
-  # Status engine state: SQLite database, last-known-public snapshot and
-  # backups. One volume, one file — the whole product is stateless otherwise.
-  status-data:
-    name: astron-collection-status-data
-  status-dev-data:
-    name: astron-collection-status-dev-data
+
+networks:
+  # Single internal bridge network. PostgreSQL and Redis are reachable only through
+  # it; it is not `internal: true` because the API needs outbound access (git
+  # providers, OAuth, AI providers, notifications).
+  astron-collection:
+    name: astron-collection-internal
+    driver: bridge

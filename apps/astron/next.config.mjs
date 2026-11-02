@@ -14,6 +14,30 @@ const nextConfig = {
 		ignoreBuildErrors: true,
 	},
 	transpilePackages: ["@astron-collection/server", "@astron-collection/status"],
+	/**
+	 * The client container only serves the frontend: every `/api/*` call is proxied
+	 * to the API service (GROUP 4), which owns authentication, tRPC/OpenAPI, the
+	 * WebSocket endpoints and the database. `beforeFiles` runs before route
+	 * matching, so the API route files bundled in this image stay unreachable —
+	 * and that container has no database or Redis credentials anyway.
+	 *
+	 * The destination is read when the server starts (`next dev`) and baked into
+	 * the routes manifest at build time (`next build`), where the Compose service
+	 * name is already the default.
+	 */
+	async rewrites() {
+		const apiInternalUrl = process.env.API_INTERNAL_URL ?? "http://api:4000";
+		return {
+			beforeFiles: [
+				{
+					source: "/api/:path*",
+					destination: `${apiInternalUrl}/api/:path*`,
+				},
+			],
+			afterFiles: [],
+			fallback: [],
+		};
+	},
 	webpack: (config) => {
 		// Resolve monorepo packages for transpilation
 		config.resolve.alias["@astron-collection/status"] = path.resolve(
