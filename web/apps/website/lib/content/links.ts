@@ -1,50 +1,51 @@
 /**
- * Every public destination used by the marketing site, in one place.
+ * Every public destination used by the site, in one place.
  *
  * Rules:
- * - Internal navigation targets are paths, so the static export keeps working.
- * - Cloud signup is NOT linked from marketing copy until the public onboarding
- *   endpoint is verified; `/cloud` is the canonical entry point.
- * - Documentation URLs live under docs.notploy.com; `comparison` replaces the
- *   older `differences` slug, which is not part of the docs navigation anymore.
+ * - Internal targets are paths so the static export keeps working.
+ * - Documentation, console and status are subdomains listed in the repository
+ *   README ("Related resources").
+ * - No public bot invite URLs are published yet: `applications.invite` stays
+ *   null until the Discord application IDs are provided, and call-to-action
+ *   buttons fall back to `/applications`.
  */
 
-export const SITE_URL = "https://notploy.com";
+export const SITE_URL = "https://astron-collection.com";
 
 export const links = {
-	/** Existing customer sessions. Not a marketing call to action. */
-	app: {
-		signIn: "https://app.notploy.com/",
-	},
+	console: "https://app.astron-collection.com",
 	docs: {
-		home: "https://docs.notploy.com/docs/core",
-		install: "https://docs.notploy.com/docs/core/installation",
-		architecture: "https://docs.notploy.com/docs/core/architecture",
-		comparison: "https://docs.notploy.com/docs/core/comparison",
-		philosophy: "https://docs.notploy.com/docs/core/philosophy",
-		featureMatrix: "https://docs.notploy.com/docs/core/feature-matrix",
-		limitations: "https://docs.notploy.com/docs/core/limitations",
-		cloud: "https://docs.notploy.com/docs/core/cloud",
-		cloudOnboarding: "https://docs.notploy.com/docs/core/cloud-onboarding",
-		sso: "https://docs.notploy.com/docs/core/sso",
-		auditLogs: "https://docs.notploy.com/docs/core/audit-logs",
-		ai: "https://docs.notploy.com/docs/core/ai",
-		security: "https://docs.notploy.com/docs/core/vulnerability-disclosure",
+		home: "https://docs.astron-collection.com",
+		installation: "https://docs.astron-collection.com/docs/core/installation",
+		architecture: "https://docs.astron-collection.com/docs/core/architecture",
+		api: "https://docs.astron-collection.com/docs/api",
+		cli: "https://docs.astron-collection.com/docs/cli",
+		develop: "https://docs.astron-collection.com/docs/core/develop",
+		mcp: "https://docs.astron-collection.com/docs/core/develop/mcp",
+		sdk: "https://docs.astron-collection.com/docs/core/develop/sdk",
+		vscode: "https://docs.astron-collection.com/docs/core/develop/vscode",
 	},
 	github: {
-		repo: "https://github.com/skygenesisenterprise/notploy",
-		discussions: "https://github.com/skygenesisenterprise/notploy/discussions",
-		issues: "https://github.com/skygenesisenterprise/notploy/issues",
-		releases: "https://github.com/skygenesisenterprise/notploy/releases",
+		repo: "https://github.com/skygenesisenterprise/astron-collection",
+		issues:
+			"https://github.com/skygenesisenterprise/astron-collection/issues",
+		discussions:
+			"https://github.com/skygenesisenterprise/astron-collection/discussions",
+		releases:
+			"https://github.com/skygenesisenterprise/astron-collection/releases",
+		license:
+			"https://github.com/skygenesisenterprise/astron-collection/blob/master/LICENSE",
+		contributing:
+			"https://github.com/skygenesisenterprise/astron-collection/blob/master/.github/CONTRIBUTING.md",
 	},
 	community: {
 		discord: "https://discord.gg/GUkDugVh34",
 	},
-	templates: "https://templates.notploy.com",
-	/** Verified reachable (HTTP 200) at the time of the redesign. */
-	status: "https://status.notploy.com",
-	install: {
-		linux: "curl -sSL https://notploy.com/install.sh | sh",
-		windows: "irm https://notploy.com/install.ps1 | iex",
+	status: "https://status.astron-collection.com",
+	openapi: "https://github.com/skygenesisenterprise/astron-collection/blob/master/openapi.json",
+	email: {
+		contact: "contact@skygenesisenterprise.com",
+		security: "security@skygenesisenterprise.com",
 	},
+	company: "https://skygenesisenterprise.com",
 } as const;

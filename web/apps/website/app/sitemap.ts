@@ -1,98 +1,17 @@
-import { coreSitePages } from "@/lib/site-navigation";
-import { getTemplates } from "@/lib/templates.server";
+import { SITE_URL } from "@/lib/content/links";
+import { siteRoutes } from "@/lib/content/site";
 import type { MetadataRoute } from "next";
 
 // Required for `output: "export"` (GitHub Pages).
 export const dynamic = "force-static";
 
-const BASE_URL = "https://notploy.com";
-
-const featurePages = [
-	"/features/application-deployment-platform",
-	"/features/application-management-software",
-	"/features/database-management-tool",
-	"/features/security",
-	"/features/role-based-access-control",
-	"/features/single-sign-on",
-	"/features/audit-logs",
-	"/features/white-labeling",
-];
-
-const comparisonPages = [
-	"/comparison",
-	"/notploy-vs-coolify",
-	"/notploy-vs-portainer",
-	"/notploy-vs-caprover",
-	"/notploy-vs-dokku",
-	"/notploy-vs-render",
-	"/notploy-vs-vercel",
-];
-
-const industryPages = [
-	"/industries",
-	"/industries/finance-banking",
-	"/industries/agencies",
-	"/industries/healthcare",
-	"/industries/government",
-	"/industries/manufacturing",
-	"/industries/pharmaceuticals",
-	"/industries/higher-education",
-];
-
-const legalPages = ["/terms-of-service", "/privacy"];
-
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-	const templates = await getTemplates();
+export default function sitemap(): MetadataRoute.Sitemap {
 	const now = new Date();
 
-	return [
-		{
-			url: BASE_URL,
-			lastModified: now,
-			changeFrequency: "monthly",
-			priority: 1,
-		},
-		...coreSitePages.map(({ path, priority }) => ({
-			url: `${BASE_URL}${path}`,
-			lastModified: now,
-			changeFrequency: "monthly" as const,
-			priority,
-		})),
-		...featurePages.map((path) => ({
-			url: `${BASE_URL}${path}`,
-			lastModified: now,
-			changeFrequency: "monthly" as const,
-			priority: 0.7,
-		})),
-		...comparisonPages.map((path) => ({
-			url: `${BASE_URL}${path}`,
-			lastModified: now,
-			changeFrequency: "monthly" as const,
-			priority: 0.6,
-		})),
-		...industryPages.map((path) => ({
-			url: `${BASE_URL}${path}`,
-			lastModified: now,
-			changeFrequency: "monthly" as const,
-			priority: 0.7,
-		})),
-		...legalPages.map((path) => ({
-			url: `${BASE_URL}${path}`,
-			lastModified: now,
-			changeFrequency: "yearly" as const,
-			priority: 0.3,
-		})),
-		{
-			url: `${BASE_URL}/templates`,
-			lastModified: now,
-			changeFrequency: "weekly" as const,
-			priority: 0.8,
-		},
-		...templates.map((template) => ({
-			url: `${BASE_URL}/templates/${template.id}`,
-			lastModified: now,
-			changeFrequency: "weekly" as const,
-			priority: 0.7,
-		})),
-	];
+	return siteRoutes.map((route) => ({
+		url: `${SITE_URL}${route.path}`,
+		lastModified: now,
+		changeFrequency: "monthly" as const,
+		priority: route.priority,
+	}));
 }

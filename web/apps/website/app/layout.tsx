@@ -1,83 +1,74 @@
-import clsx from "clsx";
+import { SITE_URL } from "@/lib/content/links";
+import { site } from "@/lib/content/site";
 import type { Metadata } from "next";
-import { Inter, Lexend } from "next/font/google";
-import type { ReactNode } from "react";
-import "@/styles/tailwind.css";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
-import { NotployTraffic } from "@/components/NotployTraffic";
+import { Inter } from "next/font/google";
 
-type Props = {
-	children: ReactNode;
-};
+// Same face and loading strategy as the documentation site.
+const inter = Inter({ subsets: ["latin"], display: "swap" });
+import { themeScript } from "@/lib/theme-script";
+import { Footer } from "@/components/navigation/Footer";
+import { Header } from "@/components/navigation/Header";
+import "@/styles/tailwind.css";
+import type { ReactNode } from "react";
 
 export const metadata: Metadata = {
-	metadataBase: new URL("https://notploy.com"),
+	metadataBase: new URL(SITE_URL),
 	title: {
-		default:
-			"Notploy - The open-source infrastructure platform for deploying and operating applications",
-		template: "%s | Notploy",
+		default: `${site.name} — ${site.tagline}`,
+		template: `%s | ${site.name}`,
 	},
-	description:
-		"Notploy is an open-source infrastructure platform. Deploy applications, databases and Compose projects, manage servers and clusters, and handle routing, certificates and backups — self-hosted with Notploy Self or managed with Notploy Cloud.",
+	description: site.description,
+	applicationName: site.name,
 	icons: {
-		icon: "/icon.svg",
+		// The official mark is `public/astron.png`; the smaller sizes are derived
+		// from it by `scripts/generate-brand-assets.mjs`.
+		icon: [
+			{ url: "/astron.png", type: "image/png" },
+			{ url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+		],
 		apple: "/apple-touch-icon.png",
 	},
 	openGraph: {
-		title: "Notploy - The open-source infrastructure platform",
-		description:
-			"Deploy applications, databases and Compose projects, manage servers and clusters, and handle routing, certificates and backups — self-hosted with Notploy Self or managed with Notploy Cloud.",
-		images: "/og.png",
+		title: `${site.name} — ${site.tagline}`,
+		description: site.description,
+		url: SITE_URL,
+		siteName: site.name,
+		locale: "en_GB",
 		type: "website",
+		images: [{ url: "/og.png", width: 1200, height: 630, alt: site.name }],
 	},
 	twitter: {
 		card: "summary_large_image",
-		title: "Notploy - The open-source infrastructure platform",
-		description:
-			"Deploy applications, databases and Compose projects, manage servers and clusters, and handle routing, certificates and backups — self-hosted with Notploy Self or managed with Notploy Cloud.",
+		title: `${site.name} — ${site.tagline}`,
+		description: site.description,
 		images: ["/og.png"],
 	},
+	alternates: { canonical: SITE_URL },
 };
-const inter = Inter({
-	subsets: ["latin"],
-	display: "swap",
-	variable: "--font-inter",
-});
 
-const lexend = Lexend({
-	subsets: ["latin"],
-	display: "swap",
-	variable: "--font-lexend",
-});
-// Since we have a `not-found.tsx` page on the root, a layout file
-// is required, even if it's just passing children through.
 export default function RootLayout({ children }: { children: ReactNode }) {
 	return (
 		<html
 			lang="en"
-			className={clsx(
-				"h-full scroll-smooth antialiased",
-				inter.variable,
-				lexend.variable,
-			)}
+			className={`dark ${inter.className} h-full antialiased`}
+			suppressHydrationWarning
 		>
-			<body>
-				{/* Traffic Manager instrumentation (no-op without the env vars). */}
-				<NotployTraffic />
+			<head>
+				{/* Resolves the theme before paint, so there is no light/dark flash. */}
+				<script dangerouslySetInnerHTML={{ __html: themeScript }} />
+			</head>
+			<body className="flex min-h-full flex-col bg-background text-foreground">
 				<a
 					href="#main-content"
 					className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground"
 				>
 					Skip to content
 				</a>
-				<div className="flex h-full flex-col">
-					<Header />
-					<div id="main-content" tabIndex={-1}>
-						{children}
-					</div>
-					<Footer />
-				</div>
+				<Header />
+				<main id="main-content" tabIndex={-1} className="flex-1">
+					{children}
+				</main>
+				<Footer />
 			</body>
 		</html>
 	);

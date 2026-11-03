@@ -1,272 +1,172 @@
 /**
  * Homepage content.
  *
- * Copy follows the positioning decided in REDESIGN.md: Notploy is a platform
- * to deploy, operate and control services, run either on infrastructure you
- * control (Self) or as a managed platform (Cloud). European development is
- * stated as a fact about the team, not as a sovereignty guarantee.
+ * Structure follows the conversion patterns audited on mee6.xyz (hero with a
+ * product-in-context preview, factual trust strip, capability cards, how it
+ * works, editions, FAQ, closing CTA). The copy stays inside what the repository
+ * verifies — no invented numbers, testimonials or shipped features.
  */
 
-export interface LifecycleStep {
-	step: string;
-	title: string;
-	description: string;
-}
+export type CapabilityIcon =
+	| "community"
+	| "moderation"
+	| "automod"
+	| "audit"
+	| "config"
+	| "voice"
+	| "developers"
+	| "deployment";
 
-export const lifecycle: LifecycleStep[] = [
-	{
-		step: "01",
-		title: "Infrastructure",
-		description:
-			"A Linux server, a homelab machine, a VPS or a Docker Swarm cluster — the machines you already run.",
-	},
-	{
-		step: "02",
-		title: "Platform",
-		description:
-			"Notploy installs on that infrastructure and becomes the control plane: deployments, routing, certificates, secrets, backups and monitoring.",
-	},
-	{
-		step: "03",
-		title: "Services",
-		description:
-			"Applications from Git or Docker, Compose stacks, databases and scheduled jobs — running where you decided they should run.",
-	},
-];
-
-export interface AudiencePath {
+export interface Capability {
+	icon: CapabilityIcon;
 	title: string;
 	description: string;
 	href: string;
-	cta: string;
+	linkLabel: string;
 }
 
-export const audiencePaths: AudiencePath[] = [
+export const capabilities: Capability[] = [
 	{
-		title: "Personal & homelab",
+		icon: "community",
+		title: "Community",
 		description:
-			"Host the applications and services you actually use, on hardware you already own. Start with one server and grow at your own pace.",
-		href: "/self",
-		cta: "Start with Self",
+			"Welcome and farewell messages, XP, levels and ranks, polls and reminders — the daily surface of a server.",
+		href: "/applications/astron",
+		linkLabel: "Astron",
 	},
 	{
-		title: "Developers & small teams",
+		icon: "moderation",
+		title: "Moderation",
 		description:
-			"Deploy from Git, keep logs, rollbacks and environments, and stop stitching five separate tools together.",
+			"Ban, kick, mute, unmute, warn and purge, with permissions re-checked on every execution.",
+		href: "/applications/protect",
+		linkLabel: "Protect",
+	},
+	{
+		icon: "automod",
+		title: "AutoMod",
+		description:
+			"Configure Discord AutoMod and let the bot enforce it alongside native moderation tools.",
+		href: "/applications/protect",
+		linkLabel: "Protect",
+	},
+	{
+		icon: "audit",
+		title: "Logging & audit",
+		description:
+			"Moderation actions, warnings and member events kept in your own data store, with structured JSON logs.",
+		href: "/applications/logger",
+		linkLabel: "Logger",
+	},
+	{
+		icon: "config",
+		title: "Per-guild configuration",
+		description:
+			"Channels and roles are set where the community lives, through `/config` — no dashboard round-trip.",
+		href: "/applications/guild",
+		linkLabel: "Guild",
+	},
+	{
+		icon: "voice",
+		title: "Voice presence",
+		description:
+			"A silent presence in the official channel, reconnecting with backoff and coordinating audio sessions.",
+		href: "/applications/player",
+		linkLabel: "Player",
+	},
+	{
+		icon: "developers",
+		title: "Developer surfaces",
+		description:
+			"OpenAPI, CLI, TypeScript SDK and an MCP server — 724 operations, one permission model.",
+		href: "/developers",
+		linkLabel: "Developers",
+	},
+	{
+		icon: "deployment",
+		title: "Self-hosted or Cloud",
+		description:
+			"Run the whole platform on your infrastructure, or let SGE operate the control plane.",
 		href: "/platform",
-		cta: "See the platform",
-	},
-	{
-		title: "Businesses & organisations",
-		description:
-			"Repeatable deployments, access control, audit trails and support for teams that answer to someone.",
-		href: "/enterprise",
-		cta: "Notploy for teams",
+		linkLabel: "Platform",
 	},
 ];
 
-export interface EditionOption {
-	name: string;
-	operator: string;
-	description: string;
-	bullets: string[];
-	cta: string;
-	href: string;
-}
+export const trustFacts = [
+	{ value: "5", label: "Discord applications" },
+	{ value: "20", label: "Shared commands" },
+	{ value: "724", label: "API operations" },
+	{ value: "MIT", label: "Licence" },
+];
 
-export const editionOptions: EditionOption[] = [
+export const steps = [
 	{
-		name: "Notploy Self",
-		operator: "You operate the platform",
+		title: "Pick a distribution",
 		description:
-			"Install Notploy on the servers you control. You decide the upgrades, the network boundaries, the backups and who has access.",
-		bullets: [
-			"Free and open source (Apache-2.0)",
-			"Runs on any Linux server with Docker",
-			"Data, secrets and backups stay in your boundary",
-			"Start on one server, add nodes when you need them",
-		],
-		cta: "Install Notploy",
-		href: "/self",
+			"One bot for everything, or a dedicated process per responsibility. Each has its own token, data volume and Redis prefix.",
+		href: "/applications",
+		linkLabel: "Compare applications",
 	},
 	{
-		name: "Notploy Cloud",
-		operator: "Notploy operates the platform",
+		title: "Configure it in Discord",
 		description:
-			"The control plane is hosted, monitored and upgraded by Notploy. Your workloads stay on the servers you connect.",
-		bullets: [
-			"Nothing to install to get started",
-			"Upgrades and monitoring handled for you",
-			"Your applications and data stay yours",
-			"Same product as Self, different operating model",
-		],
-		cta: "Explore Notploy Cloud",
-		href: "/cloud",
+			"Channels, roles, welcomes, levels and AutoMod are set with `/config` and the command set, in the guild itself.",
+		href: "/applications/astron",
+		linkLabel: "See the commands",
+	},
+	{
+		title: "Operate it from the console",
+		description:
+			"Deploy, back up and monitor the services behind the bots — self-hosted, or managed by SGE.",
+		href: "/manager",
+		linkLabel: "Open the console overview",
 	},
 ];
 
-export interface CapabilityGroup {
-	title: string;
-	description: string;
-}
-
-export const capabilityGroups: CapabilityGroup[] = [
-	{
-		title: "Workloads",
-		description:
-			"Applications from Git or Docker images, Docker Compose stacks, databases and scheduled jobs.",
-	},
-	{
-		title: "Infrastructure",
-		description:
-			"One server or several, remote hosts over SSH, Docker Swarm clusters, volumes and registries.",
-	},
-	{
-		title: "Operations",
-		description:
-			"Deployment history and rollback, logs, metrics, backups and restore workflows.",
-	},
-	{
-		title: "Networking",
-		description:
-			"Domains, Traefik routing, TLS certificates and internal service networks.",
-	},
-	{
-		title: "Access",
-		description:
-			"Organisations, roles, API keys, single sign-on and audit logs where available.",
-	},
-	{
-		title: "Automation",
-		description:
-			"REST API, CLI, SDK, webhooks, MCP and CI integration for everything you do in the dashboard.",
-	},
-];
-
-export interface Principle {
-	title: string;
-	description: string;
-	href?: string;
-	linkLabel?: string;
-}
-
-export const principles: Principle[] = [
-	{
-		title: "Self-hosting first",
-		description:
-			"The default is software you install and keep. Notploy Cloud is an option, not a requirement.",
-	},
-	{
-		title: "Open source",
-		description:
-			"Apache-2.0. The source, the issues and the release notes are public.",
-	},
-	{
-		title: "Control stays with you",
-		description:
-			"Data, backups, network boundaries and upgrade timing are your decisions.",
-	},
-	{
-		title: "Transparent dependencies",
-		description:
-			"Docker, Compose, Traefik and Swarm — standard tools you can inspect, replace and take with you.",
-	},
-	{
-		title: "European development",
-		description:
-			"Notploy is developed by a European team. We say what that means, and what it does not guarantee, instead of trading on the label.",
-	},
-];
-
-export interface ResourceLink {
-	label: string;
-	description: string;
-	href: string;
-	external?: boolean;
-}
-
-export const resources: ResourceLink[] = [
-	{
-		label: "Documentation",
-		description: "Installation, architecture and reference.",
-		href: "https://docs.notploy.com/docs/core",
-		external: true,
-	},
-	{
-		label: "Installation guide",
-		description: "Prerequisites and the one-command install.",
-		href: "https://docs.notploy.com/docs/core/installation",
-		external: true,
-	},
-	{
-		label: "Source code",
-		description: "Apache-2.0 repository, issues and releases.",
-		href: "https://github.com/skygenesisenterprise/notploy",
-		external: true,
-	},
-	{
-		label: "Feature matrix",
-		description: "What is available today, and what is not.",
-		href: "https://docs.notploy.com/docs/core/feature-matrix",
-		external: true,
-	},
-	{
-		label: "Service status",
-		description: "Availability of the hosted services.",
-		href: "https://status.notploy.com",
-		external: true,
-	},
-	{
-		label: "Community",
-		description: "Discussions, Discord and contribution guide.",
-		href: "/community",
-	},
-];
-
-export interface HomeFaq {
+export interface FaqEntry {
 	question: string;
 	answer: string;
 }
 
-export const homeFaqs: HomeFaq[] = [
+export const faqs: FaqEntry[] = [
 	{
-		question: "What is Notploy?",
+		question: "Do I need to run all five applications?",
 		answer:
-			"Notploy is a platform for deploying, operating and controlling application services. It runs on infrastructure you control with Notploy Self, or as a managed platform with Notploy Cloud.",
+			"No. Each distribution is deployed on its own, with its own Discord application, token, data volume and Redis key prefix. Nothing forces you to adopt the whole collection at once.",
 	},
 	{
-		question: "Is Notploy only for self-hosting?",
+		question: "Are the applications actually different from each other?",
 		answer:
-			"No. Self-hosting is the default way to run Notploy, and Notploy Cloud is the managed option. Both use the same platform — what changes is who operates the control plane.",
+			"Today they ship the same 20-command catalogue. They differ by deployment intent: community, logging, protection, voice or a single complete bot. The pages say so rather than inventing separate feature lists.",
 	},
 	{
-		question: "What do I need to run Notploy Self?",
+		question: "Where do I configure the bot?",
 		answer:
-			"A Linux server with Docker: a small VPS, a homelab machine or bare metal. Windows Server is supported through the PowerShell installer. The documentation lists prerequisites and supported environments.",
+			"In Discord. `/config` sets the channels and roles per guild, and the rest of the catalogue handles welcomes, levels, polls and moderation. There is no separate bot settings dashboard to keep in sync.",
 	},
 	{
-		question: "Do I need Kubernetes?",
+		question: "Does Astron Manager administer my Discord server?",
 		answer:
-			"No. Notploy is built on Docker, with Docker Swarm for multi-node deployments and Traefik for routing and certificates.",
+			"No. The console manages the platform around the bots — servers, deployments, databases, domains, backups and access. Discord appears in the console as a notification channel, not as a guild administration panel.",
 	},
 	{
-		question: "What can I deploy?",
+		question: "Can I self-host everything?",
 		answer:
-			"Applications built from a Git repository or a Docker image, Docker Compose projects, supported databases and scheduled jobs. Runtime and integration support is listed in the documentation.",
+			"Yes. The platform runs as four services — PostgreSQL, Redis, client and API — from a single Compose stack, with no Traefik, Swarm or host Docker socket required for the platform itself. The bots have their own images and Compose files.",
 	},
 	{
-		question: "Can I start on one server and add more later?",
+		question: "What does Astron Collection Cloud operate?",
 		answer:
-			"Yes. Start with the local server, then add remote servers over SSH and group them into a Swarm cluster. Multi-node distributes workloads across nodes; it is not automatic high availability.",
+			"The control plane: console, API, availability, upgrades and monitoring. Your workloads keep running on the servers you connect, and your application data stays there.",
 	},
 	{
-		question: "Is Notploy free?",
+		question: "Is music playback available?",
 		answer:
-			"Notploy Self is free and open source under Apache-2.0, so you pay only for your infrastructure. Notploy Cloud is a paid managed service, and a commercial Enterprise offer adds governance features and support.",
+			"Not yet. Astron Player ships voice presence — silent join, reconnect with backoff, session leases — but playback commands are not part of the catalogue, and the page marks it as in development.",
 	},
 	{
-		question: "How do I get started?",
+		question: "Do self-hosted installs send telemetry?",
 		answer:
-			"Run the install command above on a Linux or Windows Server host, or explore Notploy Cloud if you would rather not operate the control plane. The documentation walks through the first deployment.",
+			"No. A self-hosted installation runs on your PostgreSQL, Redis and volumes; Sky Genesis Enterprise has no access to that data and receives nothing from it.",
 	},
 ];

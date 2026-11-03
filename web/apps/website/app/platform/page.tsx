@@ -1,167 +1,261 @@
-import { Container } from "@/components/Container";
-import { EditionPaths } from "@/components/marketing/EditionPaths";
-import { FinalCta } from "@/components/marketing/FinalCta";
-import { Lifecycle } from "@/components/marketing/Lifecycle";
-import { PageIntro } from "@/components/marketing/PageIntro";
-import { Topology } from "@/components/marketing/Topology";
-import { PageFaq } from "@/components/pages/PagePrimitives";
+import { PageHero } from "@/components/pages/PageHero";
+import { EcosystemDiagram } from "@/components/platform/EcosystemDiagram";
+import { Reveal } from "@/components/Reveal";
+import {
+	Callout,
+	Checklist,
+	CtaBand,
+	DefinitionList,
+	FaqSection,
+	FeatureGrid,
+	Section,
+	SectionHeader,
+} from "@/components/Section";
 import { Button } from "@/components/ui/button";
+import { platformFaqs } from "@/lib/content/faq";
 import { links } from "@/lib/content/links";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import {
+	framework,
+	packages,
+	services,
+} from "@/lib/content/platform";
+import { pageMetadata } from "@/lib/metadata";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import type { Metadata } from "next";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
 	title: "Platform",
 	description:
-		"The Notploy platform in one control plane: workloads, infrastructure, operations, networking, access and automation — on infrastructure you control or as a managed service.",
-	alternates: { canonical: "https://notploy.com/platform" },
-};
-
-const domains = [
-	{
-		title: "Workloads",
-		description:
-			"Applications built from Git or a Docker image, Docker Compose stacks, databases and scheduled jobs.",
-	},
-	{
-		title: "Infrastructure",
-		description:
-			"The local server, remote servers over SSH, Docker Swarm clusters, volumes and container registries.",
-	},
-	{
-		title: "Operations",
-		description:
-			"Deployment history and rollback, container and deployment logs, metrics, upstream health and backups.",
-	},
-	{
-		title: "Networking",
-		description:
-			"Domains, Traefik routing, TLS certificates and internal service networks.",
-	},
-	{
-		title: "Access",
-		description:
-			"Organisations, projects, roles, API keys, single sign-on and audit logs where available.",
-	},
-	{
-		title: "Automation",
-		description:
-			"REST API, CLI, SDK, webhooks, CI triggers and an MCP server for agent-driven operations.",
-	},
-];
-
-const faqs = [
-	{
-		question: "What is the difference between the platform, Self and Cloud?",
-		answer:
-			"Notploy is one platform. Self and Cloud are the two ways to run it: with Self you operate the control plane on your own servers; with Cloud, Notploy operates it for you. The capabilities are documented once, in the platform documentation.",
-	},
-	{
-		question: "Do I need Kubernetes?",
-		answer:
-			"No. Notploy runs on Docker, uses Docker Swarm for multi-node deployments and Traefik for routing and certificates.",
-	},
-	{
-		question: "Can I use my existing servers?",
-		answer:
-			"Yes. Any Linux server with Docker can host Notploy, and remote servers are added over SSH. Existing VPS, bare-metal and homelab setups are supported.",
-	},
-	{
-		question: "Where is the authoritative list of capabilities?",
-		answer:
-			"The documentation ships a feature matrix and a limitations page. They are the reference for what a given release and edition support; marketing pages link to them instead of restating them loosely.",
-	},
-];
+		"How the applications, the shared Discord framework, the console, the API and the data layer fit together — and what each component is responsible for.",
+	path: "/platform",
+});
 
 export default function PlatformPage() {
 	return (
-		<main>
-			<PageIntro
+		<>
+			<PageHero
+				badge="Platform"
+				facts={[
+					{ value: "5", label: "Discord services" },
+					{ value: "5", label: "Shared packages" },
+					{ value: "4", label: "Layers" },
+					{ value: "MIT", label: "Licence" },
+				]}
 				eyebrow="Platform"
-				title="One control plane for"
-				highlight="every layer"
-				description="Notploy covers the lifecycle of a service: the infrastructure it runs on, the deployment that puts it there, and the operations that keep it healthy. You keep ownership of the machines and the data."
+				title={
+					<>
+						An ecosystem,{" "}
+						<span className="text-primary">not a bundle</span>
+					</>
+				}
+				description="The applications are separate deployments, but they are not unrelated software. One framework, one console, one API and one data model hold the collection together."
 				actions={
 					<>
-						<Button className="w-full rounded-full px-6 sm:w-auto" asChild>
-							<Link href="/self">
-								Install Notploy Self
-								<ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
-							</Link>
+						<Button size="lg" className="rounded-full" asChild>
+							<Link href="/platform/self-hosted">Deployment options</Link>
 						</Button>
-						<Button
-							variant="outline"
-							className="w-full rounded-full px-6 sm:w-auto"
-							asChild
-						>
-							<Link href="/cloud">Explore Notploy Cloud</Link>
+						<Button size="lg" variant="secondary" className="rounded-full" asChild>
+							<Link href="/developers">Developer surfaces</Link>
 						</Button>
 					</>
 				}
-				links={[
-					{ href: "/capabilities", label: "Capabilities" },
-					{ href: links.docs.architecture, label: "Architecture docs", external: true },
-					{ href: links.docs.featureMatrix, label: "Feature matrix", external: true },
-				]}
 			/>
 
-			<Container className="py-20 sm:py-24">
-				<div className="max-w-2xl">
-					<p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-						Domains
-					</p>
-					<h2 className="mt-3 font-display text-3xl tracking-tight sm:text-4xl">
-						What the platform covers
-					</h2>
-					<p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-						Six areas, documented together. Availability of individual features
-						depends on the release, the edition and the integrations you
-						configure.
-					</p>
+			<Section labelledBy="map">
+				<SectionHeader
+					id="map"
+					eyebrow="The map"
+					title="Four layers, one direction"
+					description="Discord at the top, the framework beneath it, the platform services beside it, and your data at the bottom. Each layer only talks to the one it needs."
+				/>
+				<div className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+					<Reveal>
+						<EcosystemDiagram />
+					</Reveal>
+					<div className="flex flex-col justify-center gap-6">
+						<p className="text-base leading-relaxed text-muted-foreground">
+							The framework is the reason the collection behaves consistently:
+							every command is authorised the same way, every failure is
+							contained the same way, and every log line has the same shape.
+						</p>
+						<Checklist
+							items={[
+								"Applications never import each other's commands",
+								"Each distribution keeps its own catalogue, data volume and Redis prefix",
+								"The console is a client of the API, not a second source of truth",
+								"Workers and schedulers run outside the request path",
+							]}
+						/>
+					</div>
 				</div>
+			</Section>
 
-				<ul className="mt-12 grid border-l border-t border-border/40 sm:grid-cols-2 lg:grid-cols-3">
-					{domains.map((domain) => (
-						<li
-							key={domain.title}
-							className="border-b border-r border-border/40 px-6 py-7"
-						>
-							<h3 className="text-base font-semibold text-foreground">
-								{domain.title}
-							</h3>
-							<p className="mt-2 text-base leading-relaxed text-muted-foreground">
-								{domain.description}
-							</p>
-						</li>
-					))}
-				</ul>
+			<Section labelledBy="framework" className="border-t border-border/60">
+				<SectionHeader
+					id="framework"
+					eyebrow="packages/discord-framework"
+					title="What the shared layer guarantees"
+					description="It contains no business logic — no command, no guild setting, no domain rule. Only the mechanisms that are dangerous to reimplement per bot."
+				/>
+				<div className="mt-10">
+					<FeatureGrid items={framework} columns={3} />
+				</div>
+			</Section>
 
-				<p className="mt-6 text-sm text-muted-foreground">
-					<a
-						href={links.docs.limitations}
-						target="_blank"
-						rel="noreferrer"
-						className="inline-flex items-center gap-1 underline-offset-4 hover:text-foreground hover:underline"
-					>
-						Read the documented limitations
-						<ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
-					</a>
-				</p>
-			</Container>
+			<Section labelledBy="components" className="border-t border-border/60">
+				<SectionHeader
+					id="components"
+					eyebrow="Components"
+					title="Applications and shared packages"
+					description="Verified against the workspace layout in the repository."
+				/>
+				<div className="mt-10 grid gap-10 lg:grid-cols-2 lg:gap-16">
+					<div>
+						<h3 className="font-mono text-xs uppercase tracking-[0.06em] text-subtle-foreground">
+							Deployable services
+						</h3>
+						<div className="mt-4">
+							<DefinitionList
+								mono
+								items={services.map((service) => ({
+									term: `${service.name} (${service.path})`,
+									description: service.role,
+								}))}
+							/>
+						</div>
+					</div>
+					<div>
+						<h3 className="font-mono text-xs uppercase tracking-[0.06em] text-subtle-foreground">
+							Shared packages
+						</h3>
+						<div className="mt-4">
+							<DefinitionList
+								mono
+								items={packages.map((entry) => ({
+									term: `${entry.name} (${entry.path})`,
+									description: entry.role,
+								}))}
+							/>
+						</div>
+					</div>
+				</div>
+			</Section>
 
-			<Lifecycle />
-			<Topology />
-			<EditionPaths />
+			<Section labelledBy="data" className="border-t border-border/60">
+				<div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+					<div>
+						<SectionHeader
+							id="data"
+							eyebrow="Data"
+							title="Where state lives"
+							description="Each store has one owner. Nothing is duplicated between the browser, the API and the bots."
+						/>
+						<div className="mt-8">
+							<DefinitionList
+								items={[
+									{
+										term: "PostgreSQL",
+										description:
+											"Platform state: projects, services, deployments, users, roles, audit. Owned by the API, which also applies migrations.",
+									},
+									{
+										term: "Redis",
+										description:
+											"Cache and queues. Optional for the bots, required by the platform stack.",
+									},
+									{
+										term: "Object storage (S3)",
+										description:
+											"Backup destinations for databases and Docker named volumes. Test the destination before you need it.",
+									},
+									{
+										term: "Bot data volumes",
+										description:
+											"Per-distribution state — settings, warnings, tickets, XP — in a named volume, with Redis as an optional cache.",
+									},
+								]}
+							/>
+						</div>
+					</div>
+					<div>
+						<SectionHeader
+							id="api"
+							eyebrow="Contracts"
+							title="Everything the interface can do, the API can do"
+						/>
+						<p className="mt-6 text-base leading-relaxed text-muted-foreground">
+							The console is built on the API. That is why automation is not a
+							second-class path: a deployment started from CI and one started
+							from the interface are the same deployment, with the same
+							permissions and the same audit entry.
+						</p>
+						<div className="mt-6">
+							<Callout title="One contract, generated clients">
+								An OpenAPI document is generated from the API, and the SDK and
+								the MCP catalogue derive from that same document. A renamed field
+								breaks the build instead of a customer's pipeline.
+							</Callout>
+						</div>
+						<div className="mt-6 flex flex-wrap gap-3">
+							<Button variant="secondary" className="rounded-full" asChild>
+								<Link href="/developers">
+									Developer surfaces
+									<ArrowRight className="h-4 w-4" aria-hidden="true" />
+								</Link>
+							</Button>
+							<Button variant="ghost" className="rounded-full" asChild>
+								<Link
+									href={links.docs.architecture}
+									target="_blank"
+									rel="noreferrer"
+								>
+									Architecture reference
+								</Link>
+							</Button>
+						</div>
+					</div>
+				</div>
+			</Section>
 
-			<PageFaq
-				id="platform-faqs"
-				title="Platform questions"
-				description="How the shared platform relates to the two operating models."
-				faqs={faqs}
+			<Section labelledBy="limits" className="border-t border-border/60">
+				<div className="grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
+					<SectionHeader
+						id="limits"
+						eyebrow="Limits"
+						title="What the platform does not do"
+						description="Stated plainly, because a platform page that only lists strengths is not useful for a decision."
+					/>
+					<Checklist
+						items={[
+							"No Kubernetes requirement — Docker and Swarm are the supported model",
+							"Multi-node distributes workloads; it is not automatic high availability",
+							"Bind mounts are not covered by volume backups — only Docker named volumes are",
+							"The console does not administer Discord guilds; bot configuration stays in Discord",
+							"The hosted assistant cannot reach localhost or a private LAN address without a tunnel",
+						]}
+					/>
+				</div>
+			</Section>
+
+			<FaqSection
+				id="faq"
+				eyebrow="Questions"
+				title="Architecture questions people actually ask"
+				description="Short answers, with the details linked where they exist."
+				items={platformFaqs}
 			/>
 
-			<FinalCta />
-		</main>
+			<CtaBand
+				title="Decide who operates it"
+				description="The same platform, two operating models. Both pages state the responsibilities that come with the choice."
+			>
+				<Button className="rounded-full" asChild>
+					<Link href="/platform/self-hosted">Self-hosted</Link>
+				</Button>
+				<Button variant="secondary" className="rounded-full" asChild>
+					<Link href="/platform/cloud">Astron Collection Cloud</Link>
+				</Button>
+			</CtaBand>
+		</>
 	);
 }

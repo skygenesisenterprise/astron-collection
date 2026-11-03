@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/content/links";
 import type { MetadataRoute } from "next";
 
 // Required for `output: "export"` (GitHub Pages).
@@ -9,6 +10,7 @@ export default function robots(): MetadataRoute.Robots {
 			userAgent: "*",
 			allow: "/",
 		},
-		sitemap: ["https://notploy.com/sitemap.xml", "https://notploy.com/llms.txt"],
+		sitemap: `${SITE_URL}/sitemap.xml`,
+		host: SITE_URL,
 	};
 }

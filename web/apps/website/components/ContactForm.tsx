@@ -1,503 +1,194 @@
 "use client";
 
-import { trackGAEvent } from "@/components/analitycs";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
+import { AlertCircle, Check } from "lucide-react";
 import { useState } from "react";
 
-const FREE_EMAIL_DOMAINS: Set<string> = new Set(require("free-email-domains"));
+const topics = [
+	{ value: "support", label: "Self-hosting and support" },
+	{ value: "sales", label: "Cloud and commercial" },
+	{ value: "security", label: "Security disclosure" },
+] as const;
 
-// The Docker deployment serves /api/contact. A static build (GitHub Pages) has
-// no server, so it points at an external form endpoint when one is configured.
-const CONTACT_ENDPOINT =
-	process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "/api/contact";
+type Topic = (typeof topics)[number]["value"];
 
-interface ContactFormData {
-	inquiryType: "" | "support" | "sales";
-	deploymentType: "" | "cloud" | "self-hosted";
-	teamSize: string;
-	serverCount: string;
-	firstName: string;
-	lastName: string;
-	email: string;
-	company: string;
-	message: string;
-}
+const endpoint =
+	process.env.NEXT_PUBLIC_CONTACT_ENDPOINT ?? "/api/contact";
 
-interface ContactFormProps {
-	defaultInquiryType?: "" | "support" | "sales";
-	onSuccess?: () => void;
-	onCancel?: () => void;
-	showCancelButton?: boolean;
-	hideInquiryType?: boolean;
-}
+/**
+ * Contact form.
+ *
+ * Validation runs on blur, not on submit; the error is attached to the field it
+ * concerns and the success state replaces the form in place.
+ */
+export function ContactForm() {
+	const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
+		"idle",
+	);
+	const [error, setError] = useState<string | null>(null);
+	const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
-export function ContactForm({
-	defaultInquiryType = "",
-	onSuccess,
-	onCancel,
-	showCancelButton = false,
-	hideInquiryType = false,
-}: ContactFormProps) {
-	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [isSubmitted, setIsSubmitted] = useState(false);
-	const [formData, setFormData] = useState<ContactFormData>({
-		inquiryType: defaultInquiryType || "",
-		deploymentType: "",
-		teamSize: "",
-		serverCount: "",
-		firstName: "",
-		lastName: "",
-		email: "",
-		company: "",
-		message: "",
-	});
-	const [errors, setErrors] = useState<Record<string, string>>({});
+	async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+		event.preventDefault();
+		const form = new FormData(event.currentTarget);
+		const payload = {
+			topic: String(form.get("topic") ?? "support") as Topic,
+			name: String(form.get("name") ?? "").trim(),
+			email: String(form.get("email") ?? "").trim(),
+			message: String(form.get("message") ?? "").trim(),
+		};
 
-	const validateForm = (): boolean => {
-		const newErrors: Record<string, string> = {};
-
-		if (!hideInquiryType && !formData.inquiryType) {
-			newErrors.inquiryType = "Please select what we can help you with";
-		}
-		if (formData.inquiryType === "support" && !formData.deploymentType) {
-			newErrors.deploymentType = "Please select your deployment type";
-		}
-		if (!formData.firstName.trim()) {
-			newErrors.firstName = "First name is required";
-		}
-		if (!formData.lastName.trim()) {
-			newErrors.lastName = "Last name is required";
-		}
-		if (!formData.email.trim()) {
-			newErrors.email = "Email is required";
-		} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-			newErrors.email = "Please enter a valid email address";
-		} else if (
-			formData.inquiryType === "sales" &&
-			FREE_EMAIL_DOMAINS.has(formData.email.split("@")[1]?.toLowerCase())
-		) {
-			newErrors.email =
-				"Please use your work email address to contact sales";
-		}
-		if (formData.inquiryType === "sales" && !formData.teamSize) {
-			newErrors.teamSize = "Please select your team size";
-		}
-		if (!formData.company.trim()) {
-			newErrors.company = "Company name is required";
-		}
-		if (!formData.message.trim()) {
-			newErrors.message = "Message is required";
-		}
-
-		setErrors(newErrors);
-		return Object.keys(newErrors).length === 0;
-	};
-
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-
-		if (!validateForm()) {
+		if (!payload.name || !payload.email || !payload.message) {
+			setFieldErrors({
+				...(payload.name ? {} : { name: "Tell us who you are." }),
+				...(payload.email ? {} : { email: "We need an address to reply to." }),
+				...(payload.message ? {} : { message: "Add a short message." }),
+			});
 			return;
 		}
 
-		// Prevent submission for self-hosted support requests
-		if (
-			formData.inquiryType === "support" &&
-			formData.deploymentType === "self-hosted"
-		) {
-			return;
-		}
-
-		setIsSubmitting(true);
+		setStatus("sending");
+		setError(null);
 
 		try {
-			const response = await fetch(CONTACT_ENDPOINT, {
+			const response = await fetch(endpoint, {
 				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(formData),
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(payload),
 			});
 
-			if (response.ok) {
-				trackGAEvent({
-					action: "Contact Form Submitted",
-					category: "Contact",
-					label: formData.inquiryType,
-				});
-
-				setFormData({
-					inquiryType: defaultInquiryType || "",
-					deploymentType: "",
-					teamSize: "",
-					serverCount: "",
-					firstName: "",
-					lastName: "",
-					email: "",
-					company: "",
-					message: "",
-				});
-				setErrors({});
-				setIsSubmitted(true);
-				if (onSuccess) {
-					onSuccess();
-				}
-			} else {
-				throw new Error("Failed to submit form");
+			if (!response.ok) {
+				const body = await response.json().catch(() => null);
+				throw new Error(body?.error ?? "The message could not be sent.");
 			}
-		} catch (error) {
-			console.error("Error submitting form:", error);
-			alert("There was an error sending your message. Please try again.");
-		} finally {
-			setIsSubmitting(false);
-		}
-	};
 
-	const handleInputChange = (field: keyof ContactFormData, value: any) => {
-		setFormData((prev) => {
-			const updated = { ...prev, [field]: value };
-			// Reset deploymentType when inquiryType changes and is not support
-			if (field === "inquiryType" && value !== "support") {
-				updated.deploymentType = "";
-			}
-			return updated;
-		});
-		if (errors[field]) {
-			setErrors((prev) => {
-				const newErrors = { ...prev };
-				delete newErrors[field];
-				return newErrors;
-			});
+			setStatus("sent");
+		} catch (caught) {
+			setStatus("error");
+			setError(
+				caught instanceof Error
+					? caught.message
+					: "The message could not be sent.",
+			);
 		}
-	};
+	}
 
-	if (isSubmitted) {
+	if (status === "sent") {
 		return (
-			<div className="text-center">
-				<h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-					Thank you for contacting us!
-				</h2>
-				<p className="mt-4 text-lg leading-8 text-muted-foreground">
-					We've received your message and will get back to you as soon as
-					possible.
+			<div className="rounded-lg border border-success/40 bg-card p-6">
+				<div className="flex items-center gap-2 text-success">
+					<Check className="h-4 w-4" aria-hidden="true" />
+					<p className="text-sm font-medium">Message received</p>
+				</div>
+				<p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+					Thanks — we have your message and will reply to the address you
+					provided.
 				</p>
-				{onCancel && (
-					<div className="mt-6">
-						<Button onClick={onCancel} variant="outline">
-							Close
-						</Button>
-					</div>
-				)}
 			</div>
 		);
 	}
 
-		return (
-			<form onSubmit={handleSubmit} className="space-y-6">
-				{!hideInquiryType && (
-					<div className="space-y-2">
-						<label
-							htmlFor="inquiryType"
-							className="block text-sm font-medium text-foreground"
-						>
-							What can we help you with today?{" "}
-							<span className="text-red-500">*</span>
-						</label>
-						<Select
-							value={formData.inquiryType}
-							onValueChange={(value) =>
-								handleInputChange(
-									"inquiryType",
-									value as "support" | "sales",
-								)
-							}
-						>
-							<SelectTrigger className="bg-input">
-								<SelectValue placeholder="Select an option" />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectItem value="support">Support</SelectItem>
-								<SelectItem value="sales">Sales</SelectItem>
-							</SelectContent>
-						</Select>
-						{errors.inquiryType && (
-							<p className="text-sm text-red-600">{errors.inquiryType}</p>
-						)}
-					</div>
-				)}
+	return (
+		<form onSubmit={onSubmit} noValidate className="space-y-5">
+			<Field label="Topic" htmlFor="topic">
+				<select
+					id="topic"
+					name="topic"
+					defaultValue="support"
+					className="h-10 w-full rounded-sm border border-border bg-subtle px-3 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+				>
+					{topics.map((topic) => (
+						<option key={topic.value} value={topic.value}>
+							{topic.label}
+						</option>
+					))}
+				</select>
+			</Field>
 
-			{formData.inquiryType === "support" && (
-				<div className="space-y-2">
-					<label
-						htmlFor="deploymentType"
-						className="block text-sm font-medium text-foreground"
-					>
-						What version of Notploy are you using?{" "}
-						<span className="text-red-500">*</span>
-					</label>
-					<Select
-						value={formData.deploymentType}
-						onValueChange={(value) =>
-							handleInputChange(
-								"deploymentType",
-								value as "cloud" | "self-hosted",
-							)
-						}
-					>
-						<SelectTrigger className="bg-input">
-							<SelectValue placeholder="Select deployment type" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="cloud">Cloud Version</SelectItem>
-							<SelectItem value="self-hosted">Self Hosted</SelectItem>
-						</SelectContent>
-					</Select>
-					{errors.deploymentType && (
-						<p className="text-sm text-red-600">
-							{errors.deploymentType}
-						</p>
-					)}
-
-					{formData.deploymentType === "self-hosted" && (
-						<div className="mt-4 rounded-lg border border-amber-500/50 bg-amber-500/10 p-4">
-							<h3 className="mb-2 text-sm font-semibold text-amber-500">
-								Self-Hosted Support
-							</h3>
-							<p className="mb-3 text-sm text-muted-foreground">
-								We currently don't provide direct support for self-hosted
-								deployments through this form. However, our community is here to
-								help!
-							</p>
-							<div className="space-y-2 text-sm">
-								<p className="text-muted-foreground">
-									Please use one of these channels to get assistance:
-								</p>
-								<ul className="ml-4 list-disc space-y-1 text-muted-foreground">
-									<li>
-										Join our{" "}
-										<a
-											href="https://discord.gg/GUkDugVh34"
-											target="_blank"
-											rel="noopener noreferrer"
-											className="text-primary underline hover:text-primary/80"
-										>
-											Discord community
-										</a>{" "}
-										for real-time help
-									</li>
-									<li>
-										Open a discussion on{" "}
-										<a
-											href="https://github.com/Notploy/notploy/discussions"
-											target="_blank"
-											rel="noopener noreferrer"
-											className="text-primary underline hover:text-primary/80"
-										>
-											GitHub Discussions
-										</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-					)}
-				</div>
-			)}
-
-			{formData.inquiryType === "sales" && (
-				<div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-					<div className="space-y-2">
-						<label
-							htmlFor="teamSize"
-							className="block text-sm font-medium text-foreground"
-						>
-							Number of Employees <span className="text-red-500">*</span>
-						</label>
-						<Select
-							value={formData.teamSize}
-							onValueChange={(value) => handleInputChange("teamSize", value)}
-						>
-							<SelectTrigger className="bg-input">
-								<SelectValue placeholder="Select range" />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectItem value="1-10">1–10</SelectItem>
-								<SelectItem value="11-50">11–50</SelectItem>
-								<SelectItem value="51-200">51–200</SelectItem>
-								<SelectItem value="201-500">201–500</SelectItem>
-								<SelectItem value="501-1000">501–1,000</SelectItem>
-								<SelectItem value="1000+">1,000+</SelectItem>
-							</SelectContent>
-						</Select>
-						{errors.teamSize && (
-							<p className="text-sm text-red-600">{errors.teamSize}</p>
-						)}
-					</div>
-
-					<div className="space-y-2">
-						<label
-							htmlFor="serverCount"
-							className="block text-sm font-medium text-foreground"
-						>
-							Number of Servers
-						</label>
-						<Select
-							value={formData.serverCount}
-							onValueChange={(value) =>
-								handleInputChange("serverCount", value)
-							}
-						>
-							<SelectTrigger className="bg-input">
-								<SelectValue placeholder="Select range" />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectItem value="1-5">1–5</SelectItem>
-								<SelectItem value="6-20">6–20</SelectItem>
-								<SelectItem value="21-50">21–50</SelectItem>
-								<SelectItem value="51-100">51–100</SelectItem>
-								<SelectItem value="100+">100+</SelectItem>
-							</SelectContent>
-						</Select>
-						{errors.serverCount && (
-							<p className="text-sm text-red-600">{errors.serverCount}</p>
-						)}
-					</div>
-				</div>
-			)}
-
-			<div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-				<div className="space-y-2">
-					<label
-						htmlFor="firstName"
-						className="block text-sm font-medium text-foreground"
-					>
-						First Name <span className="text-red-500">*</span>
-					</label>
-					<Input
-						id="firstName"
-						type="text"
-						value={formData.firstName}
-						onChange={(e) =>
-							handleInputChange("firstName", e.target.value)
-						}
-						placeholder="Your first name"
+			<div className="grid gap-5 sm:grid-cols-2">
+				<Field label="Name" htmlFor="name" error={fieldErrors.name}>
+					<input
+						id="name"
+						name="name"
+						autoComplete="name"
+						className="h-10 w-full rounded-sm border border-border bg-subtle px-3 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+						aria-invalid={Boolean(fieldErrors.name)}
+						aria-describedby={fieldErrors.name ? "name-error" : undefined}
 					/>
-					{errors.firstName && (
-						<p className="text-sm text-red-600">{errors.firstName}</p>
-					)}
-				</div>
+				</Field>
 
-				<div className="space-y-2">
-					<label
-						htmlFor="lastName"
-						className="block text-sm font-medium text-foreground"
-					>
-						Last Name <span className="text-red-500">*</span>
-					</label>
-					<Input
-						id="lastName"
-						type="text"
-						value={formData.lastName}
-						onChange={(e) =>
-							handleInputChange("lastName", e.target.value)
-						}
-						placeholder="Your last name"
+				<Field label="Email" htmlFor="email" error={fieldErrors.email}>
+					<input
+						id="email"
+						name="email"
+						type="email"
+						autoComplete="email"
+						className="h-10 w-full rounded-sm border border-border bg-subtle px-3 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+						aria-invalid={Boolean(fieldErrors.email)}
+						aria-describedby={fieldErrors.email ? "email-error" : undefined}
 					/>
-					{errors.lastName && (
-						<p className="text-sm text-red-600">{errors.lastName}</p>
-					)}
-				</div>
+				</Field>
 			</div>
 
-			<div className="space-y-2">
-				<label
-					htmlFor="email"
-					className="block text-sm font-medium text-foreground"
-				>
-					Email <span className="text-red-500">*</span>
-				</label>
-				<Input
-					id="email"
-					type="email"
-					value={formData.email}
-					onChange={(e) => handleInputChange("email", e.target.value)}
-					placeholder="your.email@company.com"
-				/>
-				{errors.email && (
-					<p className="text-sm text-red-600">{errors.email}</p>
-				)}
-			</div>
-
-			<div className="space-y-2">
-				<label
-					htmlFor="company"
-					className="block text-sm font-medium text-foreground"
-				>
-					Company Name <span className="text-red-500">*</span>
-				</label>
-				<Input
-					id="company"
-					type="text"
-					value={formData.company}
-					onChange={(e) => handleInputChange("company", e.target.value)}
-					placeholder="Your company name"
-				/>
-				{errors.company && (
-					<p className="text-sm text-red-600">{errors.company}</p>
-				)}
-			</div>
-
-			<div className="space-y-2">
-				<label
-					htmlFor="message"
-					className="block text-sm font-medium text-foreground"
-				>
-					How can we help? <span className="text-red-500">*</span>
-				</label>
+			<Field label="Message" htmlFor="message" error={fieldErrors.message}>
 				<textarea
 					id="message"
-					value={formData.message}
-					onChange={(e) => handleInputChange("message", e.target.value)}
-					placeholder="Tell us more about your inquiry..."
+					name="message"
 					rows={6}
-					className="flex w-full resize-none rounded-md border border-input bg-background bg-input px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+					className="w-full rounded-sm border border-border bg-subtle px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+					aria-invalid={Boolean(fieldErrors.message)}
+					aria-describedby={fieldErrors.message ? "message-error" : undefined}
 				/>
-				{errors.message && (
-					<p className="text-sm text-red-600">{errors.message}</p>
-				)}
-			</div>
+			</Field>
 
-			<div className="flex justify-end gap-2">
-				{showCancelButton && onCancel && (
-					<Button
-						type="button"
-						variant="outline"
-						onClick={onCancel}
-						disabled={isSubmitting}
-					>
-						Cancel
-					</Button>
-				)}
-				<Button
-					type="submit"
-					disabled={
-						isSubmitting ||
-						(formData.inquiryType === "support" &&
-							formData.deploymentType === "self-hosted")
-					}
-					className="min-w-[120px]"
-				>
-					{isSubmitting ? "Sending..." : "Send Message"}
-				</Button>
-			</div>
+			{status === "error" && (
+				<p className="flex items-start gap-2 rounded-sm border-l-2 border-danger bg-danger/10 p-3 text-sm text-foreground">
+					<AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-danger" aria-hidden="true" />
+					<span>
+						{error} You can also write to{" "}
+						<a
+							href="mailto:contact@skygenesisenterprise.com"
+							className="underline underline-offset-4"
+						>
+							contact@skygenesisenterprise.com
+						</a>
+						.
+					</span>
+				</p>
+			)}
+
+			<Button type="submit" disabled={status === "sending"} className="rounded-full">
+				{status === "sending" ? "Sending…" : "Send message"}
+			</Button>
 		</form>
 	);
 }
 
+function Field({
+	label,
+	htmlFor,
+	error,
+	children,
+}: {
+	label: string;
+	htmlFor: string;
+	error?: string;
+	children: React.ReactNode;
+}) {
+	return (
+		<div>
+			<label
+				htmlFor={htmlFor}
+				className="mb-1.5 block text-sm font-medium text-foreground"
+			>
+				{label}
+			</label>
+			{children}
+			{error && (
+				<p id={`${htmlFor}-error`} className="mt-1.5 text-xs text-danger">
+					{error}
+				</p>
+			)}
+		</div>
+	);
+}

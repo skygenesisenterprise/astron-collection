@@ -1,15 +1,14 @@
 /*
- * Notploy website styles.
+ * Astron Collection website styles.
  *
- * Based on `apps/notploy/styles/globals.css` so the website shares the product's
- * design tokens (oklch palette, radii, scrollbars, motion). The app uses
- * Tailwind CSS v4 (CSS-first `@theme`), while the website still runs Tailwind
- * v3, so the tokens are consumed here as raw oklch components
- * (`oklch(var(--token) / <alpha-value>)`) declared in `tailwind.config.ts`.
+ * Tokens come from `styles/globals.css` (the supplied brand stylesheet).
+ * That file targets Tailwind 4 (`@import "tailwindcss"`, `@theme inline`);
+ * this app runs Tailwind 3.4, so the same token names and values are kept and
+ * only the mechanism changes: channels are stored as bare `oklch` components so
+ * Tailwind can apply opacity (`bg-card/60`), and the colour mapping lives in
+ * `tailwind.config.ts` as it did for the documentation tokens.
  *
- * The application ships a light theme by default and a `.dark` theme. The
- * website is dark-first, so the application's dark theme values are used as the
- * default `:root` tokens below.
+ * Light is `:root`, dark is `.dark` — and `.dark` ships on <html> by default.
  */
 
 @tailwind base;
@@ -18,72 +17,123 @@
 
 @layer base {
 	:root {
-		/* Application dark theme (apps/notploy/styles/globals.css — `.dark`). */
-		--terminal-paste: rgba(255, 255, 255, 0.2);
-
-		--background: 0.1913 0 0;
-		--foreground: 0.9173 0.0133 82.4015;
-
-		--card: 0.2264 0 0;
-		--card-foreground: 0.9173 0.0133 82.4015;
-
-		--popover: 0.2264 0 0;
-		--popover-foreground: 0.9173 0.0133 82.4015;
-
-		--primary: 0.8520 0.0205 100.6306;
-		--primary-foreground: 0.3329 0 0;
-
-		--secondary: 0.2520 0 0;
-		--secondary-foreground: 0.8520 0.0205 100.6306;
-
-		--muted: 0.2850 0 0;
-		--muted-foreground: 0.6348 0.0113 81.7875;
-
-		--accent: 0.3329 0 0;
-		--accent-foreground: 0.8520 0.0205 100.6306;
-
-		--destructive: 0.6368 0.2078 25.3313;
+		/* ---- Surfaces, text and controls ------------------------------------ */
+		--background: 0.9881 0 0;
+		--foreground: 0.2789 0.0091 285.7942;
+		--card: 1 0 0;
+		--card-foreground: 0.2789 0.0091 285.7942;
+		--popover: 1 0 0;
+		--popover-foreground: 0.2789 0.0091 285.7942;
+		--primary: 0.5774 0.2091 273.8504;
+		--primary-foreground: 1 0 0;
+		--secondary: 0.9614 0.0013 286.375;
+		--secondary-foreground: 0.2789 0.0091 285.7942;
+		--muted: 0.9731 0 0;
+		--muted-foreground: 0.537 0.014 280.8555;
+		--accent: 0.9497 0.0027 286.349;
+		--accent-foreground: 0.2789 0.0091 285.7942;
+		--destructive: 0.5156 0.181 22.5393;
 		--destructive-foreground: 1 0 0;
+		--border: 0.9042 0.0027 286.3457;
+		--input: 0.9614 0.0013 286.375;
+		--ring: 0.5774 0.2091 273.8504;
 
-		--border: 0.2931 0 0;
-		--input: 0.2931 0 0;
-		--ring: 0.8520 0.0205 100.6306;
+		--chart-1: 0.8092 0.1122 345.1956;
+		--chart-2: 0.8757 0.0979 83.6546;
+		--chart-3: 0.9075 0.0946 165.054;
+		--chart-4: 0.8406 0.0699 242.1914;
+		--chart-5: 0.7865 0.1232 309.4396;
 
-		--chart-1: 0.6863 0.1743 34.2614;
-		--chart-2: 0.8590 0.0209 74.6369;
-		--chart-3: 0.6348 0.0113 81.7875;
-		--chart-4: 0.4681 0.0069 84.5829;
-		--chart-5: 0.3523 0 0;
+		--sidebar: 0.9644 0.0013 286.3751;
+		--sidebar-foreground: 0.516 0.0141 280.8326;
+		--sidebar-primary: 0.8984 0.0041 286.3179;
+		--sidebar-primary-foreground: 0.2789 0.0091 285.7942;
+		--sidebar-accent: 0.9285 0.0027 286.3475;
+		--sidebar-accent-foreground: 0.2789 0.0091 285.7942;
+		--sidebar-border: 0.8862 0.0041 286.3164;
+		--sidebar-ring: 0.7151 0.1523 235.2888;
 
-		--overlay: rgba(0, 0, 0, 0.5);
+		/* ---- Site extensions, derived from the same palette ----------------- */
+		/* Stronger hairline for hover states; the supplied file has no token. */
+		--border-strong: 0.8 0.0027 286.3457;
+		--success: var(--chart-3);
+		--warning: var(--chart-2);
+		--signal: var(--chart-4);
 
-		--radius: 0.5rem;
-		--tracking-normal: 0.01em;
+		/* ---- Scales --------------------------------------------------------- */
+		--radius: 0.625rem;
+		--tracking-normal: 0em;
+		--spacing: 0.25rem;
 
-		--shadow-2xs: 0px 6px 15px 0px hsl(0 0% 0% / 0.15);
-		--shadow-xs: 0px 6px 15px 0px hsl(0 0% 0% / 0.15);
-		--shadow-sm: 0px 6px 15px 0px hsl(0 0% 0% / 0.3),
-			0px 1px 2px -1px hsl(0 0% 0% / 0.3);
-		--shadow: 0px 6px 15px 0px hsl(0 0% 0% / 0.3),
-			0px 1px 2px -1px hsl(0 0% 0% / 0.3);
-		--shadow-md: 0px 6px 15px 0px hsl(0 0% 0% / 0.3),
-			0px 2px 4px -1px hsl(0 0% 0% / 0.3);
-		--shadow-lg: 0px 6px 15px 0px hsl(0 0% 0% / 0.3),
-			0px 4px 6px -1px hsl(0 0% 0% / 0.3);
-		--shadow-xl: 0px 6px 15px 0px hsl(0 0% 0% / 0.3),
-			0px 8px 10px -1px hsl(0 0% 0% / 0.3);
-		--shadow-2xl: 0px 6px 15px 0px hsl(0 0% 0% / 0.75);
+		--shadow-x: 0;
+		--shadow-y: 1px;
+		--shadow-blur: 3px;
+		--shadow-spread: 0px;
+		--shadow-opacity: 0.1;
+		--shadow-color: oklch(0 0 0);
+		--shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+		--shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+		--shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+		--shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+		--shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 2px 4px -1px hsl(0 0% 0% / 0.1);
+		--shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 4px 6px -1px hsl(0 0% 0% / 0.1);
+		--shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 8px 10px -1px hsl(0 0% 0% / 0.1);
+		--shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+		--shadow-float: 0 4px 10px 0px hsl(0 0% 0% / 0.1),
+			0 8px 10px -1px hsl(0 0% 0% / 0.1);
 
-		/* Motion tokens (apps/notploy/styles/globals.css). */
+		/* Inter is loaded by `next/font` in `app/layout.tsx`; the supplied file
+		 * names Noto Sans JP, which this app does not ship. */
+		--font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+		--font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+		--font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+			"Liberation Mono", "Courier New", monospace;
+
 		--duration-quick: 150ms;
 		--duration-fast: 250ms;
 		--duration-medium: 350ms;
-		--duration-slow: 400ms;
 		--ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);
-	}
-}
 
-@layer base {
+		color-scheme: light;
+	}
+
+	.dark {
+		--background: 0.3225 0.0107 278.2517;
+		--foreground: 1 0 0;
+		--card: 0.3502 0.0122 279.2835;
+		--card-foreground: 1 0 0;
+		--popover: 0.3502 0.0122 279.2835;
+		--popover-foreground: 1 0 0;
+		--primary: 0.5774 0.2091 273.8504;
+		--primary-foreground: 1 0 0;
+		--secondary: 0.3779 0.0118 285.8207;
+		--secondary-foreground: 1 0 0;
+		--muted: 0.3066 0.0108 278.2166;
+		--muted-foreground: 0.723 0.0087 278.582;
+		--accent: 0.4074 0.0134 280.1154;
+		--accent-foreground: 1 0 0;
+		--destructive: 0.8004 0.1141 23.185;
+		--destructive-foreground: 1 0 0;
+		--border: 0.369 0.0103 278.3345;
+		--input: 0.3066 0.0108 278.2166;
+		--ring: 0.5774 0.2091 273.8504;
+
+		--sidebar: 0.2981 0.0091 276.8201;
+		--sidebar-foreground: 0.6876 0.0102 279.6082;
+		--sidebar-primary: 0.3804 0.0102 278.3511;
+		--sidebar-primary-foreground: 1 0 0;
+		--sidebar-accent: 0.3309 0.0087 285.9137;
+		--sidebar-accent-foreground: 1 0 0;
+		--sidebar-border: 0.3494 0.0087 276.903;
+		--sidebar-ring: 0.7151 0.1523 235.2888;
+
+		--border-strong: 0.45 0.0103 278.3345;
+		--shadow-float: 0 6px 15px 0px hsl(0 0% 0% / 0.3),
+			0 8px 10px -1px hsl(0 0% 0% / 0.3);
+
+		color-scheme: dark;
+	}
+
 	html {
 		scrollbar-gutter: stable;
 		-webkit-text-size-adjust: 100%;
@@ -108,21 +158,29 @@
 		@apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
 	}
 
-	/* Cursor pointer on buttons */
+	h1,
+	h2,
+	h3,
+	h4 {
+		@apply tracking-tight text-foreground;
+		text-wrap: balance;
+	}
+
+	p {
+		text-wrap: pretty;
+	}
+
+	pre,
+	code,
+	kbd {
+		font-family: var(--font-mono);
+	}
+
 	button:not([disabled]),
 	[role="button"]:not([disabled]) {
 		cursor: pointer;
 	}
 
-	h1,
-	h2,
-	h3,
-	h4 {
-		@apply font-display tracking-tight text-foreground;
-		text-wrap: balance;
-	}
-
-	/* Custom scrollbar styling */
 	::-webkit-scrollbar {
 		width: 0.3125rem;
 	}
@@ -143,60 +201,26 @@
 }
 
 @layer components {
-	.code-editor pre.shiki {
-		background: transparent !important;
-		padding: 0.875rem 0;
+	/* Monospace section label, as used across the documentation. */
+	.eyebrow {
+		@apply text-xs uppercase text-muted-foreground;
+		font-family: var(--font-mono);
+		letter-spacing: calc(var(--tracking-normal) + 0.05em);
 	}
-	.code-editor code {
-		display: block;
-		min-width: max-content;
-		counter-reset: line;
-		font-size: 0.8125rem;
-		line-height: 1.7;
-	}
-	.code-editor code .line::before {
-		counter-increment: line;
-		content: counter(line);
-		display: inline-block;
-		width: 2rem;
-		margin-right: 1.25rem;
-		text-align: right;
-		color: oklch(var(--muted-foreground) / 0.5);
-		user-select: none;
+
+	/* Hairline grid used by capability lists. */
+	.hairline-grid > * {
+		@apply border-b border-r border-border;
 	}
 }
 
 @layer utilities {
 	.no-scrollbar {
-		/* Chrome, Safari and Opera */
 		&::-webkit-scrollbar {
 			display: none;
 		}
-		-ms-overflow-style: none; /* IE and Edge */
-		scrollbar-width: none; /* Firefox */
-	}
-
-	.custom-logs-scrollbar {
-		scrollbar-width: thin;
-		scrollbar-color: oklch(var(--muted-foreground)) transparent;
-
-		&::-webkit-scrollbar {
-			width: 8px;
-			height: 8px;
-		}
-
-		&::-webkit-scrollbar-track {
-			background: transparent;
-		}
-
-		&::-webkit-scrollbar-thumb {
-			background-color: oklch(var(--muted-foreground) / 0.3);
-			border-radius: 20px;
-		}
-
-		&::-webkit-scrollbar-thumb:hover {
-			background-color: oklch(var(--muted-foreground) / 0.5);
-		}
+		-ms-overflow-style: none;
+		scrollbar-width: none;
 	}
 }
 
@@ -208,5 +232,24 @@
 		animation-iteration-count: 1 !important;
 		transition-duration: 0.001ms !important;
 		scroll-behavior: auto !important;
+	}
+}
+
+@media (prefers-reduced-transparency: reduce) {
+	.site-header {
+		background: oklch(var(--background)) !important;
+		backdrop-filter: none !important;
+	}
+}
+
+@media (prefers-contrast: more) {
+	:root {
+		--border: 0.72 0.0027 286.3457;
+		--muted-foreground: 0.38 0.014 280.8555;
+	}
+
+	.dark {
+		--border: 0.5 0.0103 278.3345;
+		--muted-foreground: 0.85 0.0087 278.582;
 	}
 }

@@ -8,19 +8,11 @@ interface GenerateOGImageOptions {
 	label?: string;
 }
 
-const NOTPLOY_WORDMARK = {
-	type: "div",
-	props: {
-		style: { fontSize: "140px", fontWeight: 700, color: "#ffffff", opacity: 0.12 },
-		children: "Notploy",
-	},
-};
-
+/** Open Graph image for pages that render one dynamically (server builds). */
 export async function generateOGImage({
 	title,
-	label = "Notploy",
+	label = "Astron Collection",
 }: GenerateOGImageOptions): Promise<Buffer> {
-	// Cargar la fuente
 	const interRegular = await fs.readFile(
 		join(process.cwd(), "public/fonts/Inter-Regular.ttf"),
 	);
@@ -28,7 +20,6 @@ export async function generateOGImage({
 		join(process.cwd(), "public/fonts/Inter-Bold.ttf"),
 	);
 
-	// Crear el markup para la imagen OG
 	const markup = {
 		type: "div",
 		props: {
@@ -36,12 +27,11 @@ export async function generateOGImage({
 				height: "100%",
 				width: "100%",
 				display: "flex",
-				flexDirection: "column",
-				alignItems: "flex-start",
+				flexDirection: "column" as const,
 				justifyContent: "center",
-				backgroundColor: "#000000",
+				backgroundColor: "#111318",
 				padding: "80px",
-				position: "relative",
+				position: "relative" as const,
 				overflow: "hidden",
 			},
 			children: [
@@ -49,89 +39,70 @@ export async function generateOGImage({
 					type: "div",
 					props: {
 						style: {
-							position: "absolute",
-							left: "80px",
-							top: "40px",
-							fontSize: "32px",
+							position: "absolute" as const,
+							right: "-60px",
+							top: "-60px",
+							width: "420px",
+							height: "420px",
+							borderRadius: "9999px",
+							backgroundColor: "rgba(160,107,240,0.16)",
+							display: "flex",
+						},
+					},
+				},
+				{
+					type: "div",
+					props: {
+						style: {
+							fontSize: "26px",
 							fontWeight: 700,
-							color: "#fff",
+							color: "#a06bf0",
+							letterSpacing: "3px",
 							zIndex: 1,
 						},
-						children: label,
+						children: label.toUpperCase(),
 					},
 				},
 				{
 					type: "div",
 					props: {
 						style: {
-							position: "absolute",
-							right: "-50px",
-							bottom: "-50px",
-							width: "500px",
-							height: "500px",
-							opacity: 0.1,
-							display: "flex",
-							alignItems: "center",
-							justifyContent: "center",
-							transform: "rotate(-10deg)",
+							marginTop: "28px",
+							fontSize: "62px",
+							fontWeight: 700,
 							color: "#ffffff",
+							lineHeight: 1.12,
+							maxWidth: "900px",
+							letterSpacing: "-1.5px",
+							zIndex: 1,
 						},
-						children: NOTPLOY_WORDMARK,
+						children: title,
 					},
 				},
 				{
 					type: "div",
 					props: {
 						style: {
-							display: "flex",
-							flexDirection: "column",
-							gap: "24px",
-							position: "relative",
+							marginTop: "36px",
+							fontSize: "24px",
+							color: "#b9bacb",
 							zIndex: 1,
 						},
-						children: [
-							{
-								type: "div",
-								props: {
-									style: {
-										fontSize: "64px",
-										fontWeight: 700,
-										color: "#fff",
-										lineHeight: 1.2,
-										maxWidth: "900px",
-									},
-									children: title,
-								},
-							},
-						],
+						children: "Open source · MIT · Self-hosted or Cloud",
 					},
 				},
 			],
 		},
 	};
 
-	// Generar SVG con Satori
-	const svg = await satori(markup as any, {
+	const svg = await satori(markup as never, {
 		width: 1200,
 		height: 630,
 		fonts: [
-			{
-				name: "Inter",
-				data: interRegular,
-				weight: 400,
-				style: "normal",
-			},
-			{
-				name: "Inter",
-				data: interBold,
-				weight: 700,
-				style: "normal",
-			},
+			{ name: "Inter", data: interRegular, weight: 400, style: "normal" },
+			{ name: "Inter", data: interBold, weight: 700, style: "normal" },
 		],
 	});
 
-	// Convertir SVG a PNG
-	const png = await sharp(Buffer.from(svg)).png().toBuffer();
-
-	return png;
+	return sharp(Buffer.from(svg)).png().toBuffer();
 }
