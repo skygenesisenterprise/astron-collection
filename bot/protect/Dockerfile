@@ -1,42 +1,30 @@
-# ══════════════════════════════════════════════════════════════════════════════
-# Astron Collection — Discord bot (protect)
-#
-# Build context is the repository root, so the image contains both the bot's own
-# catalogue (bot/protect) and the shared technical framework
-# (packages/discord-framework). The layout is preserved:
-#
-#   /app/bot/protect                  the bot, its commands, events and data
-#   /app/packages/discord-framework   the framework, imported as ../../packages/…
-#   /app/packages/node_modules        symlink to the bot's node_modules, so the
-#                                     framework resolves discord.js from it
-#
-# Build:
-#   docker build -f bot/protect/Dockerfile .
-# ══════════════════════════════════════════════════════════════════════════════
-FROM node:25-alpine
+# Protect — independent image. Build context: repository root.
+FROM node:24-alpine
 
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
+ARG APP_VERSION=2.0.0
+ENV NODE_ENV=production \
+    APP_VERSION=${APP_VERSION} \
+    ASTRON_DATA_DIR=/app/bot/protect/data
 
-RUN apk add --no-cache \
-    ca-certificates \
-    tzdata \
-    curl \
-    bash \
-    wget
+RUN apk add --no-cache ca-certificates tzdata wget
 
 WORKDIR /app/bot/protect
 
 COPY bot/protect/package.json ./
-RUN npm install --no-audit --no-fund
+RUN npm install --omit=dev --no-audit --no-fund
 
 COPY bot/protect/ ./
 COPY packages/discord-framework /app/packages/discord-framework
 
-RUN mkdir -p /app/packages \
+RUN mkdir -p /app/packages /app/bot/protect/data \
     && ln -sfn /app/bot/protect/node_modules /app/packages/node_modules
 
 COPY bot/protect/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+
+VOLUME ["/app/bot/protect/data"]
+EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD wget -qO- http://127.0.0.1:8080/healthz >/dev/null || exit 1
 
 ENTRYPOINT ["/entrypoint.sh"]

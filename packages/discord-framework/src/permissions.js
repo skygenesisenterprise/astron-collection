@@ -128,3 +128,172 @@ export function assertAuthorized(result, fallbackMessage = "Action non autorisé
     });
   }
 }
+
+function positionOf(member) {
+  return Number(member?.roles?.highest?.position ?? member?.position ?? -1);
+}
+
+export function isGuildOwner({ userId, ownerId } = {}) {
+  return Boolean(userId && ownerId && String(userId) === String(ownerId));
+}
+
+/**
+ * Business-level moderation hierarchy, separate from Discord permissions.
+ *
+ * Discord lets a bot with Ban Members ban an administrator; every serious
+ * moderation bot still refuses. The check is fail-closed: an unreadable
+ * position denies.
+ *
+ * @param {object} input
+ * @param {{ownerId?: string}} [input.guild]
+ * @param {{id?: string, roles?: {highest?: {position?: number}}}} [input.moderator]
+ * @param {{id?: string, roles?: {highest?: {position?: number}}}} [input.target]
+ * @param {{id?: string, roles?: {highest?: {position?: number}}}} [input.bot]
+ * @returns {{ok: boolean, code?: string, reason?: string}}
+ */
+export function checkModerationHierarchy({ guild = {}, moderator, target, bot } = {}) {
+  const ownerId = guild.ownerId ?? guild.owner?.id ?? null;
+  const moderatorId = moderator?.id ?? moderator?.user?.id ?? null;
+  const targetId = target?.id ?? target?.user?.id ?? null;
+  const botId = bot?.id ?? guild.members?.me?.id ?? null;
+
+  if (!targetId) {
+    return {
+      ok: false,
+      code: ERROR_CODES.MODERATION_HIERARCHY,
+      reason: "Le membre cible est introuvable.",
+    };
+  }
+
+  if (moderatorId && targetId === moderatorId) {
+    return {
+      ok: false,
+      code: ERROR_CODES.MODERATION_SELF,
+      reason: "Vous ne pouvez pas vous sanctionner vous-même.",
+    };
+  }
+
+  if (botId && targetId === botId) {
+    return {
+      ok: false,
+      code: ERROR_CODES.MODERATION_SELF,
+      reason: "Je ne peux pas me sanctionner moi-même.",
+    };
+  }
+
+  if (ownerId && targetId === ownerId) {
+    return {
+      ok: false,
+      code: ERROR_CODES.MODERATION_OWNER,
+      reason: "Le propriétaire du serveur ne peut pas être sanctionné.",
+    };
+  }
+
+  const targetPosition = positionOf(target);
+  const moderatorPosition = positionOf(moderator);
+  const botPosition = positionOf(bot ?? guild.members?.me);
+  const moderatorIsOwner = Boolean(ownerId && moderatorId === ownerId);
+
+  if (!moderatorIsOwner && moderatorPosition <= targetPosition) {
+    return {
+      ok: false,
+      code: ERROR_CODES.MODERATION_HIERARCHY,
+      reason: "Votre rôle n'est pas au-dessus de celui de ce membre.",
+    };
+  }
+
+  if (botPosition <= targetPosition) {
+    return {
+      ok: false,
+      code: ERROR_CODES.MODERATION_BOT_HIERARCHY,
+      reason: "Mon rôle n'est pas au-dessus de celui de ce membre.",
+    };
+  }
+
+  return { ok: true };
+}
+
+/** Permissions each feature needs, for `/security audit` and diagnostics. */
+export const FEATURE_PERMISSIONS = Object.freeze({
+  general: ["ViewChannel", "SendMessages", "EmbedLinks"],
+  moderation: [
+    "ViewChannel",
+    "SendMessages",
+    "EmbedLinks",
+    "ModerateMembers",
+    "KickMembers",
+    "BanMembers",
+    "ManageMessages",
+  ],
+  logging: ["ViewChannel", "SendMessages", "EmbedLinks", "ReadMessageHistory", "ViewAuditLog"],
+  community: ["ViewChannel", "SendMessages", "EmbedLinks", "ManageRoles", "AddReactions"],
+  automations: ["ViewChannel", "SendMessages", "EmbedLinks", "ManageRoles", "ModerateMembers"],
+  player: ["ViewChannel", "Connect", "Speak", "UseVAD"],
+});
+
+export const DANGEROUS_PERMISSIONS = Object.freeze([
+  { permission: "Administrator", severity: "critical" },
+  { permission: "ManageGuild", severity: "high" },
+  { permission: "ManageRoles", severity: "high" },
+  { permission: "ManageChannels", severity: "medium" },
+  { permission: "ManageWebhooks", severity: "medium" },
+  { permission: "BanMembers", severity: "medium" },
+  { permission: "KickMembers", severity: "medium" },
+  { permission: "MentionEveryone", severity: "low" },
+]);
+
+/** Report the permissions a bot is missing for the features it runs. */
+export function auditBotPermissions({ me, features = Object.keys(FEATURE_PERMISSIONS) } = {}) {
+  const missing = {};
+
+  for (const feature of features) {
+    const required = FEATURE_PERMISSIONS[feature] ?? [];
+    const lacking = required.filter((permission) => !hasPermissions(me?.permissions, [permission]));
+    if (lacking.length > 0) missing[feature] = lacking;
+  }
+
+  return { ok: Object.keys(missing).length === 0, missing, checked: [...features] };
+}
+
+/** Non-authoritative security observations an operator should review. */
+export function securityFindings({ guild = {}, me } = {}) {
+  const findings = [];
+  const permissions = me?.permissions;
+
+  if (hasPermissions(permissions, ["Administrator"])) {
+    findings.push({
+      code: "BOT_ADMINISTRATOR",
+      severity: "critical",
+      detail: "The bot has Administrator. Grant only the permissions its features need.",
+    });
+  }
+
+  for (const entry of DANGEROUS_PERMISSIONS) {
+    if (entry.permission === "Administrator") continue;
+    if (hasPermissions(permissions, [entry.permission])) {
+      findings.push({
+        code: `BOT_${entry.permission.toUpperCase()}`,
+        severity: entry.severity,
+        detail: `The bot holds ${entry.permission}; confirm this is required.`,
+      });
+    }
+  }
+
+  if (guild?.mfaLevel === 0) {
+    findings.push({
+      code: "GUILD_MFA_DISABLED",
+      severity: "medium",
+      detail: "Two-factor authentication is not required for moderation actions.",
+    });
+  }
+
+  if (guild?.verificationLevel === 0) {
+    findings.push({
+      code: "GUILD_VERIFICATION_NONE",
+      severity: "low",
+      detail: "The guild has no membership verification level.",
+    });
+  }
+
+  return findings;
+}

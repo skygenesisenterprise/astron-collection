@@ -23,6 +23,27 @@ import { CUSTOM_ID_VERSION, parseCustomId } from "./custom-id.js";
 /** `MessageFlags.Ephemeral` without importing discord.js. */
 export const EPHEMERAL = 64;
 
+/** Default (French) router strings; a bot overrides them from its translator. */
+const DEFAULT_MESSAGES = Object.freeze({
+  unknownCommand: "Commande inconnue.",
+  guildOnly: "Cette commande doit être utilisée dans un serveur.",
+  dmOnly: "Cette commande doit être utilisée en message privé.",
+  missingPermission: "L'utilisateur ne dispose pas des permissions Discord requises.",
+  missingBotPermission: "Je n'ai pas les permissions nécessaires pour exécuter cette commande.",
+  policyDenied: "Action non autorisée.",
+  cooldown: ({ seconds }) =>
+    `Veuillez patienter encore ${seconds}s avant de réutiliser cette commande.`,
+  generic: "Une erreur est survenue pendant l'exécution de la commande.",
+});
+
+const MESSAGE_KEYS = Object.freeze({
+  GUILD_ONLY: "guildOnly",
+  DIRECT_MESSAGE_ONLY: "dmOnly",
+  MISSING_PERMISSION: "missingPermission",
+  MISSING_BOT_PERMISSION: "missingBotPermission",
+  BUSINESS_POLICY_DENIED: "policyDenied",
+});
+
 export function describeInteraction(interaction) {
   if (interaction?.isChatInputCommand?.()) return `/${interaction.commandName}`;
   if (interaction?.isUserContextMenuCommand?.() || interaction?.isMessageContextMenuCommand?.()) {
@@ -64,10 +85,19 @@ export function createInteractionRouter({
   policy,
   cooldowns = createCooldownStore(),
   services = {},
+  messages = {},
+  context = {},
   respond = defaultRespond,
 } = {}) {
   if (!bot) throw new Error("createInteractionRouter requires the bot name.");
   if (!commands) throw new Error("createInteractionRouter requires a command registry.");
+
+  const strings = { ...DEFAULT_MESSAGES, ...messages };
+  const localized = (code, fallback) => strings[MESSAGE_KEYS[code]] ?? fallback;
+  const cooldownMessage = (seconds) =>
+    typeof strings.cooldown === "function"
+      ? strings.cooldown({ seconds })
+      : String(strings.cooldown).replace("{seconds}", String(seconds));
 
   async function respondEmpty(interaction) {
     try {
@@ -97,7 +127,7 @@ export function createInteractionRouter({
 
     if (!command) {
       logger?.warn("unknown command", { command: interaction.commandName, type });
-      await reply(interaction, "Commande inconnue.");
+      await reply(interaction, strings.unknownCommand);
       return { status: "unknown", reason: ERROR_CODES.INTERACTION_UNKNOWN };
     }
 
@@ -107,7 +137,7 @@ export function createInteractionRouter({
         command: command.name,
         code: availability.code,
       });
-      await reply(interaction, availability.reason);
+      await reply(interaction, localized(availability.code, availability.reason));
       return { status: "denied", reason: availability.code };
     }
 
@@ -118,7 +148,7 @@ export function createInteractionRouter({
         code: authorization.code,
         err: authorization.error,
       });
-      await reply(interaction, authorization.reason);
+      await reply(interaction, localized(authorization.code, authorization.reason));
       return { status: "denied", reason: authorization.code };
     }
 
@@ -126,11 +156,11 @@ export function createInteractionRouter({
     if (cooldown.limited) {
       const seconds = Math.ceil(cooldown.retryAfterMs / 1000);
       logger?.debug("command refused: cooldown", { command: command.name, seconds });
-      await reply(interaction, `Veuillez patienter encore ${seconds}s avant de réutiliser cette commande.`);
+      await reply(interaction, cooldownMessage(seconds));
       return { status: "cooldown", reason: ERROR_CODES.COOLDOWN };
     }
 
-    await command.execute(interaction, { bot, logger, command, services });
+    await command.execute(interaction, { bot, logger, command, services, ...context });
     return { status: "executed", command: command.name };
   }
 
@@ -148,7 +178,7 @@ export function createInteractionRouter({
       return { status: "no-handler", command: command.name };
     }
 
-    await command.autocomplete(interaction, { bot, logger, command, services });
+    await command.autocomplete(interaction, { bot, logger, command, services, ...context });
     return { status: "dispatched", command: command.name };
   }
 
@@ -179,6 +209,7 @@ export function createInteractionRouter({
       kind,
       id: parsed,
       services,
+      ...context,
     });
     return { status: "dispatched", kind, namespace: parsed.namespace };
   }
@@ -199,7 +230,7 @@ export function createInteractionRouter({
       });
     }
 
-    await reply(interaction, userMessageFor(error));
+    await reply(interaction, userMessageFor(error, strings.generic));
     return { status: "error", reason: normalized.code };
   }
 

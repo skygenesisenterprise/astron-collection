@@ -1,20 +1,29 @@
 {
   "name": "@astron-collection/discord-framework",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
-  "description": "Shared technical framework for the Astron Collection Discord bots: bootstrap, lifecycle, command registry, interaction routing, permissions, errors, logging, command deployment and official voice presence. Contains no business logic.",
+  "description": "Shared technical foundation for the six Astron Collection Discord bots: lifecycle, command contract and routing, permissions, localization, settings, storage and migrations, event contracts, observability, deployment and voice presence. Contains no bot business logic.",
   "exports": {
     ".": "./src/index.js",
+    "./bootstrap": "./src/bootstrap.js",
     "./config": "./src/config/env.js",
+    "./contracts": "./src/contracts/index.js",
+    "./deploy": "./src/deploy/commands.js",
+    "./deploy/cli": "./src/deploy/cli.js",
+    "./localization": "./src/localization/index.js",
+    "./observability": "./src/observability/index.js",
+    "./settings": "./src/settings/index.js",
+    "./storage": "./src/storage/index.js",
+    "./ui": "./src/ui/index.js",
     "./voice": "./src/voice/index.js"
   },
   "files": [
     "src"
   ],
   "scripts": {
-    "test": "node --test test/",
-    "test:watch": "node --test --watch test/",
+    "test": "node --disable-warning=ExperimentalWarning --test test/",
+    "test:watch": "node --disable-warning=ExperimentalWarning --test --watch test/",
     "lint": "biome check .",
     "lint:fix": "biome check --write ."
   },

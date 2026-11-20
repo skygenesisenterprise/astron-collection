@@ -1,0 +1,22 @@
+{
+  "name": "@astron-collection/astron",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Astron — the generalist Discord bot: server and user information, utilities, help, documentation and general configuration.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning index.js",
+    "dev": "node --disable-warning=ExperimentalWarning --watch index.js",
+    "deploy:commands": "node deploy-commands.js",
+    "test": "node --disable-warning=ExperimentalWarning --test test/",
+    "typecheck": "node --check index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.27.0",
+    "dotenv": "^17.2.3"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  }
+}

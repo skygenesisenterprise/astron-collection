@@ -2,50 +2,29 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {
-  assertDiscordEnv,
   createCommandRegistry,
   createLogger,
-  createRestClient,
-  deployCommands,
-  loadCommands,
+  runCommandDeployment,
 } from "../../packages/discord-framework/src/index.js";
+import { BOT } from "./config/bot.js";
 import { env } from "./config/env.js";
 
-const BOT = "guild";
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
+const botRoot = path.dirname(fileURLToPath(import.meta.url));
 const logger = createLogger({ bot: BOT, level: env.logLevel });
 
 async function main() {
-  assertDiscordEnv(env);
-
-  const args = new Set(process.argv.slice(2));
-  const registry = createCommandRegistry({ bot: BOT });
-
-  await loadCommands({
-    dir: path.join(__dirname, "commands"),
-    registry,
-    logger,
-  });
-
-  const result = await deployCommands({
+  const result = await runCommandDeployment({
     bot: BOT,
     config: env,
-    commands: registry.list(),
-    rest: await createRestClient({
-      token: env.token,
-      loadDiscord: () => import("discord.js"),
-    }),
+    commandsDir: path.join(botRoot, "commands"),
+    registry: createCommandRegistry({ bot: BOT }),
     logger,
-    statePath: path.join(__dirname, "data", "command-deployment.json"),
-    force: args.has("--force"),
-    dryRun: args.has("--dry-run"),
   });
 
-  console.log(`${result.count} commande(s) — ${result.status} (scope: ${result.scope})`);
+  console.log(`${result.count} command(s) — ${result.status} (scope: ${result.scope})`);
 }
 
 main().catch((error) => {
   logger.error("command deployment failed", { err: error });
-  process.exit(1);
+  process.exitCode = 1;
 });

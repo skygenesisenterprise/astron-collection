@@ -92,6 +92,8 @@ export async function createBotRuntime({
   policy,
   services = {},
   signalHandlers = true,
+  onStart = [],
+  onStop = [],
   loginRetries = 10,
   baseDelayMs = 5_000,
   maxDelayMs = 300_000,
@@ -119,6 +121,8 @@ export async function createBotRuntime({
   });
 
   const cleanups = [];
+  const startHooks = [onStart].flat().filter((hook) => typeof hook === "function");
+  const stopHooks = [onStop].flat().filter((hook) => typeof hook === "function");
   let status = "created";
   let readyAt = null;
   let startedAt = null;
@@ -146,6 +150,15 @@ export async function createBotRuntime({
         await voice.start();
       } catch (error) {
         logger.warn("voice presence unavailable", { err: error });
+      }
+    }
+
+    for (const hook of startHooks) {
+      try {
+        await hook({ bot, client: discordClient, logger, registry });
+      } catch (error) {
+        // A failing startup hook must not prevent the bot from serving users.
+        logger.error("startup hook failed", { err: error });
       }
     }
 
@@ -221,7 +234,14 @@ export async function createBotRuntime({
     }
 
     if (eventsDir) {
-      await loadEvents({ dir: eventsDir, client: discordClient, logger, bot, removed: cleanups });
+      await loadEvents({
+        dir: eventsDir,
+        client: discordClient,
+        logger,
+        bot,
+        removed: cleanups,
+        context: { bot, logger, services, registry },
+      });
     }
 
     discordClient.on("interactionCreate", onInteraction);
@@ -287,6 +307,14 @@ export async function createBotRuntime({
           await voice.stop();
         } catch (error) {
           logger.warn("voice shutdown failed", { err: error });
+        }
+      }
+
+      for (const hook of stopHooks) {
+        try {
+          await hook();
+        } catch (error) {
+          logger.warn("shutdown hook failed", { err: error });
         }
       }
 

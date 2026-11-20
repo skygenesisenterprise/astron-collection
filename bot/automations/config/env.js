@@ -4,20 +4,59 @@ import { fileURLToPath } from "node:url";
 
 import dotenv from "dotenv";
 
-import { parseBotConfig } from "../../../packages/discord-framework/src/index.js";
+import {
+  botCredentialVariables,
+  defineConfigSchema,
+  loadConfig,
+  runtimeVariables,
+} from "../../../packages/discord-framework/src/index.js";
+import { BOT } from "./bot.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const botRoot = path.resolve(__dirname, "..");
+const botRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const repositoryRoot = path.resolve(botRoot, "..", "..");
 
-// The bot's own `.env` wins; the repository `.env` fills the gaps.
 for (const envFile of [path.join(botRoot, ".env"), path.join(repositoryRoot, ".env")]) {
-  if (fs.existsSync(envFile)) {
-    dotenv.config({ path: envFile, override: false });
-  }
+  if (fs.existsSync(envFile)) dotenv.config({ path: envFile, override: false });
 }
 
-export const env = parseBotConfig(process.env, { bot: "main" });
+const schema = defineConfigSchema({
+  bot: BOT,
+  variables: [
+    ...botCredentialVariables(BOT),
+    ...runtimeVariables(),
+    { key: "databasePath", env: ["ASTRON_DATABASE_PATH"], default: "" },
+    { key: "ingestPath", env: ["ASTRON_INGEST_PATH"], default: "/ingest/events" },
+    {
+      key: "ingestSecret",
+      env: ["ASTRON_EVENT_SECRET", "ASTRON_LOGGER_EVENT_SECRET"],
+      default: "",
+      secret: true,
+    },
+    {
+      key: "eventUrl",
+      env: ["ASTRON_EVENT_URL", "ASTRON_LOGGER_EVENT_URL"],
+      default: "",
+      description: "Logger ingest endpoint for workflow.executed events.",
+    },
+    {
+      key: "eventSecret",
+      env: ["ASTRON_OUTBOUND_SECRET", "ASTRON_EVENT_SECRET"],
+      default: "",
+      secret: true,
+    },
+  ],
+});
 
-export { assertDiscordEnv } from "../../../packages/discord-framework/src/index.js";
+const result = loadConfig({ schema });
+
+export const env = Object.freeze({
+  ...result.values,
+  bot: BOT,
+  isConfigured: result.ok,
+  missingRequiredVars: result.missing,
+  warnings: result.warnings,
+  configResult: result,
+  botRoot,
+});
+
+export { schema };

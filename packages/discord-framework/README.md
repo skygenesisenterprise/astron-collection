@@ -2,7 +2,7 @@
 
 Technical foundation shared by the Astron Collection Discord bots. It contains
 **no business logic**: no command, no event, no guild setting, no domain rule of
-`main`, `protect`, `logger`, `player` or `guild` lives here.
+`astron`, `protect`, `logger`, `guild`, `automations` or `player` lives here.
 
 ```
 bot/<name>/          own catalogue: commands, events, services, repositories, config
@@ -26,6 +26,13 @@ packages/discord-framework/   shared technical mechanisms
 | `src/config/env.js` | environment parsing, required variables, defaults, warnings |
 | `src/deploy/commands.js` | idempotent, guarded command deployment |
 | `src/voice/*` | official voice presence, connection adapter, session coordination |
+| `src/storage/*` | SQLite wrapper, checksummed migrations, pagination and JSON value helpers |
+| `src/settings/*` | validated per-guild settings stored in the bot's own database |
+| `src/contracts/*` | versioned event envelopes, event bus, HMAC-signed webhook sink, transactional outbox |
+| `src/observability/*` | `/healthz`, `/livez`, `/metrics` and custom HTTP routes |
+| `src/localization/*` | fr/en catalog and translator for framework-level messages |
+| `src/ui/*` | embeds, formatting and Discord builder helpers (separate subpath) |
+| `src/bootstrap.js` | composes runtime, services and health server for a bot entrypoint |
 
 The package has **no runtime dependency**: `discord.js` and `@discordjs/voice` are
 peer dependencies loaded lazily, and every side effect (REST client, voice

@@ -14,12 +14,12 @@ name: Docker Publish
 #   v1.3.0-status          -> ghcr.io/<owner>/astron-collection-status
 #   v1.3.0-mcp             -> ghcr.io/<owner>/astron-collection-mcp
 #   v1.3.0-github          -> ghcr.io/<owner>/astron-collection-github
-#   v1.3.0-main            -> ghcr.io/<owner>/astron
-#   v1.3.0-protect         -> ghcr.io/<owner>/astron-protect
-#   v1.3.0-logger          -> ghcr.io/<owner>/astron-logger
-#   v1.3.0-automation      -> ghcr.io/<owner>/astron-automation
-#   v1.3.0-player          -> ghcr.io/<owner>/astron-player
-#   v1.3.0-guild-center    -> ghcr.io/<owner>/guild-center
+#   v1.3.0-astron          -> ghcr.io/<owner>/astron
+#   v1.3.0-protect         -> ghcr.io/<owner>/astron/protect
+#   v1.3.0-logger          -> ghcr.io/<owner>/astron/logger
+#   v1.3.0-automations     -> ghcr.io/<owner>/astron/automations
+#   v1.3.0-player          -> ghcr.io/<owner>/astron/player
+#   v1.3.0-guild           -> ghcr.io/<owner>/astron/guild
 #
 # The catalog in `select` is the single place to add or change a product: it
 # carries the image, the build context, the Dockerfile, the target and the
@@ -34,7 +34,7 @@ name: Docker Publish
 #
 # The bots are independent products: own Dockerfile, own build context, own
 # release cycle. A bot whose directory does not exist yet (`bot/automation`) is
-# listed in the catalog but skipped with a notice instead of failing the run, so
+# listed in the catalog is skipped with a notice instead of failing the run, so
 # it can never block another product.
 #
 # Tag policy — every image gets all of these, and only for its own product:
@@ -63,12 +63,12 @@ on:
       - "v*.*.*-status"
       - "v*.*.*-mcp"
       - "v*.*.*-github"
-      - "v*.*.*-main"
+      - "v*.*.*-astron"
       - "v*.*.*-protect"
       - "v*.*.*-logger"
-      - "v*.*.*-automation"
+      - "v*.*.*-automations"
       - "v*.*.*-player"
-      - "v*.*.*-guild-center"
+      - "v*.*.*-guild"
 
 concurrency:
   group: docker-publish-${{ github.ref }}
@@ -209,16 +209,16 @@ jobs:
             },
             {
               "image": "astron",
-              "tag_suffix": "-main",
+              "tag_suffix": "-astron",
               "context": ".",
-              "file": "./bot/main/Dockerfile",
+              "file": "./bot/astron/Dockerfile",
               "build_args": "ASTRON_COLLECTION_VERSION=${VERSION}",
-              "description": "Astron Collection official Discord bot (main)",
-              "release_name": "Main",
+              "description": "Astron Collection official Discord bot (astron)",
+              "release_name": "Astron",
               "release_assets": false
             },
             {
-              "image": "astron-protect",
+              "image": "astron/protect",
               "tag_suffix": "-protect",
               "context": ".",
               "file": "./bot/protect/Dockerfile",
@@ -227,7 +227,7 @@ jobs:
               "release_assets": false
             },
             {
-              "image": "astron-logger",
+              "image": "astron/logger",
               "tag_suffix": "-logger",
               "context": ".",
               "file": "./bot/logger/Dockerfile",
@@ -236,16 +236,16 @@ jobs:
               "release_assets": false
             },
             {
-              "image": "astron-automation",
-              "tag_suffix": "-automation",
+              "image": "astron/automations",
+              "tag_suffix": "-automations",
               "context": ".",
-              "file": "./bot/automation/Dockerfile",
-              "description": "Astron Collection official Discord bot (automation)",
-              "release_name": "Automation",
+              "file": "./bot/automations/Dockerfile",
+              "description": "Astron Collection official Discord bot (automations)",
+              "release_name": "Automations",
               "release_assets": false
             },
             {
-              "image": "astron-player",
+              "image": "astron/player",
               "tag_suffix": "-player",
               "context": ".",
               "file": "./bot/player/Dockerfile",
@@ -254,16 +254,12 @@ jobs:
               "release_assets": false
             },
             {
-              "image": "guild-center",
-              "tag_suffix": "-guild-center",
+              "image": "astron/guild",
+              "tag_suffix": "-guild",
               "context": ".",
-              "file": "./bot/guild-center/Dockerfile",
-              "fallback": {
-                "context": ".",
-                "file": "./bot/guild/Dockerfile"
-              },
-              "description": "Astron Collection official Discord bot (guild center)",
-              "release_name": "Guild Center",
+              "file": "./bot/guild/Dockerfile",
+              "description": "Astron Collection official Discord bot (guild)",
+              "release_name": "Guild",
               "release_assets": false
             }
           ]

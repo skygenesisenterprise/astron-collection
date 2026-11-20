@@ -1,74 +1,26 @@
 services:
-  redis:
-    image: docker.io/library/redis:8-alpine
-    restart: unless-stopped
-    command:
-      - redis-server
-      - --loglevel
-      - warning
-      - --save
-      - "60"
-      - "1"
-      - --requirepass
-      - ${REDIS_PASSWORD:-redis-default-password}
-    environment:
-      REDIS_PASSWORD: ${REDIS_PASSWORD:-redis-default-password}
-    healthcheck:
-      test: ["CMD-SHELL", "redis-cli -a \"$${REDIS_PASSWORD}\" ping | grep -q PONG"]
-      start_period: 20s
-      interval: 30s
-      timeout: 5s
-      retries: 5
-    volumes:
-      - redis:/data
-    expose:
-      - "6379"
-
-  bot:
-    # Context is the repository root: the image needs bot/logger and
-    # packages/discord-framework. See Dockerfile.
+  logger:
     build:
       context: ../..
       dockerfile: bot/logger/Dockerfile
-      args:
-        NODE_ENV: ${NODE_ENV:-production}
-    # Published by .github/workflows/docker-publish.yml as
-    # ghcr.io/<owner>/astron-logger:v<version>.
-    image: ${ASTRON_BOT_IMAGE:-ghcr.io/skygenesisenterprise/astron-logger}:${ASTRON_BOT_VERSION:-latest}
+    image: ${ASTRON_BOT_IMAGE:-ghcr.io/skygenesisenterprise/logger}:${ASTRON_BOT_VERSION:-latest}
+    container_name: logger-bot
     restart: unless-stopped
-    command: bot
+    env_file:
+      - .env
     environment:
       NODE_ENV: ${NODE_ENV:-production}
-      ASTRON_LOGGER_DISCORD_TOKEN: ${ASTRON_LOGGER_DISCORD_TOKEN:-}
-      ASTRON_LOGGER_DISCORD_CLIENT_ID: ${ASTRON_LOGGER_DISCORD_CLIENT_ID:-}
-      # Deprecated shared fallback: only read when the two values above are empty.
-      DISCORD_TOKEN: ${DISCORD_TOKEN:-}
-      DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID:-}
-      DISCORD_WELCOME_DM_ENABLED: ${DISCORD_WELCOME_DM_ENABLED:-true}
-      DISCORD_ANNOUNCE_DEPLOYMENTS: ${DISCORD_ANNOUNCE_DEPLOYMENTS:-true}
-      DISCORD_LEVEL_CHANNEL_ID: ${DISCORD_LEVEL_CHANNEL_ID:-}
-      DISCORD_ROLE_AGENTS_ID: ${DISCORD_ROLE_AGENTS_ID:-}
-      ASTRON_COMMAND_SCOPE: ${ASTRON_COMMAND_SCOPE:-global}
-      ASTRON_COMMAND_GUILD_ID: ${ASTRON_COMMAND_GUILD_ID:-}
-      DISCORD_COMMAND_SCOPE: ${DISCORD_COMMAND_SCOPE:-}
-      ASTRON_VOICE_PRESENCE_ENABLED: ${ASTRON_VOICE_PRESENCE_ENABLED:-true}
-      ASTRON_OFFICIAL_GUILD_ID: ${ASTRON_OFFICIAL_GUILD_ID:-1369779785273839749}
-      ASTRON_PRESENCE_VOICE_CHANNEL_ID: ${ASTRON_PRESENCE_VOICE_CHANNEL_ID:-1564590674194473000}
-      ASTRON_LOG_LEVEL: ${ASTRON_LOG_LEVEL:-info}
-      REDIS_ENABLED: "true"
-      REDIS_REQUIRED: "false"
-      REDIS_HOST: redis
-      REDIS_PORT: "6379"
-      REDIS_PASSWORD: ${REDIS_PASSWORD:-redis-default-password}
-      REDIS_DB: "0"
-      REDIS_URL: redis://default:${REDIS_PASSWORD:-redis-default-password}@redis:6379/0
-      REDIS_KEY_PREFIX: astron-logger:v1
-    depends_on:
-      redis:
-        condition: service_healthy
+      ASTRON_DATA_DIR: /app/bot/logger/data
+      ASTRON_HEALTH_PORT: "8080"
     volumes:
-      - bot-data:/app/bot/logger/data
+      - logger-data:/app/bot/logger/data
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
 
 volumes:
-  redis:
-  bot-data:
+  logger-data:
+    name: logger-data

@@ -1,123 +1,85 @@
-import {
-  SlashCommandBuilder,
-  PermissionFlagsBits,
-  EmbedBuilder,
-} from "discord.js";
+import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 
-import { addAudit, addWarning, getWarnings } from "../utils/store.js";
+import { defineCommand, EPHEMERAL, formatList } from "../../../packages/discord-framework/src/index.js";
+import { successEmbed, warningEmbed } from "../../../packages/discord-framework/src/ui/index.js";
+import { caseEmbed, caseSummary, reasonOf, requireGuild } from "../lib/responses.js";
 
-export const data = new SlashCommandBuilder()
-  .setName("warn")
-  .setDescription("Avertir un membre.")
-  .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
-  .setDMPermission(false)
-  .addUserOption((option) =>
-    option
-      .setName("membre")
-      .setDescription("Le membre à avertir")
-      .setRequired(true)
-  )
-  .addStringOption((option) =>
-    option
-      .setName("raison")
-      .setDescription("La raison de l'avertissement")
-      .setRequired(true)
-  );
+export default defineCommand({
+  data: new SlashCommandBuilder()
+    .setName("warn")
+    .setDescription("Warn a member, list or clear their warnings.")
+    .setDescriptionLocalizations({ fr: "Avertir un membre, lister ou effacer ses avertissements." })
+    .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
+    .setDMPermission(false)
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("add")
+        .setDescription("Warn a member")
+        .setDescriptionLocalizations({ fr: "Avertir un membre" })
+        .addUserOption((option) =>
+          option.setName("member").setDescription("Member to warn").setRequired(true),
+        )
+        .addStringOption((option) =>
+          option
+            .setName("reason")
+            .setDescription("Reason for the warning")
+            .setRequired(true)
+            .setMaxLength(1000),
+        ),
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("list")
+        .setDescription("List active warnings of a member")
+        .setDescriptionLocalizations({ fr: "Lister les avertissements actifs d'un membre" })
+        .addUserOption((option) =>
+          option.setName("member").setDescription("Member to inspect").setRequired(true),
+        ),
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("clear")
+        .setDescription("Clear every active warning of a member")
+        .setDescriptionLocalizations({ fr: "Effacer tous les avertissements actifs d'un membre" })
+        .addUserOption((option) =>
+          option.setName("member").setDescription("Member to clear").setRequired(true),
+        ),
+    ),
+  category: "moderation",
+  permissions: { user: [PermissionFlagsBits.ModerateMembers], bot: [PermissionFlagsBits.ModerateMembers] },
+  availability: { guildOnly: true },
+  execute: async (interaction, { services }) => {
+    requireGuild(interaction);
+    const subcommand = interaction.options.getSubcommand();
+    const user = interaction.options.getUser("member", true);
 
-export async function execute(interaction) {
-  if (!interaction.inCachedGuild()) {
-    await interaction.reply({
-      content: "Cette commande doit être utilisée dans un serveur.",
-      ephemeral: true,
-    });
-    return;
-  }
-
-  const member = interaction.options.getUser("membre", true);
-  const reason = interaction.options.getString("raison", true);
-
-  if (member.id === interaction.user.id) {
-    await interaction.reply({
-      content: "Vous ne pouvez pas vous avertir vous-même.",
-      ephemeral: true,
-    });
-    return;
-  }
-
-  if (member.id === interaction.client.user.id) {
-    await interaction.reply({
-      content: "Je ne peux pas m'avertir moi-même.",
-      ephemeral: true,
-    });
-    return;
-  }
-
-  const guildMember = await interaction.guild.members.fetch(member.id).catch(() => null);
-  if (!guildMember) {
-    await interaction.reply({
-      content: "Ce membre n'est pas dans le serveur.",
-      ephemeral: true,
-    });
-    return;
-  }
-
-  try {
-    addWarning({
-      guildId: interaction.guildId,
-      userId: member.id,
-      userTag: member.tag,
-      reason: reason,
-      moderator: interaction.user.tag,
-      timestamp: new Date().toISOString(),
-    });
-
-    addAudit({
-      guildId: interaction.guildId,
-      action: "warn",
-      actor: interaction.user.tag,
-      target: member.tag,
-      reason: reason,
-    });
-
-    const warnings = getWarnings(interaction.guildId, member.id);
-
-    const embed = new EmbedBuilder()
-      .setColor(0xffff00)
-      .setTitle("⚠️ Membre averti")
-      .setDescription(`${member.tag} a reçu un avertissement.`)
-      .addFields(
-        { name: "Raison", value: reason, inline: false },
-        { name: "Modérateur", value: interaction.user.tag, inline: true },
-        { name: "Total avertissements", value: String(warnings.length), inline: true }
-      )
-      .setTimestamp();
-
-    await interaction.reply({ embeds: [embed] });
-
-    // Envoyer un message privé au membre averti
-    try {
-      await member.send({
-        embeds: [
-          new EmbedBuilder()
-            .setColor(0xffff00)
-            .setTitle("⚠️ Avertissement reçu")
-            .setDescription(`Vous avez reçu un avertissement sur **${interaction.guild.name}**.`)
-            .addFields(
-              { name: "Raison", value: reason, inline: false },
-              { name: "Modérateur", value: interaction.user.tag, inline: true },
-              { name: "Total avertissements", value: String(warnings.length), inline: true }
-            )
-            .setTimestamp(),
-        ],
+    if (subcommand === "add") {
+      const record = await services.moderation.warn(interaction, { user, reason: reasonOf(interaction) });
+      await interaction.reply({
+        embeds: [warningEmbed("Member warned", null, { fields: caseEmbed(record).data.fields })],
+        flags: EPHEMERAL,
       });
-    } catch (dmError) {
-      console.warn(`Impossible d'envoyer un DM à ${member.tag}:`, dmError.message);
+      return;
     }
-  } catch (error) {
-    console.error("Erreur lors de l'avertissement:", error);
+
+    if (subcommand === "clear") {
+      const cleared = services.moderation.closeWarnings(interaction, user);
+      await interaction.reply({
+        embeds: [successEmbed("Warnings cleared", `${cleared} warning(s) closed for ${user.tag}.`)],
+        flags: EPHEMERAL,
+      });
+      return;
+    }
+
+    const warnings = services.moderation.warnings(interaction.guildId, user.id);
     await interaction.reply({
-      content: "Une erreur est survenue lors de l'avertissement.",
-      ephemeral: true,
+      embeds: [
+        warningEmbed(
+          `Warnings — ${user.tag}`,
+          warnings.length ? formatList(warnings.map(caseSummary), { limit: 15 }) : "No active warning.",
+        ),
+      ],
+      flags: EPHEMERAL,
     });
-  }
-}
+  },
+});

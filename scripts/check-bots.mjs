@@ -14,10 +14,12 @@ import path from "node:path";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const BOTS_DIR = path.join(ROOT, "bot");
-const FRAMEWORK_IMPORT = "../../packages/discord-framework/src/index.js";
+const FRAMEWORK_IMPORT = /(^|\/)packages\/discord-framework\/src\/index\.js$/;
+const EXPECTED_BOTS = ["astron", "automations", "guild", "logger", "player", "protect"];
 const REQUIRED_ENTRIES = [
   "index.js",
   "config/env.js",
+  "config/bot.js",
   "deploy-commands.js",
   "commands",
   "events",
@@ -25,6 +27,8 @@ const REQUIRED_ENTRIES = [
   "docker-compose.yml",
   "entrypoint.sh",
   ".env.example",
+  "README.md",
+  "package.json",
 ];
 
 const failures = [];
@@ -45,7 +49,7 @@ async function walk(dir) {
   for (const entry of entries) {
     const target = path.join(dir, entry.name);
     if (entry.isDirectory()) {
-      if (entry.name === "node_modules" || entry.name === "data") continue;
+      if (["node_modules", "data"].includes(entry.name)) continue;
       files.push(...(await walk(target)));
     } else if (entry.isFile()) {
       files.push(target);
@@ -57,12 +61,12 @@ async function walk(dir) {
 
 const relative = (file) => path.relative(ROOT, file).split(path.sep).join("/");
 const bots = (await fs.readdir(BOTS_DIR, { withFileTypes: true }))
-  .filter((entry) => entry.isDirectory())
+  .filter((entry) => entry.isDirectory() && !entry.name.startsWith("."))
   .map((entry) => entry.name)
   .sort();
 
-if (bots.length === 0) {
-  failures.push("bot/: no bot directory found");
+if (bots.join(",") !== EXPECTED_BOTS.join(",")) {
+  failures.push(`bot/: expected exactly ${EXPECTED_BOTS.join(", ")}; found ${bots.join(", ") || "none"}`);
 }
 
 for (const bot of bots) {
@@ -74,32 +78,48 @@ for (const bot of bots) {
     }
   }
 
+  const packageJson = JSON.parse(await fs.readFile(path.join(botDir, "package.json"), "utf8").catch(() => "{}"));
+  if (packageJson.name !== `@astron-collection/${bot}`) {
+    failures.push(`bot/${bot}/package.json: expected name @astron-collection/${bot}`);
+  }
+
   const index = await fs.readFile(path.join(botDir, "index.js"), "utf8").catch(() => "");
-  if (!index.includes(FRAMEWORK_IMPORT)) {
+  if (!FRAMEWORK_IMPORT.test(index)) {
     failures.push(`bot/${bot}/index.js: does not import the shared framework`);
   }
   if (/\bnew\s+Client\s*\(/.test(index)) {
     failures.push(`bot/${bot}/index.js: creates its own Discord client instead of the framework's`);
   }
 
-  const config = await fs.readFile(path.join(botDir, "config/env.js"), "utf8").catch(() => "");
-  if (!config.includes(FRAMEWORK_IMPORT)) {
-    failures.push(`bot/${bot}/config/env.js: does not import the shared framework`);
+  const config = await fs.readFile(path.join(botDir, "config/bot.js"), "utf8").catch(() => "");
+  if (!new RegExp(`BOT\\s*=\\s*["']${bot}["']`).test(config)) {
+    failures.push(`bot/${bot}/config/bot.js: declares a bot name that does not match its directory`);
   }
-  if (!config.includes(`bot: "${bot}"`)) {
-    failures.push(`bot/${bot}/config/env.js: declares a bot name that does not match its directory`);
+
+  const env = await fs.readFile(path.join(botDir, "config/env.js"), "utf8").catch(() => "");
+  if (!FRAMEWORK_IMPORT.test(env)) {
+    failures.push(`bot/${bot}/config/env.js: does not import the shared framework`);
   }
 
   const deploy = await fs.readFile(path.join(botDir, "deploy-commands.js"), "utf8").catch(() => "");
-  if (!deploy.includes("deployCommands")) {
+  if (!deploy.includes("runCommandDeployment") && !deploy.includes("deployCommands")) {
     failures.push(`bot/${bot}/deploy-commands.js: does not use the framework deployer`);
+  }
+
+  for (const entry of ["commands", "events"]) {
+    const dir = path.join(botDir, entry);
+    const count = (await fs.readdir(dir).catch(() => [])).filter((name) => name.endsWith(".js")).length;
+    if (count === 0) failures.push(`bot/${bot}/${entry}: no module`);
+  }
+
+  if (!(await exists(path.join(botDir, "tests"))) && !(await exists(path.join(botDir, "test")))) {
+    failures.push(`bot/${bot}: no test directory`);
   }
 
   for (const file of await walk(botDir)) {
     if (!file.endsWith(".js")) continue;
 
-    const name = path.basename(file);
-    if (name === "interactionCreate.js") {
+    if (path.basename(file) === "interactionCreate.js") {
       failures.push(`${relative(file)}: interactionCreate is owned by the framework router`);
     }
 
@@ -126,7 +146,7 @@ for (const bot of bots) {
 }
 
 const frameworkDir = path.join(ROOT, "packages", "discord-framework");
-for (const entry of ["package.json", "src/index.js"]) {
+for (const entry of ["package.json", "src/index.js", "src/storage/database.js", "src/contracts/events.js"]) {
   if (!(await exists(path.join(frameworkDir, entry)))) {
     failures.push(`packages/discord-framework: missing ${entry}`);
   }

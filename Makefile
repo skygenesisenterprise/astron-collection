@@ -7,7 +7,7 @@
 # Two families of products, addressed the same way — by name, on the command line:
 #
 #   editions  self | cloud | console   the platform stack (postgres, redis, client, api)
-#   bots      main | protect | logger | automation | player | guild-center
+#   bots      astron | protect | logger | guild | automations | player
 #
 # So `make docker-up self` starts the self-hosted platform, `make docker-up main`
 # starts the Discord bot, and `make docker-dev player` runs the same product with
@@ -48,24 +48,24 @@ GIT_SHA := $(shell git rev-parse --short HEAD 2>/dev/null || echo dev)
 
 # --- Products ---------------------------------------------------------------
 PLATFORM_EDITIONS := self cloud console
-BOTS := main protect logger automation player guild-center
+BOTS := astron automations guild logger player protect
 PRODUCTS := $(PLATFORM_EDITIONS) $(BOTS)
 
 # Bot directory and GHCR image, exactly as docker-publish.yml publishes them.
 # `guild-center` lives in bot/guild today (the workflow resolves the same fallback).
-BOT_DIR_main := bot/main
-BOT_DIR_protect := bot/protect
+BOT_DIR_astron := bot/astron
+BOT_DIR_automations := bot/automations
+BOT_DIR_guild := bot/guild
 BOT_DIR_logger := bot/logger
-BOT_DIR_automation := bot/automation
 BOT_DIR_player := bot/player
-BOT_DIR_guild-center := bot/guild
+BOT_DIR_protect := bot/protect
 
-BOT_IMAGE_main := astron
-BOT_IMAGE_protect := astron-protect
-BOT_IMAGE_logger := astron-logger
-BOT_IMAGE_automation := astron-automation
-BOT_IMAGE_player := astron-player
-BOT_IMAGE_guild-center := guild-center
+BOT_IMAGE_astron := astron
+BOT_IMAGE_automations := astron/automations
+BOT_IMAGE_guild := astron/guild
+BOT_IMAGE_logger := astron/logger
+BOT_IMAGE_player := astron/player
+BOT_IMAGE_protect := astron/protect
 
 # --- Inline product flag ----------------------------------------------------
 # Select the product for one invocation, without editing .env or exporting
@@ -74,7 +74,7 @@ BOT_IMAGE_guild-center := guild-center
 #   make docker-up self        # self-hosted platform (default)
 #   make docker-up cloud       # Astron Collection Cloud
 #   make docker-up console     # Astron Collection Console
-#   make docker-up main        # the main Discord bot
+#           make docker-up astron      # the general Discord bot
 #   make docker-dev player     # the player bot, in development mode
 #
 # GNU make itself rejects `make docker-dev --self` (`--self` is parsed as an
@@ -86,7 +86,7 @@ BOT_IMAGE_guild-center := guild-center
 # product that was built last:
 #
 #   make docker-up self   # build a fresh image + start the platform
-#   make docker-up main   # build a fresh image + start the main bot
+#           make docker-up astron # build a fresh image + start the general bot
 #   make docker-down      # stop the product started last (volumes are kept)
 #
 # Precedence: inline product flag > the product recorded by the last build > self.
@@ -255,8 +255,11 @@ build: ## Build the workspace (pnpm build)
 test: ## Run the test suites (pnpm test)
 	$(PNPM) test
 
-test-bots: ## Run the Discord framework test suite
-	node --test packages/discord-framework/test/*.test.js
+test-bots: ## Run the framework and every bot test suite
+	node --disable-warning=ExperimentalWarning --test packages/discord-framework/test/*.test.js
+	@for bot in $(BOTS); do \
+		node --disable-warning=ExperimentalWarning --test bot/$$bot/test*/*.test.js || exit 1; \
+	done
 
 check-bots: ## Check that each bot owns its catalogue and uses the framework
 	node scripts/check-bots.mjs
@@ -279,7 +282,7 @@ lint: ## Lint/format check (pnpm lint)
 # in both profiles, so the two modes are mutually exclusive — `make docker-down`
 # stops either. PostgreSQL and Redis are never published.
 #
-# A bot runs from bot/<dir>/docker-compose.yml with its own Redis, volumes and
+# A bot runs from bot/<dir>/docker-compose.yml with its own volume, health port and
 # network: bots are independent products, exactly as they are published.
 # ---------------------------------------------------------------------------
 install: ## Create .env from the template (if missing) and start the selected product
@@ -331,8 +334,8 @@ migrate: ## Apply the database migrations once (one-off run of the `api` service
 # Images — the same lifecycle as .github/workflows/docker-publish.yml, locally
 #
 #   editions: astron-collection, astron-collection-cloud, astron-collection-console
-#   bots:     astron, astron-protect, astron-logger, astron-automation,
-#             astron-player, guild-center
+#   bots:     astron, astron/automations, astron/guild, astron/logger,
+#             astron/player, astron/protect
 #
 # `image-build` produces the three tags a release carries and loads them locally,
 # so `make docker-up <product>` runs exactly what a release would ship. Nothing

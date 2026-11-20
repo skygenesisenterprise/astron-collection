@@ -1,0 +1,27 @@
+# Astron alone: one image, one process, one volume. No Redis, no shared database.
+services:
+  astron:
+    build:
+      context: ../..
+      dockerfile: bot/astron/Dockerfile
+    image: ${ASTRON_BOT_IMAGE:-ghcr.io/skygenesisenterprise/astron}:${ASTRON_BOT_VERSION:-latest}
+    container_name: astron-bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      ASTRON_DATA_DIR: /app/bot/astron/data
+      ASTRON_HEALTH_PORT: "8080"
+    volumes:
+      - astron-data:/app/bot/astron/data
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+volumes:
+  astron-data:
+    name: astron-data

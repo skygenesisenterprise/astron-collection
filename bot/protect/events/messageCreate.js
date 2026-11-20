@@ -1,31 +1,14 @@
-import { env } from "../config/env.js";
-import { awardMessageXp } from "../utils/xp.js";
-
 export const name = "messageCreate";
 
-export async function execute(message) {
-  if (!message.guild || message.author.bot || message.system) {
-    return;
+export async function execute(message, { services, logger }) {
+  if (!message.guild || message.author?.bot) return;
+
+  try {
+    if (!message.member && typeof message.guild.members?.fetch === "function") {
+      message.member = await message.guild.members.fetch(message.author.id).catch(() => null);
+    }
+    await services.security.onMessage(message);
+  } catch (error) {
+    logger.error("message protection failed", { guildId: message.guildId, err: error });
   }
-
-  const result = awardMessageXp(message.guild.id, message.author.id);
-
-  if (!result?.leveledUp) {
-    return;
-  }
-
-  if (!env.levelChannelId) {
-    return;
-  }
-
-  const levelChannel = await message.client.channels.fetch(env.levelChannelId).catch(() => null);
-
-  if (!levelChannel?.isTextBased()) {
-    return;
-  }
-
-  await levelChannel.send({
-    content: `${message.author} passe niveau **${result.level}** avec **${result.totalXp} XP**.`,
-    allowedMentions: { repliedUser: false },
-  }).catch(() => null);
 }

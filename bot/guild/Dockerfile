@@ -1,37 +1,23 @@
-# ══════════════════════════════════════════════════════════════════════════════
-# Astron Collection — Discord bot (guild)
-#
-# Build context is the repository root, so the image contains both the bot's own
-# catalogue (bot/guild) and the shared technical framework
-# (packages/discord-framework).
-#
-# Build:
-#   docker build -f bot/guild/Dockerfile .
-# ══════════════════════════════════════════════════════════════════════════════
-FROM node:25-alpine
+# syntax=docker/dockerfile:1
+FROM node:22-slim AS base
+ENV NODE_ENV=production \
+    NPM_CONFIG_UPDATE_NOTIFIER=false
+WORKDIR /app
 
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+COPY packages/discord-framework/package.json packages/discord-framework/
+COPY bot/guild/package.json bot/guild/
+RUN corepack enable && pnpm install --frozen-lockfile --prod --filter @astron-collection/guild...
 
-RUN apk add --no-cache \
-    ca-certificates \
-    tzdata \
-    curl \
-    bash \
-    wget
+COPY packages/discord-framework packages/discord-framework
+COPY bot/guild bot/guild
 
 WORKDIR /app/bot/guild
+RUN mkdir -p /app/bot/guild/data && chown -R node:node /app
+USER node
 
-COPY bot/guild/package.json ./
-RUN npm install --no-audit --no-fund
+EXPOSE 3013
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD node -e "fetch('http://127.0.0.1:'+(process.env.ASTRON_HEALTH_PORT||3013)+'/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
 
-COPY bot/guild/ ./
-COPY packages/discord-framework /app/packages/discord-framework
-
-RUN mkdir -p /app/packages \
-    && ln -sfn /app/bot/guild/node_modules /app/packages/node_modules
-
-COPY bot/guild/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]

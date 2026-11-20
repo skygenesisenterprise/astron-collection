@@ -1,9 +1,13 @@
 /**
  * @astron-collection/discord-framework
  *
- * Technical foundation shared by the Astron Collection Discord bots. Nothing in
- * this package knows about a specific bot: catalogues, services and business
- * rules stay in `bot/<name>/`.
+ * The single shared technical foundation of the six Astron Collection Discord
+ * bots. Nothing in this package knows about a specific bot: catalogues,
+ * services, repositories and business rules stay in `bot/<name>/`.
+ *
+ * `./ui` is intentionally not re-exported here: it imports discord.js, and the
+ * framework core must stay importable by tests and tooling without the Discord
+ * library installed.
  */
 
 export {
@@ -68,7 +72,15 @@ export {
 export { COMPONENT_KINDS, createComponentRegistry } from "./interactions/components.js";
 export { EPHEMERAL, createInteractionRouter, describeInteraction } from "./interactions/router.js";
 
-export { checkAvailability, checkCommandPermissions, assertAuthorized } from "./permissions.js";
+export {
+  assertAuthorized,
+  auditBotPermissions,
+  checkAvailability,
+  checkCommandPermissions,
+  checkModerationHierarchy,
+  isGuildOwner,
+  securityFindings,
+} from "./permissions.js";
 export { createCooldownStore } from "./cooldown.js";
 
 export {
@@ -77,6 +89,7 @@ export {
   isRetryableNetworkError,
   keepAlive,
 } from "./lifecycle.js";
+export { startBot } from "./bootstrap.js";
 
 export {
   DEPLOYMENT_SCOPES,
@@ -87,6 +100,82 @@ export {
   deployCommands,
   validateCatalogue,
 } from "./deploy/commands.js";
+export { runCommandDeployment } from "./deploy/cli.js";
+
+export {
+  BUILTIN_CATALOGS,
+  DEFAULT_LOCALE,
+  SUPPORTED_LOCALES,
+  createBotTranslator,
+  createTranslator,
+  descriptionLocalizations,
+  interpolate,
+  mergeCatalogs,
+  normalizeLocale,
+  resolveLocale,
+} from "./localization/index.js";
+
+export { createHealthServer, createMetrics } from "./observability/index.js";
+
+export {
+  DAY_MS,
+  HOUR_MS,
+  MINUTE_MS,
+  MIGRATIONS_TABLE,
+  boolToInt,
+  createDatabase,
+  createMemoryDatabase,
+  daysFromNow,
+  fromJson,
+  intToBool,
+  listMigrations,
+  nowIso,
+  paginate,
+  runMigrations,
+  toJson,
+} from "./storage/index.js";
+
+export {
+  DEFAULT_HEALTH_PORT,
+  assertConfigured,
+  botCredentialVariables,
+  createSettingsStore,
+  defineConfigSchema,
+  ensureSettingsSchema,
+  loadConfig,
+  runtimeVariables,
+  toEnvPrefix as configEnvPrefix,
+} from "./settings/index.js";
+
+export {
+  CONTRACT_VERSION,
+  EVENT_CONTRACTS,
+  EVENT_TYPES,
+  createCollectingSink,
+  createEvent,
+  createEventBus,
+  createOutbox,
+  createWebhookSink,
+  ensureOutboxSchema,
+  listContracts,
+  signPayload,
+  sortByOccurrence,
+  validateEvent,
+  validatePayload,
+  verifySignature,
+} from "./contracts/index.js";
+
+export {
+  COLORS,
+  chunk,
+  formatDuration,
+  formatList,
+  formatNumber,
+  percent,
+  progressBar,
+  timestamp,
+  truncate,
+} from "./ui/format.js";
 
 export {
   VOICE_PRESENCE_STATUS,
