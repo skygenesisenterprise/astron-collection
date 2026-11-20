@@ -4,7 +4,7 @@
 
 ## OVERVIEW
 
-Company's React component library (`@company/kumo`). pnpm monorepo: component library (Base UI + Tailwind v4), Astro docs site, Figma plugin, screenshot worker. ESM-only, Node 24+.
+Company's React component library (`@astron-collection/react`). pnpm monorepo: component library (Base UI + Tailwind v4), Astro docs site, Figma plugin, screenshot worker. ESM-only, Node 24+.
 
 ## STRUCTURE
 
@@ -58,13 +58,13 @@ kumo/
 
 ### Components
 
-- **Scaffold new**: `pnpm --filter @company/kumo new:component` (never create manually)
+- **Scaffold new**: `pnpm --filter @astron-collection/react new:component` (never create manually)
 - **Registry first**: Always check `component-registry.json` before using/modifying a component
 - See `packages/kumo/AGENTS.md` for component conventions (variants, forwardRef, displayName)
 
 ### Imports
 
-- **No cross-package relative imports**: Use `@company/kumo` not `../../kumo/src/...` (lint-enforced)
+- **No cross-package relative imports**: Use `@astron-collection/react` not `../../kumo/src/...` (lint-enforced)
 - **ESM-only**: `"type": "module"` throughout. No CJS.
 
 ### Changesets
@@ -116,10 +116,10 @@ pnpm typecheck                                    # TypeScript check all package
 pnpm changeset                                    # Create changeset (required for kumo changes)
 
 # Package-specific (see child AGENTS.md for full lists)
-pnpm --filter @company/kumo build              # Build library
-pnpm --filter @company/kumo test               # Vitest
-pnpm --filter @company/kumo codegen:registry   # Regenerate component-registry
-pnpm --filter @company/kumo-figma build        # Build Figma plugin
+pnpm --filter @astron-collection/react build              # Build library
+pnpm --filter @astron-collection/react test               # Vitest
+pnpm --filter @astron-collection/react codegen:registry   # Regenerate component-registry
+pnpm --filter @astron-collection/react-figma build        # Build Figma plugin
 ```
 
 ## BUILD PIPELINE

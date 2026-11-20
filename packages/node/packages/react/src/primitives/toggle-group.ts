@@ -6,7 +6,7 @@
  *
  * @example
  * ```tsx
- * import { ToggleGroup } from '@company/kumo/primitives/toggle-group';
+ * import { ToggleGroup } from '@astron-collection/react/primitives/toggle-group';
  * ```
  */
 

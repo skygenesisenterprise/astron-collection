@@ -10,7 +10,7 @@ import {
   Select,
   Table,
   Tooltip,
-} from "@company/kumo";
+} from "@astron-collection/react";
 import {
   Article,
   ChatCircle,

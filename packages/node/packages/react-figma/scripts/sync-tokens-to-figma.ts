@@ -5,8 +5,8 @@
  * It purges all existing variables and recreates them from the config.
  *
  * Usage:
- *   FIGMA_TOKEN="your-token" pnpm --filter @company/kumo-figma figma:sync
- *   FIGMA_TOKEN="your-token" pnpm --filter @company/kumo-figma figma:sync get
+ *   FIGMA_TOKEN="your-token" pnpm --filter @astron-collection/react-figma figma:sync
+ *   FIGMA_TOKEN="your-token" pnpm --filter @astron-collection/react-figma figma:sync get
  *
  * Environment Variables:
  *   FIGMA_TOKEN (required) - Figma personal access token
@@ -170,7 +170,7 @@ function getValidatedToken(): string {
     console.error("");
     console.error("Usage:");
     console.error(
-      '  FIGMA_TOKEN="your-token" pnpm --filter @company/kumo-figma figma:sync',
+      '  FIGMA_TOKEN="your-token" pnpm --filter @astron-collection/react-figma figma:sync',
     );
     console.error("");
     console.error(

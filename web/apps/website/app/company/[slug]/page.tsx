@@ -40,7 +40,7 @@ export default async function CompanyDetailPage({ params }: PageProps) {
 				title={page.title}
 				description={page.description}
 				breadcrumbs={[
-					{ name: "Company", path: "/company" },
+					{ name: "Astron Collection", path: "/company" },
 					{ name: page.title, path: page.path },
 				]}
 				actions={
@@ -79,8 +79,8 @@ export default async function CompanyDetailPage({ params }: PageProps) {
 							<ul className="mt-3 space-y-2 text-sm text-muted-foreground">
 								<li>
 									Sales:{" "}
-									<a href="mailto:sales@company.com" className="text-foreground underline underline-offset-4">
-										sales@company.com
+									<a href="mailto:sales@astron-collection.com" className="text-foreground underline underline-offset-4">
+										sales@astron-collection.com
 									</a>
 								</li>
 								<li>
@@ -91,7 +91,7 @@ export default async function CompanyDetailPage({ params }: PageProps) {
 										rel="noreferrer"
 										className="text-foreground underline underline-offset-4"
 									>
-										status.company.com
+										status.astron-collection.com
 									</a>
 								</li>
 								<li>
@@ -102,7 +102,7 @@ export default async function CompanyDetailPage({ params }: PageProps) {
 										rel="noreferrer"
 										className="text-foreground underline underline-offset-4"
 									>
-										docs.company.com
+										docs.astron-collection.com
 									</a>
 								</li>
 							</ul>
@@ -142,7 +142,7 @@ export default async function CompanyDetailPage({ params }: PageProps) {
 				title="Commercial question?"
 				description="Use the sales route for new capacity, partnerships and enterprise procurement."
 				primary={{ href: "/contact-sales", label: "Contact sales" }}
-				secondary={{ href: "/company", label: "Company overview" }}
+				secondary={{ href: "/company", label: "Astron Collection overview" }}
 			/>
 		</>
 	);

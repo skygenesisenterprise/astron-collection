@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TableOfContents, useTableOfContentsActiveId } from "@company/kumo";
+import { TableOfContents, useTableOfContentsActiveId } from "@astron-collection/react";
 
 const headings = [
   { text: "Introduction" },

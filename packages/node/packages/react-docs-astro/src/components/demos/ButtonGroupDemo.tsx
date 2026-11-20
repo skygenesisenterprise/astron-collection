@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, DropdownMenu } from "@company/kumo";
+import { Button, ButtonGroup, DropdownMenu } from "@astron-collection/react";
 import { CaretDownIcon } from "@phosphor-icons/react";
 
 /**

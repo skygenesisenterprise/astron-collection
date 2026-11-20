@@ -90,7 +90,7 @@ export type ClipboardTextSize = KumoClipboardTextSize;
  * @example
  * ```tsx
  * <ClipboardText text="sk_live_abc123" />
- * <ClipboardText text="npm install @company/kumo" size="sm" />
+ * <ClipboardText text="npm install @astron-collection/react" size="sm" />
  * ```
  */
 export interface ClipboardTextProps extends KumoClipboardTextVariantsProps {

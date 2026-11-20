@@ -1,4 +1,4 @@
-import { Button, Toasty, useKumoToastManager, Link } from "@company/kumo";
+import { Button, Toasty, useKumoToastManager, Link } from "@astron-collection/react";
 import { CheckCircleIcon } from "@phosphor-icons/react/dist/ssr";
 
 function ToastTriggerButton() {

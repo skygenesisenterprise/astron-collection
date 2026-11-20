@@ -4,7 +4,7 @@ import * as React from "react";
 
 type Theme = "light" | "dark";
 
-const STORAGE_KEY = "company-theme";
+const STORAGE_KEY = "astron-collection-theme";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 
 type ThemeContextValue = {
@@ -29,13 +29,13 @@ function applyTheme(theme: Theme) {
 }
 
 /**
- * The initial theme is resolved on the server from the `company-theme`
+ * The initial theme is resolved on the server from the `astron-collection-theme`
  * cookie, so the correct class is present in the first HTML response. No
  * inline pre-paint script is needed.
  */
 export function ThemeProvider({
 	children,
-	initialTheme = "light",
+	initialTheme = "dark",
 }: {
 	children: React.ReactNode;
 	initialTheme?: Theme;

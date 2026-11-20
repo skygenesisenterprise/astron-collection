@@ -1,4 +1,4 @@
-import { ChartPalette, Chart, LayerCard, Table } from "@company/kumo";
+import { ChartPalette, Chart, LayerCard, Table } from "@astron-collection/react";
 import * as echarts from "echarts/core";
 import type { EChartsOption } from "echarts";
 import { BarChart, HeatmapChart, LineChart, PieChart } from "echarts/charts";

@@ -6,7 +6,7 @@
  *
  * @example
  * ```tsx
- * import { NavigationMenu } from '@company/kumo/primitives/navigation-menu';
+ * import { NavigationMenu } from '@astron-collection/react/primitives/navigation-menu';
  * ```
  */
 

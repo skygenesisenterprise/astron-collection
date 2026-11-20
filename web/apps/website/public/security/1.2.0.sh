@@ -4,7 +4,7 @@
 # Moves BETTER_AUTH_SECRET into Docker Secrets and re-encrypts existing 2FA data.
 #
 # Usage:
-#   curl -sSL https://company.com/security/1.2.0.sh | sudo bash
+#   curl -sSL https://astron-collection.com/security/1.2.0.sh | sudo bash
 #
 # Idempotent: if the service already reads BETTER_AUTH_SECRET_FILE, nothing is
 # changed. If a previous run created the Docker secret but failed before

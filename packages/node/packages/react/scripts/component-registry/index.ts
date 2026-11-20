@@ -103,7 +103,7 @@ function loadDemoExamples(): Map<string, { aiExamples: string[] }> {
       `Warning: demo-metadata.json not found at ${demoMetadataPath}`,
     );
     console.warn(
-      "Run 'pnpm --filter @company/kumo-docs-astro codegen:demos' first",
+      "Run 'pnpm --filter @astron-collection/react-docs-astro codegen:demos' first",
     );
     return new Map();
   }
@@ -701,7 +701,7 @@ async function processComponent(
     name: config.name,
     type: config.type,
     description: config.description,
-    importPath: "@company/kumo",
+    importPath: "@astron-collection/react",
     category: config.category,
     props,
     examples,
@@ -871,7 +871,7 @@ async function generateRegistry(): Promise<GenerateRegistryResult> {
       type: "component",
       description:
         "Multi-line textarea input with Input variants and InputArea-specific dimensions",
-      importPath: "@company/kumo (synthetic - uses Input component)",
+      importPath: "@astron-collection/react (synthetic - uses Input component)",
       category: "Input",
       props: {
         size: {

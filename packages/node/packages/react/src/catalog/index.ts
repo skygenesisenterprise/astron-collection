@@ -17,7 +17,7 @@
  *   initCatalog,
  *   evaluateVisibility,
  *   resolveProps,
- * } from '@company/kumo/catalog';
+ * } from '@astron-collection/react/catalog';
  *
  * // Create catalog with actions
  * const catalog = createKumoCatalog({

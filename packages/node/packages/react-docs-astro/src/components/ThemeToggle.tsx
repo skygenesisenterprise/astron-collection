@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, DropdownMenu } from "@company/kumo";
+import { Button, DropdownMenu } from "@astron-collection/react";
 import { DesktopIcon, MoonIcon, SunIcon } from "@phosphor-icons/react";
 
 type ThemePreference = "light" | "dark" | "system";

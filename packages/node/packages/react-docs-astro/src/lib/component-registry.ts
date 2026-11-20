@@ -4,15 +4,15 @@
  */
 
 // Import the registry JSON from the kumo package export
-import registry from "@company/kumo/ai/component-registry.json";
+import registry from "@astron-collection/react/ai/component-registry.json";
 
-// Import shared types from @company/kumo
+// Import shared types from @astron-collection/react
 import type {
   ComponentRegistry,
   ComponentSchema,
   PropSchema,
   SubComponentSchema,
-} from "@company/kumo";
+} from "@astron-collection/react";
 
 // Re-export types for convenience
 export type { PropSchema, SubComponentSchema as SubComponentData };

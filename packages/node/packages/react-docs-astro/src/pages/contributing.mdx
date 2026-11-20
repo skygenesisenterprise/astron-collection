@@ -39,7 +39,7 @@ Recommended local setup:
 Internal contributors normally clone and push directly to `company/kumo`:
 
 ```bash
-git clone https://github.com/skygenesisenterprise/company
+git clone https://github.com/skygenesisenterprise/astron-collection
 git switch -c <branch-name>
 git push -u origin <branch-name>
 ```
@@ -59,7 +59,7 @@ Use this to decide where your change belongs:
 When adding a new **component**, scaffold it (do not create files manually):
 
 ```bash
-pnpm --filter @company/kumo new:component
+pnpm --filter @astron-collection/react new:component
 ```
 
 ---
@@ -70,7 +70,7 @@ Run these in separate terminals:
 
 ```bash
 # Terminal 1: watch Kumo package output
-pnpm --filter @company/kumo dev
+pnpm --filter @astron-collection/react dev
 
 # Terminal 2: docs site
 pnpm dev
@@ -109,20 +109,20 @@ Run these from repo root before opening or updating your PR:
 ```bash
 pnpm lint
 pnpm typecheck
-pnpm --filter @company/kumo test
+pnpm --filter @astron-collection/react test
 ```
 
 If you changed exports/build behavior, also run:
 
 ```bash
-pnpm --filter @company/kumo build
+pnpm --filter @astron-collection/react build
 ```
 
 Optional (when relevant):
 
 ```bash
 pnpm format
-pnpm --filter @company/kumo test:run
+pnpm --filter @astron-collection/react test:run
 ```
 
 Windsurf and hooks catch additional issues, but you should still run checks locally before requesting review.
@@ -198,4 +198,4 @@ Common pitfalls to avoid:
 
 ## Related Docs
 
-Follow the [changeset guide](https://github.com/skygenesisenterprise/company) to document releasable library changes and see the [AGENTS.md](https://github.com/skygenesisenterprise/company) for conventions and patterns.
+Follow the [changeset guide](https://github.com/skygenesisenterprise/astron-collection) to document releasable library changes and see the [AGENTS.md](https://github.com/skygenesisenterprise/astron-collection) for conventions and patterns.

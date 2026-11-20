@@ -35,7 +35,7 @@ import {
   VAR_NAMES,
 } from "./shared";
 import { createIconInstance, bindIconColor } from "./icon-utils";
-import registry from "@company/kumo/ai/component-registry.json";
+import registry from "@astron-collection/react/ai/component-registry.json";
 
 // Read styling metadata from registry (added in Phase 7)
 const menuBarStyling = (registry.components.MenuBar as any).styling;

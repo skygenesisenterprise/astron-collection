@@ -32,7 +32,7 @@ import themeData from "../generated/theme-data.json";
 import { createIconInstance, bindIconColor } from "./icon-utils";
 
 // Import component metadata from registry
-import registry from "@company/kumo/ai/component-registry.json";
+import registry from "@astron-collection/react/ai/component-registry.json";
 
 const paginationComponent = registry.components.Pagination;
 const paginationProps = paginationComponent.props;

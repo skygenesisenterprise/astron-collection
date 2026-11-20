@@ -38,10 +38,10 @@ import {
     <CodeBlock code={`npm install echarts`} lang="bash" />
     
     <Heading level={3} class="mb-2 mt-6 text-lg">Barrel</Heading>
-    <CodeBlock code={`import { SankeyChart } from "@company/kumo";`} lang="tsx" />
+    <CodeBlock code={`import { SankeyChart } from "@astron-collection/react";`} lang="tsx" />
     <Heading level={3} class="mb-2 mt-4 text-lg">Granular</Heading>
     <CodeBlock
-      code={`import { SankeyChart } from "@company/kumo/components/chart";`}
+      code={`import { SankeyChart } from "@astron-collection/react/components/chart";`}
       lang="tsx"
     />
   </ComponentSection>
@@ -50,7 +50,7 @@ import {
   <ComponentSection>
     <Heading level={2}>Usage</Heading>
     <CodeBlock
-      code={`import { SankeyChart, ChartPalette } from "@company/kumo";
+      code={`import { SankeyChart, ChartPalette } from "@astron-collection/react";
 import * as echarts from "echarts/core";
 import { SankeyChart as SankeyChartType } from "echarts/charts";
 import { TooltipComponent } from "echarts/components";
@@ -126,7 +126,7 @@ export default function Example() {
         <p class="mb-4 text-kumo-subtle">
           Use <code class="text-kumo-default">tooltipFormatter</code> for full control over tooltip content.
         </p>
-        <ComponentExample code={`import { SankeyChart, type SankeyTooltipParams } from "@company/kumo";
+        <ComponentExample code={`import { SankeyChart, type SankeyTooltipParams } from "@astron-collection/react";
 
 const customTooltip = (params: SankeyTooltipParams) => {
   if (params.type === "node" && params.node) {

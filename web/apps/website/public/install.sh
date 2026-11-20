@@ -1121,7 +1121,7 @@ detect_version() {
         echo "Detecting latest stable version from GitHub..." >&2
         
         version=$(curl -fsSL --connect-timeout 10 -o /dev/null -w '%{url_effective}\n' \
-            https://github.com/skygenesisenterprise/company/releases/latest 2>/dev/null | \
+            https://github.com/skygenesisenterprise/astron-collection/releases/latest 2>/dev/null | \
             sed 's#.*/tag/##')
 
         case "$version" in
@@ -1221,7 +1221,7 @@ Error: this is the Linux installer and does not run natively on Windows.
 On Windows Server 2022/2025/2026, use the standalone PowerShell installer
 (install.ps1) in an elevated PowerShell:
 
-  irm https://company.com/install.ps1 | iex
+  irm https://astron-collection.com/install.ps1 | iex
 
 or, from a checkout of this repository:
 
@@ -2199,7 +2199,7 @@ migrate_dokploy() {
     if [ "$NOTPLOY_INSTALLED" = "1" ]; then
         echo "Error: an existing Notploy installation was detected on this host." >&2
         echo "A migration would overwrite its data; update it instead:" >&2
-        echo "  curl -fsSL https://company.com/install.sh | sh -s -- update" >&2
+        echo "  curl -fsSL https://astron-collection.com/install.sh | sh -s -- update" >&2
         exit 1
     fi
 
@@ -2490,7 +2490,7 @@ install_company() {
     if [ "$NOTPLOY_INSTALLED" = "1" ]; then
         echo "Error: an existing Notploy installation was detected on this host." >&2
         echo "A fresh install would disrupt it. To update it instead, run:" >&2
-        echo "  curl -fsSL https://company.com/install.sh | sh -s -- update" >&2
+        echo "  curl -fsSL https://astron-collection.com/install.sh | sh -s -- update" >&2
         exit 1
     fi
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CommandPalette, Button } from "@company/kumo";
+import { CommandPalette, Button } from "@astron-collection/react";
 import {
   GearIcon,
   FileIcon,

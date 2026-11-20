@@ -51,7 +51,7 @@ demos/
 ## VALIDATION
 
 ```bash
-pnpm --filter @company/kumo-docs-astro codegen:demos
-pnpm --filter @company/kumo-docs-astro typecheck
-pnpm --filter @company/kumo-docs-astro lint
+pnpm --filter @astron-collection/react-docs-astro codegen:demos
+pnpm --filter @astron-collection/react-docs-astro typecheck
+pnpm --filter @astron-collection/react-docs-astro lint
 ```

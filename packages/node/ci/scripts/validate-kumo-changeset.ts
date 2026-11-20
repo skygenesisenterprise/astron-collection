@@ -10,11 +10,11 @@ import {
 } from "../utils/git-operations";
 
 /**
- * Validates that a changeset exists for the @company/kumo package
+ * Validates that a changeset exists for the @astron-collection/react package
  * when files in packages/kumo/ are modified in a pull request.
  */
 
-const KUMO_PACKAGE_NAME = "@company/kumo";
+const KUMO_PACKAGE_NAME = "@astron-collection/react";
 const KUMO_PATH = "packages/kumo";
 const CHANGESET_DIR = ".changeset";
 const KUMO_README_PATH = `${KUMO_PATH}/README.md`;
@@ -107,7 +107,7 @@ function main() {
       );
     } else {
       console.error(
-        "\x1b[31;1m❌ ERROR: Found NEW changeset files, but none target @company/kumo\x1b[0m",
+        "\x1b[31;1m❌ ERROR: Found NEW changeset files, but none target @astron-collection/react\x1b[0m",
       );
       console.error("");
       console.error("New changesets found:");
@@ -120,7 +120,7 @@ function main() {
     console.error("\x1b[33;1m📋 To fix this issue:\x1b[0m");
     console.error("   1. Run: \x1b[36mpnpm changeset\x1b[0m");
     console.error(
-      '   2. Select "\x1b[36m@company/kumo\x1b[0m" when prompted',
+      '   2. Select "\x1b[36m@astron-collection/react\x1b[0m" when prompted',
     );
     console.error(
       "   3. Choose the appropriate change type (patch/minor/major)",
@@ -142,7 +142,7 @@ function main() {
   }
 
   console.log(
-    `✅ Found ${newKumoChangesets.length} NEW changeset(s) for @company/kumo:`,
+    `✅ Found ${newKumoChangesets.length} NEW changeset(s) for @astron-collection/react:`,
   );
   newKumoChangesets.forEach((cs) => {
     console.log(`   - ${cs.name}`);

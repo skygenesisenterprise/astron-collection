@@ -2,6 +2,6 @@
  * @deprecated Use `@astron-collection/react/styles/tailwind` instead.
  *
  * Legacy Tailwind entry kept for applications upgrading from
- * `@company/kumo/styles`.
+ * `@astron-collection/react/styles`.
  */
 @import "./tailwind.css";

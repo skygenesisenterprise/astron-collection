@@ -12,7 +12,7 @@ const PRIMARY_LABELS = [
 	"Solutions",
 	"Developers",
 	"Resources",
-	"Company",
+	"Astron Collection",
 ];
 
 const CATEGORY_IDS = [

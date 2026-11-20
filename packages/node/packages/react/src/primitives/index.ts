@@ -9,7 +9,7 @@
  * @example
  * ```tsx
  * // Import multiple primitives
- * import { Popover, Slider, Tooltip } from '@company/kumo/primitives';
+ * import { Popover, Slider, Tooltip } from '@astron-collection/react/primitives';
  * ```
  */
 

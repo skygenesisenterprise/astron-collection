@@ -4,7 +4,7 @@ import {
   DropdownMenu,
   Breadcrumbs,
   type SidebarState,
-} from "@company/kumo";
+} from "@astron-collection/react";
 import {
   HouseIcon,
   GlobeIcon,

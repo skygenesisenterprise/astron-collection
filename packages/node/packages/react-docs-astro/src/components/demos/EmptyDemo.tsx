@@ -1,4 +1,4 @@
-import { Empty, Button } from "@company/kumo";
+import { Empty, Button } from "@astron-collection/react";
 import {
   Database,
   FolderOpen,
@@ -14,7 +14,7 @@ export function EmptyDemo() {
       icon={<PackageIcon size={48} />}
       title="No packages found"
       description="Get started by installing your first package."
-      commandLine="npm install @company/kumo"
+      commandLine="npm install @astron-collection/react"
       contents={
         <div className="flex items-center gap-2">
           <Button icon={<CodeIcon />}>See examples</Button>

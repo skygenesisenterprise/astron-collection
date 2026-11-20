@@ -8,7 +8,7 @@ import Link from "next/link";
 export const metadata: Metadata = pageMetadata({
 	title: "Infrastructure",
 	description:
-		"Company's hybrid infrastructure model: owned and partner capacity, network services, regions with a published verification state.",
+		"Astron Collection's hybrid infrastructure model: owned and partner capacity, network services, regions with a published verification state.",
 	path: "/infrastructure",
 });
 
@@ -21,7 +21,7 @@ export default function InfrastructurePage() {
 			<PageHeader
 				eyebrow="Infrastructure"
 				title="Owned and partner infrastructure, stated plainly"
-				description="Company runs a hybrid model. Owned capacity is operated directly; partner capacity is supplied by external providers and integrated into the same catalogue. The interface keeps the two distinct."
+				description="Astron Collection runs a hybrid model. Owned capacity is operated directly; partner capacity is supplied by external providers and integrated into the same catalogue. The interface keeps the two distinct."
 				breadcrumbs={[{ name: "Infrastructure", path: "/infrastructure" }]}
 			/>
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Badge, Radio } from "@company/kumo";
+import { Badge, Radio } from "@astron-collection/react";
 
 /** Shows a basic controlled radio group */
 export function RadioBasicDemo() {

@@ -3,7 +3,7 @@
  * Provides component registry data from the AI metadata.
  */
 declare module "virtual:kumo-registry" {
-  import type { ComponentRegistry } from "@company/kumo";
+  import type { ComponentRegistry } from "@astron-collection/react";
 
   /** Component registry markdown content for documentation */
   export const kumoRegistryMarkdown: string;

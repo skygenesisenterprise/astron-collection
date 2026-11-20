@@ -6,7 +6,7 @@
  *
  * @example
  * ```tsx
- * import { DirectionProvider } from '@company/kumo/primitives/direction-provider';
+ * import { DirectionProvider } from '@astron-collection/react/primitives/direction-provider';
  * ```
  */
 

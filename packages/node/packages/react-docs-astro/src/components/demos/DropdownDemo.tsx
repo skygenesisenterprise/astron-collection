@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { DropdownMenu, Button } from "@company/kumo";
+import { DropdownMenu, Button } from "@astron-collection/react";
 import {
   PlusIcon,
   UserIcon,
@@ -287,7 +287,7 @@ export function DropdownLinkItemDemo() {
         </DropdownMenu.LinkItem>
         <DropdownMenu.Separator />
         <DropdownMenu.LinkItem
-          href="https://github.com/skygenesisenterprise/company"
+          href="https://github.com/skygenesisenterprise/astron-collection"
           target="_blank"
           icon={ArrowSquareOutIcon}
         >

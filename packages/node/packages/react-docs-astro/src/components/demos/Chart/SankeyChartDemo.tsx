@@ -4,7 +4,7 @@ import {
   ChartPalette,
   type SankeyTooltipParams,
   type SankeyNodeData,
-} from "@company/kumo";
+} from "@astron-collection/react";
 import * as echarts from "echarts/core";
 import { SankeyChart as SankeyChartType } from "echarts/charts";
 import { TooltipComponent } from "echarts/components";

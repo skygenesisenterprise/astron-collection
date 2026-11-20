@@ -9,7 +9,7 @@
  * @example
  * ```tsx
  * // Next.js RSC
- * import { highlightCode, CodeBlock } from "@company/kumo/code/server";
+ * import { highlightCode, CodeBlock } from "@astron-collection/react/code/server";
  *
  * export default async function Page() {
  *   const html = await highlightCode(`const x = 1;`, "tsx");
@@ -219,7 +219,7 @@ export interface CodeBlockProps {
  *
  * @example
  * ```tsx
- * import { highlightCode, CodeBlock } from "@company/kumo/code/server";
+ * import { highlightCode, CodeBlock } from "@astron-collection/react/code/server";
  *
  * export default async function Page() {
  *   const html = await highlightCode(`const x = 1;`, "tsx");

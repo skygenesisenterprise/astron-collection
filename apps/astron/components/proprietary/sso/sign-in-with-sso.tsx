@@ -227,7 +227,7 @@ export function SignInWithSSO({
 									<div className="flex gap-2">
 										<Input
 											type="email"
-											placeholder="you@company.com"
+											placeholder="you@astron-collection.com"
 											className="flex-1"
 											autoComplete="email"
 											disabled={isPending}

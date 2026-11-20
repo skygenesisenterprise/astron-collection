@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { cn } from "@company/kumo";
+import { cn } from "@astron-collection/react";
 import { GithubLogoIcon } from "@phosphor-icons/react";
 import { ThemeToggle } from "../ThemeToggle";
 import { BaseUIIcon } from "./icons/BaseUIIcon";
@@ -151,12 +151,12 @@ export function StickyDocHeader({
             )}
           </div>
           <a
-            href="https://github.com/skygenesisenterprise/company"
+            href="https://github.com/skygenesisenterprise/astron-collection"
             target="_blank"
             rel="noopener noreferrer"
             className="font-mono text-sm text-kumo-subtle transition-colors hover:text-kumo-default"
           >
-            @company/kumo
+            @astron-collection/react
           </a>
         </div>
         <div className="hidden w-12 shrink-0 items-center justify-center lg:flex">

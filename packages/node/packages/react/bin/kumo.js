@@ -28,7 +28,7 @@ async function main() {
   }
 
   console.error(
-    "Kumo CLI entrypoint not found. If you're in the repo, run: pnpm --filter @zenthcloud/kumo build",
+    "Kumo CLI entrypoint not found. If you're in the repo, run: pnpm --filter @astron-collection/kumo build",
   );
   process.exit(1);
 }

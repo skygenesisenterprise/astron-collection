@@ -74,7 +74,7 @@ export const productCategories: NavCategory[] = [
 		href: "/products/compute-infrastructure",
 		products: [
 			{
-				name: "ZenthCloud",
+				name: "Astron Collection",
 				description: "Cloud infrastructure platform",
 				family: "Zenth",
 			},
@@ -239,7 +239,7 @@ export type CataloguedProject = {
  */
 export const featuredProjectNames = [
 	"Notploy",
-	"ZenthCloud",
+	"Astron Collection",
 	"Aether Identity",
 	"Aether Mail",
 	"Giteria",
@@ -413,7 +413,7 @@ export const solutionPatterns: SolutionPattern[] = [
 		title: "Infrastructure management",
 		description:
 			"Cloud capacity, container tooling and an infrastructure operating system, for teams that run their own workloads.",
-		productNames: ["ZenthCloud", "Nocker", "OblivionOS"],
+		productNames: ["Astron Collection", "Nocker", "OblivionOS"],
 		href: "/solutions/enterprise",
 		relationship: "Documented solution path",
 	},
@@ -732,7 +732,7 @@ export const newsSection = {
 	eyebrow: "News and insights",
 	title: "Where the group publishes.",
 	description:
-		"Company and product communication is published through the newsroom, the blog and the repositories. This page does not generate announcements to fill a layout.",
+		"Astron Collection and product communication is published through the newsroom, the blog and the repositories. This page does not generate announcements to fill a layout.",
 	emptyState:
 		"No announcement is published here yet. When there is something to announce, it will appear in the newsroom and in the repository history first.",
 } as const;
@@ -741,7 +741,7 @@ export const newsDestinations = [
 	{
 		label: "Newsroom",
 		href: "/company/newsroom",
-		description: "Company and product announcements",
+		description: "Astron Collection and product announcements",
 		external: false,
 	},
 	{

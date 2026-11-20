@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Output AI usage guide for @company/kumo
+ * Output AI usage guide for @astron-collection/react
  * Usage: kumo ai
  */
 
@@ -21,7 +21,7 @@ export function ai(): void {
     console.log(content);
   } catch {
     console.error(
-      "Could not read ai/USAGE.md. Make sure you are running this from an installed @company/kumo package.",
+      "Could not read ai/USAGE.md. Make sure you are running this from an installed @astron-collection/react package.",
     );
     process.exit(1);
   }

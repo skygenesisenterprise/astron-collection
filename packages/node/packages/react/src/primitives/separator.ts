@@ -6,7 +6,7 @@
  *
  * @example
  * ```tsx
- * import { Separator } from '@company/kumo/primitives/separator';
+ * import { Separator } from '@astron-collection/react/primitives/separator';
  * ```
  */
 

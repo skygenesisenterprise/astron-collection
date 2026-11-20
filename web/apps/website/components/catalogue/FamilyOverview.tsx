@@ -53,7 +53,7 @@ export function FamilyOverview({ family }: { family: ProductFamily }) {
 		url: `${SITE_URL}${meta.route}`,
 		isPartOf: {
 			"@type": "CollectionPage",
-			name: "Company Products",
+			name: "Astron Collection Products",
 			url: `${SITE_URL}/products`,
 		},
 		hasPart: products.map((product) => ({

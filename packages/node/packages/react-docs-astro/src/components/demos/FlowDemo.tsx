@@ -1,5 +1,5 @@
 import { forwardRef, useState } from "react";
-import { Flow } from "@company/kumo";
+import { Flow } from "@astron-collection/react";
 import { CaretDownIcon } from "@phosphor-icons/react";
 
 const ExpandableNode = forwardRef<

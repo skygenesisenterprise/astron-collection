@@ -9,7 +9,7 @@ export type SearchEntry = {
 	title: string;
 	href: string;
 	description: string;
-	group: "Products" | "Solutions" | "Pricing" | "Infrastructure" | "Resources" | "Company";
+	group: "Products" | "Solutions" | "Pricing" | "Infrastructure" | "Resources" | "Astron Collection";
 };
 
 const products: SearchEntry[] = getAllProducts().map((product) => ({
@@ -60,7 +60,7 @@ const companyEntries: SearchEntry[] = companyPages.map((page) => ({
 	title: page.title,
 	href: page.path,
 	description: page.description,
-	group: "Company",
+	group: "Astron Collection",
 }));
 
 export const searchIndex: SearchEntry[] = [

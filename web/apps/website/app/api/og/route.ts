@@ -8,7 +8,7 @@ const DEFAULT_TITLE = "Cloud infrastructure. Without boundaries.";
 export async function GET(request: NextRequest) {
 	const { searchParams } = new URL(request.url);
 	const title = (searchParams.get("title")?.trim() || DEFAULT_TITLE).slice(0, 90);
-	const eyebrow = (searchParams.get("eyebrow")?.trim() || "Company").slice(0, 40);
+	const eyebrow = (searchParams.get("eyebrow")?.trim() || "Astron Collection").slice(0, 40);
 
 	try {
 		const png = await generateOGImage({ title, eyebrow });

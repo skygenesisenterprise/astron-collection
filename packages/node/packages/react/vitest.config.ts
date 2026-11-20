@@ -9,7 +9,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": resolve(__dirname, "src"),
-      "@company/kumo": resolve(__dirname, "src/index.ts"),
+      "@astron-collection/react": resolve(__dirname, "src/index.ts"),
     },
   },
   test: {
@@ -25,7 +25,7 @@ export default defineConfig({
         resolve: {
           alias: {
             "@": resolve(__dirname, "src"),
-            "@company/kumo": resolve(__dirname, "src/index.ts"),
+            "@astron-collection/react": resolve(__dirname, "src/index.ts"),
           },
         },
         test: {

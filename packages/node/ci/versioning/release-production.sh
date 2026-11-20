@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Configuration
-PACKAGE_NAME="${PACKAGE_NAME:-@company/kumo}"
+PACKAGE_NAME="${PACKAGE_NAME:-@astron-collection/react}"
 PACKAGE_PATH="${PACKAGE_PATH:-packages/kumo}"
 DRY_RUN="${DRY_RUN:-false}"
 

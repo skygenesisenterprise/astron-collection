@@ -1,4 +1,4 @@
-import { Grid, GridItem, Surface, Text } from "@company/kumo";
+import { Grid, GridItem, Surface, Text } from "@astron-collection/react";
 
 export function GridDemo() {
   return (

@@ -219,8 +219,8 @@ function executeCommand(
   // Parse kumo command
   let commandIndex = 1;
   if (baseCommand === "npx") {
-    // Skip "@company/kumo" part
-    if (parts[1] === "@company/kumo") {
+    // Skip "@astron-collection/react" part
+    if (parts[1] === "@astron-collection/react") {
       commandIndex = 2;
     } else {
       return {
@@ -466,11 +466,11 @@ function executeCommand(
       if (block.dependencies && block.dependencies.length > 0) {
         output.push("This block depends on the following Kumo components:");
         for (const dep of block.dependencies) {
-          output.push(`  - ${dep} (from @company/kumo)`);
+          output.push(`  - ${dep} (from @astron-collection/react)`);
         }
         output.push("");
-        output.push("Make sure @company/kumo is installed in your project:");
-        output.push("  pnpm add @company/kumo");
+        output.push("Make sure @astron-collection/react is installed in your project:");
+        output.push("  pnpm add @astron-collection/react");
         output.push("");
       }
 

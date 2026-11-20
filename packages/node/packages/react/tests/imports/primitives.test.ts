@@ -113,7 +113,7 @@ describe("Primitives Export", () => {
 
       if (missingExports.length > 0) {
         console.error(
-          "\n❌ Base-ui primitives missing from @company/kumo/primitives:",
+          "\n❌ Base-ui primitives missing from @astron-collection/react/primitives:",
         );
         missingExports.forEach((name) => {
           console.error(`   - ${name}`);

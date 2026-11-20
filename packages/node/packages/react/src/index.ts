@@ -26,7 +26,7 @@
  * **AI resources:** See `@astron-collection/react/ai/component-registry.json` for full
  * component metadata including prop descriptions, variant values, and examples.
  *
- * @see {@link https://github.com/skygenesisenterprise/company} — Documentation
+ * @see {@link https://github.com/skygenesisenterprise/astron-collection} — Documentation
  */
 
 // Components

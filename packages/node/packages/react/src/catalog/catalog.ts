@@ -84,7 +84,7 @@ function getSchemas(): SchemasModule {
  * - Generates AI prompts describing available components
  *
  * @example
- * import { createKumoCatalog, initCatalog } from '@company/kumo/catalog';
+ * import { createKumoCatalog, initCatalog } from '@astron-collection/react/catalog';
  *
  * const catalog = createKumoCatalog({
  *   actions: {

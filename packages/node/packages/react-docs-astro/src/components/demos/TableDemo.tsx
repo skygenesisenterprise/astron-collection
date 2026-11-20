@@ -5,7 +5,7 @@ import {
   DropdownMenu,
   LayerCard,
   Table,
-} from "@company/kumo";
+} from "@astron-collection/react";
 import {
   DotsThree,
   EnvelopeSimple,

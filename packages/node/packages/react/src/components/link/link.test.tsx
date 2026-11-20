@@ -108,7 +108,7 @@ describe("Link", () => {
 
   it("should render with ExternalIcon as child", () => {
     const props = {
-      href: "https://github.com/skygenesisenterprise/company",
+      href: "https://github.com/skygenesisenterprise/astron-collection",
       target: "_blank",
       rel: "noopener noreferrer",
       children: [

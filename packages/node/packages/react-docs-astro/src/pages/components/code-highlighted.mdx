@@ -29,7 +29,7 @@ import {
   <div class="mb-4 rounded-md border border-kumo-brand/20 bg-kumo-brand/5 p-4">
     <p class="text-sm text-kumo-strong">
       <strong>New in v1.10:</strong> Shiki-powered syntax highlighting with lazy
-      loading. Import from `@company/kumo/code` to use.
+      loading. Import from `@astron-collection/react/code` to use.
     </p>
   </div>
   <ComponentExample demo="CodeHighlightedBasicDemo">
@@ -46,7 +46,7 @@ import {
   <p>
     A Shiki-powered syntax highlighter. Supports 200+ languages with TextMate
     grammars, dual light/dark themes, and lazy loading. Exported from a separate
-    entry point ( `@company/kumo/code` ) to avoid bundling Shiki for apps
+    entry point ( `@astron-collection/react/code` ) to avoid bundling Shiki for apps
     that don't need it.
   </p>
 </ComponentSection>
@@ -62,12 +62,12 @@ import {
   </p>
 
 ```tsx
-import { ShikiProvider, CodeHighlighted } from "@company/kumo/code";
+import { ShikiProvider, CodeHighlighted } from "@astron-collection/react/code";
 ```
 
   <div class="mt-4 rounded-md border border-kumo-warning/20 bg-kumo-warning/5 p-4">
     <p class="text-sm text-kumo-strong">
-      <strong>Important:</strong> Do NOT import from the main `@company/kumo` entry.
+      <strong>Important:</strong> Do NOT import from the main `@astron-collection/react` entry.
       That would pull Shiki into your bundle even if you don't use it.
     </p>
   </div>
@@ -85,7 +85,7 @@ import { ShikiProvider, CodeHighlighted } from "@company/kumo/code";
   </p>
 
 ```tsx
-import { ShikiProvider, CodeHighlighted } from "@company/kumo/code";
+import { ShikiProvider, CodeHighlighted } from "@astron-collection/react/code";
 
 export function App() {
   return (
@@ -242,7 +242,7 @@ export function App() {
 
 ```tsx
 // Next.js RSC or Astro
-import { highlightCode } from "@company/kumo/code/server";
+import { highlightCode } from "@astron-collection/react/code/server";
 
 export default async function Page() {
   const html = await highlightCode(`const x = 1;`, "typescript");
@@ -255,7 +255,7 @@ export default async function Page() {
 
 ```tsx
 // For multiple highlights, reuse the highlighter
-import { createServerHighlighter } from "@company/kumo/code/server";
+import { createServerHighlighter } from "@astron-collection/react/code/server";
 
 const highlighter = await createServerHighlighter({
   languages: ["tsx", "bash", "json"],
@@ -280,7 +280,7 @@ highlighter.dispose(); // Clean up when done
   </p>
 
 ```tsx
-import { useShikiHighlighter } from "@company/kumo/code";
+import { useShikiHighlighter } from "@astron-collection/react/code";
 
 function CustomCodeBlock({ code, lang }) {
   const { highlight, isLoading, isReady, error } = useShikiHighlighter();
@@ -357,7 +357,7 @@ function CustomCodeBlock({ code, lang }) {
 // app/providers.tsx
 "use client";
 
-import { ShikiProvider } from "@company/kumo/code";
+import { ShikiProvider } from "@astron-collection/react/code";
 
 export function Providers({ children }) {
   return (
@@ -391,7 +391,7 @@ export default function RootLayout({ children }) {
 ```tsx
 ---
 // src/components/CodeBlock.astro
-import { highlightCode } from "@company/kumo/code/server";
+import { highlightCode } from "@astron-collection/react/code/server";
 
 const { code, lang } = Astro.props;
 const html = await highlightCode(code, lang);
@@ -445,7 +445,7 @@ const html = await highlightCode(code, lang);
     </table>
   </div>
   <p class="mt-4 text-sm text-kumo-subtle">
-    Teams that don't import from `@company/kumo/code` pay 0 KB.
+    Teams that don't import from `@astron-collection/react/code` pay 0 KB.
   </p>
 </ComponentSection>
 
@@ -462,11 +462,11 @@ const html = await highlightCode(code, lang);
 
 ```tsx
 // Before (deprecated)
-import { Code, CodeBlock } from "@company/kumo";
+import { Code, CodeBlock } from "@astron-collection/react";
 <CodeBlock code="const x = 1;" lang="ts" />
 
 // After
-import { ShikiProvider, CodeHighlighted } from "@company/kumo/code";
+import { ShikiProvider, CodeHighlighted } from "@astron-collection/react/code";
 
 // Once at app root
 <ShikiProvider engine="javascript" languages={["tsx"]}>

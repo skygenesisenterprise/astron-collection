@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { Autocomplete } from "@company/kumo";
+import { Autocomplete } from "@astron-collection/react";
 import { languages, type Language } from "./data/languages";
 
 const fruits = [

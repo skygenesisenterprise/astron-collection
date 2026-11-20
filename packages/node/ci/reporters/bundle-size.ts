@@ -36,21 +36,21 @@ interface Fixture {
  * entries in sync with the fixture IDs used by the artifact contract.
  */
 const FIXTURE_ENTRIES = {
-  "root-button": `export { Button } from "@company/kumo";`,
-  "subpath-button": `export { Button } from "@company/kumo/components/button";`,
-  "root-trio": `export { Button, Dialog, Select } from "@company/kumo";`,
+  "root-button": `export { Button } from "@astron-collection/react";`,
+  "subpath-button": `export { Button } from "@astron-collection/react/components/button";`,
+  "root-trio": `export { Button, Dialog, Select } from "@astron-collection/react";`,
   "subpath-trio": `
-      export { Button } from "@company/kumo/components/button";
-      export { Dialog } from "@company/kumo/components/dialog";
-      export { Select } from "@company/kumo/components/select";
+      export { Button } from "@astron-collection/react/components/button";
+      export { Dialog } from "@astron-collection/react/components/dialog";
+      export { Select } from "@astron-collection/react/components/select";
     `,
-  "root-chart": `export { Chart } from "@company/kumo";`,
-  "subpath-chart": `export { Chart } from "@company/kumo/components/chart";`,
-  "subpath-badge": `export { Badge } from "@company/kumo/components/badge";`,
-  "subpath-flow": `export { Flow } from "@company/kumo/components/flow";`,
-  "primitive-button": `export * from "@company/kumo/primitives/button";`,
-  "primitives-barrel": `export * from "@company/kumo/primitives";`,
-  code: `export { ShikiProvider, CodeHighlighted } from "@company/kumo/code";`,
+  "root-chart": `export { Chart } from "@astron-collection/react";`,
+  "subpath-chart": `export { Chart } from "@astron-collection/react/components/chart";`,
+  "subpath-badge": `export { Badge } from "@astron-collection/react/components/badge";`,
+  "subpath-flow": `export { Flow } from "@astron-collection/react/components/flow";`,
+  "primitive-button": `export * from "@astron-collection/react/primitives/button";`,
+  "primitives-barrel": `export * from "@astron-collection/react/primitives";`,
+  code: `export { ShikiProvider, CodeHighlighted } from "@astron-collection/react/code";`,
 } satisfies Record<BundleSizeFixtureId, string>;
 
 /** Peer dependencies stay external — consumers always provide these. */

@@ -1,4 +1,4 @@
-import { InputArea } from "@company/kumo";
+import { InputArea } from "@astron-collection/react";
 
 export function InputAreaBasicDemo() {
   return (

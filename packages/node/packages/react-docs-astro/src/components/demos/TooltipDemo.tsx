@@ -1,4 +1,4 @@
-import { Tooltip, TooltipProvider, Button } from "@company/kumo";
+import { Tooltip, TooltipProvider, Button } from "@astron-collection/react";
 import { Info, PlusIcon, TranslateIcon } from "@phosphor-icons/react";
 
 export function TooltipHeroDemo() {

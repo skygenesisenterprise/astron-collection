@@ -11,7 +11,7 @@ export const homeHero = {
 	title: "Cloud infrastructure.",
 	highlight: "Boundaries you can verify.",
 	description:
-		"Compute, storage, networking and platform services on infrastructure operated by Company or a named partner. Availability and commercial state are published per product and region.",
+		"Compute, storage, networking and platform services on infrastructure operated by Astron Collection or a named partner. Availability and commercial state are published per product and region.",
 	primaryCta: { href: "/products", label: "Explore products" },
 	secondaryCta: { href: "/pricing", label: "View pricing" },
 } as const;

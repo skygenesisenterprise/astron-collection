@@ -9,7 +9,7 @@ import Link from "next/link";
 export const metadata: Metadata = pageMetadata({
 	title: "Public Cloud",
 	description:
-		"Company Public Cloud: compute instances, GPU, object and block storage, managed databases, Kubernetes and backups.",
+		"Astron Collection Public Cloud: compute instances, GPU, object and block storage, managed databases, Kubernetes and backups.",
 	path: "/products/public-cloud",
 });
 

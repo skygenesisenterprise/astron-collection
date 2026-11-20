@@ -11,7 +11,7 @@
     "resolveJsonModule": true,
     "types": ["@figma/plugin-typings", "node"],
     "paths": {
-      "@company/kumo/*": ["../kumo/*"]
+      "@astron-collection/react/*": ["../kumo/*"]
     }
   },
   "include": ["src/**/*.ts"],

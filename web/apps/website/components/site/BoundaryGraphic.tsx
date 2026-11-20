@@ -14,7 +14,7 @@ export function BoundaryGraphic({ className }: { className?: string }) {
 				aria-labelledby="boundary-title boundary-desc"
 				className="h-auto w-full"
 			>
-				<title id="boundary-title">Company boundary model</title>
+				<title id="boundary-title">Astron Collection boundary model</title>
 				<desc id="boundary-desc">
 					Three nested boundaries representing owned infrastructure, partner
 					infrastructure and regional availability, connected to a customer

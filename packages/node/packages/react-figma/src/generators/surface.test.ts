@@ -21,7 +21,7 @@ import {
 } from "./surface";
 
 // Import registry as source of truth
-import registry from "@company/kumo/ai/component-registry.json";
+import registry from "@astron-collection/react/ai/component-registry.json";
 
 const surfaceComponent = registry.components.Surface;
 

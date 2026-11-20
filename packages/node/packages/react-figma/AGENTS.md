@@ -1,4 +1,4 @@
-# Figma Plugin (`@company/kumo-figma`)
+# Figma Plugin (`@astron-collection/react-figma`)
 
 Generates production-quality Figma components from `component-registry.json`. Destructive sync: purges and recreates all components per run.
 

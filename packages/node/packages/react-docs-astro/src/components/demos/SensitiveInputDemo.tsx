@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SensitiveInput, Button } from "@company/kumo";
+import { SensitiveInput, Button } from "@astron-collection/react";
 
 export function SensitiveInputDemo() {
   return (

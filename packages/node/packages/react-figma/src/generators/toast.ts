@@ -41,7 +41,7 @@ import { getButtonIcon, bindIconColor } from "./icon-utils";
 import { logComplete } from "../logger";
 
 // Import registry as source of truth
-import registry from "@company/kumo/ai/component-registry.json";
+import registry from "@astron-collection/react/ai/component-registry.json";
 
 // Type for registry styling
 const toastStyling = (registry.components as any).Toasty?.styling;

@@ -5,13 +5,13 @@
  * Provides types and utilities for accessing component metadata.
  */
 
-// Import shared types from @company/kumo
+// Import shared types from @astron-collection/react
 import type {
   ComponentRegistry,
   ComponentSchema,
   PropSchema,
   SubComponentSchema,
-} from "@company/kumo";
+} from "@astron-collection/react";
 
 // Re-export with aliases for backwards compatibility
 export type { ComponentRegistry };

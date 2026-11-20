@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { cn, Button } from "@company/kumo";
+import { cn, Button } from "@astron-collection/react";
 import {
   CaretDownIcon,
   MagnifyingGlassIcon,
@@ -97,8 +97,8 @@ const chartItems: NavItem[] = [
 ];
 
 // Blocks are CLI-installed components that you own and can customize
-// Use `npx @company/kumo blocks` to see available blocks
-// Use `npx @company/kumo add <block>` to install
+// Use `npx @astron-collection/react blocks` to see available blocks
+// Use `npx @astron-collection/react add <block>` to install
 const blockItems: NavItem[] = [
   { label: "Page Header", href: "/blocks/page-header" },
   { label: "Resource List", href: "/blocks/resource-list" },

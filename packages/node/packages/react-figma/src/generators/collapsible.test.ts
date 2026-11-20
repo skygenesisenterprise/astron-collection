@@ -23,7 +23,7 @@ import {
 } from "./collapsible";
 
 // Import registry as source of truth
-import registry from "@company/kumo/ai/component-registry.json";
+import registry from "@astron-collection/react/ai/component-registry.json";
 
 const collapsibleComponent = registry.components.Collapsible;
 const collapsibleColors = collapsibleComponent.colors as string[];

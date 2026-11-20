@@ -1,4 +1,4 @@
-import { Banner, Text, Link } from "@company/kumo";
+import { Banner, Text, Link } from "@astron-collection/react";
 import { Info, WarningCircle, Warning, X } from "@phosphor-icons/react";
 
 /** Shows all banner variants with structured title and description. */
@@ -203,12 +203,12 @@ export function BannerWithLinksDemo() {
         <>
           <Banner.Action
             variant="secondary"
-            href="https://github.com/skygenesisenterprise/company"
+            href="https://github.com/skygenesisenterprise/astron-collection"
             external
           >
             View docs
           </Banner.Action>
-          <Banner.Action href="https://github.com/skygenesisenterprise/company">
+          <Banner.Action href="https://github.com/skygenesisenterprise/astron-collection">
             Manage payments
           </Banner.Action>
         </>

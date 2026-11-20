@@ -6,7 +6,7 @@
  *
  * @example
  * ```tsx
- * import { Accordion } from '@company/kumo/primitives/accordion';
+ * import { Accordion } from '@astron-collection/react/primitives/accordion';
  * ```
  */
 

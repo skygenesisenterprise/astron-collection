@@ -6,7 +6,7 @@
  *
  * @example
  * ```tsx
- * import { Input } from '@company/kumo/primitives/input';
+ * import { Input } from '@astron-collection/react/primitives/input';
  * ```
  */
 

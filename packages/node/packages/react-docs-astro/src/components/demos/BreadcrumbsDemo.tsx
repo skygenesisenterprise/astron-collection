@@ -1,4 +1,4 @@
-import { Breadcrumbs } from "@company/kumo";
+import { Breadcrumbs } from "@astron-collection/react";
 import { House } from "@phosphor-icons/react";
 
 export function BreadcrumbsDemo() {

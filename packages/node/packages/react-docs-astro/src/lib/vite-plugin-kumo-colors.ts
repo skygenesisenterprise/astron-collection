@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url";
 import type {
   ThemeConfig,
   TokenDefinition,
-} from "@company/kumo/scripts/theme-generator/types";
+} from "@astron-collection/react/scripts/theme-generator/types";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 

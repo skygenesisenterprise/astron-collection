@@ -2,7 +2,7 @@
  * Type-level tests for Select with strictNullChecks and strictFunctionTypes.
  * These tests verify the TypeScript inference works correctly in strict mode.
  *
- * Run with: pnpm --filter @company/kumo test:types
+ * Run with: pnpm --filter @astron-collection/react test:types
  */
 
 import { useState } from "react";

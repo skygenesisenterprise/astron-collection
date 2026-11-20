@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Select } from "@company/kumo";
+import { Select } from "@astron-collection/react";
 
 // ============================================================================
 // STRESS TEST: TypeScript Generic Inference

@@ -1,4 +1,4 @@
-import { SkeletonLine } from "@company/kumo";
+import { SkeletonLine } from "@astron-collection/react";
 import type { ReactNode } from "react";
 
 export function SkeletonLineDemo() {

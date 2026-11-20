@@ -1,5 +1,5 @@
 import { PageHeader } from "../kumo/page-header/page-header";
-import { Breadcrumbs, Button } from "@company/kumo";
+import { Breadcrumbs, Button } from "@astron-collection/react";
 import {
   HouseIcon,
   GearIcon,

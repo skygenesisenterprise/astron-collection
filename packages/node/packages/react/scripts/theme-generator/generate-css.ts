@@ -236,7 +236,7 @@ export function generateThemeOverrideCSS(
 
 /**
  * Generate the legacy `kumo-*` alias layer. Every alias resolves to the new
- * `zenth-*` token, so applications migrating from `@company/kumo` keep
+ * `zenth-*` token, so applications migrating from `@astron-collection/react` keep
  * their variables working. Deprecated: remove in the next major release.
  */
 export function generateKumoCompatCSS(config: ThemeConfig): string {

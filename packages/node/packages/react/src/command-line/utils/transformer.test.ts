@@ -4,37 +4,37 @@ import { transformImports } from "./transformer";
 describe("transformImports", () => {
   it("transforms component imports from relative to package", () => {
     const input = `import { Tabs } from "../../components/tabs";`;
-    const expected = `import { Tabs } from "@company/kumo";`;
+    const expected = `import { Tabs } from "@astron-collection/react";`;
     expect(transformImports(input)).toBe(expected);
   });
 
   it("transforms util imports from relative to package", () => {
     const input = `import { cn } from "../../utils/cn";`;
-    const expected = `import { cn } from "@company/kumo";`;
+    const expected = `import { cn } from "@astron-collection/react";`;
     expect(transformImports(input)).toBe(expected);
   });
 
   it("transforms multiple imports in one statement", () => {
     const input = `import { Tabs, Button } from "../../components/tabs";`;
-    const expected = `import { Tabs, Button } from "@company/kumo";`;
+    const expected = `import { Tabs, Button } from "@astron-collection/react";`;
     expect(transformImports(input)).toBe(expected);
   });
 
   it("preserves type-only imports using inline type syntax", () => {
     const input = `import type { TabsItem } from "../../components/tabs";`;
-    const expected = `import { type TabsItem } from "@company/kumo";`;
+    const expected = `import { type TabsItem } from "@astron-collection/react";`;
     expect(transformImports(input)).toBe(expected);
   });
 
   it("consolidates mixed value and type imports using inline type syntax", () => {
     const input = `import { Tabs, type TabsItem } from "../../components/tabs";`;
-    const expected = `import { Tabs, type TabsItem } from "@company/kumo";`;
+    const expected = `import { Tabs, type TabsItem } from "@astron-collection/react";`;
     expect(transformImports(input)).toBe(expected);
   });
 
   it("handles inline type imports for multiple types", () => {
     const input = `import { type TabsItem, type TabsProps } from "../../components/tabs";`;
-    const expected = `import { type TabsItem, type TabsProps } from "@company/kumo";`;
+    const expected = `import { type TabsItem, type TabsProps } from "@astron-collection/react";`;
     expect(transformImports(input)).toBe(expected);
   });
 
@@ -54,20 +54,20 @@ import { Tabs, type TabsItem } from "../../components/tabs";
 import { cn } from "../../utils/cn";`;
 
     const expected = `import { ReactNode } from "react";
-import { Tabs, cn, type TabsItem } from "@company/kumo";`;
+import { Tabs, cn, type TabsItem } from "@astron-collection/react";`;
 
     expect(transformImports(input)).toBe(expected);
   });
 
   it("handles complex mixed imports with multiple values and types", () => {
     const input = `import { Button, Input, type ButtonProps, Select, type InputProps } from "../../components/button";`;
-    const expected = `import { Button, Input, Select, type ButtonProps, type InputProps } from "@company/kumo";`;
+    const expected = `import { Button, Input, Select, type ButtonProps, type InputProps } from "@astron-collection/react";`;
     expect(transformImports(input)).toBe(expected);
   });
 
   it("handles imports without semicolons", () => {
     const input = `import { Tabs } from "../../components/tabs"`;
-    const expected = `import { Tabs } from "@company/kumo";`;
+    const expected = `import { Tabs } from "@astron-collection/react";`;
     expect(transformImports(input)).toBe(expected);
   });
 
@@ -78,7 +78,7 @@ export function Component() {
   return <Tabs />;
 }`;
 
-    const expected = `import { Tabs } from "@company/kumo";
+    const expected = `import { Tabs } from "@astron-collection/react";
 
 export function Component() {
   return <Tabs />;
@@ -93,7 +93,7 @@ import { Tabs, type TabsItem } from "../../components/tabs";
 import { cn } from "../../utils/cn";`;
 
     const expected = `import { ReactNode } from "react";
-import { Tabs, cn, type TabsItem } from "@company/kumo";`;
+import { Tabs, cn, type TabsItem } from "@astron-collection/react";`;
 
     expect(transformImports(input)).toBe(expected);
   });
@@ -103,14 +103,14 @@ import { Tabs, cn, type TabsItem } from "@company/kumo";`;
 import { cn } from "../../utils/cn";`;
 
     const expected = `import type { ReactNode } from "react";
-import { cn } from "@company/kumo";`;
+import { cn } from "@astron-collection/react";`;
 
     expect(transformImports(input)).toBe(expected);
   });
 
   it("transforms imports with single quotes", () => {
     const input = `import { Tabs } from '../../components/tabs';`;
-    const expected = `import { Tabs } from "@company/kumo";`;
+    const expected = `import { Tabs } from "@astron-collection/react";`;
     expect(transformImports(input)).toBe(expected);
   });
 
@@ -139,7 +139,7 @@ import {
 import { Banner } from "../../components/banner";`;
 
     const expected = `import { useState, useCallback, useEffect } from "react";
-import { Dialog, DialogRoot, DialogTitle, DialogClose, Input, Button, cn, Banner } from "@company/kumo";
+import { Dialog, DialogRoot, DialogTitle, DialogClose, Input, Button, cn, Banner } from "@astron-collection/react";
 import {
   CheckIcon,
   CopyIcon,
@@ -155,7 +155,7 @@ import {
 import { Button, type ButtonProps } from "../../components/button";
 import { Input, type InputProps } from "../../components/input";`;
 
-    const expected = `import { Dialog, Button, Input, type DialogProps, type ButtonProps, type InputProps } from "@company/kumo";`;
+    const expected = `import { Dialog, Button, Input, type DialogProps, type ButtonProps, type InputProps } from "@astron-collection/react";`;
 
     expect(transformImports(input)).toBe(expected);
   });
@@ -164,7 +164,7 @@ import { Input, type InputProps } from "../../components/input";`;
     const input = `import type { DialogProps } from "../../components/dialog";
 import type { ButtonProps } from "../../components/button";`;
 
-    const expected = `import { type DialogProps, type ButtonProps } from "@company/kumo";`;
+    const expected = `import { type DialogProps, type ButtonProps } from "@astron-collection/react";`;
 
     expect(transformImports(input)).toBe(expected);
   });

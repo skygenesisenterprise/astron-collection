@@ -6,7 +6,7 @@
  *
  * @example
  * ```tsx
- * import { AlertDialog } from '@company/kumo/primitives/alert-dialog';
+ * import { AlertDialog } from '@astron-collection/react/primitives/alert-dialog';
  * ```
  */
 

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { cn } from "@company/kumo";
+import { cn } from "@astron-collection/react";
 
 export interface ResourceListPageProps {
   title?: string;

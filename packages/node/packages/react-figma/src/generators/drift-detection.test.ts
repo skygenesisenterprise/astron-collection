@@ -14,7 +14,7 @@ import { describe, it, expect } from "vite-plus/test";
 import { existsSync, readdirSync, readFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
-import registry from "@company/kumo/ai/component-registry.json";
+import registry from "@astron-collection/react/ai/component-registry.json";
 import {
   parseTailwindTheme,
   generateExpectedSpacingScale,
@@ -1154,7 +1154,7 @@ describe("Figma Plugin - Registry Styling Integration", () => {
           `  - ${violations.join("\n  - ")}\n\n` +
           `🔧 To fix each generator:\n` +
           `  1. Add COMPONENT_STYLING_METADATA entry in scripts/component-registry/index.ts\n` +
-          `  2. Run: pnpm --filter @company/kumo codegen:registry\n` +
+          `  2. Run: pnpm --filter @astron-collection/react codegen:registry\n` +
           `  3. Update generator to read: (registry.components.X as any).styling\n` +
           `  4. Use styling data instead of hardcoded CONFIG objects\n`,
       );

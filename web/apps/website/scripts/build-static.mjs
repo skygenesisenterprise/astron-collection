@@ -1,5 +1,5 @@
 /**
- * Builds the marketing site as a static export for GitHub Pages / Company
+ * Builds the marketing site as a static export for GitHub Pages / Astron Collection
  * Pages.
  *
  * Three route handlers need a Node server and cannot be exported:

@@ -23,14 +23,14 @@ export const legalDocuments: LegalDocument[] = [
 		slug: "terms",
 		title: "Terms of service",
 		description:
-			"The terms that govern use of the Company website and services.",
+			"The terms that govern use of the Astron Collection website and services.",
 		updated: "2026-11-09",
 		status: "under-review",
 		sections: [
 			{
 				heading: "Scope",
 				paragraphs: [
-					"These terms cover the Company public website and the services ordered through Company. Service-specific terms, including capacity, availability and support scope, form part of the applicable order.",
+					"These terms cover the Astron Collection public website and the services ordered through Astron Collection. Service-specific terms, including capacity, availability and support scope, form part of the applicable order.",
 					"This page is a summary maintained by the website. The executed agreement and the order documents prevail over it.",
 				],
 			},
@@ -71,7 +71,7 @@ export const legalDocuments: LegalDocument[] = [
 		slug: "privacy",
 		title: "Privacy policy",
 		description:
-			"How Company handles personal data collected through the website and services.",
+			"How Astron Collection handles personal data collected through the website and services.",
 		updated: "2026-11-09",
 		status: "under-review",
 		sections: [
@@ -141,13 +141,13 @@ export const legalDocuments: LegalDocument[] = [
 		slug: "acceptable-use",
 		title: "Acceptable use policy",
 		description:
-			"What may and may not be run on Company infrastructure.",
+			"What may and may not be run on Astron Collection infrastructure.",
 		updated: "2026-11-09",
 		status: "under-review",
 		sections: [
 			{
 				heading: "Prohibited use",
-				paragraphs: ["The following are not permitted on Company infrastructure:"],
+				paragraphs: ["The following are not permitted on Astron Collection infrastructure:"],
 				bullets: [
 					"Unlawful content or activity, including content that infringes third-party rights.",
 					"Unauthorised access, scanning or disruption of systems you do not own.",

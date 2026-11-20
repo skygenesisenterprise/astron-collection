@@ -20,7 +20,7 @@ import {
 } from "./sensitive-input";
 
 // Import registry as source of truth (uses Input's configuration)
-import registry from "@company/kumo/ai/component-registry.json";
+import registry from "@astron-collection/react/ai/component-registry.json";
 
 const inputComponent = registry.components.Input;
 const inputProps = inputComponent.props;

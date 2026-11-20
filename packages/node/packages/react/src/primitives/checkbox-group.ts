@@ -6,7 +6,7 @@
  *
  * @example
  * ```tsx
- * import { CheckboxGroup } from '@company/kumo/primitives/checkbox-group';
+ * import { CheckboxGroup } from '@astron-collection/react/primitives/checkbox-group';
  * ```
  */
 

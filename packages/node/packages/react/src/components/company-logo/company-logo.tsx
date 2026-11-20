@@ -224,7 +224,7 @@ export interface PoweredByCompanyProps extends React.AnchorHTMLAttributes<HTMLAn
 /**
  * "Powered by Company" badge component.
  *
- * Renders a link to company.com with the Company glyph and "Powered by Company" text.
+ * Renders a link to astron-collection.com with the Company glyph and "Powered by Company" text.
  *
  * @example Basic usage
  * ```tsx
@@ -238,7 +238,7 @@ export interface PoweredByCompanyProps extends React.AnchorHTMLAttributes<HTMLAn
  *
  * @example Custom link
  * ```tsx
- * <PoweredByCompany href="https://github.com/skygenesisenterprise/company" />
+ * <PoweredByCompany href="https://github.com/skygenesisenterprise/astron-collection" />
  * ```
  */
 export const PoweredByCompany = forwardRef<
@@ -248,7 +248,7 @@ export const PoweredByCompany = forwardRef<
   (
     {
       color = "color",
-      href = "https://github.com/skygenesisenterprise/company",
+      href = "https://github.com/skygenesisenterprise/astron-collection",
       className,
       ...props
     },

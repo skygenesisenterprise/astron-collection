@@ -113,7 +113,7 @@ export function getWorkerPreviewUrl(detailsUrl: string): string {
   const match = url.pathname.match(
     /^\/[^/]+\/workers\/services\/view\/kumo-docs\/production\/previews\/([a-z0-9-]+)$/,
   );
-  if (url.hostname !== "dash.company.com" || !match) {
+  if (url.hostname !== "dash.astron-collection.com" || !match) {
     throw new Error(`Unexpected Worker Builds URL: ${detailsUrl}`);
   }
   return `https://${match[1]}-kumo-docs.design-engineering.workers.dev`;

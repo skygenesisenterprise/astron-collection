@@ -20,6 +20,8 @@ export const authClient = createAuthClient({
 			user: {
 				lastName: {
 					type: "string",
+					required: false,
+					defaultValue: "",
 				},
 			},
 		}),

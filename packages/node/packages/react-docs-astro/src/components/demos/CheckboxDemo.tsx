@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Checkbox } from "@company/kumo";
+import { Checkbox } from "@astron-collection/react";
 
 export function CheckboxBasicDemo() {
   const [checked, setChecked] = useState(false);

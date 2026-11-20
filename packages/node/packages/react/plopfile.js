@@ -127,9 +127,9 @@ export default function (plop) {
         console.log(`   3. Run tests: pnpm test`);
         console.log(`   4. Build: pnpm build`);
         console.log(`\n💡 Import examples:`);
-        console.log(`   import { ${pascalName} } from "@company/kumo";`);
+        console.log(`   import { ${pascalName} } from "@astron-collection/react";`);
         console.log(
-          `   import { ${pascalName} } from "@company/kumo/components/${kebabName}";`,
+          `   import { ${pascalName} } from "@astron-collection/react/components/${kebabName}";`,
         );
 
         return "Component created successfully";

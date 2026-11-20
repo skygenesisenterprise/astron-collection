@@ -27,12 +27,12 @@ export default function NotFound() {
 				<p className="mt-8 text-sm text-muted-foreground">
 					Looking for documentation?{" "}
 					<a
-						href="https://docs.company.com"
+						href="https://docs.astron-collection.com"
 						target="_blank"
 						rel="noreferrer"
 						className="text-foreground underline underline-offset-4"
 					>
-						docs.company.com
+						docs.astron-collection.com
 					</a>
 				</p>
 			</div>

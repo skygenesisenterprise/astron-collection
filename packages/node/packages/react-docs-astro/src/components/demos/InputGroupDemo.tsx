@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { InputGroup, Loader } from "@company/kumo";
+import { InputGroup, Loader } from "@astron-collection/react";
 import {
   MagnifyingGlassIcon,
   CheckCircleIcon,

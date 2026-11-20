@@ -1,5 +1,5 @@
 import { CheckCircleIcon, XCircleIcon } from "@phosphor-icons/react";
-import { cn, Text } from "@company/kumo";
+import { cn, Text } from "@astron-collection/react";
 import type { ReactNode } from "react";
 
 interface DesignTipProps {

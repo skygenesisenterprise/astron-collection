@@ -6,7 +6,7 @@
  *
  * @example
  * ```tsx
- * import { NumberField } from '@company/kumo/primitives/number-field';
+ * import { NumberField } from '@astron-collection/react/primitives/number-field';
  * ```
  */
 

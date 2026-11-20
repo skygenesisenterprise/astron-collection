@@ -1,5 +1,5 @@
 import { logComplete } from "../logger";
-import registry from "@company/kumo/ai/component-registry.json";
+import registry from "@astron-collection/react/ai/component-registry.json";
 
 /**
  * DateRangePicker Component Generator

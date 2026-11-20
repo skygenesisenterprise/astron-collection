@@ -9,7 +9,7 @@ import {
   StatusBannerDemo,
 } from "~/components/demos/ColorsDemo";
 import ComponentExample from "~/components/docs/ComponentExample.astro";
-import { Badge, Banner } from "@company/kumo";
+import { Badge, Banner } from "@astron-collection/react";
 import { InfoIcon } from "@phosphor-icons/react";
 
 ## Usage
@@ -79,15 +79,15 @@ Themes are defined in a centralized config and generated as CSS files. The theme
 
 # List all tokens and their theme overrides
 
-pnpm --filter @company/kumo codegen:themes --list
+pnpm --filter @astron-collection/react codegen:themes --list
 
 # Generate theme CSS files
 
-pnpm --filter @company/kumo codegen:themes
+pnpm --filter @astron-collection/react codegen:themes
 
 # Preview changes without writing files
 
-pnpm --filter @company/kumo codegen:themes --dry-run
+pnpm --filter @astron-collection/react codegen:themes --dry-run
 ```
 
 Theme config: `packages/kumo/scripts/theme-generator/config.ts`

@@ -30,7 +30,7 @@ pnpm run release:beta
 
 # Get the published version
 NEW_VERSION=$(node -p "require('./packages/kumo/package.json').version")
-PACKAGE_NAME="${PACKAGE_NAME:-@company/kumo}"
+PACKAGE_NAME="${PACKAGE_NAME:-@astron-collection/react}"
 
 echo "Published version: $NEW_VERSION"
 

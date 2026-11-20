@@ -41,13 +41,13 @@ import {
 ### Barrel
 
 ```tsx
-import { Toasty, useKumoToastManager } from "@company/kumo";
+import { Toasty, useKumoToastManager } from "@astron-collection/react";
 ```
 
 ### Granular
 
 ```tsx
-import { Toasty, useKumoToastManager } from "@company/kumo/components/toast";
+import { Toasty, useKumoToastManager } from "@astron-collection/react/components/toast";
 ```
 
 </ComponentSection>
@@ -63,7 +63,7 @@ import { Toasty, useKumoToastManager } from "@company/kumo/components/toast";
   </p>
 
 ```tsx
-import { Toasty, useKumoToastManager, Button } from "@company/kumo";
+import { Toasty, useKumoToastManager, Button } from "@astron-collection/react";
 
 function ToastTrigger() {
   const toastManager = useKumoToastManager();
@@ -106,7 +106,7 @@ export default function App() {
 
 ```tsx
 // In your app root or layout
-import { Toasty } from "@company/kumo";
+import { Toasty } from "@astron-collection/react";
 
 export function Layout({ children }) {
   return <Toasty>{children}</Toasty>;

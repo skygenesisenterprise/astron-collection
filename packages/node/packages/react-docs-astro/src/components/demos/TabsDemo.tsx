@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Tabs } from "@company/kumo";
+import { Tabs } from "@astron-collection/react";
 
 const productionLikeTabs = [
   { value: "overview", label: "Overview" },
@@ -214,7 +214,7 @@ export function TabsRenderPropDemo() {
           label: "Company",
           nativeButton: false,
           render: (props) => (
-            <a {...props} href="https://github.com/skygenesisenterprise/company" target="_blank" />
+            <a {...props} href="https://github.com/skygenesisenterprise/astron-collection" target="_blank" />
           ),
         },
       ]}

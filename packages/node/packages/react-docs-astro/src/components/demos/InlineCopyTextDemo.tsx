@@ -1,4 +1,4 @@
-import { InlineCopyText } from "@company/kumo";
+import { InlineCopyText } from "@astron-collection/react";
 
 /** Compact copy control for a short identifier. */
 export function InlineCopyTextBasicDemo() {

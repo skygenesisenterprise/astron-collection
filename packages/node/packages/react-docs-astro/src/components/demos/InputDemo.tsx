@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Input } from "@company/kumo";
+import { Input } from "@astron-collection/react";
 
 export function InputBasicDemo() {
   return (
@@ -145,7 +145,7 @@ export function InputReactNodeLabelDemo() {
         </span>
       }
       required
-      placeholder="billing@company.com"
+      placeholder="billing@astron-collection.com"
       type="email"
     />
   );

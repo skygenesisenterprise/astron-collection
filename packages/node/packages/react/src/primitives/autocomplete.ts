@@ -6,7 +6,7 @@
  *
  * @example
  * ```tsx
- * import { Autocomplete } from '@company/kumo/primitives/autocomplete';
+ * import { Autocomplete } from '@astron-collection/react/primitives/autocomplete';
  * ```
  */
 

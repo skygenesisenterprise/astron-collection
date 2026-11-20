@@ -68,7 +68,7 @@ export default async function ProductPage({ params }: PageProps) {
 		url: `${SITE_URL}${product.route}`,
 		provider: {
 			"@type": "Organization",
-			name: "Company",
+			name: "Astron Collection",
 			url: SITE_URL,
 		},
 	};

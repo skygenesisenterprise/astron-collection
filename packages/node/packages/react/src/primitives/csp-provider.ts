@@ -6,7 +6,7 @@
  *
  * @example
  * ```tsx
- * import { CspProvider } from '@company/kumo/primitives/csp-provider';
+ * import { CspProvider } from '@astron-collection/react/primitives/csp-provider';
  * ```
  */
 

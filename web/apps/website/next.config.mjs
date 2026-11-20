@@ -29,8 +29,8 @@ const turbopackAliases = {
 // Webpack (production build) takes absolute paths and pins React explicitly.
 const webpackAliases = {
 	...turbopackAliases,
-	"@zenthcloud/status": path.resolve(__dirname, "../../packages/status/src"),
-	"@zenthcloud/server": path.resolve(__dirname, "../../packages/server/src"),
+	"@astron-collection/status": path.resolve(__dirname, "../../packages/status/src"),
+	"@astron-collection/server": path.resolve(__dirname, "../../packages/server/src"),
 	react: path.resolve(__dirname, "node_modules/react"),
 	"react-dom": path.resolve(__dirname, "node_modules/react-dom"),
 };

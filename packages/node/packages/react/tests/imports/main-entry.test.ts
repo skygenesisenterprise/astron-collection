@@ -10,13 +10,13 @@ describe("Main Entry Point Imports", () => {
 
   it("should import the main module without errors", async () => {
     expect(async () => {
-      await import("@company/kumo");
+      await import("@astron-collection/react");
     }).not.toThrow();
   });
 
   describe("Component exports", () => {
     it("should export all discovered exports from main entry point", async () => {
-      const module = (await import("@company/kumo")) as Record<
+      const module = (await import("@astron-collection/react")) as Record<
         string,
         unknown
       >;
@@ -29,7 +29,7 @@ describe("Main Entry Point Imports", () => {
   });
 
   it("should have all expected exports", async () => {
-    const module = await import("@company/kumo");
+    const module = await import("@astron-collection/react");
     const actualExports = Object.keys(module)
       .filter((key) => key !== "default")
       .sort();

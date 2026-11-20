@@ -53,7 +53,7 @@ function createRepositoryWithStaleMergeRef(): {
   writeFile(
     repository,
     ".changeset/new-on-main.md",
-    '---\n"@company/kumo": patch\n---\n\nMain change.\n',
+    '---\n"@astron-collection/react": patch\n---\n\nMain change.\n',
   );
   git(repository, "add", "packages/kumo/src/new-on-main.ts");
   git(repository, "add", ".changeset/new-on-main.md");

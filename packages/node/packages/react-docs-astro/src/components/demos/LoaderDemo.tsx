@@ -1,4 +1,4 @@
-import { Loader } from "@company/kumo";
+import { Loader } from "@astron-collection/react";
 
 export function LoaderBasicDemo() {
   return <Loader />;

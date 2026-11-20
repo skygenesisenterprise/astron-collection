@@ -359,7 +359,7 @@ export const mainNav: NavSection[] = [
 	},
 	{
 		id: "company",
-		label: "Company",
+		label: "Astron Collection",
 		href: "/company",
 		description:
 			"Sky Genesis Enterprise as an organisation: structure, partners and responsibility.",
@@ -380,7 +380,7 @@ export const mainNav: NavSection[] = [
 					{
 						href: "/company/newsroom",
 						label: "Newsroom",
-						description: "Company and product announcements",
+						description: "Astron Collection and product announcements",
 					},
 					{
 						href: "/company/contact",
@@ -468,7 +468,7 @@ export const mainNav: NavSection[] = [
 			},
 		],
 		footerLinks: [
-			{ href: "/company", label: "Company overview" },
+			{ href: "/company", label: "Astron Collection overview" },
 			{ href: "/contact-sales", label: "Contact sales" },
 		],
 	},

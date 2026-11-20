@@ -15,7 +15,7 @@ The Kumo catalog module enables rendering UI from JSON structures, designed spec
 Unlike approaches that require maintaining separate schema definitions, Kumo automatically derives validation schemas from your actual component TypeScript types. When you update a component's props, the validation schemas update automatically via the component registry codegen process. No manual synchronization required — your schemas are always in sync with your components.
 
 <Callout type="info">
-  Schemas are auto-generated in `@company/kumo/ai/schemas` from component
+  Schemas are auto-generated in `@astron-collection/react/ai/schemas` from component
   TypeScript types. Run `pnpm codegen:registry` after modifying component props
   to regenerate.
 </Callout>
@@ -41,7 +41,7 @@ import {
   initCatalog,
   resolveProps,
   evaluateVisibility,
-} from "@company/kumo/catalog";
+} from "@astron-collection/react/catalog";
 ```
 
 ## Creating a Catalog
@@ -49,7 +49,7 @@ import {
 Create a catalog instance that validates AI-generated JSON against the auto-generated schemas:
 
 ```ts
-import { createKumoCatalog, initCatalog } from "@company/kumo/catalog";
+import { createKumoCatalog, initCatalog } from "@astron-collection/react/catalog";
 
 // Create a catalog with optional actions
 const catalog = createKumoCatalog({
@@ -129,7 +129,7 @@ The UI tree uses a flat structure optimized for LLM generation and streaming. El
 Props can reference values from a data model using JSON Pointer paths. This allows the AI to declare data bindings that your application resolves at render time.
 
 ```ts
-import { resolveProps, resolveDynamicValue } from "@company/kumo/catalog";
+import { resolveProps, resolveDynamicValue } from "@astron-collection/react/catalog";
 
 // Data model backing the UI
 const dataModel = {
@@ -166,7 +166,7 @@ Elements can be conditionally rendered based on data values, authentication stat
 import {
   evaluateVisibility,
   createVisibilityContext,
-} from "@company/kumo/catalog";
+} from "@astron-collection/react/catalog";
 
 const ctx = createVisibilityContext(
   // Data model
@@ -348,7 +348,7 @@ import type {
   KumoCatalog,
   CatalogConfig,
   ValidationResult,
-} from "@company/kumo/catalog";
+} from "@astron-collection/react/catalog";
 ```
 
 ## Full Example
@@ -362,8 +362,8 @@ import {
   resolveProps,
   evaluateVisibility,
   createVisibilityContext,
-} from "@company/kumo/catalog";
-import { Button, Text, Surface } from "@company/kumo";
+} from "@astron-collection/react/catalog";
+import { Button, Text, Surface } from "@astron-collection/react";
 
 // 1. Create and initialize catalog
 const catalog = createKumoCatalog({

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { matchSorter } from "match-sorter";
-import { CommandPalette, Badge, type HighlightRange } from "@company/kumo";
+import { CommandPalette, Badge, type HighlightRange } from "@astron-collection/react";
 import {
   MagnifyingGlassIcon,
   CubeIcon,
@@ -19,8 +19,8 @@ import {
  * 3. Add its description to COMPONENT_DESCRIPTIONS below
  */
 const COMPONENTS_WITHOUT_DOCS = new Set([
-  "Code", // Deprecated: use CodeHighlighted from @company/kumo/code
-  "CodeBlock", // Deprecated: use CodeHighlighted from @company/kumo/code
+  "Code", // Deprecated: use CodeHighlighted from @astron-collection/react/code
+  "CodeBlock", // Deprecated: use CodeHighlighted from @astron-collection/react/code
   "DateRangePicker", // Deprecated: use DatePicker with mode="range"
   "Field",
   "Icon",
@@ -29,7 +29,7 @@ const COMPONENTS_WITHOUT_DOCS = new Set([
 ]);
 
 /**
- * Chart components are auto-discovered from the @company/kumo registry, but
+ * Chart components are auto-discovered from the @astron-collection/react registry, but
  * they are documented under /charts/* rather than /components/*. Map the ones
  * with a dedicated page to their real docs URL so search results link correctly
  * — e.g. searching "bubble" finds BubbleMap and links to /charts/maps#bubble-map

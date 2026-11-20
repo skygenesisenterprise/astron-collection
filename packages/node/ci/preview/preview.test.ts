@@ -11,7 +11,7 @@ describe("preview contract", () => {
   it("derives the public URL from a Worker Builds details URL", () => {
     assert.equal(
       getWorkerPreviewUrl(
-        "https://github.com/skygenesisenterprise/company",
+        "https://github.com/skygenesisenterprise/astron-collection",
       ),
       "https://feature-branch-kumo-docs.design-engineering.workers.dev",
     );
@@ -20,7 +20,7 @@ describe("preview contract", () => {
   it("rejects details URLs for other Workers", () => {
     assert.throws(() =>
       getWorkerPreviewUrl(
-        "https://github.com/skygenesisenterprise/company",
+        "https://github.com/skygenesisenterprise/astron-collection",
       ),
     );
   });

@@ -6,7 +6,7 @@
  *
  * @example
  * ```tsx
- * import { PreviewCard } from '@company/kumo/primitives/preview-card';
+ * import { PreviewCard } from '@astron-collection/react/primitives/preview-card';
  * ```
  */
 

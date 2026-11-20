@@ -11,7 +11,7 @@ export const kumoVersion =
 
 ## NPM Registry
 
-The `@company/kumo` package is published to the public npm registry. No special configuration is required for installation.
+The `@astron-collection/react` package is published to the public npm registry. No special configuration is required for installation.
 
 ## Install Package
 
@@ -20,19 +20,19 @@ Install Kumo using your preferred package manager. The current version is <code>
 #### npm
 
 ```bash
-npm install @company/kumo
+npm install @astron-collection/react
 ```
 
 #### pnpm
 
 ```bash
-pnpm add @company/kumo
+pnpm add @astron-collection/react
 ```
 
 #### yarn
 
 ```bash
-yarn add @company/kumo
+yarn add @astron-collection/react
 ```
 
 #### Peer Dependencies
@@ -51,14 +51,14 @@ Import components from the main package or use granular imports for better tree-
 #### Main Package Import
 
 ```tsx
-import { Button, Input, LayerCard } from "@company/kumo";
+import { Button, Input, LayerCard } from "@astron-collection/react";
 ```
 
 #### Granular Import (Recommended)
 
 ```tsx
-import { Button } from "@company/kumo/components/button";
-import { Input } from "@company/kumo/components/input";
+import { Button } from "@astron-collection/react/components/button";
+import { Input } from "@astron-collection/react/components/input";
 ```
 
 ## Base UI Primitives
@@ -69,16 +69,16 @@ Kumo is built on top of [Base UI](https://base-ui.com), a library of unstyled, a
 
 ```tsx
 // Import multiple primitives at once
-import { Popover, Slider, Accordion } from "@company/kumo/primitives";
+import { Popover, Slider, Accordion } from "@astron-collection/react/primitives";
 ```
 
 #### Granular Imports (Recommended for Performance)
 
 ```tsx
 // Import individual primitives for better tree-shaking
-import { Popover } from "@company/kumo/primitives/popover";
-import { Slider } from "@company/kumo/primitives/slider";
-import { Accordion } from "@company/kumo/primitives/accordion";
+import { Popover } from "@astron-collection/react/primitives/popover";
+import { Slider } from "@astron-collection/react/primitives/slider";
+import { Accordion } from "@astron-collection/react/primitives/accordion";
 ```
 
 Granular imports result in smaller bundle sizes by only including the primitives you actually use.
@@ -116,8 +116,8 @@ If your application uses Tailwind CSS, add Kumo's source files to your content c
 
 ```css
 /* app.css or main.css */
-@source "../node_modules/@company/kumo/dist/**/*.{js,jsx,ts,tsx}";
-@import "@company/kumo/styles/tailwind";
+@source "../node_modules/@astron-collection/react/dist/**/*.{js,jsx,ts,tsx}";
+@import "@astron-collection/react/styles/tailwind";
 @import "tailwindcss";
 
 /* Your custom styles */
@@ -126,10 +126,10 @@ If your application uses Tailwind CSS, add Kumo's source files to your content c
 <Callout type="info">
   The `@source` path is relative to your CSS file. Adjust it based on your
   project structure — e.g. if your CSS is in `src/styles/`, you may need
-  `../../node_modules/@company/kumo/dist/**/*.{"{"}js,jsx,ts,tsx{"}"}`.
+  `../../node_modules/@astron-collection/react/dist/**/*.{"{"}js,jsx,ts,tsx{"}"}`.
 </Callout>
 
-Note: You can also use the default export `@company/kumo/styles` which is equivalent to `styles/tailwind`.
+Note: You can also use the default export `@astron-collection/react/styles` which is equivalent to `styles/tailwind`.
 
 ### For Non-Tailwind Users (Standalone)
 
@@ -137,7 +137,7 @@ If your application doesn't use Tailwind CSS, use the standalone build which inc
 
 ```tsx
 // In your app entry point (e.g., main.tsx, index.tsx)
-import "@company/kumo/styles/standalone";
+import "@astron-collection/react/styles/standalone";
 ```
 
 The standalone build includes all Tailwind utilities and Kumo component styles pre-compiled. No Tailwind configuration needed!
@@ -179,8 +179,8 @@ Here's a complete example of using Kumo components with Tailwind CSS:
 #### CSS File (app.css)
 
 ```css
-@source "../node_modules/@company/kumo/dist/**/*.{js,jsx,ts,tsx}";
-@import "@company/kumo/styles/tailwind";
+@source "../node_modules/@astron-collection/react/dist/**/*.{js,jsx,ts,tsx}";
+@import "@astron-collection/react/styles/tailwind";
 @import "tailwindcss";
 ```
 
@@ -189,7 +189,7 @@ Note: The `@source` path is relative to your CSS file. Adjust it based on your p
 #### Component File (App.tsx)
 
 ```tsx
-import { Button, Input, LayerCard } from "@company/kumo";
+import { Button, Input, LayerCard } from "@astron-collection/react";
 import "./app.css";
 
 export default function App() {
@@ -212,7 +212,7 @@ Kumo provides two types of building blocks for your application:
 Components are published as NPM exports and can be imported directly from the package. These are the core UI primitives like `Button`, `Input`, and `Dialog`.
 
 ```tsx
-import { Button, Input, Dialog } from "@company/kumo";
+import { Button, Input, Dialog } from "@astron-collection/react";
 ```
 
 Use components when you need consistent, pre-styled UI primitives that integrate seamlessly with your application. Components are versioned, tree-shakeable, and receive automatic updates.
@@ -225,18 +225,18 @@ Blocks are higher-level compositions (like `PageHeader` and `ResourceListPage`) 
 
 # Initialize Kumo configuration
 
-npx @company/kumo init
+npx @astron-collection/react init
 
 # List available blocks
 
-npx @company/kumo blocks
+npx @astron-collection/react blocks
 
 # Install a block
 
-npx @company/kumo add PageHeader
+npx @astron-collection/react add PageHeader
 ```
 
-After installation, blocks live in your project (e.g., `src/components/kumo/`) and can be customized as needed. The CLI automatically transforms imports from relative paths to `@company/kumo` for seamless integration.
+After installation, blocks live in your project (e.g., `src/components/kumo/`) and can be customized as needed. The CLI automatically transforms imports from relative paths to `@astron-collection/react` for seamless integration.
 
 ```tsx
 import { PageHeader } from "src/components/kumo/page-header/page-header";
@@ -257,7 +257,7 @@ import { PageHeader } from "src/components/kumo/page-header/page-header";
 Kumo also exports utility functions for common tasks:
 
 ```tsx
-import { cn, safeRandomId, LinkProvider } from "@company/kumo";
+import { cn, safeRandomId, LinkProvider } from "@astron-collection/react";
 
 // Merge class names with Tailwind
 const className = cn("base-class", condition && "conditional-class");

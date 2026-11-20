@@ -36,7 +36,7 @@ import {
   VAR_NAMES,
 } from "./shared";
 import { logComplete } from "../logger";
-import registry from "@company/kumo/ai/component-registry.json";
+import registry from "@astron-collection/react/ai/component-registry.json";
 import { parseTailwindClasses } from "../parsers/tailwind-to-figma";
 
 /**

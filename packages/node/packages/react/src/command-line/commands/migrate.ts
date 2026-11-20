@@ -82,7 +82,7 @@ When Kumo releases breaking changes to token names, use this command
 to get the rename map for updating your codebase.
 
 USAGE:
-  npx @company/kumo migrate [options]
+  npx @astron-collection/react migrate [options]
 
 OPTIONS:
   --json         Output machine-readable JSON (default)
@@ -92,16 +92,16 @@ OPTIONS:
 
 EXAMPLES:
   # Check if there are pending migrations
-  npx @company/kumo migrate
+  npx @astron-collection/react migrate
 
   # Get class-level mapping for sed/find-replace
-  npx @company/kumo migrate --classes
+  npx @astron-collection/react migrate --classes
 
   # Get JSON for custom codemod
-  npx @company/kumo migrate --json > rename-map.json
+  npx @astron-collection/react migrate --json > rename-map.json
 
 USING WITH sed:
-  npx @company/kumo migrate --classes | grep "^bg-\\|^text-" | \\
+  npx @astron-collection/react migrate --classes | grep "^bg-\\|^text-" | \\
     while IFS= read -r line; do
       old=$(echo "$line" | awk '{print $1}')
       new=$(echo "$line" | awk '{print $3}')

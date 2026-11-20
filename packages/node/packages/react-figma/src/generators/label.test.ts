@@ -23,7 +23,7 @@ import {
 import { FONT_SIZE, FALLBACK_VALUES, SPACING } from "./shared";
 
 // Import registry as source of truth
-import registry from "@company/kumo/ai/component-registry.json";
+import registry from "@astron-collection/react/ai/component-registry.json";
 
 // Use type assertion for Label component
 const labelComponent = (registry.components as Record<string, unknown>)

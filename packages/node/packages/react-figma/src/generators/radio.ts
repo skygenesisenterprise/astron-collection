@@ -51,7 +51,7 @@ import themeData from "../generated/theme-data.json";
 import { logInfo } from "../logger";
 
 // Import registry for component metadata (note: Radio has variants defined in source, not props)
-import registry from "@company/kumo/ai/component-registry.json";
+import registry from "@astron-collection/react/ai/component-registry.json";
 
 // Radio component exists in registry but variants are in KUMO_RADIO_VARIANTS, not props
 const _radioComponent = registry.components as Record<string, unknown>;

@@ -6,9 +6,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = pageMetadata({
-	title: "Company",
+	title: "Astron Collection",
 	description:
-		"About Company and Sky Genesis Enterprise: company information, careers, partners, contact and newsroom.",
+		"About Astron Collection and Sky Genesis Enterprise: company information, careers, partners, contact and newsroom.",
 	path: "/company",
 });
 
@@ -16,13 +16,13 @@ export default function CompanyPage() {
 	return (
 		<>
 			<PageHeader
-				eyebrow="Company"
-				title="Company, built by Sky Genesis Enterprise"
+				eyebrow="Astron Collection"
+				title="Astron Collection, built by Sky Genesis Enterprise"
 				description="A cloud infrastructure brand with European roots and global ambitions. This section covers the company, the partnership model and how to reach the right team."
-				breadcrumbs={[{ name: "Company", path: "/company" }]}
+				breadcrumbs={[{ name: "Astron Collection", path: "/company" }]}
 			/>
 
-			<Section title="Company information">
+			<Section title="Astron Collection information">
 				<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 					{companyPages.map((page) => (
 						<Link

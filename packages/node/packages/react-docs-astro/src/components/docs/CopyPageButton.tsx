@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Button, DropdownMenu } from "@company/kumo";
+import { Button, DropdownMenu } from "@astron-collection/react";
 import {
   CopySimpleIcon,
   LinkSimpleIcon,
@@ -9,7 +9,7 @@ import {
 } from "@phosphor-icons/react";
 import { OpenAiLogo } from "@phosphor-icons/react";
 import { ClaudeIcon } from "./icons/ClaudeIcon";
-import { cn } from "@company/kumo";
+import { cn } from "@astron-collection/react";
 
 interface CopyPageButtonProps {
   align?: "start" | "center" | "end";

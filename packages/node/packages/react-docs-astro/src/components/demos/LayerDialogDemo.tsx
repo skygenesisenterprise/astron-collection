@@ -7,7 +7,7 @@ import {
   Text,
   type KumoLayerDialogSize,
   type KumoLayerDialogVerticalAlign,
-} from "@company/kumo";
+} from "@astron-collection/react";
 
 function LongContent() {
   return (

@@ -1,4 +1,4 @@
-import { Meter } from "@company/kumo";
+import { Meter } from "@astron-collection/react";
 
 export function MeterBasicDemo() {
   return <Meter label="Storage used" value={65} />;

@@ -1,4 +1,4 @@
-# Component Library (`@company/kumo`)
+# Component Library (`@astron-collection/react`)
 
 React component library: Base UI + Tailwind v4 + Vite library mode. ESM-only, tree-shakeable per-component exports.
 
@@ -81,7 +81,7 @@ Output: ai/component-registry.{json,md} + ai/schemas.ts
 ### Testing
 
 - **Vitest** with `happy-dom`, globals enabled
-- **Path aliases**: `@/` → `src/`, `@company/kumo` → `src/index.ts`
+- **Path aliases**: `@/` → `src/`, `@astron-collection/react` → `src/index.ts`
 - **Structural tests** in `tests/imports/`: validate all export paths resolve, package.json matches vite entries
 - **Component tests**: ~14 components have unit tests (`*.test.tsx`), plus 2 browser tests (`*.browser.test.tsx`). Coverage is growing but not comprehensive across all 39 components
 - **`describe.skipIf(!isBuilt)`**: Export validation tests skip gracefully when `dist/` missing

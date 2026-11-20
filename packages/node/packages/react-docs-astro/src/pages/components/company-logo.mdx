@@ -40,7 +40,7 @@ import {
   CompanyLogo,
   PoweredByCompany,
   generateCompanyLogoSvg,
-} from "@company/kumo";
+} from "@astron-collection/react";
 ```
 
 ### Granular
@@ -50,7 +50,7 @@ import {
   CompanyLogo,
   PoweredByCompany,
   generateCompanyLogoSvg,
-} from "@company/kumo/components/company-logo";
+} from "@astron-collection/react/components/company-logo";
 ```
 
 </ComponentSection>
@@ -62,7 +62,7 @@ import {
 ## Usage
 
 ```tsx
-import { CompanyLogo } from "@company/kumo";
+import { CompanyLogo } from "@astron-collection/react";
 
 export default function Example() {
   return <CompanyLogo className="w-36" />;
@@ -161,7 +161,7 @@ export default function Example() {
   </p>
 
 ```tsx
-import { generateCompanyLogoSvg } from "@company/kumo";
+import { generateCompanyLogoSvg } from "@astron-collection/react";
 
 // Generate glyph SVG (cloud only)
 const glyphSvg = generateCompanyLogoSvg({ variant: "glyph" });
@@ -247,7 +247,7 @@ await navigator.clipboard.writeText(
         <tr>
           <td class="py-3 pr-4 font-mono text-kumo-default">href</td>
           <td class="py-3 pr-4 font-mono">string</td>
-          <td class="py-3 pr-4 font-mono">"https://github.com/skygenesisenterprise/company"</td>
+          <td class="py-3 pr-4 font-mono">"https://github.com/skygenesisenterprise/astron-collection"</td>
           <td class="py-3">Link destination. Opens in a new tab by default.</td>
         </tr>
       </tbody>

@@ -9,7 +9,7 @@ import Link from "next/link";
 export const metadata: Metadata = pageMetadata({
 	title: "Contact sales",
 	description:
-		"Discuss capacity, private infrastructure, enterprise terms or partner-delivered services with the Company sales team.",
+		"Discuss capacity, private infrastructure, enterprise terms or partner-delivered services with the Astron Collection sales team.",
 	path: "/contact-sales",
 });
 
@@ -50,10 +50,10 @@ export default function ContactSalesPage() {
 							<p className="mt-2 text-muted-foreground">
 								If the form is unavailable in this deployment, write to{" "}
 								<a
-									href="mailto:sales@company.com"
+									href="mailto:sales@astron-collection.com"
 									className="text-foreground underline underline-offset-4"
 								>
-									sales@company.com
+									sales@astron-collection.com
 								</a>
 								.
 							</p>

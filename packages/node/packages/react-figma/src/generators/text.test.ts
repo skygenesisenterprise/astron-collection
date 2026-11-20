@@ -31,7 +31,7 @@ import {
 } from "./_test-utils";
 
 // Import registry as source of truth
-import registry from "@company/kumo/ai/component-registry.json";
+import registry from "@astron-collection/react/ai/component-registry.json";
 
 const textComponent = registry.components.Text;
 const textProps = textComponent.props;

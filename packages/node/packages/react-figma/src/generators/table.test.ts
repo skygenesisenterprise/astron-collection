@@ -30,7 +30,7 @@ import { FONT_SIZE, FALLBACK_VALUES, BORDER_RADIUS } from "./shared";
 import themeData from "../generated/theme-data.json";
 
 // Import registry as source of truth
-import registry from "@company/kumo/ai/component-registry.json";
+import registry from "@astron-collection/react/ai/component-registry.json";
 
 // Use type assertion for Table component
 const tableComponent = (registry.components as Record<string, unknown>)

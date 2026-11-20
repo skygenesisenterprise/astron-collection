@@ -14,7 +14,7 @@ import type { UseShikiHighlighterResult } from "./types";
  *
  * @example
  * ```tsx
- * import { useShikiHighlighter } from "@company/kumo/code";
+ * import { useShikiHighlighter } from "@astron-collection/react/code";
  *
  * function CustomCodeBlock({ code, lang }) {
  *   const { highlight, isLoading, isReady, error } = useShikiHighlighter();
@@ -44,7 +44,7 @@ export function useShikiHighlighter(): UseShikiHighlighterResult {
   if (!context) {
     throw new Error(
       "useShikiHighlighter must be used within a ShikiProvider. " +
-        "Wrap your app with <ShikiProvider> from '@company/kumo/code'.",
+        "Wrap your app with <ShikiProvider> from '@astron-collection/react/code'.",
     );
   }
 

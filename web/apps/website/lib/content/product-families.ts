@@ -40,9 +40,9 @@ export type FamilyContent = {
 
 export const familyContent: Record<ProductFamily, FamilyContent> = {
 	"network-edge": {
-		metaTitle: "Network & Edge — Company",
+		metaTitle: "Network & Edge — Astron Collection",
 		metaDescription:
-			"DNS, private networking, traffic routing and entry-point protection for Company services, with availability stated per service.",
+			"DNS, private networking, traffic routing and entry-point protection for Astron Collection services, with availability stated per service.",
 		heroDescription:
 			"Connect resources, publish services and protect the traffic that reaches them.",
 		overview: [
@@ -50,7 +50,7 @@ export const familyContent: Record<ProductFamily, FamilyContent> = {
 			"Each service is catalogued individually. DNS and private networking have public detail pages; content delivery, load balancing, edge processing and certificates are listed with their current status rather than presented as live capacity.",
 		],
 		audience: [
-			"Teams publishing web applications and APIs on Company",
+			"Teams publishing web applications and APIs on Astron Collection",
 			"Organisations connecting cloud resources to an existing network",
 			"Operators who want DNS and entry-point protection in one account",
 		],
@@ -100,7 +100,7 @@ export const familyContent: Record<ProductFamily, FamilyContent> = {
 		],
 	},
 	"compute-infrastructure": {
-		metaTitle: "Compute & Infrastructure — Company",
+		metaTitle: "Compute & Infrastructure — Astron Collection",
 		metaDescription:
 			"Virtual machines, VPS, bare metal, GPU capacity, containers, Kubernetes and private cloud, with each operating model stated.",
 		heroDescription:
@@ -160,7 +160,7 @@ export const familyContent: Record<ProductFamily, FamilyContent> = {
 		],
 	},
 	"storage-databases": {
-		metaTitle: "Storage & Databases — Company",
+		metaTitle: "Storage & Databases — Astron Collection",
 		metaDescription:
 			"Object and block storage, backups, retention and managed database engines, with lifecycle and availability stated per service.",
 		heroDescription:
@@ -220,11 +220,11 @@ export const familyContent: Record<ProductFamily, FamilyContent> = {
 		],
 	},
 	"developer-platform": {
-		metaTitle: "Developer Platform — Company",
+		metaTitle: "Developer Platform — Astron Collection",
 		metaDescription:
-			"Deployment, registries, pipelines, functions, jobs, secrets and observability for teams building on Company, with planned status stated.",
+			"Deployment, registries, pipelines, functions, jobs, secrets and observability for teams building on Astron Collection, with planned status stated.",
 		heroDescription:
-			"Build, deploy and operate applications on Company without running the tooling yourself.",
+			"Build, deploy and operate applications on Astron Collection without running the tooling yourself.",
 		overview: [
 			"Developer Platform covers the services that help teams build, ship and operate applications: deployment, registries, pipelines, functions, jobs, secrets and observability.",
 			"Most of this family is planned. The catalogue marks each service accordingly; nothing here is presented as generally available, and the relationship between ZenthPaaS and Notploy is not asserted on this website.",
@@ -280,9 +280,9 @@ export const familyContent: Record<ProductFamily, FamilyContent> = {
 		],
 	},
 	"security-identity": {
-		metaTitle: "Security & Identity — Company",
+		metaTitle: "Security & Identity — Astron Collection",
 		metaDescription:
-			"Identity, access, firewalling, audit trails and secret management for Company, with related network protection cross-linked.",
+			"Identity, access, firewalling, audit trails and secret management for Astron Collection, with related network protection cross-linked.",
 		heroDescription:
 			"Protect resources, applications, identities and every path into your estate.",
 		overview: [
@@ -340,9 +340,9 @@ export const familyContent: Record<ProductFamily, FamilyContent> = {
 		],
 	},
 	"cloud-management": {
-		metaTitle: "Cloud Management — Company",
+		metaTitle: "Cloud Management — Astron Collection",
 		metaDescription:
-			"Projects, resources, orchestration, billing and support for operating a Company estate, with platform capabilities clearly separated.",
+			"Projects, resources, orchestration, billing and support for operating a Astron Collection estate, with platform capabilities clearly separated.",
 		heroDescription:
 			"Organise, control, provision and monitor your cloud environment from one place.",
 		overview: [
@@ -402,7 +402,7 @@ export const familyContent: Record<ProductFamily, FamilyContent> = {
 			{
 				title: "Organizations",
 				description:
-					"Membership and ownership for a company or institution using Company.",
+					"Membership and ownership for a company or institution using Astron Collection.",
 			},
 			{
 				title: "Workspaces",

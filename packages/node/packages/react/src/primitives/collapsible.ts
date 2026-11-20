@@ -6,7 +6,7 @@
  *
  * @example
  * ```tsx
- * import { Collapsible } from '@company/kumo/primitives/collapsible';
+ * import { Collapsible } from '@astron-collection/react/primitives/collapsible';
  * ```
  */
 

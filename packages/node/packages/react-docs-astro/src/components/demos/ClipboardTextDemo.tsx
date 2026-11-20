@@ -1,4 +1,4 @@
-import { ClipboardText } from "@company/kumo";
+import { ClipboardText } from "@astron-collection/react";
 
 export function ClipboardTextBasicDemo() {
   return <ClipboardText text="0c239dd2" />;

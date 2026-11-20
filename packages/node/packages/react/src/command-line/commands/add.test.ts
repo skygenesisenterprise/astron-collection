@@ -118,13 +118,13 @@ describe("add command - integration tests", () => {
     it("should transform component imports", () => {
       const input = 'import { Tabs } from "../../components/tabs";';
       const output = transformImports(input);
-      expect(output).toBe('import { Tabs } from "@company/kumo";');
+      expect(output).toBe('import { Tabs } from "@astron-collection/react";');
     });
 
     it("should transform util imports", () => {
       const input = 'import { cn } from "../../utils/cn";';
       const output = transformImports(input);
-      expect(output).toBe('import { cn } from "@company/kumo";');
+      expect(output).toBe('import { cn } from "@astron-collection/react";');
     });
 
     it("should consolidate mixed value and type imports using inline type syntax", () => {
@@ -133,7 +133,7 @@ describe("add command - integration tests", () => {
       const output = transformImports(input);
       // Uses inline type syntax to satisfy import/no-duplicates with prefer-inline: true
       expect(output).toBe(
-        'import { Tabs, type TabsItem } from "@company/kumo";',
+        'import { Tabs, type TabsItem } from "@astron-collection/react";',
       );
     });
 
@@ -141,7 +141,7 @@ describe("add command - integration tests", () => {
       const input = 'import type { TabsItem } from "../../components/tabs";';
       const output = transformImports(input);
       // Uses inline type syntax to satisfy import/no-duplicates with prefer-inline: true
-      expect(output).toBe('import { type TabsItem } from "@company/kumo";');
+      expect(output).toBe('import { type TabsItem } from "@astron-collection/react";');
     });
 
     it("should preserve non-relative imports", () => {
@@ -167,7 +167,7 @@ import { cn } from "../../utils/cn";`;
       expect(output).toContain('import { ReactNode } from "react";');
       // All kumo imports should be consolidated with inline type syntax
       expect(output).toContain(
-        'import { Tabs, cn, type TabsItem } from "@company/kumo";',
+        'import { Tabs, cn, type TabsItem } from "@astron-collection/react";',
       );
 
       // Ensure React import is preserved
@@ -257,7 +257,7 @@ import { cn } from "../../utils/cn";`;
       // Verify transformations occurred
       expect(transformed).not.toContain("../../components/");
       expect(transformed).not.toContain("../../utils/");
-      expect(transformed).toContain("@company/kumo");
+      expect(transformed).toContain("@astron-collection/react");
 
       // Verify React imports are preserved
       if (originalContent.includes('from "react"')) {
@@ -284,7 +284,7 @@ import { useState } from "react";`;
 
       // All Kumo imports should be consolidated into a single import
       expect(output).toContain(
-        'import { Tabs, Button, cn } from "@company/kumo"',
+        'import { Tabs, Button, cn } from "@astron-collection/react"',
       );
 
       // Original relative paths should be gone

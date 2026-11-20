@@ -1,4 +1,4 @@
-import { ChoroplethMap, type MapGeoJson } from "@company/kumo";
+import { ChoroplethMap, type MapGeoJson } from "@astron-collection/react";
 import * as echarts from "echarts/core";
 import { MapChart } from "echarts/charts";
 import { VisualMapComponent, TooltipComponent } from "echarts/components";

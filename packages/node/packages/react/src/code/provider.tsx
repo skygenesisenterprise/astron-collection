@@ -59,7 +59,7 @@ export function normalizeLanguage(lang: string): SupportedLanguage | null {
  *
  * @example
  * ```tsx
- * import { ShikiProvider, CodeHighlighted } from "@company/kumo/code";
+ * import { ShikiProvider, CodeHighlighted } from "@astron-collection/react/code";
  *
  * function App() {
  *   return (

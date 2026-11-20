@@ -6,7 +6,7 @@
  *
  * @example
  * ```tsx
- * import { ScrollArea } from '@company/kumo/primitives/scroll-area';
+ * import { ScrollArea } from '@astron-collection/react/primitives/scroll-area';
  * ```
  */
 

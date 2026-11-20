@@ -4,7 +4,7 @@ import {
   Select,
   Checkbox,
   KumoLocaleProvider,
-} from "@company/kumo";
+} from "@astron-collection/react";
 
 export function LabelBasicDemo() {
   return (

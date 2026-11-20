@@ -18,7 +18,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = pageMetadata({
 	title: "Pricing",
 	description:
-		"Company Cloud subscriptions — Free, Pro and Enterprise — with one platform covering six service families. Platform fees and infrastructure consumption are billed separately, and Self needs no subscription.",
+		"Astron Collection Cloud subscriptions — Free, Pro and Enterprise — with one platform covering six service families. Platform fees and infrastructure consumption are billed separately, and Self needs no subscription.",
 	path: "/pricing",
 });
 

@@ -157,17 +157,17 @@ export interface CodeProps extends KumoCodeVariantsProps {
  * - No borders or padding (use CodeBlock for styled container)
  * - Supports all semantic tokens via className prop
  *
- * @deprecated Use `CodeHighlighted` from `@company/kumo/code` for syntax highlighting.
+ * @deprecated Use `CodeHighlighted` from `@astron-collection/react/code` for syntax highlighting.
  * This component will be removed in v2.0.
  *
  * @example Migration:
  * ```tsx
  * // Before
- * import { Code } from "@company/kumo";
+ * import { Code } from "@astron-collection/react";
  * <Code code="const x = 1;" lang="ts" />
  *
  * // After
- * import { ShikiProvider, CodeHighlighted } from "@company/kumo/code";
+ * import { ShikiProvider, CodeHighlighted } from "@astron-collection/react/code";
  * <ShikiProvider engine="javascript" languages={['tsx']} themes={{ light: 'github-light', dark: 'github-dark' }}>
  *   <CodeHighlighted code="const x = 1;" lang="tsx" />
  * </ShikiProvider>
@@ -217,7 +217,7 @@ export interface CodeBlockProps {
  * - Inner padding: `p-2.5` (10px)
  * - Uses semantic tokens: `bg-zenth-base`, `border-zenth-fill`
  *
- * @deprecated Use `CodeHighlighted` from `@company/kumo/code` for syntax highlighting.
+ * @deprecated Use `CodeHighlighted` from `@astron-collection/react/code` for syntax highlighting.
  * This component will be removed in v2.0.
  */
 function CodeBlockComponent({ code, lang }: CodeBlockProps) {

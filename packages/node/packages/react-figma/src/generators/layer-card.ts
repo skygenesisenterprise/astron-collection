@@ -32,7 +32,7 @@ import {
   VAR_NAMES,
 } from "./shared";
 import { createIconInstance, bindIconColor, DEFAULT_ICONS } from "./icon-utils";
-import registry from "@company/kumo/ai/component-registry.json";
+import registry from "@astron-collection/react/ai/component-registry.json";
 import themeData from "../generated/theme-data.json";
 
 // Read LayerCard styling from registry

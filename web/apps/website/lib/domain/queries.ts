@@ -18,8 +18,8 @@ import type {
  * so the data source can move behind a public API without touching templates.
  */
 
-export const SITE_URL = "https://company.com";
-export const SITE_NAME = "Company";
+export const SITE_URL = "https://astron-collection.com";
+export const SITE_NAME = "Astron Collection";
 
 export const FAMILIES: Record<
 	ProductFamily,
@@ -52,7 +52,7 @@ export const FAMILIES: Record<
 	"developer-platform": {
 		name: "Developer Platform",
 		valueProposition:
-			"Build, deploy and operate applications on Company without running the tooling yourself.",
+			"Build, deploy and operate applications on Astron Collection without running the tooling yourself.",
 		description:
 			"Deployment, registries, pipelines, functions, jobs, secrets and observability for engineering teams.",
 		route: "/products/developer-platform",
@@ -162,8 +162,8 @@ export const AVAILABILITY_ORDER: ProductAvailability[] = [
 ];
 
 export const DELIVERY_MODEL_META: Record<ProductDeliveryModel, string> = {
-	company_owned: "Company-owned infrastructure",
-	company_operated: "Operated by Company",
+	company_owned: "Astron Collection-owned infrastructure",
+	company_operated: "Operated by Astron Collection",
 	partner_provided: "Partner-provided infrastructure",
 	managed_service: "Managed service",
 	software_service: "Software service",

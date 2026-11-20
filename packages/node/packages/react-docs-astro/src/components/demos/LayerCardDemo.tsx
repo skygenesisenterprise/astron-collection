@@ -1,4 +1,4 @@
-import { LayerCard, Button } from "@company/kumo";
+import { LayerCard, Button } from "@astron-collection/react";
 import { ArrowRightIcon } from "@phosphor-icons/react";
 
 export function LayerCardDemo() {

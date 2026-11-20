@@ -1,4 +1,4 @@
-import { Button, LinkButton } from "@company/kumo";
+import { Button, LinkButton } from "@astron-collection/react";
 import { ArrowSquareOutIcon, PlusIcon } from "@phosphor-icons/react";
 
 export function ButtonBasicDemo() {
@@ -138,7 +138,7 @@ export function ButtonLinkAsButtonDemo() {
         Read Link docs
       </LinkButton>
       <LinkButton
-        href="https://github.com/skygenesisenterprise/company"
+        href="https://github.com/skygenesisenterprise/astron-collection"
         variant="ghost"
         icon={ArrowSquareOutIcon}
         external

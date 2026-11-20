@@ -6,7 +6,7 @@
  * This runs at BUILD TIME before bundling the plugin.
  *
  * Usage:
- *   pnpm --filter @company/kumo-figma build:data
+ *   pnpm --filter @astron-collection/react-figma build:data
  *
  * Output:
  *   packages/kumo-figma/src/generated/loader-data.json

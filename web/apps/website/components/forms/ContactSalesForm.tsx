@@ -74,7 +74,7 @@ export function ContactSalesForm() {
 					status: "unavailable",
 					message:
 						payload.message ??
-						"The form backend is not configured for this deployment. Email sales@company.com instead.",
+						"The form backend is not configured for this deployment. Email sales@astron-collection.com instead.",
 				}));
 				return;
 			}
@@ -84,14 +84,14 @@ export function ContactSalesForm() {
 				errors: payload.errors ?? {},
 				message:
 					payload.message ??
-					"The request could not be sent. Please try again or contact sales@company.com.",
+					"The request could not be sent. Please try again or contact sales@astron-collection.com.",
 			}));
 		} catch {
 			setState((current) => ({
 				...current,
 				status: "error",
 				message:
-					"The request could not be sent. Check your connection or email sales@company.com.",
+					"The request could not be sent. Check your connection or email sales@astron-collection.com.",
 			}));
 		}
 	}
@@ -271,7 +271,7 @@ export function ContactSalesForm() {
 						className="mt-0.5 h-4 w-4 rounded border-input accent-[var(--primary)]"
 					/>
 					<span>
-						I agree that Company may use these details to answer this
+						I agree that Astron Collection may use these details to answer this
 						request, as described in the{" "}
 						<a href="/legal/privacy" className="text-foreground underline underline-offset-4">
 							privacy policy

@@ -17,10 +17,10 @@ export const links = {
 		support: 'https://docs.skygenesisenterprise.com/support',
 		differences: 'https://docs.skygenesisenterprise.com/docs/core/differences',
 	},
-	status: 'https://status.company.com',
-	console: 'https://dash.company.com',
-	blog: 'https://blog.company.com',
-	github: 'https://github.com/skygenesisenterprise/company',
+	status: 'https://status.astron-collection.com',
+	console: 'https://dash.astron-collection.com',
+	blog: 'https://blog.astron-collection.com',
+	github: 'https://github.com/skygenesisenterprise/astron-collection',
 	githubOrg: 'https://github.com/skygenesisenterprise',
 	trust: '/company/trust',
 	skyGenesis: 'https://skygenesisenterprise.com/',
@@ -95,7 +95,7 @@ export const footerSections: { title: string; links: NavLink[] }[] = [
 		],
 	},
 	{
-		title: 'Company',
+		title: 'Astron Collection',
 		links: [
 			{ href: '/company/about', label: 'About' },
 			{ href: '/company/careers', label: 'Careers' },
@@ -129,10 +129,10 @@ export const footerSections: { title: string; links: NavLink[] }[] = [
 ];
 
 export const organisation = {
-	name: 'Company',
+	name: 'Astron Collection',
 	legalName: 'Sky Genesis Enterprise',
 	positioning: 'European Integrated Cloud Infrastructure',
 	supporting: 'European roots. Global ambitions.',
 	description:
-		'Company is a European integrated cloud infrastructure provider building compute, storage, networking, developer and security services on owned and partner infrastructure.',
+		'Astron Collection is a European integrated cloud infrastructure provider building compute, storage, networking, developer and security services on owned and partner infrastructure.',
 } as const

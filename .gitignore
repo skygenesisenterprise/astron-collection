@@ -161,3 +161,4 @@ build/
 .claude/
 skills-lock.json
 .opencode/
+.agents/

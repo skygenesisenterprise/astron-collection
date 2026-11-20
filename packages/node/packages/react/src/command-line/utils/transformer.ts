@@ -37,7 +37,7 @@ function parseImports(content: string): ParsedImport[] {
 }
 
 /**
- * Checks if an import path should be transformed to @company/kumo
+ * Checks if an import path should be transformed to @astron-collection/react
  */
 function shouldTransformToKumo(path: string): boolean {
   if (!path.startsWith("../")) {
@@ -94,20 +94,20 @@ function buildConsolidatedImport(
     parts.push(`type ${item}`);
   }
 
-  return `import { ${parts.join(", ")} } from "@company/kumo";`;
+  return `import { ${parts.join(", ")} } from "@astron-collection/react";`;
 }
 
 /**
  * Transforms relative imports in block source code to package imports
  *
- * This function consolidates all imports from @company/kumo into a single
+ * This function consolidates all imports from @astron-collection/react into a single
  * import statement using inline `type` syntax to satisfy ESLint's
  * import/no-duplicates rule with prefer-inline: true.
  *
  * Examples:
  * - Multiple component imports → single consolidated import
- * - `../../components/tabs` + `../../utils/cn` → `import { Tabs, cn } from "@company/kumo";`
- * - Mixed value/type imports → `import { Button, type ButtonProps } from "@company/kumo";`
+ * - `../../components/tabs` + `../../utils/cn` → `import { Tabs, cn } from "@astron-collection/react";`
+ * - Mixed value/type imports → `import { Button, type ButtonProps } from "@astron-collection/react";`
  *
  * @param content - The source code content to transform
  * @returns Transformed source code with consolidated package imports

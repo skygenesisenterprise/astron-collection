@@ -1,7 +1,7 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { cn } from "@company/kumo";
-import { Text } from "@company/kumo";
+import { cn } from "@astron-collection/react";
+import { Text } from "@astron-collection/react";
 
 const GITHUB_COMMIT_URL = "https://github.com/skygenesisenterprise/company";
 

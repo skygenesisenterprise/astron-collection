@@ -21,7 +21,7 @@ import { parseTailwindClasses } from "../parsers/tailwind-to-figma";
 import { getAllVariantData, getBaseStyles, getLangConfig } from "./code";
 
 // Import registry as source of truth
-import registry from "@company/kumo/ai/component-registry.json";
+import registry from "@astron-collection/react/ai/component-registry.json";
 
 const codeComponent = registry.components.Code as any;
 const codeProps = codeComponent.props;

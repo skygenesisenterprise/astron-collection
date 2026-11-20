@@ -1,4 +1,4 @@
-import { Combobox, InputGroup, Select, Toolbar } from "@company/kumo";
+import { Combobox, InputGroup, Select, Toolbar } from "@astron-collection/react";
 import {
   BookOpenIcon,
   DownloadSimpleIcon,

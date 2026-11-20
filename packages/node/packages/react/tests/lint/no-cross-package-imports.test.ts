@@ -81,7 +81,7 @@ describe("no-cross-package-imports", () => {
     });
 
     it("ignores package imports", () => {
-      expect(getCrossPackageImport("@company/kumo")).toBeNull();
+      expect(getCrossPackageImport("@astron-collection/react")).toBeNull();
     });
 
     it("ignores node_modules imports", () => {

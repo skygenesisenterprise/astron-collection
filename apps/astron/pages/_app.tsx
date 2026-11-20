@@ -1,3 +1,4 @@
+import "@astron-collection/react/styles.css";
 import "@/styles/globals.css";
 
 import type { NextPage } from "next";

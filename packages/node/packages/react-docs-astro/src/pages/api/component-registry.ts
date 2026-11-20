@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import componentRegistry from "@company/kumo/ai/component-registry.json";
+import componentRegistry from "@astron-collection/react/ai/component-registry.json";
 
 export const GET: APIRoute = () => {
   return new Response(JSON.stringify(componentRegistry), {

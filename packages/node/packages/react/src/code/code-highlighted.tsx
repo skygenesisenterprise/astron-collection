@@ -17,7 +17,7 @@ import type { CodeHighlightedProps } from "./types";
  *
  * @example
  * ```tsx
- * import { ShikiProvider, CodeHighlighted } from "@company/kumo/code";
+ * import { ShikiProvider, CodeHighlighted } from "@astron-collection/react/code";
  *
  * <ShikiProvider
  *   engine="javascript"

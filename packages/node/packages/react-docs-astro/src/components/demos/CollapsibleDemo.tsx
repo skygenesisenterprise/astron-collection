@@ -1,4 +1,4 @@
-import { Button, Collapsible, Input, Text } from "@company/kumo";
+import { Button, Collapsible, Input, Text } from "@astron-collection/react";
 import { useState } from "react";
 
 /**
@@ -155,7 +155,7 @@ export function CollapsibleAccordionDemo() {
     {
       title: "How do I install it?",
       content:
-        "Run `npm install @company/kumo` and import the components you need.",
+        "Run `npm install @astron-collection/react` and import the components you need.",
     },
     {
       title: "Is it accessible?",

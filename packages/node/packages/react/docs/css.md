@@ -207,8 +207,8 @@ This is optional. `styles.css` is enough for every component.
 | `text-kumo-subtle`              | `text-zenth-subtle`                |
 | `[data-kumo-component]`         | `[data-zenth-component]`           |
 | `data-mode="dark"`              | `data-zenth-mode="dark"` (supported) |
-| `@company/kumo/styles`       | `@astron-collection/react/styles.css`     |
-| `@company/kumo/styles/standalone` | `@astron-collection/react/styles.css` |
+| `@astron-collection/react/styles`       | `@astron-collection/react/styles.css`     |
+| `@astron-collection/react/styles/standalone` | `@astron-collection/react/styles.css` |
 
 Compatibility is intentional and temporary:
 

@@ -17,11 +17,11 @@ if [ -z "$COMPANY_API_TOKEN" ] || [ -z "$COMPANY_ACCOUNT_ID" ]; then
   exit 1
 fi
 
-echo "🔨 Building @company/kumo library..."
-pnpm --filter @company/kumo build
+echo "🔨 Building @astron-collection/react library..."
+pnpm --filter @astron-collection/react build
 
 echo "🔨 Building kumo-docs..."
-pnpm --filter @company/kumo-docs-astro build
+pnpm --filter @astron-collection/react-docs-astro build
 
 echo "🚀 Uploading version to kumo-docs worker..."
 cd packages/kumo-docs-astro

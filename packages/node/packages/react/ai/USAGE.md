@@ -1,4 +1,4 @@
-# @company/kumo — AI Usage Guide
+# @astron-collection/react — AI Usage Guide
 
 > Company's React component library built on [Base UI](https://base-ui.com) + Tailwind CSS v4.
 
@@ -9,25 +9,25 @@
 In your main CSS file (e.g. `global.css`), add **all three lines in this order**:
 
 ```css
-@source "path/to/node_modules/@company/kumo/dist/**/*.{js,jsx,ts,tsx}";
-@import "@company/kumo/styles";
+@source "path/to/node_modules/@astron-collection/react/dist/**/*.{js,jsx,ts,tsx}";
+@import "@astron-collection/react/styles";
 @import "tailwindcss";
 ```
 
 - **`@source`** — Tells Tailwind to scan kumo's compiled JS for class names. Without this, kumo component internals will be unstyled. Adjust the relative path so it resolves to your project's `node_modules/`.
-- **Import order matters** — `@company/kumo/styles` must come **before** `@import "tailwindcss"` so kumo's `@theme` tokens are registered first.
+- **Import order matters** — `@astron-collection/react/styles` must come **before** `@import "tailwindcss"` so kumo's `@theme` tokens are registered first.
 
 ### Component usage
 
 ```tsx
-import { Button, Input, Dialog } from "@company/kumo";
+import { Button, Input, Dialog } from "@astron-collection/react";
 ```
 
 ## Critical Rules
 
 1. **Semantic tokens only** — use `bg-kumo-base`, `text-kumo-default`, etc. Never use raw Tailwind colors (`bg-blue-500`).
 2. **No `dark:` variant** — light/dark mode is handled automatically via CSS `light-dark()`. Never add `dark:` prefixes.
-3. **Merge classes with `cn()`** — import from `@company/kumo` and use it to combine class names.
+3. **Merge classes with `cn()`** — import from `@astron-collection/react` and use it to combine class names.
 4. **Compound components** — many components use a dot-notation API: `<Dialog.Root>`, `<Dialog.Trigger>`, etc.
 
 ## Component Quick Reference
@@ -210,7 +210,7 @@ Some components accept an `as` prop or Base UI's `render` prop:
 For complete prop details, variant values, Tailwind classes, and code examples for every component, see:
 
 ```
-@company/kumo/ai/component-registry.json
+@astron-collection/react/ai/component-registry.json
 ```
 
 This JSON file contains structured metadata for all components, optimized for AI/agent consumption.

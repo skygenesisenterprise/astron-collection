@@ -92,7 +92,7 @@ export function validateDescription(
     !parsedLabels.includes("no-changeset-required")
   ) {
     errors.push(
-      "Your PR doesn't include a changeset. Either include one (following the instructions in CONTRIBUTING.md) or add the 'no-changeset-required' label to bypass this check. See https://github.com/skygenesisenterprise/company for more details.",
+      "Your PR doesn't include a changeset. Either include one (following the instructions in CONTRIBUTING.md) or add the 'no-changeset-required' label to bypass this check. See https://github.com/skygenesisenterprise/astron-collection for more details.",
     );
   }
 

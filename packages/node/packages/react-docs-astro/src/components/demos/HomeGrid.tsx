@@ -42,8 +42,8 @@ import {
   Tooltip,
   TooltipProvider,
   useKumoToastManager,
-} from "@company/kumo";
-import { ShikiProvider, CodeHighlighted } from "@company/kumo/code";
+} from "@astron-collection/react";
+import { ShikiProvider, CodeHighlighted } from "@astron-collection/react/code";
 import { CommandPaletteBasicDemo } from "~/components/demos/CommandPaletteDemo";
 import { InputGroupDemo } from "~/components/demos/InputGroupDemo";
 import {

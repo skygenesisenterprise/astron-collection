@@ -8,7 +8,7 @@ import Link from "next/link";
 export const metadata: Metadata = pageMetadata({
 	title: "Solutions",
 	description:
-		"Company for developers, startups, small businesses, enterprises, hosting providers and AI research teams.",
+		"Astron Collection for developers, startups, small businesses, enterprises, hosting providers and AI research teams.",
 	path: "/solutions",
 });
 
@@ -52,7 +52,7 @@ export default function SolutionsPage() {
 				description="These pages describe how the catalogue applies to a type of work. They do not claim customer outcomes, reference customers or certifications."
 			>
 				<p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
-					If you are evaluating Company for a specific procurement process,
+					If you are evaluating Astron Collection for a specific procurement process,
 					start with the product pages and the infrastructure section. Those
 					pages carry the availability, provider and pricing facts that an
 					audience page deliberately avoids repeating.

@@ -72,7 +72,7 @@ const isDev = process.argv.includes("dev");
 // In dev, defer to the source-loading path so Kumo does not need to be built.
 const builtThemeConfig = isDev
   ? undefined
-  : await import("@company/kumo/scripts/theme-generator/config");
+  : await import("@astron-collection/react/scripts/theme-generator/config");
 
 // Path to kumo source (used for dev mode CSS aliases)
 const kumoSrc = resolve(__dirname, "../kumo/src");
@@ -105,11 +105,11 @@ export default defineConfig({
   },
   vite: {
     plugins: [
-      // In dev mode, resolve @company/kumo imports to raw source files
+      // In dev mode, resolve @astron-collection/react imports to raw source files
       // for instant HMR. In production builds, the normal package.json
       // exports (dist/) are used — preserving the real consumer experience.
       // IMPORTANT: Must come BEFORE tailwindcss() so CSS @import statements
-      // like `@import "@company/kumo/styles"` are aliased to source files
+      // like `@import "@astron-collection/react/styles"` are aliased to source files
       // before Tailwind processes them.
       ...(isDev ? [kumoHmrPlugin()] : []),
       tailwindcss(),
@@ -118,20 +118,20 @@ export default defineConfig({
     ],
 
     // In dev mode, add resolve.alias for CSS @import statements that may bypass
-    // Vite plugins. This ensures `@import "@company/kumo/styles"` resolves
+    // Vite plugins. This ensures `@import "@astron-collection/react/styles"` resolves
     // to source files without requiring a build step.
     resolve: isDev
       ? {
           alias: {
-            "@company/kumo/styles/tailwind": resolve(
+            "@astron-collection/react/styles/tailwind": resolve(
               kumoSrc,
               "styles/kumo.css",
             ),
-            "@company/kumo/styles/standalone": resolve(
+            "@astron-collection/react/styles/standalone": resolve(
               kumoSrc,
               "styles/kumo-standalone.css",
             ),
-            "@company/kumo/styles": resolve(kumoSrc, "styles/kumo.css"),
+            "@astron-collection/react/styles": resolve(kumoSrc, "styles/kumo.css"),
           },
         }
       : undefined,

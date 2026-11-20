@@ -1,5 +1,5 @@
-import { ShikiProvider } from "@company/kumo/code";
-import { Text } from "@company/kumo";
+import { ShikiProvider } from "@astron-collection/react/code";
+import { Text } from "@astron-collection/react";
 import { isValidElement } from "react";
 import { CodeExample, designTips } from "./design-tips";
 import { DesignTip } from "./DesignTip";

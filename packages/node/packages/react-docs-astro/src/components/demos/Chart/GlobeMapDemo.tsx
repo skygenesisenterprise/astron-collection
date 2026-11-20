@@ -1,4 +1,4 @@
-import { GlobeMap, type GlobeMapMarker } from "@company/kumo";
+import { GlobeMap, type GlobeMapMarker } from "@astron-collection/react";
 import { useIsDarkMode } from "~/lib/use-is-dark-mode";
 
 const companyAvailabilityLocations: GlobeMapMarker[] = [

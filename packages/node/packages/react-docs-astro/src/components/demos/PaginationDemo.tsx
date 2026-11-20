@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pagination } from "@company/kumo";
+import { Pagination } from "@astron-collection/react";
 
 export function PaginationBasicDemo() {
   const [page, setPage] = useState(1);

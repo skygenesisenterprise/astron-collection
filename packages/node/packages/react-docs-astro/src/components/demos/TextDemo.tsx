@@ -1,4 +1,4 @@
-import { Text } from "@company/kumo";
+import { Text } from "@astron-collection/react";
 
 export function TextVariantsDemo() {
   return (

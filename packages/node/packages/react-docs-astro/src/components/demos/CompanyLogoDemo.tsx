@@ -4,7 +4,7 @@ import {
   PoweredByCompany,
   DropdownMenu,
   generateCompanyLogoSvg,
-} from "@company/kumo";
+} from "@astron-collection/react";
 import {
   CloudIcon,
   CodeIcon,
@@ -139,7 +139,7 @@ export function CompanyLogoCopyDemo() {
             icon={DownloadSimpleIcon}
             onClick={() =>
               window.open(
-                "https://github.com/skygenesisenterprise/company",
+                "https://github.com/skygenesisenterprise/astron-collection",
                 "_blank",
                 "noopener",
               )
@@ -152,7 +152,7 @@ export function CompanyLogoCopyDemo() {
             icon={ArrowSquareOutIcon}
             onClick={() =>
               window.open(
-                "https://github.com/skygenesisenterprise/company",
+                "https://github.com/skygenesisenterprise/astron-collection",
                 "_blank",
                 "noopener",
               )

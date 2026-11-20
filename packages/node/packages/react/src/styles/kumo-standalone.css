@@ -2,7 +2,7 @@
  * @deprecated Use `@astron-collection/react/styles.css` instead.
  *
  * Legacy standalone entry kept for applications upgrading from
- * `@company/kumo/styles/standalone`. It now maps to the same compiled
+ * `@astron-collection/react/styles/standalone`. It now maps to the same compiled
  * stylesheet as `styles.css`.
  */
 @import "./index.css";

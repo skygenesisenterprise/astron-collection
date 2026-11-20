@@ -1,4 +1,4 @@
-import { Button, cn, LayerCard, Text } from "@company/kumo";
+import { Button, cn, LayerCard, Text } from "@astron-collection/react";
 import { motion } from "motion/react";
 import { useState } from "react";
 

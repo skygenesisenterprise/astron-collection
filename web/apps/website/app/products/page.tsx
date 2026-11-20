@@ -21,7 +21,7 @@ import Link from "next/link";
 export const metadata: Metadata = pageMetadata({
 	title: "Products",
 	description:
-		"Company products in six families: Network & Edge, Compute & Infrastructure, Storage & Databases, Developer Platform, Security & Identity and Cloud Management.",
+		"Astron Collection products in six families: Network & Edge, Compute & Infrastructure, Storage & Databases, Developer Platform, Security & Identity and Cloud Management.",
 	path: "/products",
 });
 
@@ -38,7 +38,7 @@ export default function ProductsPage() {
 			<PageHeader
 				eyebrow="Catalogue"
 				title="Six service families. One integrated cloud catalogue."
-				description="Company products are organised by the job they do: connect and protect traffic, run workloads, keep data, build and deploy, secure access, and operate the estate. Every entry states its availability, and planned services are never presented as orderable."
+				description="Astron Collection products are organised by the job they do: connect and protect traffic, run workloads, keep data, build and deploy, secure access, and operate the estate. Every entry states its availability, and planned services are never presented as orderable."
 				breadcrumbs={[{ name: "Products", path: "/products" }]}
 				actions={
 					<>

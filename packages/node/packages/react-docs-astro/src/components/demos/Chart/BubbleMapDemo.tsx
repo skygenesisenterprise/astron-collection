@@ -1,4 +1,4 @@
-import { BubbleMap, type MapGeoJson } from "@company/kumo";
+import { BubbleMap, type MapGeoJson } from "@astron-collection/react";
 import * as echarts from "echarts/core";
 import { MapChart, ScatterChart } from "echarts/charts";
 import { TooltipComponent } from "echarts/components";

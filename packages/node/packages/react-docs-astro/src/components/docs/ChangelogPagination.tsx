@@ -1,4 +1,4 @@
-import { Pagination } from "@company/kumo";
+import { Pagination } from "@astron-collection/react";
 
 interface ChangelogPaginationProps {
   page: number;

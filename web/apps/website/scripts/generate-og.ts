@@ -5,7 +5,7 @@ import { generateOGImage } from "../lib/og-image";
 async function main() {
 	const png = await generateOGImage({
 		title: "Cloud infrastructure. Without boundaries.",
-		eyebrow: "Company",
+		eyebrow: "Astron Collection",
 	});
 
 	await writeFile(join(process.cwd(), "public/og.png"), new Uint8Array(png));

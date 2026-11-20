@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Badge, Input, LayerCard, Tabs } from "@company/kumo";
+import { Badge, Input, LayerCard, Tabs } from "@astron-collection/react";
 
 // ─── Data ────────────────────────────────────────────────────────────
 
 const ORIGINS = [
-  { origin: "challenges.company.com", s2xx: 1, s4xx: 0, duration: "95.4ms" },
+  { origin: "challenges.astron-collection.com", s2xx: 1, s4xx: 0, duration: "95.4ms" },
   { origin: "Unknown", s2xx: 19, s4xx: 7, duration: "463.7ms" },
   { origin: "api.example.com", s2xx: 42, s4xx: 3, duration: "128.1ms" },
 ];

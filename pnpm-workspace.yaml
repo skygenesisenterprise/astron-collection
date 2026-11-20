@@ -70,3 +70,13 @@ peerDependencyRules:
     - '@electric-sql/pglite'
     - typescript
     - drizzle-kit
+
+permissions:
+  '@trpc/client':
+    skills: true
+  '@trpc/next':
+    skills: true
+  '@trpc/server':
+    skills: true
+  dotenv:
+    skills: true

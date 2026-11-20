@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Popover, Button } from "@company/kumo";
+import { Popover, Button } from "@astron-collection/react";
 import { BellIcon, DotsThree } from "@phosphor-icons/react";
 
 export function PopoverHeroDemo() {

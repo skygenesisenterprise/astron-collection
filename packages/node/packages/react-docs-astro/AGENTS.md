@@ -4,7 +4,7 @@
 
 ## OVERVIEW
 
-Astro documentation site for `@company/kumo`. Static output uses React islands,
+Astro documentation site for `@astron-collection/react`. Static output uses React islands,
 MDX reference pages, Tailwind v4, and Company Workers static assets.
 
 **Parent:** See [root AGENTS.md](../../AGENTS.md) for monorepo-wide rules.
@@ -58,7 +58,7 @@ src/components/skill/*
   -> public/skill.md
 ```
 
-`vp run build:docs` builds `@company/kumo` first. Production Astro builds use
+`vp run build:docs` builds `@astron-collection/react` first. Production Astro builds use
 the package output, while development aliases Kumo imports to source for HMR.
 
 ## CONVENTIONS
@@ -75,7 +75,7 @@ the package output, while development aliases Kumo imports to source for HMR.
 - Choose hydration by behavior: `client:visible` for ordinary demos,
   `client:load` for immediately interactive UI, and `client:only="react"` only for
   known SSR mismatches.
-- Keep `@company/kumo/styles` before Tailwind imports. Keep the Kumo `@source`
+- Keep `@astron-collection/react/styles` before Tailwind imports. Keep the Kumo `@source`
   directive so Tailwind discovers package classes.
 - View transitions persist parts of the page shell. Browser state that follows
   navigation must listen for Astro lifecycle events.
@@ -95,11 +95,11 @@ the package output, while development aliases Kumo imports to source for HMR.
 ## COMMANDS
 
 ```bash
-pnpm --filter @company/kumo-docs-astro dev
-pnpm --filter @company/kumo-docs-astro build
-pnpm --filter @company/kumo-docs-astro test
-pnpm --filter @company/kumo-docs-astro typecheck
-pnpm --filter @company/kumo-docs-astro lint
+pnpm --filter @astron-collection/react-docs-astro dev
+pnpm --filter @astron-collection/react-docs-astro build
+pnpm --filter @astron-collection/react-docs-astro test
+pnpm --filter @astron-collection/react-docs-astro typecheck
+pnpm --filter @astron-collection/react-docs-astro lint
 pnpm vp run build:docs
 ```
 

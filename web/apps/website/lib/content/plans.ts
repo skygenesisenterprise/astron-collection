@@ -2,7 +2,7 @@
  * Pricing page content — the single source of truth for the commercial offer.
  *
  * Model:
- * - Company Cloud is the only mode sold as a platform subscription
+ * - Astron Collection Cloud is the only mode sold as a platform subscription
  *   (Free, Pro, Enterprise).
  * - Self and Hybrid are deployment modes, never a fourth plan.
  * - A subscription pays for the platform. Infrastructure is metered separately.
@@ -58,7 +58,7 @@ export const planSection = {
 	eyebrow: "Cloud subscriptions",
 	title: "Platform plans, not infrastructure.",
 	description:
-		"Three plans on Company Cloud. Each one opens the same six service families; what changes is the depth you can operate, the quotas you get and the support behind them.",
+		"Three plans on Astron Collection Cloud. Each one opens the same six service families; what changes is the depth you can operate, the quotas you get and the support behind them.",
 	note: "Subscription plans are platform plans. The 14 resource plans in the catalogue are consumption items, not subscriptions. Prices are not published yet: every plan is modelled and none is an offer.",
 } as const;
 
@@ -258,7 +258,7 @@ export const consumption = {
 		eyebrow: "Platform and consumption",
 		title: "Infrastructure pricing — Pay for the resources you use.",
 		description:
-			"A Company bill has two parts: the platform subscription, and the infrastructure that is actually consumed. Keeping them separate is what makes the invoice predictable.",
+			"A Astron Collection bill has two parts: the platform subscription, and the infrastructure that is actually consumed. Keeping them separate is what makes the invoice predictable.",
 	},
 	subscription: {
 		title: "Platform subscription",
@@ -276,7 +276,7 @@ export const consumption = {
 	consumption: {
 		title: "Infrastructure consumption",
 		description:
-			"Metered per resource, per unit, and invoiced separately from the subscription when Company provides the resource.",
+			"Metered per resource, per unit, and invoiced separately from the subscription when Astron Collection provides the resource.",
 		items: [
 			{ resource: "CPU", unit: "vCPU-hour" },
 			{ resource: "Memory", unit: "GB-month" },
@@ -294,7 +294,7 @@ export const consumption = {
 	statement:
 		"Pro and Enterprise never include a physical server, unlimited memory or free infrastructure capacity. Server, storage, network and backup costs are metered on top of the platform fee.",
 	useNote:
-		"On Self, resources run on infrastructure you control and are not billed by Company. The platform subscription does not apply to Self.",
+		"On Self, resources run on infrastructure you control and are not billed by Astron Collection. The platform subscription does not apply to Self.",
 	billing:
 		"Unit rates are not published yet. When they are, every resource will state its amount, currency and billing interval, and the invoice will keep platform and infrastructure lines separate.",
 	resourceLinksNote: "Resource-level plans by category",
@@ -312,7 +312,7 @@ export const dedicated = {
 		eyebrow: "Dedicated bare metal",
 		title: "Dedicated infrastructure. One unified control plane.",
 		description:
-			"Physical servers dedicated to one organisation, managed from the same Company workspace as virtual resources. The hardware is sized for you; the control plane stays unified.",
+			"Physical servers dedicated to one organisation, managed from the same Astron Collection workspace as virtual resources. The hardware is sized for you; the control plane stays unified.",
 	},
 	capabilities: [
 		"Hardware resources exposed to your workspace",
@@ -352,10 +352,10 @@ export const deployment = {
 			id: "cloud",
 			name: "Cloud",
 			description:
-				"Hosted and operated by Sky Genesis Enterprise. You manage your infrastructure from the Company console.",
+				"Hosted and operated by Sky Genesis Enterprise. You manage your infrastructure from the Astron Collection console.",
 			points: [
 				"Free, Pro and Enterprise subscriptions",
-				"Access at dash.company.com",
+				"Access at dash.astron-collection.com",
 				"No installation or upgrade work",
 			],
 			primary: {
@@ -369,7 +369,7 @@ export const deployment = {
 			id: "self",
 			name: "Self",
 			description:
-				"Install and operate Company on infrastructure you control, without a Cloud subscription or a Cloud account.",
+				"Install and operate Astron Collection on infrastructure you control, without a Cloud subscription or a Cloud account.",
 			points: [
 				"Open-source core, free to self-host",
 				"You keep control of the installation",
@@ -387,7 +387,7 @@ export const deployment = {
 			id: "hybrid",
 			name: "Hybrid",
 			description:
-				"Combine the centralised control plane with one or more local Company Self installations.",
+				"Combine the centralised control plane with one or more local Astron Collection Self installations.",
 			points: [
 				"Centralised management across sites",
 				"Local infrastructure keeps operating autonomously",
@@ -430,7 +430,7 @@ export const enterprise = {
 
 export const pricingFaqs: readonly FaqEntry[] = [
 	{
-		question: "What is included in each Company plan?",
+		question: "What is included in each Astron Collection plan?",
 		answer:
 			"Every plan covers the same six service families. Free covers core management with limited history and community support. Pro raises quotas and adds advanced automation, members, permissions and priority support. Enterprise adds governance, extended audit, dedicated infrastructure and contractual support. Infrastructure consumption is billed on top of the subscription in every plan.",
 	},
@@ -450,12 +450,12 @@ export const pricingFaqs: readonly FaqEntry[] = [
 			"Yes. A plan change is made from the console and applies from the next billing period unless the agreement says otherwise. A downgrade requires the workspace to fit within the lower quotas before it is applied.",
 	},
 	{
-		question: "Can I use Company without subscribing to Cloud?",
+		question: "Can I use Astron Collection without subscribing to Cloud?",
 		answer:
-			"Yes. Company Self runs on infrastructure you control, with no Cloud subscription and no Cloud account.",
+			"Yes. Astron Collection Self runs on infrastructure you control, with no Cloud subscription and no Cloud account.",
 	},
 	{
-		question: "Is Company Self free to use?",
+		question: "Is Astron Collection Self free to use?",
 		answer:
 			"The open-source core is free to self-host. Enterprise capabilities, such as advanced RBAC, audit and white labelling, require a commercial licence. Support and onboarding are separate services.",
 	},
@@ -467,7 +467,7 @@ export const pricingFaqs: readonly FaqEntry[] = [
 	{
 		question: "Can I connect my own infrastructure providers?",
 		answer:
-			"Company is designed to manage infrastructure across providers rather than lock a workspace to one. Self and Hybrid are the modes for infrastructure you already operate; supported providers and integrations are documented in the product documentation and added as they are verified.",
+			"Astron Collection is designed to manage infrastructure across providers rather than lock a workspace to one. Self and Hybrid are the modes for infrastructure you already operate; supported providers and integrations are documented in the product documentation and added as they are verified.",
 	},
 	{
 		question: "Is Dedicated Bare Metal included in Pro or Enterprise?",
@@ -495,7 +495,7 @@ export const finalCta = {
 	eyebrow: "Start here",
 	title: "One control plane for your whole infrastructure.",
 	description:
-		"Start free, operate on Pro, or run Company on your own infrastructure with Self and Hybrid.",
+		"Start free, operate on Pro, or run Astron Collection on your own infrastructure with Self and Hybrid.",
 	primary: { label: "Start for free", href: links.console, external: true },
 	secondary: { label: "Contact sales", href: "/contact-sales" },
 	tertiary: {

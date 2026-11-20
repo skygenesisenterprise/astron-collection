@@ -1,4 +1,4 @@
-import { ShikiProvider, CodeHighlighted } from "@company/kumo/code";
+import { ShikiProvider, CodeHighlighted } from "@astron-collection/react/code";
 import { useState } from "react";
 import type { ReactNode } from "react";
 
@@ -87,10 +87,10 @@ export function CodeHighlightedBashDemo() {
     <DemoProvider>
       <CodeHighlighted
         code={`# Install Kumo
-npm install @company/kumo
+npm install @astron-collection/react
 
 # Or with pnpm
-pnpm add @company/kumo
+pnpm add @astron-collection/react
 
 # Start development server
 pnpm dev`}
@@ -106,7 +106,7 @@ export function CodeHighlightedJsonDemo() {
     <DemoProvider>
       <CodeHighlighted
         code={`{
-  "name": "@company/kumo",
+  "name": "@astron-collection/react",
   "version": "1.9.0",
   "dependencies": {
     "react": "^19.0.0",
@@ -178,7 +178,7 @@ export function CodeHighlightedCopyButtonDemo() {
   return (
     <DemoProvider>
       <CodeHighlighted
-        code={`npm install @company/kumo`}
+        code={`npm install @astron-collection/react`}
         lang="bash"
         showCopyButton
       />
@@ -238,7 +238,7 @@ export function CodeHighlightedFullFeaturedDemo() {
   return (
     <DemoProvider>
       <CodeHighlighted
-        code={`import { ShikiProvider, CodeHighlighted } from "@company/kumo/code";
+        code={`import { ShikiProvider, CodeHighlighted } from "@astron-collection/react/code";
 
 export function CodeExample({ code, language }: Props) {
   return (

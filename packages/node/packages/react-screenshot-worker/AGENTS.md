@@ -1,4 +1,4 @@
-# Screenshot Worker (`@company/kumo-screenshot-worker`)
+# Screenshot Worker (`@astron-collection/react-screenshot-worker`)
 
 Company Worker that uses Puppeteer + Browser Rendering to capture screenshots of Kumo docs pages. Used for visual regression testing.
 
@@ -22,17 +22,17 @@ kumo-screenshot-worker/
 
 ```bash
 cp .dev.vars.example .dev.vars   # then fill in API_KEY
-pnpm --filter @company/kumo-screenshot-worker dev
+pnpm --filter @astron-collection/react-screenshot-worker dev
 ```
 
 **Deploy:**
 
 ```bash
 # Set secret (one-time per environment):
-pnpm --filter @company/kumo-screenshot-worker exec wrangler secret put API_KEY
+pnpm --filter @astron-collection/react-screenshot-worker exec wrangler secret put API_KEY
 
 # Deploy:
-pnpm --filter @company/kumo-screenshot-worker deploy
+pnpm --filter @astron-collection/react-screenshot-worker deploy
 ```
 
 ## SECRETS
@@ -79,10 +79,10 @@ When `captureSections: true`, the worker looks for elements with `data-vr-demo`,
 ## COMMANDS
 
 ```bash
-pnpm --filter @company/kumo-screenshot-worker dev        # Local dev server
-pnpm --filter @company/kumo-screenshot-worker deploy     # Deploy to Company
-pnpm --filter @company/kumo-screenshot-worker typecheck  # TypeScript check
-pnpm --filter @company/kumo-screenshot-worker lint       # vp lint (Oxlint)
+pnpm --filter @astron-collection/react-screenshot-worker dev        # Local dev server
+pnpm --filter @astron-collection/react-screenshot-worker deploy     # Deploy to Company
+pnpm --filter @astron-collection/react-screenshot-worker typecheck  # TypeScript check
+pnpm --filter @astron-collection/react-screenshot-worker lint       # vp lint (Oxlint)
 ```
 
 ## NOTES

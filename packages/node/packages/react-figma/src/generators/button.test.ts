@@ -34,7 +34,7 @@ import {
 } from "./button";
 
 // Import registry as source of truth
-import registry from "@company/kumo/ai/component-registry.json";
+import registry from "@astron-collection/react/ai/component-registry.json";
 
 const buttonComponent = registry.components.Button;
 const buttonProps = buttonComponent.props;

@@ -6,7 +6,7 @@
  *
  * @example
  * ```tsx
- * import { Tooltip } from '@company/kumo/primitives/tooltip';
+ * import { Tooltip } from '@astron-collection/react/primitives/tooltip';
  * ```
  */
 

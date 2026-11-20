@@ -1,305 +1,508 @@
-import { IS_CLOUD, isAdminPresent, validateRequest } from "@astron-collection/server";
 import { standardSchemaResolver as zodResolver } from "@hookform/resolvers/standard-schema";
-import { generateServerSideHelper } from "@/utils/create-server-helpers";
-import { AlertTriangle } from "lucide-react";
+import {
+	DiscordLogoIcon,
+	EyeIcon,
+	EyeSlashIcon,
+	GithubLogoIcon,
+	GlobeIcon,
+	WarningCircleIcon,
+} from "@phosphor-icons/react";
+import {
+	Banner,
+	Button,
+	Field,
+	Input,
+	Link as KumoLink,
+	Text,
+} from "@astron-collection/react";
+import { IS_CLOUD, isAdminPresent } from "@astron-collection/server";
+import { validateRequest } from "@astron-collection/server/lib/auth";
+import { readOnboardingStatus } from "@astron-collection/server/services/onboarding";
 import type { GetServerSidePropsContext } from "next";
-import Link from "next/link";
+import Head from "next/head";
 import { useRouter } from "next/router";
-import { type ReactElement, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { OnboardingLayout } from "@/components/layouts/onboarding-layout";
-import { SignInWithGithub } from "@/components/proprietary/auth/sign-in-with-github";
-import { SignInWithGoogle } from "@/components/proprietary/auth/sign-in-with-google";
-import { AlertBlock } from "@/components/shared/alert-block";
-import { Logo } from "@/components/shared/logo";
-import { Button } from "@/components/ui/button";
-import { CardContent, CardDescription, CardTitle } from "@/components/ui/card";
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { pushToDataLayer } from "@/lib/analytics";
 import { authClient } from "@/lib/auth-client";
 import { appRouter } from "@/server/api/root";
-import { useWhitelabelingPublic } from "@/utils/hooks/use-whitelabeling";
+import { generateServerSideHelper } from "@/utils/create-server-helpers";
 
-const registerSchema = z
+const RegisterSchema = z
 	.object({
-		name: z.string().min(1, {
-			message: "First name is required",
-		}),
-		lastName: z.string().min(1, {
-			message: "Last name is required",
-		}),
 		email: z
 			.string()
-			.min(1, {
-				message: "Email is required",
-			})
-			.email({
-				message: "Email must be a valid email",
-			}),
-		password: z
-			.string()
-			.min(1, {
-				message: "Password is required",
-			})
-			.refine((password) => password === "" || password.length >= 8, {
-				message: "Password must be at least 8 characters",
-			}),
-		confirmPassword: z
-			.string()
-			.min(1, {
-				message: "Password is required",
-			})
-			.refine(
-				(confirmPassword) =>
-					confirmPassword === "" || confirmPassword.length >= 8,
-				{
-					message: "Password must be at least 8 characters",
-				},
-			),
+			.min(1, "Enter your email address")
+			.email("Enter a valid email address"),
+		password: z.string().min(8, "Password must be at least 8 characters"),
+		confirmPassword: z.string().min(1, "Confirm your password"),
 	})
 	.refine((data) => data.password === data.confirmPassword, {
 		message: "Passwords do not match",
 		path: ["confirmPassword"],
 	});
 
-type Register = z.infer<typeof registerSchema>;
+type RegisterForm = z.infer<typeof RegisterSchema>;
 
-interface Props {
-	hasAdmin: boolean;
-	isCloud: boolean;
+const REGISTER_PATH = "/register";
+const LOGIN_PATH = "/login";
+/** The organization step owns onboarding after the user account exists. */
+const CREATE_ACCOUNT_PATH = "/create-account";
+
+function GoogleMark({ className = "size-4" }: { className?: string }) {
+	return (
+		<svg viewBox="0 0 24 24" aria-hidden="true" className={className}>
+			<path
+				fill="#4285F4"
+				d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+			/>
+			<path
+				fill="#34A853"
+				d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+			/>
+			<path
+				fill="#FBBC05"
+				d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+			/>
+			<path
+				fill="#EA4335"
+				d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+			/>
+		</svg>
+	);
 }
 
-const Register = ({ isCloud }: Props) => {
-	const router = useRouter();
-	const { config: whitelabeling } = useWhitelabelingPublic();
-	const [isError, setIsError] = useState(false);
-	const [error, setError] = useState<string | null>(null);
-	const [data, setData] = useState<any>(null);
+function MicrosoftMark({ className = "size-4" }: { className?: string }) {
+	return (
+		<svg viewBox="0 0 24 24" aria-hidden="true" className={className}>
+			<path fill="#F25022" d="M2 2h9.5v9.5H2z" />
+			<path fill="#7FBA00" d="M12.5 2H22v9.5h-9.5z" />
+			<path fill="#00A4EF" d="M2 12.5h9.5V22H2z" />
+			<path fill="#FFB900" d="M12.5 12.5H22V22h-9.5z" />
+		</svg>
+	);
+}
 
-	const form = useForm<Register>({
+function OrDivider() {
+	return (
+		<div className="my-6 flex items-center gap-4" aria-hidden="true">
+			<span className="h-px flex-1 bg-zenth-line" />
+			<Text
+				variant="secondary"
+				size="xs"
+				as="span"
+				DANGEROUS_className="font-medium tracking-[0.1em] uppercase"
+			>
+				or
+			</Text>
+			<span className="h-px flex-1 bg-zenth-line" />
+		</div>
+	);
+}
+
+/** Text link built on the design-system Link (no app-specific styling). */
+function AuthLink({
+	href,
+	children,
+	external = false,
+	inline = false,
+}: {
+	href: string;
+	children: React.ReactNode;
+	external?: boolean;
+	inline?: boolean;
+}) {
+	return (
+		<KumoLink
+			href={href}
+			variant={inline ? "inline" : "plain"}
+			className="font-medium"
+			{...(external ? { target: "_blank", rel: "noreferrer" } : {})}
+		>
+			{children}
+		</KumoLink>
+	);
+}
+
+interface Props {
+	IS_CLOUD: boolean;
+}
+
+type SocialProvider = "google" | "github" | "discord" | "microsoft";
+
+export default function RegisterPage({ IS_CLOUD }: Props) {
+	const router = useRouter();
+	const [isRegisterLoading, setIsRegisterLoading] = useState(false);
+	const [socialLoading, setSocialLoading] = useState<SocialProvider | null>(
+		null,
+	);
+	const [error, setError] = useState<string | null>(null);
+	const [showPassword, setShowPassword] = useState(false);
+	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+	const registerForm = useForm<RegisterForm>({
+		resolver: zodResolver(RegisterSchema),
 		defaultValues: {
-			name: "",
-			lastName: "",
 			email: "",
 			password: "",
 			confirmPassword: "",
 		},
-		resolver: zodResolver(registerSchema),
 	});
 
+	// The identity provider redirects back with ?error=… when a sign-up fails.
 	useEffect(() => {
-		form.reset();
-	}, [form, form.reset, form.formState.isSubmitSuccessful]);
+		const queryError = router.query.error;
+		if (!queryError) return;
 
-	const onSubmit = async (values: Register) => {
-		const { data, error } = await authClient.signUp.email({
-			email: values.email,
-			password: values.password,
-			name: values.name,
-			lastName: values.lastName,
+		const raw = Array.isArray(queryError) ? queryError[0] : queryError;
+		if (!raw) return;
+		const normalized = raw.replace(/[+_]/g, " ").toLowerCase();
+
+		setError(
+			normalized.includes("account not linked")
+				? "This account already exists but isn't linked to that sign-in provider yet. Sign in instead or contact your administrator to link it."
+				: normalized.includes("access denied")
+					? "Access was denied by the identity provider."
+					: "We couldn't complete sign-up. Please try again or contact your administrator.",
+		);
+
+		const { error: _removed, ...rest } = router.query;
+		router.replace({ pathname: router.pathname, query: rest }, undefined, {
+			shallow: true,
 		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [router.query.error]);
 
-		if (error) {
-			setIsError(true);
-			setError(error.message || "An error occurred");
-		} else {
-			toast.success("User registered successfully", {
-				duration: 2000,
+	const onSocialSignUp = async (provider: SocialProvider) => {
+		setSocialLoading(provider);
+		try {
+			const { error } = await authClient.signIn.social({
+				provider,
+				// Existing accounts finish on the sign-in page, new accounts continue
+				// to the organization step.
+				callbackURL: LOGIN_PATH,
+				newUserCallbackURL: CREATE_ACCOUNT_PATH,
+				errorCallbackURL: REGISTER_PATH,
 			});
-			if (!isCloud) {
-				router.push("/");
-			} else {
-				pushToDataLayer("sign_up", { method: "email" });
-				setData(data);
+			if (error) {
+				const message = error.message || `Could not sign up with ${provider}`;
+				toast.error(message);
+				setError(message);
 			}
+		} catch (caught) {
+			const message =
+				caught instanceof Error
+					? caught.message
+					: `Could not sign up with ${provider}`;
+			toast.error(message);
+			setError(message);
+		} finally {
+			setSocialLoading(null);
 		}
 	};
-	return (
-		<div className="">
-			<div className="flex  w-full items-center justify-center ">
-				<div className="flex flex-col items-center gap-4 w-full">
-					<CardTitle className="text-2xl font-bold flex  items-center gap-2">
-						<Link href="/" className="flex flex-row items-center gap-2">
-							<Logo
-								className="size-12"
-								logoUrl={
-									whitelabeling?.loginLogoUrl ||
-									whitelabeling?.logoUrl ||
-									undefined
-								}
-							/>
-						</Link>
-						{isCloud ? "Sign Up" : "Setup the server"}
-					</CardTitle>
-					<CardDescription>
-						Enter your email and password to{" "}
-						{isCloud ? "create an account" : "setup the server"}
-					</CardDescription>
-					<div className="mx-auto w-full max-w-lg bg-transparent">
-						{isError && (
-							<div className="my-2 flex flex-row items-center gap-2 rounded-lg bg-red-50 p-2 dark:bg-red-950">
-								<AlertTriangle className="text-red-600 dark:text-red-400" />
-								<span className="text-sm text-red-600 dark:text-red-400">
-									{error}
-								</span>
-							</div>
-						)}
-						{isCloud && data && (
-							<AlertBlock type="success" className="my-2">
-								<span>
-									Registered successfully, please check your inbox or spam
-									folder to confirm your account.
-								</span>
-							</AlertBlock>
-						)}
-						<CardContent className="p-0">
-							{isCloud && (
-								<div className="flex flex-col gap-2">
-									<SignInWithGithub />
-									<SignInWithGoogle />
-								</div>
-							)}
-							{isCloud && (
-								<p className="mb-4 text-center text-xs text-muted-foreground">
-									Or register with email
-								</p>
-							)}
-							<Form {...form}>
-								<form
-									method="post"
-									onSubmit={form.handleSubmit(onSubmit)}
-									className="grid gap-4"
-								>
-									<div className="space-y-4">
-										<FormField
-											control={form.control}
-											name="name"
-											render={({ field }) => (
-												<FormItem>
-													<FormLabel>First Name</FormLabel>
-													<FormControl>
-														<Input placeholder="John" {...field} />
-													</FormControl>
-													<FormMessage />
-												</FormItem>
-											)}
-										/>
-										<FormField
-											control={form.control}
-											name="lastName"
-											render={({ field }) => (
-												<FormItem>
-													<FormLabel>Last Name</FormLabel>
-													<FormControl>
-														<Input placeholder="Doe" {...field} />
-													</FormControl>
-													<FormMessage />
-												</FormItem>
-											)}
-										/>
-										<FormField
-											control={form.control}
-											name="email"
-											render={({ field }) => (
-												<FormItem>
-													<FormLabel>Email</FormLabel>
-													<FormControl>
-														<Input placeholder="email@astron-collection.com" {...field} />
-													</FormControl>
-													<FormMessage />
-												</FormItem>
-											)}
-										/>
-										<FormField
-											control={form.control}
-											name="password"
-											render={({ field }) => (
-												<FormItem>
-													<FormLabel>Password</FormLabel>
-													<FormControl>
-														<Input
-															type="password"
-															placeholder="Password"
-															{...field}
-														/>
-													</FormControl>
-													<FormMessage />
-												</FormItem>
-											)}
-										/>
 
-										<FormField
-											control={form.control}
-											name="confirmPassword"
-											render={({ field }) => (
-												<FormItem>
-													<FormLabel>Confirm Password</FormLabel>
-													<FormControl>
-														<Input
-															type="password"
-															placeholder="Password"
-															{...field}
-														/>
-													</FormControl>
-													<FormMessage />
-												</FormItem>
-											)}
-										/>
+	const onSubmit = async (values: RegisterForm) => {
+		setIsRegisterLoading(true);
+		setError(null);
+		try {
+			const { error } = await authClient.signUp.email({
+				email: values.email,
+				password: values.password,
+				name: values.email,
+				lastName: "",
+			});
 
-										<Button
-											type="submit"
-											isLoading={form.formState.isSubmitting}
-											className="w-full"
-										>
-											Register
-										</Button>
-									</div>
-								</form>
-							</Form>
-							<div className="flex flex-row justify-between flex-wrap">
-								{isCloud && (
-									<div className="mt-4 text-center text-sm flex gap-2 text-muted-foreground">
-										Already have account?
-										<Link className="underline" href="/">
-											Sign in
-										</Link>
-									</div>
-								)}
+			if (error) {
+				toast.error(error.message);
+				setError(
+					error.message || "An error occurred while creating your account",
+				);
+				return;
+			}
 
-								<div className="mt-4 text-center text-sm flex flex-row justify-center gap-2  text-muted-foreground">
-									Need help?
-									<Link
-										className="underline"
-										href="https://astron-collection.com"
-										target="_blank"
-									>
-										Contact us
-									</Link>
-								</div>
-							</div>
-						</CardContent>
-					</div>
+			if (IS_CLOUD) {
+				pushToDataLayer("sign_up", { method: "email" });
+			}
+
+			// Cloud installations disable `autoSignIn` on sign-up, so the account
+			// exists without a session yet. Open it explicitly before onboarding:
+			// without one, /create-account would send the new account to /login.
+			const { data: signedIn } = await authClient.getSession();
+			if (!signedIn?.session) {
+				const { error: signInError } = await authClient.signIn.email({
+					email: values.email,
+					password: values.password,
+				});
+				if (signInError) {
+					// Email verification blocks the session on production Cloud: the
+					// account is created, the workspace step waits for the sign-in.
+					const message =
+						signInError.code === "EMAIL_NOT_VERIFIED"
+							? "Your account was created. Verify your email address, then sign in to finish setting up your workspace."
+							: signInError.message ||
+								"Your account was created. Sign in to continue.";
+					toast.info(message);
+					setError(message);
+					window.location.assign(LOGIN_PATH);
+					return;
+				}
+			}
+
+			toast.success("Account created successfully");
+			// Document navigation so the next request carries the fresh session.
+			window.location.assign(CREATE_ACCOUNT_PATH);
+		} catch {
+			toast.error("An error occurred while creating your account");
+		} finally {
+			setIsRegisterLoading(false);
+		}
+	};
+
+	const emailError = registerForm.formState.errors.email?.message;
+	const passwordError = registerForm.formState.errors.password?.message;
+	const confirmPasswordError =
+		registerForm.formState.errors.confirmPassword?.message;
+
+	const registerPanel = (
+		<>
+			{IS_CLOUD && (
+				<div className="mt-6 grid grid-cols-2 gap-2">
+					<Button
+						variant="outline"
+						size="lg"
+						className="w-full justify-center"
+						loading={socialLoading === "google"}
+						disabled={socialLoading !== null}
+						onClick={() => onSocialSignUp("google")}
+					>
+						<GoogleMark />
+						Google
+					</Button>
+					<Button
+						variant="outline"
+						size="lg"
+						className="w-full justify-center"
+						icon={GithubLogoIcon}
+						loading={socialLoading === "github"}
+						disabled={socialLoading !== null}
+						onClick={() => onSocialSignUp("github")}
+					>
+						GitHub
+					</Button>
+					<Button
+						variant="outline"
+						size="lg"
+						className="w-full justify-center"
+						icon={DiscordLogoIcon}
+						loading={socialLoading === "discord"}
+						disabled={socialLoading !== null}
+						onClick={() => onSocialSignUp("discord")}
+					>
+						Discord
+					</Button>
+					<Button
+						variant="outline"
+						size="lg"
+						className="w-full justify-center"
+						loading={socialLoading === "microsoft"}
+						disabled={socialLoading !== null}
+						onClick={() => onSocialSignUp("microsoft")}
+					>
+						<MicrosoftMark />
+						Microsoft
+					</Button>
 				</div>
+			)}
+			{IS_CLOUD && <OrDivider />}
+			<form
+				method="post"
+				onSubmit={registerForm.handleSubmit(onSubmit)}
+				className={IS_CLOUD ? "mt-6 space-y-5" : "mt-8 space-y-5"}
+				id="register-form"
+			>
+				<Field
+					label="Email"
+					error={emailError ? { message: emailError, match: true } : undefined}
+				>
+					<Input
+						type="email"
+						placeholder="john@example.com"
+						autoComplete="email"
+						size="lg"
+						{...registerForm.register("email")}
+					/>
+				</Field>
+
+				<Field
+					label="Password"
+					error={
+						passwordError ? { message: passwordError, match: true } : undefined
+					}
+				>
+					<div className="relative w-full">
+						<Input
+							type={showPassword ? "text" : "password"}
+							placeholder="Create a password"
+							autoComplete="new-password"
+							size="lg"
+							className="w-full pr-12"
+							{...registerForm.register("password")}
+						/>
+						<Button
+							type="button"
+							variant="ghost"
+							shape="square"
+							size="sm"
+							onClick={() => setShowPassword((value) => !value)}
+							aria-label={showPassword ? "Hide password" : "Show password"}
+							aria-pressed={showPassword}
+							className="absolute top-1/2 right-1.5 -translate-y-1/2"
+						>
+							{showPassword ? (
+								<EyeSlashIcon className="size-4" />
+							) : (
+								<EyeIcon className="size-4" />
+							)}
+						</Button>
+					</div>
+				</Field>
+
+				<Field
+					label="Confirm password"
+					error={
+						confirmPasswordError
+							? { message: confirmPasswordError, match: true }
+							: undefined
+					}
+				>
+					<div className="relative w-full">
+						<Input
+							type={showConfirmPassword ? "text" : "password"}
+							placeholder="Repeat your password"
+							autoComplete="new-password"
+							size="lg"
+							className="w-full pr-12"
+							{...registerForm.register("confirmPassword")}
+						/>
+						<Button
+							type="button"
+							variant="ghost"
+							shape="square"
+							size="sm"
+							onClick={() => setShowConfirmPassword((value) => !value)}
+							aria-label={
+								showConfirmPassword
+									? "Hide password confirmation"
+									: "Show password confirmation"
+							}
+							aria-pressed={showConfirmPassword}
+							className="absolute top-1/2 right-1.5 -translate-y-1/2"
+						>
+							{showConfirmPassword ? (
+								<EyeSlashIcon className="size-4" />
+							) : (
+								<EyeIcon className="size-4" />
+							)}
+						</Button>
+					</div>
+				</Field>
+
+				<Button
+					type="submit"
+					variant="primary"
+					size="lg"
+					className="w-full justify-center rounded-lg"
+					loading={isRegisterLoading}
+				>
+					Create account
+				</Button>
+			</form>
+			<div className="mt-6 space-y-1 text-center">
+				<Text variant="secondary" size="sm">
+					Already have an account?{" "}
+					<AuthLink href={LOGIN_PATH}>Sign in</AuthLink>
+				</Text>
 			</div>
-		</div>
+			<Text
+				variant="secondary"
+				size="xs"
+				as="p"
+				DANGEROUS_className="mt-7 text-center leading-relaxed"
+			>
+				By continuing, you agree to the Astron Collection{" "}
+				<AuthLink href="https://astron-collection.com/legal/terms" external inline>
+					Terms of Service
+				</AuthLink>
+				,{" "}
+				<AuthLink href="https://astron-collection.com/legal/privacy" external inline>
+					Privacy Policy
+				</AuthLink>{" "}
+				and{" "}
+				<AuthLink href="https://astron-collection.com/legal/cookies" external inline>
+					Cookie Policy
+				</AuthLink>
+				.
+			</Text>
+		</>
 	);
-};
 
-export default Register;
+	return (
+		<main
+			data-zenth-mode="light"
+			className="flex min-h-svh flex-col bg-zenth-base text-zenth-default"
+		>
+			<Head>
+				<title>Astron Collection Dashboard | Manage Your Account</title>
+			</Head>
+			<header className="flex h-20 items-center justify-end gap-4 px-6">
+				<div className="flex items-center gap-3">
+					<Text
+						variant="secondary"
+						size="sm"
+						as="span"
+						DANGEROUS_className="inline-flex items-center gap-1.5"
+					>
+						<GlobeIcon className="size-4" aria-hidden="true" />
+						English
+					</Text>
+					<Button variant="outline" onClick={() => router.push(LOGIN_PATH)}>
+						Sign in
+					</Button>
+				</div>
+			</header>
 
-Register.getLayout = (page: ReactElement) => {
-	return <OnboardingLayout>{page}</OnboardingLayout>;
-};
+			<section
+				aria-labelledby="register-heading"
+				className="flex flex-1 justify-center px-6 pt-12 pb-12 sm:px-4"
+			>
+				<div className="w-full max-w-[22.75rem]">
+					<Text
+						id="register-heading"
+						variant="heading1"
+						as="h1"
+						DANGEROUS_className="text-center text-[1.75rem] leading-9 tracking-[-0.02em]"
+					>
+						Create your Astron Collection account
+					</Text>
+
+					{error && (
+						<Banner
+							variant="error"
+							size="sm"
+							icon={<WarningCircleIcon className="size-4" />}
+							description={error}
+							className="mt-6"
+						/>
+					)}
+
+					{registerPanel}
+				</div>
+			</section>
+		</main>
+	);
+}
+
 export async function getServerSideProps(context: GetServerSidePropsContext) {
 	const helpers = generateServerSideHelper(appRouter, context);
 	// Prefetch the public branding so the onboarding logo and app name render
@@ -307,37 +510,47 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 	await helpers.whitelabeling.getPublic.prefetch();
 
 	if (IS_CLOUD) {
-		const { user } = await validateRequest(context.req);
+		try {
+			const { user, session } = await validateRequest(context.req);
+			if (user) {
+				// The active organization stored on the session may have been
+				// deleted since: persisted memberships decide the destination.
+				const status = await readOnboardingStatus(
+					user.id,
+					session?.activeOrganizationId,
+				);
+				return {
+					redirect: {
+						permanent: false,
+						destination: status.destination ?? CREATE_ACCOUNT_PATH,
+					},
+				};
+			}
+		} catch {}
 
-		if (user) {
-			return {
-				redirect: {
-					permanent: false,
-					destination: "/dashboard/home",
-				},
-			};
-		}
 		return {
 			props: {
 				trpcState: helpers.dehydrate(),
-				isCloud: true,
+				IS_CLOUD: true,
 			},
 		};
 	}
+
 	const hasAdmin = await isAdminPresent();
 
 	if (hasAdmin) {
 		return {
 			redirect: {
 				permanent: false,
-				destination: "/",
+				destination: LOGIN_PATH,
 			},
 		};
 	}
+
 	return {
 		props: {
 			trpcState: helpers.dehydrate(),
-			isCloud: false,
+			IS_CLOUD: false,
 		},
 	};
 }
