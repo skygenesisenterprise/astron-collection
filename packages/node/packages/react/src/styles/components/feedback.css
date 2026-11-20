@@ -1,0 +1,48 @@
+/**
+ * Company — feedback component styles
+ *
+ * Non-Tailwind rules that are difficult to express with utilities:
+ * shimmer gradients and chart loading overlays.
+ */
+@layer components {
+  .zenth-skeleton {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in oklch, var(--text-color-zenth-default) 6%, transparent) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: zenth-skeleton 1.5s ease-in-out infinite;
+  }
+
+  .zenth-skeleton-line {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-zenth-xs);
+    height: var(--spacing-zenth-sm);
+    width: var(--skeleton-width);
+    background-color: var(--color-zenth-fill);
+  }
+
+  .zenth-skeleton-line::after {
+    position: absolute;
+    inset: 0;
+    content: "";
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in oklch, var(--text-color-zenth-default) 8%, transparent) 50%,
+      transparent 100%
+    );
+    animation: zenth-shimmer var(--shimmer-duration, 1.5s)
+      var(--shimmer-delay, 0s) infinite ease-in-out;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zenth-skeleton,
+  .zenth-skeleton-line::after {
+    animation: none;
+  }
+}

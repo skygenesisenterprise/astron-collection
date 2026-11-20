@@ -1,0 +1,23 @@
+/**
+ * Company — semantic aliases
+ *
+ * Convenience aliases for the higher-level vocabulary requested by the
+ * design system (background, surface, border, primary, secondary, disabled).
+ * They point at the generated semantic tokens, so themes and mode switching
+ * keep working without duplicating values.
+ */
+@theme {
+  --color-zenth-background: var(--color-zenth-canvas);
+  --color-zenth-surface: var(--color-zenth-base);
+  --color-zenth-surface-elevated: var(--color-zenth-elevated);
+  --color-zenth-surface-muted: var(--color-zenth-recessed);
+  --color-zenth-border: var(--color-zenth-line);
+  --color-zenth-border-subtle: var(--color-zenth-hairline);
+  --color-zenth-primary: var(--color-zenth-brand);
+  --color-zenth-secondary: var(--color-zenth-fill);
+  --color-zenth-disabled: var(--color-zenth-interact);
+
+  --text-color-zenth-foreground: var(--text-color-zenth-default);
+  --text-color-zenth-muted: var(--text-color-zenth-subtle);
+  --text-color-zenth-disabled: var(--text-color-zenth-inactive);
+}

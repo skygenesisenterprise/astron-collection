@@ -1,0 +1,23 @@
+/**
+ * Company — shadow tokens
+ *
+ * Shadows stay subtle and mostly structural: a hairline edge plus a short
+ * drop shadow. Overlays get the larger elevation.
+ */
+@theme {
+  --shadow-zenth-none: none;
+  --shadow-zenth-xs: 0 1px 2px 0
+    color-mix(in oklch, var(--color-zenth-shadow-drop) 100%, transparent);
+  --shadow-zenth-sm:
+    0 1px 2px 0 var(--color-zenth-shadow-drop),
+    0 1px 1px 0 color-mix(in oklch, var(--color-zenth-shadow-edge) 60%, transparent);
+  --shadow-zenth-md:
+    0 4px 8px -2px var(--color-zenth-shadow-drop),
+    0 2px 4px -2px var(--color-zenth-shadow-drop);
+  --shadow-zenth-lg:
+    0 12px 24px -6px var(--color-zenth-shadow-drop),
+    0 4px 8px -4px var(--color-zenth-shadow-edge);
+  --shadow-zenth-overlay:
+    0 16px 40px -8px var(--color-zenth-shadow-drop),
+    0 0 0 1px var(--color-zenth-arrow-edge);
+}

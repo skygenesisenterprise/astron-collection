@@ -1,0 +1,22 @@
+/**
+ * Company — design tokens
+ *
+ * Token-only entry point. Import this when the host application wants the
+ * Company variables without any component or utility CSS:
+ *
+ *   import "@company/react/tokens.css";
+ *
+ * Then import a theme layer:
+ *
+ *   import "@company/react/themes/light.css";
+ *   import "@company/react/themes/dark.css";
+ */
+@import "./tokens/colors.css";
+@import "./tokens/typography.css";
+@import "./tokens/spacing.css";
+@import "./tokens/radius.css";
+@import "./tokens/shadows.css";
+@import "./tokens/motion.css";
+@import "./tokens/z-index.css";
+@import "./theme-zenth.css";
+@import "./tokens/aliases.css";

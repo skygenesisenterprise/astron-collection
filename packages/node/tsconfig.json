@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "references": [{ "path": "./packages/react" }],
+  "compilerOptions": {
+    "composite": true,
+    "skipLibCheck": true
+  }
+}

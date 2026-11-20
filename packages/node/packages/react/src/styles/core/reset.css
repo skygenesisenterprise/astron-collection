@@ -1,0 +1,32 @@
+/**
+ * Company — scoped reset
+ *
+ * Deliberately NOT a global reset: it never touches html, body, button,
+ * input or other native elements outside Company-owned subtrees. Host
+ * applications keep their own preflight/styles intact.
+ *
+ * Scope is opt-in through `.zenth-root` / `[data-zenth-root]` for layout
+ * surfaces, and automatic for rendered component roots/parts.
+ */
+@layer base {
+  :where(.zenth-root, [data-zenth-root]),
+  :where(.zenth-root, [data-zenth-root]) *,
+  :where(.zenth-root, [data-zenth-root]) *::before,
+  :where(.zenth-root, [data-zenth-root]) *::after,
+  :where([data-zenth-component], [data-zenth-part]),
+  :where([data-zenth-component], [data-zenth-part]) *,
+  :where([data-zenth-component], [data-zenth-part]) *::before,
+  :where([data-zenth-component], [data-zenth-part]) *::after {
+    box-sizing: border-box;
+  }
+
+  :where(.zenth-root, [data-zenth-root]) {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-size-adjust: 100%;
+  }
+
+  :where([hidden]) {
+    display: none !important;
+  }
+}

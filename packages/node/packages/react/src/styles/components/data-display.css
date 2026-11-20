@@ -1,0 +1,68 @@
+/**
+ * Company — data display styles
+ *
+ * Shiki dual-theme support and code block layout. The <pre> background is
+ * transparent so the surrounding surface token and radius show through.
+ */
+@layer components {
+  .zenth-shiki pre {
+    background-color: transparent !important;
+  }
+
+  .zenth-shiki code {
+    display: block;
+    width: fit-content;
+    min-width: 100%;
+    padding-right: 1rem;
+  }
+
+  .zenth-shiki {
+    --zenth-code-highlight-bg: color-mix(
+      in oklch,
+      var(--text-color-zenth-default) 5%,
+      transparent
+    );
+  }
+
+  .zenth-shiki .line.line-highlighted {
+    display: inline-block;
+    width: calc(100% + 2rem);
+    margin: 0 -1rem;
+    padding: 0 1rem;
+    background-color: var(--zenth-code-highlight-bg);
+  }
+
+  .zenth-line-numbers {
+    padding-left: 0.75rem;
+    line-height: 1.625; /* matches leading-relaxed */
+  }
+
+  [data-zenth-mode="dark"] .zenth-shiki {
+    --zenth-code-highlight-bg: color-mix(
+      in oklch,
+      var(--text-color-zenth-default) 8%,
+      transparent
+    );
+  }
+
+  [data-mode="dark"] .zenth-shiki {
+    --zenth-code-highlight-bg: color-mix(
+      in oklch,
+      var(--text-color-zenth-default) 8%,
+      transparent
+    );
+  }
+
+  /* Dark-mode token colors. `!important` is required to override the inline
+     styles Shiki writes for the light theme. */
+  [data-zenth-mode="dark"] .zenth-shiki span:not(.line-highlighted),
+  [data-mode="dark"] .zenth-shiki span:not(.line-highlighted) {
+    color: var(--shiki-dark) !important;
+    background-color: transparent !important;
+  }
+
+  [data-zenth-mode="dark"] .zenth-shiki .line-highlighted,
+  [data-mode="dark"] .zenth-shiki .line-highlighted {
+    color: var(--shiki-dark) !important;
+  }
+}

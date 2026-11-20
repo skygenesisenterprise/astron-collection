@@ -1,0 +1,27 @@
+/**
+ * Company — overlay component styles
+ *
+ * Popover/tooltip arrows and dark-mode outline alignment for portaled
+ * surfaces. These must work inside document.body portals, so selectors are
+ * library-scoped only and never depend on the host's layout.
+ */
+@layer components {
+  /* In dark mode, offset the outline inward to align with the inner stroke.
+     Compensates for the different geometry of inner vs outer stroke paths. */
+  [data-zenth-mode="dark"] .zenth-tooltip-popup,
+  [data-zenth-mode="dark"] .zenth-popover-popup,
+  [data-mode="dark"] .zenth-tooltip-popup,
+  [data-mode="dark"] .zenth-popover-popup {
+    outline-offset: -1px;
+  }
+
+  .zenth-input-placeholder::placeholder {
+    color: var(--text-color-zenth-placeholder);
+    opacity: 1;
+  }
+}
+
+/* Legacy selector kept for consumers on the pre-3.x class names. */
+.zenth-input-placeholder::placeholder {
+  color: var(--text-color-zenth-placeholder);
+}

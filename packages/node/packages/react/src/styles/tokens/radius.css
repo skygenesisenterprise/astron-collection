@@ -1,0 +1,16 @@
+/**
+ * Company — radius tokens
+ *
+ * Keep radii restrained: this is an infrastructure console, not a consumer
+ * marketing surface. Pills are reserved for badges and status chips.
+ */
+@theme {
+  --radius-zenth-none: 0;
+  --radius-zenth-xs: 0.125rem; /* 2px */
+  --radius-zenth-sm: 0.25rem; /* 4px */
+  --radius-zenth-md: 0.375rem; /* 6px */
+  --radius-zenth-lg: 0.5rem; /* 8px */
+  --radius-zenth-xl: 0.75rem; /* 12px */
+  --radius-zenth-2xl: 1rem; /* 16px */
+  --radius-zenth-pill: 9999px;
+}

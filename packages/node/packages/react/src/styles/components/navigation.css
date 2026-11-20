@@ -1,0 +1,75 @@
+/**
+ * Company — navigation component styles
+ *
+ * Tab list scroll affordances and scroll-driven edge fades. The fade is
+ * progressive enhancement: browsers without scroll-driven animations keep
+ * the native scrollbar.
+ */
+@property --zenth-fade-left-n {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --zenth-fade-right-n {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@keyframes zenth-scroll-fade-x-left {
+  from {
+    --zenth-fade-left-n: 0;
+  }
+  to {
+    --zenth-fade-left-n: 1;
+  }
+}
+
+@keyframes zenth-scroll-fade-x-right {
+  from {
+    --zenth-fade-right-n: 1;
+  }
+  to {
+    --zenth-fade-right-n: 0;
+  }
+}
+
+@layer components {
+  .zenth-tabs-list {
+    overscroll-behavior-x: contain;
+  }
+
+  [data-zenth-overflowing],
+  [data-overflowing] {
+    @supports (animation-timeline: scroll()) {
+      mask-image: linear-gradient(
+        to right,
+        transparent,
+        white calc(var(--zenth-fade-left-n) * var(--scroll-fade-width, 3rem)),
+        white
+          calc(100% - var(--zenth-fade-right-n) * var(--scroll-fade-width, 3rem)),
+        transparent
+      );
+
+      animation-name: zenth-scroll-fade-x-left, zenth-scroll-fade-x-right;
+      animation-timing-function: linear, linear;
+      animation-timeline: scroll(self x);
+      animation-range:
+        0 var(--scroll-fade-range, 3rem),
+        calc(100% - var(--scroll-fade-range, 3rem)) 100%;
+      animation-fill-mode: both;
+    }
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .zenth-tabs-list {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .zenth-tabs-list::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}

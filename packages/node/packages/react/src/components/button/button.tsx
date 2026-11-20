@@ -1,0 +1,570 @@
+import React from "react";
+import { ArrowsClockwise, type Icon } from "@phosphor-icons/react";
+import { Loader } from "../loader/loader";
+import { Tooltip } from "../tooltip/tooltip";
+import { cn } from "../../utils/cn";
+import { resolveVariant } from "../../utils/resolve-variant";
+import { useLinkComponent } from "../../utils/link-provider";
+import { unwrapLazyElement } from "../../utils/unwrap-lazy-element";
+
+/** Button variant definitions mapping shape, size, and variant names to their Tailwind classes. */
+export const KUMO_BUTTON_VARIANTS = {
+  shape: {
+    base: {
+      classes: "",
+      description: "Default rectangular button shape",
+    },
+    square: {
+      classes: "items-center justify-center p-0",
+      description: "Square button for icon-only actions",
+    },
+    circle: {
+      classes: "items-center justify-center p-0 rounded-full",
+      description: "Circular button for icon-only actions",
+    },
+  },
+  size: {
+    xs: {
+      classes: "h-5 gap-1 rounded-sm px-1.5 text-xs",
+      description: "Extra small button for compact UIs",
+    },
+    sm: {
+      classes: "h-6.5 gap-1 rounded-md px-2 text-xs",
+      description: "Small button for secondary actions",
+    },
+    base: {
+      classes: "h-9 gap-1.5 rounded-lg px-3 text-base",
+      description: "Default button size",
+    },
+    lg: {
+      classes: "h-10 gap-2 rounded-lg px-4 text-base",
+      description: "Large button for primary CTAs",
+    },
+  },
+  compactSize: {
+    xs: { classes: "size-3.5" },
+    sm: { classes: "size-6.5" },
+    base: { classes: "size-9" },
+    lg: { classes: "size-10" },
+  },
+  variant: {
+    primary: {
+      classes:
+        "relative overflow-hidden bg-(--zenth-button-emphasis-bg) !text-white ring ring-(--zenth-button-emphasis-ring) focus:ring-(--zenth-button-emphasis-ring) focus-visible:ring-(--zenth-button-emphasis-ring) active:ring-(--zenth-button-emphasis-ring) disabled:opacity-50",
+      description: "High-emphasis button for primary actions",
+    },
+    secondary: {
+      classes:
+        "bg-zenth-base !text-zenth-default ring not-disabled:hover:bg-zenth-tint disabled:bg-zenth-base/50 disabled:!text-zenth-default/70 ring-zenth-line data-[state=open]:bg-zenth-base",
+      description: "Default button style for most actions",
+    },
+    ghost: {
+      classes: "text-zenth-default hover:bg-zenth-tint shadow-none bg-inherit",
+      description: "Minimal button with no background",
+    },
+    destructive: {
+      classes:
+        "relative overflow-hidden bg-(--zenth-button-emphasis-bg) !text-white ring ring-(--zenth-button-emphasis-ring) focus:ring-(--zenth-button-emphasis-ring) focus-visible:ring-(--zenth-button-emphasis-ring) active:ring-(--zenth-button-emphasis-ring) disabled:opacity-50",
+      description: "Danger button for destructive actions like delete",
+    },
+    "secondary-destructive": {
+      classes:
+        "bg-zenth-base !text-zenth-danger ring not-disabled:hover:!text-zenth-danger not-disabled:hover:ring-zenth-danger/30 disabled:bg-zenth-base/50 disabled:!text-zenth-danger/70 ring-zenth-line data-[state=open]:bg-zenth-base",
+      description:
+        "Secondary button with destructive text for less prominent dangerous actions",
+    },
+    outline: {
+      classes:
+        "bg-transparent text-zenth-default ring ring-zenth-line transition-colors not-disabled:hover:text-zenth-strong not-disabled:hover:ring-zenth-focus/25",
+      description: "Bordered button with transparent background",
+    },
+  },
+} as const;
+
+export const KUMO_BUTTON_DEFAULT_VARIANTS = {
+  shape: "base",
+  size: "base",
+  variant: "secondary",
+} as const;
+
+// Derived types from KUMO_BUTTON_VARIANTS
+export type KumoButtonShape = keyof typeof KUMO_BUTTON_VARIANTS.shape;
+export type KumoButtonSize = keyof typeof KUMO_BUTTON_VARIANTS.size;
+export type KumoButtonVariant = keyof typeof KUMO_BUTTON_VARIANTS.variant;
+
+export interface KumoButtonVariantsProps {
+  /**
+   * Button shape.
+   * - `"base"` — Default rectangular button
+   * - `"square"` — Square button for icon-only actions
+   * - `"circle"` — Circular button for icon-only actions
+   * @default "base"
+   */
+  shape?: KumoButtonShape;
+  /**
+   * Button size.
+   * - `"xs"` — Extra small for compact UIs
+   * - `"sm"` — Small for secondary actions
+   * - `"base"` — Default size
+   * - `"lg"` — Large for primary CTAs
+   * @default "base"
+   */
+  size?: KumoButtonSize;
+  /**
+   * Visual style of the button.
+   * - `"primary"` — High-emphasis, brand-colored for primary actions
+   * - `"secondary"` — Default style with border for most actions
+   * - `"ghost"` — Minimal, no background for tertiary actions
+   * - `"destructive"` — Danger button for destructive actions
+   * - `"secondary-destructive"` — Secondary style with destructive text
+   * - `"outline"` — Bordered with transparent background
+   * @default "secondary"
+   */
+  variant?: KumoButtonVariant;
+}
+
+export function buttonVariants({
+  variant = KUMO_BUTTON_DEFAULT_VARIANTS.variant,
+  size = KUMO_BUTTON_DEFAULT_VARIANTS.size,
+  shape = KUMO_BUTTON_DEFAULT_VARIANTS.shape,
+}: KumoButtonVariantsProps = {}) {
+  const isCompactShape = shape === "square" || shape === "circle";
+
+  return cn(
+    // Base styles
+    "group flex w-max shrink-0 items-center font-medium select-none",
+    "border-0 shadow-xs",
+    "focus:ring-zenth-focus/50 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-zenth-brand",
+    "cursor-pointer",
+    // Disabled state
+    "disabled:cursor-not-allowed disabled:text-zenth-subtle",
+    resolveVariant(
+      KUMO_BUTTON_VARIANTS.size,
+      size,
+      KUMO_BUTTON_DEFAULT_VARIANTS.size,
+    ).classes,
+    resolveVariant(
+      KUMO_BUTTON_VARIANTS.shape,
+      shape,
+      KUMO_BUTTON_DEFAULT_VARIANTS.shape,
+    ).classes,
+    isCompactShape &&
+      resolveVariant(
+        KUMO_BUTTON_VARIANTS.compactSize,
+        size,
+        KUMO_BUTTON_DEFAULT_VARIANTS.size,
+      ).classes,
+    resolveVariant(
+      KUMO_BUTTON_VARIANTS.variant,
+      variant,
+      KUMO_BUTTON_DEFAULT_VARIANTS.variant,
+    ).classes,
+  );
+}
+
+// Lowercase text sits below its line box's center, so lift the content row
+// with bottom padding to optically center the text in the button.
+const TEXT_LIFT_CLASSES: Record<KumoButtonSize, string> = {
+  xs: "pb-px [--zenth-button-text-lift:0.5px]",
+  sm: "pb-px [--zenth-button-text-lift:0.5px]",
+  base: "pb-0.5 [--zenth-button-text-lift:1px]",
+  lg: "pb-0.5 [--zenth-button-text-lift:1px]",
+};
+
+// Icons carry built-in whitespace inside their viewBox, so trim the leading
+// padding of icon + text buttons to optically match the trailing padding.
+const ICON_LEADING_PADDING: Record<KumoButtonSize, string> = {
+  xs: "pl-1",
+  sm: "pl-1.5",
+  base: "pl-2.5",
+  lg: "pl-3.5",
+};
+
+// Undo the lift for the icon so it stays centered. The icon is the first child
+// of the flex row: the button itself, or the inner `span.relative` for
+// emphasis variants.
+const ICON_CENTER_CLASSES =
+  "[&>svg:first-child]:translate-y-(--zenth-button-text-lift) [&>span.relative>svg:first-child]:translate-y-(--zenth-button-text-lift)";
+
+const getTextClasses = (
+  shape: KumoButtonShape,
+  size: KumoButtonSize,
+  iconNode: React.ReactNode,
+  children: React.ReactNode,
+) => {
+  const hasText = React.Children.toArray(children).some(
+    (child) => child !== "",
+  );
+  if (shape !== "base" || !hasText) return undefined;
+  return cn(
+    TEXT_LIFT_CLASSES[size],
+    iconNode != null && [ICON_LEADING_PADDING[size], ICON_CENTER_CLASSES],
+  );
+};
+
+// Normalize icon prop to support both React elements and component types
+const renderIconNode = (iconProp?: Icon | React.ReactNode) => {
+  const IconComponent = unwrapLazyElement(iconProp);
+  if (!IconComponent) return null;
+  if (React.isValidElement(IconComponent)) return IconComponent;
+  const Comp = IconComponent as React.ComponentType<Record<string, unknown>>;
+  return <Comp />;
+};
+
+const getEmphasisToken = (variant: KumoButtonVariant) => {
+  if (variant === "primary") return "var(--color-zenth-brand)";
+  if (variant === "destructive") return "var(--color-zenth-danger)";
+  return undefined;
+};
+
+const getEmphasisStyle = (variant: KumoButtonVariant) => {
+  const token = getEmphasisToken(variant);
+  if (!token) return undefined;
+
+  return {
+    "--zenth-button-emphasis-ring": `color-mix(in oklch, ${token}, black 10%)`,
+    "--zenth-button-emphasis-bg": `color-mix(in oklch, ${token}, white 30%)`,
+    "--zenth-button-emphasis-gradient-start": `color-mix(in oklch, ${token}, white 15%)`,
+    "--zenth-button-emphasis-gradient-end": token,
+  } satisfies React.CSSProperties & Record<`--${string}`, string>;
+};
+
+const ANCHOR_ONLY_PROPS = new Set([
+  "href",
+  "target",
+  "rel",
+  "download",
+  "hrefLang",
+  "media",
+  "ping",
+  "referrerPolicy",
+  "linksExternal",
+]);
+
+const toDisabledButtonProps = (
+  props: React.AnchorHTMLAttributes<HTMLAnchorElement>,
+): React.ButtonHTMLAttributes<HTMLButtonElement> => {
+  const result: Partial<React.AnchorHTMLAttributes<HTMLAnchorElement>> = {
+    ...props,
+  };
+  for (const key of Object.keys(result)) {
+    // event handlers are inert on a disabled button, and anchor-only attrs are invalid on it
+    if (key.startsWith("on") || ANCHOR_ONLY_PROPS.has(key)) {
+      delete result[key as keyof typeof result];
+    }
+  }
+  return result as React.ButtonHTMLAttributes<HTMLButtonElement>;
+};
+
+const renderButtonContent = (
+  variant: KumoButtonVariant,
+  iconNode: React.ReactNode,
+  children: React.ReactNode,
+) => {
+  const childNode =
+    children != null ? <span className="contents">{children}</span> : null;
+
+  if (!getEmphasisToken(variant)) {
+    return (
+      <>
+        {iconNode}
+        {childNode}
+      </>
+    );
+  }
+
+  return (
+    <>
+      <span
+        aria-hidden="true"
+        className="absolute inset-0 rounded-[inherit] bg-linear-to-b from-(--zenth-button-emphasis-gradient-start) to-(--zenth-button-emphasis-gradient-end) shadow-[inset_0_1px_0_0_var(--zenth-button-emphasis-bg)] group-hover:from-(--zenth-button-emphasis-bg)"
+      />
+      <span className="relative flex items-center gap-1.5">
+        {iconNode}
+        {childNode}
+      </span>
+    </>
+  );
+};
+
+const getTitleLabel = (title: React.ReactNode) => {
+  if (typeof title === "string") return title;
+  if (typeof title === "number") return String(title);
+  return undefined;
+};
+
+/**
+ * Button component props.
+ *
+ * Uses a discriminated union on `shape` so that icon-only buttons
+ * (`shape="square"` or `shape="circle"`) require an accessible name.
+ *
+ * @example
+ * ```tsx
+ * <Button variant="primary">Save</Button>
+ * <Button variant="secondary" shape="square" icon={PlusIcon} aria-label="Add" />
+ * <Button variant="destructive" loading>Deleting...</Button>
+ * ```
+ */
+type ButtonBaseProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  /** Content rendered inside the button. */
+  children?: React.ReactNode;
+  /** Additional CSS classes merged via `cn()`. */
+  className?: string;
+  /** Icon from `@phosphor-icons/react` or a React element. Rendered before children. */
+  icon?: Icon | React.ReactNode;
+  /** Shows a loading spinner and disables interaction. */
+  loading?: boolean;
+  /** When set, wraps the button in a Tooltip with this content. */
+  title?: React.ReactNode;
+};
+
+type ButtonWithTextProps = ButtonBaseProps & {
+  shape?: "base";
+  size?: KumoButtonSize;
+  variant?: KumoButtonVariant;
+};
+
+type IconOnlyButtonAccessibleNameProps =
+  | {
+      /** Required for icon-only buttons to provide an accessible label for screen readers. */
+      "aria-label": string;
+      "aria-labelledby"?: string;
+    }
+  | {
+      "aria-label"?: string;
+      /** References an element that provides the accessible label for screen readers. */
+      "aria-labelledby": string;
+    }
+  | {
+      /** Used as tooltip content and as a fallback accessible label when no children are provided. */
+      title: string | number;
+      "aria-label"?: string;
+      "aria-labelledby"?: string;
+    };
+
+type IconOnlyButtonProps = ButtonBaseProps &
+  IconOnlyButtonAccessibleNameProps & {
+    shape: "square" | "circle";
+    size?: KumoButtonSize;
+    variant?: KumoButtonVariant;
+  };
+
+export type ButtonProps = ButtonWithTextProps | IconOnlyButtonProps;
+
+export type RefreshButtonProps = Omit<
+  IconOnlyButtonProps,
+  "children" | "icon" | "shape"
+>;
+
+/**
+ * LinkButton component props — renders an anchor styled as a button.
+ *
+ * @example
+ * ```tsx
+ * <LinkButton href="/docs" variant="ghost" icon={BookIcon}>Docs</LinkButton>
+ * <LinkButton href="https://example.com" external>Visit Site</LinkButton>
+ * ```
+ */
+export type LinkButtonProps = React.AnchorHTMLAttributes<HTMLAnchorElement> &
+  KumoButtonVariantsProps & {
+    /** Content rendered inside the link button. */
+    children?: React.ReactNode;
+    /** Additional CSS classes merged via `cn()`. */
+    className?: string;
+    /** When `true`, the button is disabled. We render an actual html button with `disabled` attribute. */
+    disabled?: boolean;
+    /** Icon from `@phosphor-icons/react` or a React element. Rendered before children. */
+    icon?: Icon | React.ReactNode;
+    /** When `true`, opens in a new tab with `rel="noopener noreferrer"`. */
+    external?: boolean;
+    linksExternal?: boolean;
+  };
+
+/**
+ * Primary action trigger. Supports multiple variants, sizes, shapes, icons, and loading state.
+ *
+ * @example
+ * ```tsx
+ * <Button variant="primary">Save</Button>
+ * <Button variant="secondary" icon={PlusIcon}>Create Worker</Button>
+ * ```
+ */
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      children,
+      className,
+      disabled,
+      loading,
+      shape = "base",
+      size = "base",
+      variant = "secondary",
+      icon: IconComponent,
+      style,
+      title,
+      ...props
+    },
+    ref,
+  ) => {
+    const { type, ...restProps } = props;
+    const emphasisStyle = getEmphasisStyle(variant);
+    const titleLabel = getTitleLabel(title);
+    const buttonProps = {
+      ...restProps,
+      ...(!React.Children.count(children) &&
+        !restProps["aria-label"] &&
+        !restProps["aria-labelledby"] &&
+        titleLabel && { "aria-label": titleLabel }),
+    };
+    const iconNode = loading ? (
+      <Loader size={size === "lg" ? 16 : 14} />
+    ) : (
+      renderIconNode(IconComponent)
+    );
+
+    const button = (
+      <button
+        ref={ref}
+        data-zenth-component="Button"
+        className={cn(
+          buttonVariants({ variant, size, shape }),
+          getTextClasses(shape, size, iconNode, children),
+          disabled && "cursor-not-allowed opacity-50",
+          className,
+        )}
+        disabled={loading || disabled}
+        style={emphasisStyle ? { ...emphasisStyle, ...style } : style}
+        type={type ?? "button"}
+        {...buttonProps}
+      >
+        {renderButtonContent(variant, iconNode, children)}
+      </button>
+    );
+
+    if (title && (disabled || loading)) {
+      return (
+        <Tooltip content={title} render={<span className="inline-flex" />}>
+          {button}
+        </Tooltip>
+      );
+    }
+
+    if (title) {
+      return <Tooltip content={title} render={button} />;
+    }
+
+    return button;
+  },
+);
+
+Button.displayName = "Button";
+
+/**
+ * Square button with a rotating arrows icon, used to trigger data refresh actions.
+ *
+ * @example
+ * ```tsx
+ * <RefreshButton loading={isRefreshing} onClick={refresh} />
+ * ```
+ */
+export const RefreshButton = ({
+  "aria-label": ariaLabel = "Refresh",
+  loading,
+  ...props
+}: RefreshButtonProps) => (
+  <Button shape="square" aria-label={ariaLabel} {...props}>
+    <ArrowsClockwise
+      className={cn({
+        "zenth-animate-refresh": loading,
+        "size-4.5": props.size === "base" || !props.size,
+        "size-4": props.size === "sm",
+        "size-5": props.size === "lg",
+      })}
+    />
+  </Button>
+);
+
+/**
+ * Anchor element styled as a button. Integrates with `LinkProvider` for framework routing.
+ *
+ * @example
+ * ```tsx
+ * <LinkButton href="/settings" variant="ghost">Settings</LinkButton>
+ * ```
+ */
+export const LinkButton = React.forwardRef<HTMLAnchorElement, LinkButtonProps>(
+  (
+    {
+      children,
+      className,
+      disabled = false,
+      external,
+      href,
+      shape = "base",
+      size = "base",
+      variant = "ghost",
+      icon: IconComponent,
+      style,
+      title,
+      // linksExternal = false,
+      ...props
+    },
+    ref,
+  ) => {
+    const LinkComponent = useLinkComponent();
+    const emphasisStyle = getEmphasisStyle(variant);
+    const externalProps = external
+      ? { target: "_blank", rel: "noopener noreferrer" }
+      : {};
+
+    if (disabled) {
+      // ref is intentionally not forwarded: it's typed for the anchor, but the disabled state renders a button
+      return (
+        <Button
+          {...toDisabledButtonProps(props)}
+          className={cn("select-text", className)}
+          data-zenth-component="LinkButton"
+          disabled
+          icon={IconComponent}
+          shape={shape as "base"}
+          size={size}
+          style={style}
+          title={title}
+          variant={variant}
+        >
+          {children}
+        </Button>
+      );
+    }
+
+    const iconNode = renderIconNode(IconComponent);
+    const link = (
+      <LinkComponent
+        ref={ref}
+        data-zenth-component="LinkButton"
+        className={cn(
+          buttonVariants({ variant, size, shape }),
+          getTextClasses(shape, size, iconNode, children),
+          "flex items-center no-underline! select-text",
+          className,
+        )}
+        href={href}
+        style={emphasisStyle ? { ...emphasisStyle, ...style } : style}
+        to={typeof href === "string" ? href : undefined}
+        {...externalProps}
+        {...props}
+      >
+        {renderButtonContent(variant, iconNode, children)}
+      </LinkComponent>
+    );
+
+    if (title) {
+      return <Tooltip content={title} render={link} />;
+    }
+
+    return link;
+  },
+);
+
+LinkButton.displayName = "LinkButton";

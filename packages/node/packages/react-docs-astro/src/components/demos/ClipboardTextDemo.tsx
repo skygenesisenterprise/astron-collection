@@ -1,0 +1,45 @@
+import { ClipboardText } from "@company/kumo";
+
+export function ClipboardTextBasicDemo() {
+  return <ClipboardText text="0c239dd2" />;
+}
+
+export function ClipboardTextShortDemo() {
+  return <ClipboardText text="abc123" />;
+}
+
+export function ClipboardTextApiKeyDemo() {
+  return <ClipboardText text="sk_live_51H8..." />;
+}
+
+/** Masks a sensitive value until the reveal button is pressed. */
+export function ClipboardTextMaskedDemo() {
+  return (
+    <div className="w-full max-w-xs">
+      <ClipboardText className="w-full" text="sk_live_51H8_abc123" masked />
+    </div>
+  );
+}
+
+export function ClipboardTextAlternateTextToCopyDemo() {
+  return (
+    <ClipboardText
+      text="sk_live_***********"
+      textToCopy="sk_live_51H8_abc123"
+    />
+  );
+}
+
+export function ClipboardTextLongDemo() {
+  return <ClipboardText text="https://example.com/very/long/url/path" />;
+}
+
+/** With tooltip on hover showing "Copy", and anchored toast on click showing "Copied" */
+export function ClipboardTextWithTooltipDemo() {
+  return (
+    <ClipboardText
+      text="npx kumo add button"
+      tooltip={{ text: "Copy", copiedText: "Copied!", side: "top" }}
+    />
+  );
+}

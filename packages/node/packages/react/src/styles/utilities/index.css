@@ -1,0 +1,49 @@
+/**
+ * Company — internal utilities
+ *
+ * Class names are `zenth-` prefixed so they cannot collide with host
+ * application utilities.
+ */
+@layer utilities {
+  .zenth-no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .zenth-no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* "spinner" = up/down arrows on number inputs */
+  .zenth-no-input-spinner {
+    appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      appearance: none;
+      margin: 0;
+    }
+  }
+
+  .zenth-link-current {
+    text-decoration-color: color-mix(in oklch, currentColor 35%, transparent);
+  }
+
+  [data-zenth-mode="dark"] .zenth-link-current,
+  [data-mode="dark"] .zenth-link-current {
+    text-decoration-color: color-mix(in oklch, currentColor 65%, transparent);
+  }
+
+  .zenth-link-current:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .zenth-link-external-icon {
+    stroke-width: 1.75;
+  }
+
+  [data-zenth-mode="dark"] .zenth-link-external-icon,
+  [data-mode="dark"] .zenth-link-external-icon {
+    stroke-width: 2;
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@company/react-screenshot-worker",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Company Worker for capturing screenshots of React docs pages (visual regression testing)",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "cf-typegen": "wrangler types",
+    "lint": "vp lint src/"
+  },
+  "dependencies": {
+    "@company/puppeteer": "npm:@company/puppeteer@^1.0.0",
+    "hono": "^4.13.5"
+  },
+  "devDependencies": {
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plus": "catalog:",
+    "wrangler": "catalog:"
+  }
+}

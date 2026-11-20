@@ -1,0 +1,43 @@
+/**
+ * Company — base layer
+ *
+ * Only library-owned custom properties and the opt-in `.zenth-root` surface
+ * are styled here. No global element selectors are used.
+ *
+ * Theme contract:
+ * - `data-zenth-mode="light" | "dark"` selects the color scheme.
+ * - `data-mode="light" | "dark"` is kept for backward compatibility.
+ * - `data-zenth-theme="<name>"` selects an optional token override theme.
+ */
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  [data-zenth-mode="dark"],
+  [data-mode="dark"] {
+    color-scheme: dark;
+  }
+
+  [data-zenth-mode="light"],
+  [data-mode="light"] {
+    color-scheme: light;
+  }
+
+  /* Opt-in application surface. Without this class the library only
+     provides tokens and component styles, never a page-level reset. */
+  :where(.zenth-root, [data-zenth-root]) {
+    background-color: var(--color-zenth-base);
+    color: var(--text-color-zenth-default);
+    font-family: var(--font-zenth-sans);
+    font-size: var(--text-zenth-base, 14px);
+    line-height: var(--text-zenth-base--line-height, 1.5);
+    letter-spacing: var(--tracking-zenth-normal, 0);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :where(.zenth-root, [data-zenth-root]) :where(pre, code, kbd, samp) {
+    font-family: var(--font-zenth-mono);
+    letter-spacing: normal;
+  }
+}

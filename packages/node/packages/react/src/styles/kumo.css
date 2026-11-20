@@ -1,0 +1,7 @@
+/**
+ * @deprecated Use `@company/react/styles/tailwind` instead.
+ *
+ * Legacy Tailwind entry kept for applications upgrading from
+ * `@company/kumo/styles`.
+ */
+@import "./tailwind.css";

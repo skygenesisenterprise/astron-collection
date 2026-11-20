@@ -1,0 +1,124 @@
+/**
+ * Company — date picker styles
+ *
+ * Month-change animations for react-day-picker. Colors, layout and states
+ * remain Tailwind utilities in `date-picker.tsx`.
+ */
+.rdp-root {
+  --rdp-animation_duration: var(--motion-zenth-duration-overlay);
+  --rdp-animation_timing: var(--motion-zenth-ease-out);
+}
+
+@keyframes zenth-rdp-slide-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes zenth-rdp-slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes zenth-rdp-slide-out-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes zenth-rdp-slide-out-right {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes zenth-rdp-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zenth-rdp-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.rdp-weeks_before_enter {
+  animation: zenth-rdp-slide-in-left var(--rdp-animation_duration)
+    var(--rdp-animation_timing) forwards;
+}
+
+.rdp-weeks_before_exit {
+  animation: zenth-rdp-slide-out-left var(--rdp-animation_duration)
+    var(--rdp-animation_timing) forwards;
+}
+
+.rdp-weeks_after_enter {
+  animation: zenth-rdp-slide-in-right var(--rdp-animation_duration)
+    var(--rdp-animation_timing) forwards;
+}
+
+.rdp-weeks_after_exit {
+  animation: zenth-rdp-slide-out-right var(--rdp-animation_duration)
+    var(--rdp-animation_timing) forwards;
+}
+
+.rdp-root[dir="rtl"] .rdp-weeks_after_enter {
+  animation: zenth-rdp-slide-in-left var(--rdp-animation_duration)
+    var(--rdp-animation_timing) forwards;
+}
+
+.rdp-root[dir="rtl"] .rdp-weeks_before_exit {
+  animation: zenth-rdp-slide-out-right var(--rdp-animation_duration)
+    var(--rdp-animation_timing) forwards;
+}
+
+.rdp-root[dir="rtl"] .rdp-weeks_before_enter {
+  animation: zenth-rdp-slide-in-right var(--rdp-animation_duration)
+    var(--rdp-animation_timing) forwards;
+}
+
+.rdp-root[dir="rtl"] .rdp-weeks_after_exit {
+  animation: zenth-rdp-slide-out-left var(--rdp-animation_duration)
+    var(--rdp-animation_timing) forwards;
+}
+
+.rdp-caption_after_enter,
+.rdp-caption_before_enter {
+  animation: zenth-rdp-fade-in var(--rdp-animation_duration)
+    var(--rdp-animation_timing) forwards;
+}
+
+.rdp-caption_after_exit,
+.rdp-caption_before_exit {
+  animation: zenth-rdp-fade-out var(--rdp-animation_duration)
+    var(--rdp-animation_timing) forwards;
+}
+
+/* Shorten rather than remove the animation: react-day-picker removes the
+   outgoing month only when its animationend event fires. */
+@media (prefers-reduced-motion: reduce) {
+  .rdp-root {
+    --rdp-animation_duration: 0.01ms;
+  }
+}

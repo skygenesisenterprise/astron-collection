@@ -1,0 +1,38 @@
+/**
+ * Company — raw Tailwind entry
+ *
+ * For applications that already run Tailwind CSS v4 and want to build the
+ * library styles themselves. This entry does NOT import `tailwindcss` or
+ * preflight: the host application owns its Tailwind pipeline.
+ *
+ * Most applications should import the precompiled `styles.css` instead:
+ *
+ *   import "@company/react/styles.css";
+ */
+@import "./tokens/colors.css";
+@import "./tokens/typography.css";
+@import "./tokens/spacing.css";
+@import "./tokens/radius.css";
+@import "./tokens/shadows.css";
+@import "./tokens/motion.css";
+@import "./tokens/z-index.css";
+
+@import "./theme-zenth.css";
+@import "./tokens/aliases.css";
+@import "./theme-fedramp.css";
+
+@import "./core/reset.css";
+@import "./core/base.css";
+@import "./core/accessibility.css";
+@import "./core/animations.css";
+
+@import "./utilities/index.css";
+
+@import "./components/feedback.css";
+@import "./components/overlays.css";
+@import "./components/data-display.css";
+@import "./components/navigation.css";
+@import "./components/date-picker.css";
+
+/* Temporary bridge for applications still on the kumo-* names. */
+@import "./compat/kumo.css";

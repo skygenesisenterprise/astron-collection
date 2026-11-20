@@ -1,0 +1,28 @@
+/**
+ * Company — compiled stylesheet entry
+ *
+ * Compiled at package build time into `dist/styles/styles.css`. Consumers
+ * import it directly and do NOT need Tailwind, a Tailwind config, or an
+ * `@source` directive:
+ *
+ *   import "@company/react/styles.css";
+ *
+ * Preflight is intentionally NOT imported. The library must not reset the
+ * host application's html/body/native elements; all resets live in the
+ * scoped `core/reset.css` layer instead.
+ *
+ * The layer statement MUST come before the imports. Without it the first
+ * layer encountered is `utilities`, which would place every consumer's
+ * `base` layer *after* utilities and let preflight override utility spacing
+ * and typography.
+ */
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "./tailwind.css";
+/* Utilities are imported last so the first layer declarations encountered by
+ * a consuming stylesheet are theme, base, components, utilities — never
+ * utilities before base. */
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@source "../**/*.{ts,tsx}";

@@ -1,0 +1,17 @@
+/**
+ * Company — z-index tokens
+ *
+ * Portaled layers (popover, dialog, toast, tooltip) must sit above the host
+ * application's own stacking contexts while staying predictable relative to
+ * each other.
+ */
+:root {
+  --z-index-zenth-base: 0;
+  --z-index-zenth-sticky: 10;
+  --z-index-zenth-dropdown: 40;
+  --z-index-zenth-overlay: 50;
+  --z-index-zenth-dialog: 60;
+  --z-index-zenth-popover: 70;
+  --z-index-zenth-tooltip: 80;
+  --z-index-zenth-toast: 90;
+}

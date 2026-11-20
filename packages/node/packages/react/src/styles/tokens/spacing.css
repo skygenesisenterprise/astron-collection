@@ -1,0 +1,25 @@
+/**
+ * Company — spacing tokens
+ *
+ * A named scale for component padding, gaps and layout rhythm. The numeric
+ * Tailwind scale (`--spacing` multiplier) remains available; these names
+ * exist so consumer applications can theme spacing deliberately.
+ */
+@theme {
+  --spacing-zenth-none: 0;
+  --spacing-zenth-3xs: 0.125rem; /* 2px */
+  --spacing-zenth-2xs: 0.25rem; /* 4px */
+  --spacing-zenth-xs: 0.375rem; /* 6px */
+  --spacing-zenth-sm: 0.5rem; /* 8px */
+  --spacing-zenth-md: 0.75rem; /* 12px */
+  --spacing-zenth-lg: 1rem; /* 16px */
+  --spacing-zenth-xl: 1.5rem; /* 24px */
+  --spacing-zenth-2xl: 2rem; /* 32px */
+  --spacing-zenth-3xl: 3rem; /* 48px */
+
+  /* Component sizing */
+  --spacing-zenth-control-xs: 1.25rem; /* 20px */
+  --spacing-zenth-control-sm: 1.625rem; /* 26px */
+  --spacing-zenth-control-md: 2.25rem; /* 36px */
+  --spacing-zenth-control-lg: 2.5rem; /* 40px */
+}

@@ -1,0 +1,8 @@
+/**
+ * @deprecated Use `@company/react/styles.css` instead.
+ *
+ * Legacy standalone entry kept for applications upgrading from
+ * `@company/kumo/styles/standalone`. It now maps to the same compiled
+ * stylesheet as `styles.css`.
+ */
+@import "./index.css";
