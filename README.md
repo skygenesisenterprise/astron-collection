@@ -1,6 +1,6 @@
 # Astron Collection
 
-[![License: MIT](https://img.shields.io/github/license/skygenesisenterprise/astron-collection)](LICENSE)
+[![License: Apache 2.0](https://img.shields.io/github/license/skygenesisenterprise/astron-collection)](LICENSE)
 [![Node.js 24](https://img.shields.io/badge/Node.js-24-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org)
 [![pnpm 10](https://img.shields.io/badge/pnpm-10-F69220?logo=pnpm&logoColor=white)](https://pnpm.io)
 [![TypeScript](https://img.shields.io/badge/TypeScript-7.0-3178C6?logo=typescript&logoColor=white)](https://typescriptlang.org)
