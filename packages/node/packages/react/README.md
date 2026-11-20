@@ -1,11 +1,11 @@
-# @company/react
+# @astron-collection/react
 
 Company's React component library and design system for building modern web applications.
 
 ## Installation
 
 ```bash
-pnpm add @company/react
+pnpm add @astron-collection/react
 ```
 
 ### Peer Dependencies
@@ -21,9 +21,9 @@ pnpm add react react-dom @phosphor-icons/react
 Company React includes a built-in CLI for quick component reference:
 
 ```bash
-npx @company/react ls         # List all components
-npx @company/react doc Button # Get component documentation
-npx @company/react docs       # Get all component docs
+npx @astron-collection/react ls         # List all components
+npx @astron-collection/react doc Button # Get component documentation
+npx @astron-collection/react docs       # Get all component docs
 ```
 
 The CLI reads from `ai/component-registry.json` (generated from TypeScript types + demo examples).
@@ -34,10 +34,10 @@ The CLI reads from `ai/component-registry.json` (generated from TypeScript types
 
 ```tsx
 // Main package import
-import { Button, Input, Surface } from "@company/react";
+import { Button, Input, Surface } from "@astron-collection/react";
 
 // Granular imports (recommended for tree-shaking)
-import { Button } from "@company/react/components/button";
+import { Button } from "@astron-collection/react/components/button";
 ```
 
 ### Import Styles
@@ -45,7 +45,7 @@ import { Button } from "@company/react/components/button";
 Import the precompiled stylesheet once, in your application entry point:
 
 ```tsx
-import "@company/react/styles.css";
+import "@astron-collection/react/styles.css";
 ```
 
 That is all that is required. **Tailwind is not required in the consuming application**: no Tailwind install, config file, `@source` directive, or rebuild of the library styles.
@@ -71,9 +71,9 @@ The library never resets `html` or `body`. Set the color mode on the document an
 #### Tokens only
 
 ```tsx
-import "@company/react/tokens.css";
-import "@company/react/themes/light.css";
-import "@company/react/themes/dark.css";
+import "@astron-collection/react/tokens.css";
+import "@astron-collection/react/themes/light.css";
+import "@astron-collection/react/themes/dark.css";
 ```
 
 #### For Tailwind CSS Users (optional)
@@ -81,20 +81,20 @@ import "@company/react/themes/dark.css";
 If your application already runs Tailwind CSS v4 and wants the `@theme` tokens to use `bg-zenth-*` utilities in its own code, import the raw entry before `tailwindcss`:
 
 ```css
-@source "../node_modules/@company/react/dist/**/*.{js,jsx,ts,tsx}";
-@import "@company/react/styles/tailwind";
+@source "../node_modules/@astron-collection/react/dist/**/*.{js,jsx,ts,tsx}";
+@import "@astron-collection/react/styles/tailwind";
 @import "tailwindcss";
 ```
 
 > **Import order matters** — import the Company entry **before** `@import "tailwindcss"` so its `@theme` tokens are registered first.
 
-> **Note:** The `@source` path is relative to your CSS file. Adjust it to your project layout — e.g. from `src/styles/` use `../../node_modules/@company/react/dist/**/*.{js,jsx,ts,tsx}`.
+> **Note:** The `@source` path is relative to your CSS file. Adjust it to your project layout — e.g. from `src/styles/` use `../../node_modules/@astron-collection/react/dist/**/*.{js,jsx,ts,tsx}`.
 
 This pipeline is optional. `styles.css` already covers every component.
 
 #### Legacy entry points (deprecated)
 
-`@company/react/styles`, `@company/react/styles/tailwind` and `@company/react/styles/standalone` still resolve. New code should use `styles.css`, or `styles/tailwind` when it needs the raw Tailwind source.
+`@astron-collection/react/styles`, `@astron-collection/react/styles/tailwind` and `@astron-collection/react/styles/standalone` still resolve. New code should use `styles.css`, or `styles/tailwind` when it needs the raw Tailwind source.
 
 ### Base UI Primitives
 
@@ -102,17 +102,17 @@ Company React bundles [Base UI](https://base-ui.com) and re-exports all primitiv
 
 ```tsx
 // Barrel import - imports all primitives (convenient but larger bundle)
-import { Popover, Slider, Accordion } from "@company/react/primitives";
+import { Popover, Slider, Accordion } from "@astron-collection/react/primitives";
 
 // Granular imports - tree-shakeable, smaller bundles (recommended)
-import { Popover } from "@company/react/primitives/popover";
-import { Slider } from "@company/react/primitives/slider";
-import { Accordion } from "@company/react/primitives/accordion";
+import { Popover } from "@astron-collection/react/primitives/popover";
+import { Slider } from "@astron-collection/react/primitives/slider";
+import { Accordion } from "@astron-collection/react/primitives/accordion";
 ```
 
 > **Note:** Prefer styled Company React components when available. Primitives are for custom components not yet in Company React or cases requiring fine-grained control.
 >
-> **Performance tip:** Use granular imports (`@company/react/primitives/{name}`) for better tree-shaking and smaller bundle sizes.
+> **Performance tip:** Use granular imports (`@astron-collection/react/primitives/{name}`) for better tree-shaking and smaller bundle sizes.
 
 #### Updating Primitives
 
@@ -288,10 +288,10 @@ pnpm test:coverage
 
 **What's tested:**
 
-- All components importable from main entry: `import { Component } from "@company/react"`
-- All components importable via deep imports: `import { Component } from "@company/react/components/component-name"`
-- All blocks importable from main entry: `import { Block } from "@company/react"`
-- All blocks importable via deep imports: `import { Block } from "@company/react/blocks/block-name"`
+- All components importable from main entry: `import { Component } from "@astron-collection/react"`
+- All components importable via deep imports: `import { Component } from "@astron-collection/react/components/component-name"`
+- All blocks importable from main entry: `import { Block } from "@astron-collection/react"`
+- All blocks importable via deep imports: `import { Block } from "@astron-collection/react/blocks/block-name"`
 - Package.json exports sync with actual components and blocks
 - Export paths and formats are correct
 - Build configuration consistency
@@ -310,15 +310,15 @@ Beta releases are automatically triggered for pull requests through GitHub Actio
 
 - **Workflow**: `package-preview-pr.yml`
 - **Triggers**: Pull requests with changes to `packages/react/**` or `.changeset/**`
-- **Dependencies**: Requires changeset to exist for `@company/react`
+- **Dependencies**: Requires changeset to exist for `@astron-collection/react`
 
 **Process Flow:**
 
-1. **Validate**: Ensures changeset exists for `@company/react`
+1. **Validate**: Ensures changeset exists for `@astron-collection/react`
 2. **Version**: Runs `pnpm run version:beta`
    - Consumes pending changesets
    - Appends `-beta.{commit-hash}` to version number
-3. **Build**: Runs `pnpm --filter @company/react build`
+3. **Build**: Runs `pnpm --filter @astron-collection/react build`
 4. **Publish**: Publishes to npm with `beta` tag
 5. **Notify**: Posts PR comment with installation instructions
 
@@ -343,10 +343,10 @@ When a beta is published, the PR will include a comment with installation instru
 
 ```bash
 # Install the specific beta version
-npm install @company/react@0.1.0-beta.a1b2c3d
+npm install @astron-collection/react@0.1.0-beta.a1b2c3d
 
 # Or with pnpm
-pnpm add @company/react@0.1.0-beta.a1b2c3d
+pnpm add @astron-collection/react@0.1.0-beta.a1b2c3d
 ```
 
 ### Testing Beta Releases
@@ -366,7 +366,7 @@ All pull requests with changes to `packages/react/` must include a changeset:
 pnpm changeset
 ```
 
-- Select `@company/react` when prompted
+- Select `@astron-collection/react` when prompted
 - Choose the type of change: `patch`, `minor`, or `major`
 - Write a clear description of what changed
 
@@ -391,7 +391,7 @@ This package uses [Changesets](https://github.com/changesets/changesets) for ver
    pnpm changeset
    ```
 
-   - Select `@company/react` from the list
+   - Select `@astron-collection/react` from the list
    - Select the type of change: `patch`, `minor`, or `major`
    - Write a clear description of what changed
    - This creates a `.changeset/*.md` file describing the change
@@ -440,7 +440,7 @@ After publishing:
 
    ```bash
    git add .
-   git commit -m "chore: release @company/react@{version}"
+   git commit -m "chore: release @astron-collection/react@{version}"
    git push
    ```
 
@@ -452,7 +452,7 @@ After publishing:
 
 3. **Verify publication**:
    ```bash
-   npm view @company/react versions
+   npm view @astron-collection/react versions
    ```
 
 ### Semantic Versioning
@@ -482,8 +482,8 @@ The changelog includes all changeset descriptions, providing clear documentation
 If the CI fails with a changeset validation error:
 
 1. **Check if changeset exists**: Run `ls .changeset/*.md` to see pending changesets
-2. **Create changeset**: Run `pnpm changeset` and select `@company/react`
-3. **Verify changeset targets correct package**: Open the changeset file and ensure it includes `@company/react`
+2. **Create changeset**: Run `pnpm changeset` and select `@astron-collection/react`
+3. **Verify changeset targets correct package**: Open the changeset file and ensure it includes `@astron-collection/react`
 4. **Commit changeset**: Add and commit the changeset file to your branch
 
 **Beta Publication Failed**

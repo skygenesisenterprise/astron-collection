@@ -1,4 +1,4 @@
-import { Link } from "@company/react";
+import { Link } from "@astron-collection/react";
 import { Container } from "@/components/Container";
 import {
 	ecosystemSection,

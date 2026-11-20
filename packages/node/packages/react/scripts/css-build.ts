@@ -78,7 +78,7 @@ ensureDir(join(distDir, "themes"));
 
 // ---------------------------------------------------------------------------
 // 1. Copy the raw Tailwind source tree into dist so that
-//    `@company/react/styles/tailwind` resolves its relative imports.
+//    `@astron-collection/react/styles/tailwind` resolves its relative imports.
 // ---------------------------------------------------------------------------
 const RAW_ENTRY_FILES = new Set(["index.css", "tokens.css"]);
 
@@ -124,11 +124,11 @@ try {
 const distTailwindEntry = join(distDir, "tailwind.css");
 writeFileSync(
   join(distDir, "kumo.css"),
-  '/**\n * @deprecated Use "@company/react/styles/tailwind".\n */\n@import "./tailwind.css";\n',
+  '/**\n * @deprecated Use "@astron-collection/react/styles/tailwind".\n */\n@import "./tailwind.css";\n',
 );
 writeFileSync(
   join(distDir, "kumo-binding.css"),
-  '/**\n * @deprecated Use "@company/react/styles/tailwind".\n */\n@import "./tailwind.css";\n',
+  '/**\n * @deprecated Use "@astron-collection/react/styles/tailwind".\n */\n@import "./tailwind.css";\n',
 );
 
 if (existsSync(join(distDir, "styles.css"))) {

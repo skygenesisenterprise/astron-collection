@@ -1,6 +1,6 @@
 # Company CSS Design System
 
-`@company/react` ships its own design system: tokens, light/dark themes, a
+`@astron-collection/react` ships its own design system: tokens, light/dark themes, a
 compiled stylesheet, and scoped component styles. Components are built with
 Tailwind CSS v4 internally, but **consuming applications do not need Tailwind**.
 
@@ -8,7 +8,7 @@ Tailwind CSS v4 internally, but **consuming applications do not need Tailwind**.
 
 ```tsx
 // app entry point (Next.js root layout, Vite main.tsx, etc.)
-import "@company/react/styles.css";
+import "@astron-collection/react/styles.css";
 ```
 
 That single import contains:
@@ -63,12 +63,12 @@ color tokens. Run `pnpm codegen:themes` after changing it.
 
 | Import                                       | Content                                       |
 | -------------------------------------------- | --------------------------------------------- |
-| `@company/react/styles.css`               | Everything (recommended, no Tailwind needed)  |
-| `@company/react/tokens.css`               | Tokens only, no component styles or utilities |
-| `@company/react/themes/light.css`         | Light-mode token values                       |
-| `@company/react/themes/dark.css`          | Dark-mode token values                        |
-| `@company/react/styles/tailwind`          | Raw Tailwind v4 entry (no preflight)          |
-| `@company/react/styles/standalone`        | Deprecated alias of `styles.css`              |
+| `@astron-collection/react/styles.css`               | Everything (recommended, no Tailwind needed)  |
+| `@astron-collection/react/tokens.css`               | Tokens only, no component styles or utilities |
+| `@astron-collection/react/themes/light.css`         | Light-mode token values                       |
+| `@astron-collection/react/themes/dark.css`          | Dark-mode token values                        |
+| `@astron-collection/react/styles/tailwind`          | Raw Tailwind v4 entry (no preflight)          |
+| `@astron-collection/react/styles/standalone`        | Deprecated alias of `styles.css`              |
 
 All files are present in `dist/styles/` in the published package.
 
@@ -154,7 +154,7 @@ Sizing and motion:
 
 ```tsx
 // app/layout.tsx
-import "@company/react/styles.css";
+import "@astron-collection/react/styles.css";
 
 export default function RootLayout({
   children,
@@ -176,7 +176,7 @@ are styled by the same stylesheet, including dark mode.
 
 ```tsx
 // src/main.tsx
-import "@company/react/styles.css";
+import "@astron-collection/react/styles.css";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 
@@ -190,8 +190,8 @@ tokens (to reuse `bg-zenth-*` utilities in app code), import the raw entry
 before `tailwindcss`:
 
 ```css
-@source "../node_modules/@company/react/dist/**/*.{js,jsx,ts,tsx}";
-@import "@company/react/styles/tailwind";
+@source "../node_modules/@astron-collection/react/dist/**/*.{js,jsx,ts,tsx}";
+@import "@astron-collection/react/styles/tailwind";
 @import "tailwindcss";
 ```
 
@@ -207,8 +207,8 @@ This is optional. `styles.css` is enough for every component.
 | `text-kumo-subtle`              | `text-zenth-subtle`                |
 | `[data-kumo-component]`         | `[data-zenth-component]`           |
 | `data-mode="dark"`              | `data-zenth-mode="dark"` (supported) |
-| `@company/kumo/styles`       | `@company/react/styles.css`     |
-| `@company/kumo/styles/standalone` | `@company/react/styles.css` |
+| `@company/kumo/styles`       | `@astron-collection/react/styles.css`     |
+| `@company/kumo/styles/standalone` | `@astron-collection/react/styles.css` |
 
 Compatibility is intentional and temporary:
 

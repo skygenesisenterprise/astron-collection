@@ -1,13 +1,13 @@
-# Company React
+# Astron-Collection React
 
-[![npm](https://img.shields.io/npm/v/@company/kumo.svg)](https://www.npmjs.com/package/@company/kumo)
+[![npm](https://img.shields.io/npm/v/@astron-collection/kumo.svg)](https://www.npmjs.com/package/@astron-collection/kumo)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](https://typescriptlang.org)
 
 > Company's accessible component library for building modern web applications.
 
-**React** provides accessible, design-system-compliant UI components built on [Documentation](https://docs.company.com/). It handles keyboard navigation, focus management and ARIA attributes so you can build accessible applications without thinking through every detail.
+**React** provides accessible, design-system-compliant UI components built on [Documentation](https://docs.astron-collection.com/). It handles keyboard navigation, focus management and ARIA attributes so you can build accessible applications without thinking through every detail.
 
 **Perfect for:** product teams building Company surfaces, developers who want accessible React primitives with semantic theming, and anyone who needs a component library that works with an AI agent through a CLI.
 
@@ -15,7 +15,7 @@
 
 ## Contents
 
-- [Company React](#company-react)
+- [Astron-Collection React](#astron-collection-react)
   - [Contents](#contents)
   - [Why Kumo matters](#why-kumo-matters)
   - [What you can do](#what-you-can-do)
@@ -70,7 +70,7 @@
 ### Install
 
 ```bash
-pnpm add @company/react
+pnpm add @astron-collection/react
 ```
 
 ### Peer dependencies
@@ -82,14 +82,14 @@ pnpm add react react-dom @phosphor-icons/react
 ### Usage
 
 ```tsx
-import { Button, Input, Dialog } from "@company/react";
-import "@company/react/styles";
+import { Button, Input, Dialog } from "@astron-collection/react";
+import "@astron-collection/react/styles";
 ```
 
 ### Granular imports
 
 ```tsx
-import { Button } from "@company/react";
+import { Button } from "@astron-collection/react";
 ```
 
 ### Base UI primitives
@@ -97,7 +97,7 @@ import { Button } from "@company/react";
 Kumo re-exports all Base UI primitives for advanced use cases:
 
 ```tsx
-import { Popover } from "@company/react";
+import { Popover } from "@astron-collection/react";
 ```
 
 ## How Kumo is built
@@ -108,7 +108,7 @@ Kumo is a pnpm monorepo with an ESM-only component library, an Astro documentati
 
 | Path | Package | Role |
 | --- | --- | --- |
-| `packages/kumo/` | `@company/kumo` | Component library built on Base UI and Tailwind v4 |
+| `packages/kumo/` | `@astron-collection/kumo` | Component library built on Base UI and Tailwind v4 |
 | `packages/kumo-docs-astro/` | — | Astro documentation site |
 | `packages/kumo-figma/` | — | Figma plugin and generators |
 | `packages/kumo-screenshot-worker/` | — | Visual regression worker |
@@ -124,9 +124,9 @@ Components use semantic tokens such as `bg-kumo-base`, `text-kumo-default` and `
 Query component documentation from the command line:
 
 ```bash
-npx @company/react ls          # List all components
-npx @company/react doc Button  # Get component docs
-npx @company/react docs        # Get all docs
+npx @astron-collection/react ls          # List all components
+npx @astron-collection/react doc Button  # Get component docs
+npx @astron-collection/react docs        # Get all docs
 ```
 
 ## Development
@@ -138,7 +138,7 @@ See [AGENTS.md](./AGENTS.md) for comprehensive development documentation includi
 ```bash
 pnpm install
 pnpm dev                    # Start docs site at localhost:4321
-pnpm --filter @company/react test
+pnpm --filter @astron-collection/react test
 ```
 
 ### Figma plugin
@@ -148,7 +148,7 @@ pnpm --filter @company/react test
 # cp packages/react-figma/scripts/.env.example packages/react-figma/scripts/.env
 # $EDITOR packages/react-figma/scripts/.env  # set FIGMA_TOKEN (and optionally FIGMA_FILE_KEY)
 
-pnpm --filter @company/react-figma build
+pnpm --filter @astron-collection/react-figma build
 # In Figma: Plugins > Development > Import plugin from manifest...
 # Select: packages/react-figma/src/manifest.json
 ```
@@ -156,7 +156,7 @@ pnpm --filter @company/react-figma build
 ### Creating components
 
 ```bash
-pnpm --filter @company/react new-component
+pnpm --filter @astron-collection/react new-component
 ```
 
 ## FAQ
@@ -171,7 +171,7 @@ No. Use semantic `kumo-*` tokens. Raw colors such as `bg-blue-500` fail lint.
 
 ### Are Base UI primitives available?
 
-Yes. react re-exports them under `@company/react/*`.
+Yes. react re-exports them under `@astron-collection/react/*`.
 
 ### Where is the component API registry?
 
@@ -179,18 +179,18 @@ The registry lives at `packages/react/ai/component-registry.json` and is the sou
 
 ## Related resources
 
-- Live docs: [docs.company.com](https://docs.company.com)
+- Live docs: [docs.astron-collection.com](https://docs.astron-collection.com)
 - Agent guide: [AGENTS.md](./AGENTS.md)
-- Base UI: [docs.company.com](https://docs.company.com/)
-- Company repository: [github.com/skygenesisenterprise/company](https://github.com/skygenesisenterprise/company)
+- Base UI: [docs.astron-collection.com](https://docs.astron-collection.com/)
+- Company repository: [github.com/skygenesisenterprise/astron-collection](https://github.com/skygenesisenterprise/astron-collection)
 
 ## Contributing
 
-Contributions and suggestions are welcome. Read the repository [contribution guide](https://github.com/skygenesisenterprise/company) before participating, and add a changeset for every user-facing change to the published package.
+Contributions and suggestions are welcome. Read the repository [contribution guide](https://github.com/skygenesisenterprise/astron-collection) before participating, and add a changeset for every user-facing change to the published package.
 
 ## Security
 
-Never commit Figma tokens, npm tokens or API keys. `.env` files are gitignored. Do not report security vulnerabilities in public issues; follow the private reporting instructions in the repository [`SECURITY.md`](https://github.com/skygenesisenterprise/company).
+Never commit Figma tokens, npm tokens or API keys. `.env` files are gitignored. Do not report security vulnerabilities in public issues; follow the private reporting instructions in the repository [`SECURITY.md`](https://github.com/skygenesisenterprise/astron-collection).
 
 ## License
 

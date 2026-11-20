@@ -5,7 +5,7 @@
  * import it directly and do NOT need Tailwind, a Tailwind config, or an
  * `@source` directive:
  *
- *   import "@company/react/styles.css";
+ *   import "@astron-collection/react/styles.css";
  *
  * Preflight is intentionally NOT imported. The library must not reset the
  * host application's html/body/native elements; all resets live in the

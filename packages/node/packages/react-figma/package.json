@@ -1,5 +1,5 @@
 {
-  "name": "@company/react-figma",
+  "name": "@astron-collection/react-figma",
   "version": "0.3.55",
   "private": true,
   "description": "Figma plugin for generating React UI Kit components",
@@ -14,11 +14,11 @@
     "clean": "rm -rf src/generated src/code.js",
     "test": "vp test run",
     "typecheck": "pnpm run build:data && tsc --noEmit",
-    "validate": "pnpm --filter @company/react codegen:registry && pnpm run build:data && vp test run src/generators/drift-detection.test.ts",
+    "validate": "pnpm --filter @astron-collection/react codegen:registry && pnpm run build:data && vp test run src/generators/drift-detection.test.ts",
     "figma:sync": "tsx scripts/sync-tokens-to-figma.ts"
   },
   "dependencies": {
-    "@company/react": "workspace:*",
+    "@astron-collection/react": "workspace:*",
     "culori": "^4.0.0"
   },
   "devDependencies": {

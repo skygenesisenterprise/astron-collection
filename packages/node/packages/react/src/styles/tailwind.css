@@ -7,7 +7,7 @@
  *
  * Most applications should import the precompiled `styles.css` instead:
  *
- *   import "@company/react/styles.css";
+ *   import "@astron-collection/react/styles.css";
  */
 @import "./tokens/colors.css";
 @import "./tokens/typography.css";

@@ -1,4 +1,4 @@
-import { Badge } from "@company/react";
+import { Badge } from "@astron-collection/react";
 import {
 	COMMERCIAL_STATUS_META,
 	PRODUCT_AVAILABILITY_META,

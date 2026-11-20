@@ -1,6 +1,6 @@
 "use client";
 
-import { Button as ZenthButton, LinkButton } from "@company/react";
+import { Button as ZenthButton, LinkButton } from "@astron-collection/react";
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
@@ -43,7 +43,7 @@ export interface ButtonProps
  *
  * The public API used by the site (`variant`, `size`, `asChild`) is preserved,
  * but the rendering, tokens and interaction states come from
- * `@company/react`. `asChild` with a link renders the library's LinkButton
+ * `@astron-collection/react`. `asChild` with a link renders the library's LinkButton
  * so routing still goes through the shared LinkProvider.
  */
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(

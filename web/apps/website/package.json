@@ -41,7 +41,7 @@
 		"@tabler/icons-react": "3.21.0",
 		"@tailwindcss/postcss": "^4.3.5",
 		"@tryghost/content-api": "^1.11.21",
-		"@company/react": "workspace:*",
+		"@astron-collection/react": "workspace:*",
 		"@types/node": "20.4.6",
 		"autoprefixer": "^10.4.12",
 		"axios": "^1.8.1",

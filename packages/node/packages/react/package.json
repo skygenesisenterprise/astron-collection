@@ -1,5 +1,5 @@
 {
-  "name": "@company/react",
+  "name": "@astron-collection/react",
   "version": "1.0.0",
   "private": false,
   "description": "React - Company's component library for building modern web applications",
@@ -13,7 +13,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/skygenesisenterprise/company",
+    "url": "git+https://github.com/skygenesisenterprise/astron-collection",
     "directory": "packages/node"
   },
   "bin": {
@@ -466,7 +466,7 @@
     "codegen:themes": "tsx scripts/theme-generator/index.ts",
     "migrate:tokens": "tsx scripts/theme-generator/migrate.ts",
     "codegen:primitives": "tsx scripts/generate-primitives.ts",
-    "codegen:registry": "pnpm --filter @company/react-docs-astro codegen:demos && tsx scripts/component-registry/index.ts",
+    "codegen:registry": "pnpm --filter @astron-collection/react-docs-astro codegen:demos && tsx scripts/component-registry/index.ts",
     "lint": "pnpm run lint:oxlint",
     "lint:oxlint": "vp lint src/",
     "test": "CI=true vp test run --project=unit",

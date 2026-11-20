@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge as ZenthBadge } from "@company/react";
+import { Badge as ZenthBadge } from "@astron-collection/react";
 import type * as React from "react";
 
 type BadgeVariant = "default" | "secondary" | "destructive" | "outline";

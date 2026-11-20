@@ -20,8 +20,8 @@ const __dirname = fileURLToPath(new URL(".", import.meta.url));
 // design system's React hit a null dispatcher (`Cannot read properties of null
 // (reading 'useId')`).
 const turbopackAliases = {
-	"@zenthcloud/status": "../../packages/status/src",
-	"@zenthcloud/server": "../../packages/server/src",
+	"@astron-collection/status": "../../packages/status/src",
+	"@astron-collection/server": "../../packages/server/src",
 	react: "./node_modules/react",
 	"react-dom": "./node_modules/react-dom",
 };

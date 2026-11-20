@@ -1,28 +1,28 @@
 {
-  "name": "@company/react",
+  "name": "@astron-collection/react",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/skygenesisenterprise/company.git"
+    "url": "git+https://github.com/skygenesisenterprise/astron-collection.git"
   },
-  "homepage": "https://github.com/skygenesisenterprise/company",
+  "homepage": "https://github.com/skygenesisenterprise/astron-collection",
   "bugs": {
-    "url": "https://github.com/skygenesisenterprise/company/issues"
+    "url": "https://github.com/skygenesisenterprise/astron-collection/issues"
   },
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "pnpm --filter @company/react-docs-astro build",
-    "codegen": "pnpm --filter @company/react-docs-astro codegen:demos && pnpm --filter @company/react codegen",
+    "build": "pnpm --filter @astron-collection/react-docs-astro build",
+    "codegen": "pnpm --filter @astron-collection/react-docs-astro codegen:demos && pnpm --filter @astron-collection/react codegen",
     "build:all": "pnpm -r build",
     "ci:typecheck": "tsc -p ci/tsconfig.json --noEmit",
     "changeset": "tsx ci/scripts/ensure-changeset-config.ts && changeset",
     "clean": "pnpm -r exec rm -rf dist build .astro .wrangler node_modules",
-    "dev": "pnpm codegen && pnpm --filter @company/react-docs-astro dev",
+    "dev": "pnpm codegen && pnpm --filter @astron-collection/react-docs-astro dev",
     "format": "vp fmt --write",
     "format:check": "vp fmt --check",
-    "lint": "pnpm --filter @company/react lint && vp lint packages/*/src",
+    "lint": "pnpm --filter @astron-collection/react lint && vp lint packages/*/src",
     "lockfile-check": "pnpm install --no-frozen-lockfile && git diff --exit-code pnpm-lock.yaml",
-    "preview": "pnpm --filter @company/react-docs-astro preview",
+    "preview": "pnpm --filter @astron-collection/react-docs-astro preview",
     "publish:beta": "bash ci/versioning/publish-beta.sh",
     "deploy:react-docs-preview": "bash ci/versioning/deploy-react-docs-preview.sh",
     "deploy:react-docs-staging": "bash ci/versioning/deploy-react-docs-staging.sh",
@@ -31,9 +31,9 @@
     "release:beta": "changeset publish --no-git-tag --tag beta",
     "release:production": "bash ci/versioning/release-production.sh",
     "react": "node packages/react/dist/command-line/cli.js",
-    "test": "pnpm --filter @company/react test",
+    "test": "pnpm --filter @astron-collection/react test",
     "test:ci": "tsx --test ci/preview/*.test.ts ci/reporters/*.test.ts ci/scripts/*.test.ts ci/utils/*.test.ts ci/visual-regression/*.test.ts",
-    "test:watch": "pnpm --filter @company/react test:watch",
+    "test:watch": "pnpm --filter @astron-collection/react test:watch",
     "typecheck": "pnpm -r typecheck",
     "version": "changeset version",
     "version:beta": "./ci/versioning/version-beta.sh"

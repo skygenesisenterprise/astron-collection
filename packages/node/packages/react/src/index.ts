@@ -1,5 +1,5 @@
 /**
- * @module @company/react
+ * @module @astron-collection/react
  *
  * Company's React component library built on Base UI and Tailwind CSS v4.
  *
@@ -7,7 +7,7 @@
  * - Use **semantic tokens only** (`bg-zenth-base`, `text-zenth-default`, etc.) — never raw Tailwind colors.
  * - **No `dark:` variant** — light/dark mode is handled automatically via CSS `light-dark()`.
  * - Merge custom classes with the `cn()` utility exported from this package.
- * - Import the precompiled stylesheet once: `import "@company/react/styles.css"`.
+ * - Import the precompiled stylesheet once: `import "@astron-collection/react/styles.css"`.
  *   Tailwind is not required in the consuming application.
  *
  * **Component categories:**
@@ -21,9 +21,9 @@
  * - **Other:** Label, Link
  *
  * **Blocks** (composite page-level components) are NOT exported here.
- * Install them via the CLI: `npx @company/react add <block-name>`.
+ * Install them via the CLI: `npx @astron-collection/react add <block-name>`.
  *
- * **AI resources:** See `@company/react/ai/component-registry.json` for full
+ * **AI resources:** See `@astron-collection/react/ai/component-registry.json` for full
  * component metadata including prop descriptions, variant values, and examples.
  *
  * @see {@link https://github.com/skygenesisenterprise/company} — Documentation

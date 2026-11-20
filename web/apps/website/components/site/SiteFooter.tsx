@@ -1,4 +1,4 @@
-import { Link } from "@company/react";
+import { Link } from "@astron-collection/react";
 import { footerSections, links, organisation } from "@/lib/content/site";
 import { Container } from "../Container";
 import { Logo } from "../shared/Logo";

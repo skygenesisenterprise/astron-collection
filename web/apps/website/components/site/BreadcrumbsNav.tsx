@@ -1,6 +1,6 @@
 "use client";
 
-import { Breadcrumbs as ZenthBreadcrumbs } from "@company/react";
+import { Breadcrumbs as ZenthBreadcrumbs } from "@astron-collection/react";
 import * as React from "react";
 import type { Crumb } from "./Breadcrumbs";
 

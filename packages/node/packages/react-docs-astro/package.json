@@ -1,5 +1,5 @@
 {
-  "name": "@company/react-docs-astro",
+  "name": "@astron-collection/react-docs-astro",
   "version": "1.5.25",
   "private": true,
   "type": "module",
@@ -23,7 +23,7 @@
     "@astrojs/markdown-remark": "^7.2.1",
     "@astrojs/mdx": "^7.0.3",
     "@astrojs/sitemap": "^3.7.3",
-    "@company/react": "workspace:*",
+    "@astron-collection/react": "workspace:*",
     "@phosphor-icons/react": "catalog:",
     "@tailwindcss/typography": "^0.5.19",
     "@types/turndown": "5.0.6",

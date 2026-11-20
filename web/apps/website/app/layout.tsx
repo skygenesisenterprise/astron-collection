@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Lexend } from "next/font/google";
 import type { ReactNode } from "react";
-import "@company/react/styles.css";
+import "@astron-collection/react/styles.css";
 import "@/styles/tailwind.css";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";

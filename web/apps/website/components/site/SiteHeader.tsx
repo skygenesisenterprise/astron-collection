@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, DropdownMenu, Link, LinkButton } from "@company/react";
+import { Button, DropdownMenu, Link, LinkButton } from "@astron-collection/react";
 import {
 	ArrowRight,
 	CaretDown,

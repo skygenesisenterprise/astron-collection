@@ -1,4 +1,4 @@
-import { Link } from "@company/react";
+import { Link } from "@astron-collection/react";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { Container } from "@/components/Container";
 import {

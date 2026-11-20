@@ -1,4 +1,4 @@
-import { Link, LinkButton } from "@company/react";
+import { Link, LinkButton } from "@astron-collection/react";
 import type * as React from "react";
 import { cn } from "@/lib/utils";
 import { Container } from "../Container";
