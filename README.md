@@ -1,135 +1,367 @@
-# Astron Collection
+<div align="center">
 
-[![License: Apache 2.0](https://img.shields.io/github/license/skygenesisenterprise/astron-collection)](LICENSE)
-[![Node.js 24](https://img.shields.io/badge/Node.js-24-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org)
-[![pnpm 10](https://img.shields.io/badge/pnpm-10-F69220?logo=pnpm&logoColor=white)](https://pnpm.io)
-[![TypeScript](https://img.shields.io/badge/TypeScript-7.0-3178C6?logo=typescript&logoColor=white)](https://typescriptlang.org)
-[![Discord.js 14](https://img.shields.io/badge/Discord.js-14-5865F2?logo=discord&logoColor=white)](https://discord.js.org)
-[![Next.js 16](https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white)](https://nextjs.org)
-[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](.github/CONTRIBUTING.md)
-[![Discord](https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white)](https://discord.gg/GUkDugVh34)
+<h1>Astron Collection</h1>
 
-> A modular suite of advanced, open-source Discord applications and tools designed for modern communities.
+<p><strong>The open-source platform for Discord communities.</strong></p>
 
-**Astron Collection** is an open-source, self-hostable platform for running a complete Discord community stack. It bundles focused Discord bots for community management, moderation, logging, voice and protection, alongside a web control plane, a public status page, an API, and developer tooling. Run the bots on their own, self-host the whole platform on infrastructure you control, or use [Astron Collection Cloud](https://app.astron-collection.com) for a managed experience.
+<p>Six focused bots. A self-hostable control plane. A status page, documentation and the shared foundation that holds them together.</p>
 
-**Perfect for:** Discord server owners and moderators, community managers, gaming and creator communities, self-hosting enthusiasts, and developers who want a modern, extensible Discord toolchain without giving up control of their data.
+<p>
+  <a href="https://astron-collection.com">Website</a> ·
+  <a href="https://docs.astron-collection.com">Documentation</a> ·
+  <a href="https://status.astron-collection.com">Status</a> ·
+  <a href="https://discord.gg/GUkDugVh34">Discord</a> ·
+  <a href="https://github.com/skygenesisenterprise/astron-collection/issues">Issues</a>
+</p>
 
-## Contents
+<p>
+  <a href="LICENSE"><img alt="License: Apache 2.0" src="https://img.shields.io/badge/license-Apache--2.0-4c9aff"></a>
+  <a href="https://nodejs.org"><img alt="Node.js 24" src="https://img.shields.io/badge/Node.js-24-339933?logo=nodedotjs&logoColor=white"></a>
+  <a href="https://pnpm.io"><img alt="pnpm 12" src="https://img.shields.io/badge/pnpm-12-F69220?logo=pnpm&logoColor=white"></a>
+  <a href="https://www.typescriptlang.org"><img alt="TypeScript 7" src="https://img.shields.io/badge/TypeScript-7-3178C6?logo=typescript&logoColor=white"></a>
+  <a href="https://discord.js.org"><img alt="Discord.js 14" src="https://img.shields.io/badge/Discord.js-14-5865F2?logo=discord&logoColor=white"></a>
+  <a href="https://nextjs.org"><img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white"></a>
+</p>
 
-- [Astron Collection](#astron-collection)
-  - [Contents](#contents)
-  - [Why Astron Collection matters](#why-astron-collection-matters)
-  - [What you can do](#what-you-can-do)
-    - [Community](#community)
-    - [Moderate](#moderate)
-    - [Engage](#engage)
-    - [Protect](#protect)
-    - [Operate](#operate)
-    - [Automate](#automate)
-  - [Quick start](#quick-start)
-    - [Requirements](#requirements)
-    - [Run a Discord bot locally](#run-a-discord-bot-locally)
-    - [Run a bot with Docker Compose](#run-a-bot-with-docker-compose)
-    - [Self-host the full platform](#self-host-the-full-platform)
-    - [Makefile shortcuts](#makefile-shortcuts)
-  - [How Astron Collection is built](#how-astron-collection-is-built)
-    - [Workspace layout](#workspace-layout)
-    - [Discord applications](#discord-applications)
-    - [Core services](#core-services)
-    - [Shared packages](#shared-packages)
-    - [Web properties](#web-properties)
-    - [Containers and deployment targets](#containers-and-deployment-targets)
-  - [Development](#development)
-    - [Root commands](#root-commands)
-    - [Discord bot development](#discord-bot-development)
-    - [Bot configuration](#bot-configuration)
-    - [Platform development](#platform-development)
-    - [Web properties](#web-properties-1)
-    - [Repository conventions](#repository-conventions)
-  - [FAQ](#faq)
-    - [Is Astron Collection free?](#is-astron-collection-free)
-    - [Do I have to host it myself?](#do-i-have-to-host-it-myself)
-    - [What do I need to run it?](#what-do-i-need-to-run-it)
-    - [Can I run several bots at once?](#can-i-run-several-bots-at-once)
-    - [Where is the documentation?](#where-is-the-documentation)
-    - [How do I get help or report a bug?](#how-do-i-get-help-or-report-a-bug)
-  - [Related resources](#related-resources)
-    - [Official](#official)
-    - [Community](#community-1)
-    - [Commercial](#commercial)
-  - [Contributing](#contributing)
-  - [Security](#security)
-  - [License](#license)
-  - [Note](#note)
+</div>
 
-## Why Astron Collection matters
+---
 
-🎯 **You own the stack** — Every bot, service and database runs on your infrastructure. Your member data, configuration and audit history stay under your control, and the source is yours to audit.
+Astron Collection is an open-source, self-hostable platform for running a complete
+Discord community stack. It is built for server owners, moderators and developers
+who want focused tools, clear ownership boundaries and their community data on
+infrastructure they control.
 
-🧩 **Modular by design** — Pick the bot that matches each responsibility: `main` for a complete suite, `guild` for community management, `logger` for audit trails, `player` for voice, and `protect` for safety. Run one or all of them.
+Run one bot or all six. Self-host the control plane with Docker Compose, or use
+[Astron Collection Cloud](https://app.astron-collection.com) for a managed
+experience. Every component is independently deployable, and no bot depends on the
+platform being online.
 
-🛡️ **Moderation is built in** — Ban, kick, mute, warn and purge commands, AutoMod integration, configurable moderation channels and roles, and per-guild settings — no third-party bot required.
+## ✨ Highlights
 
-💬 **Community features that work** — Welcome and farewell messages, XP and ranks, polls, reminders, mini-games, server and user info, and a flexible `/config` command for channels and roles.
+- **Six focused bots, not one monolith.** Astron handles general utilities,
+  Protect moderates, Logger audits, Guild engages, Automations orchestrates and
+  Player plays music. Each has its own Discord application, token, command
+  catalogue, database and image.
+- **One technical foundation.** Commands, events, permissions, configuration,
+  SQLite storage, migrations, logging, health checks and graceful shutdown are
+  shared through `packages/discord-framework` so each bot stays small and
+  consistent.
+- **Your infrastructure, your data.** Bots store their own SQLite files. The
+  control plane uses your PostgreSQL and Redis. Nothing is sent to a third party
+  unless you configure it.
+- **Contracts, not shared databases.** Bots integrate through versioned,
+  HMAC-signed events with a transactional outbox and consumer deduplication.
+- **Operable by default.** Health endpoints, Prometheus-style metrics, structured
+  JSON logs, checksummed migrations, non-root containers and graceful shutdown
+  are part of the foundation.
+- **Open source and extensible.** Apache-2.0, a single pnpm workspace, clear
+  package boundaries and a static isolation check for the Discord layer.
 
-🔒 **Secure by default** — Bot tokens and secrets live in environment variables, commands are scoped explicitly, and the platform supports OAuth, SSO and per-guild configuration.
+## 📦 What's inside
 
-📊 **Observable and operable** — A web control plane, a public status page, background jobs, scheduled tasks, resource monitoring and a deployment announcement feed keep you informed.
+| Product | What it does | Where |
+| --- | --- | --- |
+| **Discord bots** | Six independent Discord applications covering community, moderation, audit, engagement, automations and voice | [`bot/`](bot) |
+| **Control plane** | Dashboard, API, auth, WebSockets, workers and scheduled jobs | [`apps/astron`](apps/astron), [`apps/api`](apps/api), [`apps/schedules`](apps/schedules) |
+| **Status product** | Public status page, incident/maintenance state and notification outbox | [`apps/status`](apps/status), [`packages/status`](packages/status) |
+| **Web properties** | Marketing website and documentation site with their own workspace | [`web/`](web) |
+| **Shared foundations** | Bot framework, platform domain, OpenAPI bridge and MCP server | [`packages/`](packages) |
+| **Design system** | React components, primitives, tokens and component documentation | [`packages/node`](packages/node) |
 
-🤝 **Open source and extensible** — The project is MIT licensed, self-hostable, and built on `discord.js`, Next.js, Hono and a shared TypeScript workspace, so it fits into existing tooling instead of replacing it.
+## 🧱 Project support structure
 
-## What you can do
+Astron Collection is organized as **support layers**. Each layer has one job and
+depends only on the layer beneath it. This is what keeps six bots, a control
+plane and several web properties releasable without turning the repository into a
+single coupled application.
 
-### Community
+```mermaid
+flowchart TB
+  subgraph Interfaces["Interfaces"]
+    WEB["Website & docs"]
+    DASH["Dashboard & API"]
+    STATUS["Status page"]
+    MCP["MCP server"]
+  end
 
-- Greet new members with welcome messages and optional welcome DMs, and send farewells when members leave.
-- Reward activity with XP, levels and ranks.
-- Run polls, reminders, dice rolls and 8-ball prompts directly from slash commands.
-- Configure per-guild channels and roles with `/config`, and inspect servers and users with `/serverinfo` and `/userinfo`.
+  subgraph Platform["Platform domain"]
+    SERVER["packages/server"]
+    STATUSPKG["packages/status"]
+    TRPC["packages/trpc-openapi"]
+    SERVICES["apps/api · apps/schedules · apps/monitoring"]
+  end
 
-### Moderate
+  subgraph Discord["Discord products"]
+    BOTS["bot/astron · protect · logger · guild · automations · player"]
+    FRAMEWORK["packages/discord-framework"]
+  end
 
-- Ban, kick, mute, unmute, warn and purge with permission checks and audit logging.
-- Use AutoMod configuration alongside native Discord moderation tools.
-- Keep a persistent audit trail, warnings and member events in the bot data store.
-- Route moderation actions to dedicated channels configured per guild.
+  subgraph Runtime["Runtime support"]
+    POSTGRES[("PostgreSQL")]
+    REDIS[("Redis")]
+    SQLITE[("SQLite per bot")]
+    EVENTS["HMAC event contracts"]
+  end
 
-### Engage
+  WEB --> DASH
+  DASH --> SERVER
+  DASH --> STATUSPKG
+  DASH --> TRPC
+  SERVICES --> SERVER
+  BOTS --> FRAMEWORK
+  BOTS --> SQLITE
+  BOTS --> EVENTS
+  SERVER --> POSTGRES
+  SERVICES --> REDIS
+  STATUSPKG --> POSTGRES
+```
 
-- Use the `player` distribution for voice-capable deployments built on `@discordjs/voice`.
-- Announce deployments and new versions in a configured updates channel.
-- Keep members informed with polls, reminders and structured embeds.
+| Layer | Location | Owns | Depends on |
+| --- | --- | --- | --- |
+| **Interfaces** | `apps/astron`, `apps/status`, `web/`, `packages/mcp` | Screens, HTTP surfaces, docs, AI tools | Platform domain, UI foundation |
+| **Platform services** | `apps/api`, `apps/schedules`, `apps/monitoring` | Background jobs, schedules, metrics collection | Domain packages, PostgreSQL, Redis |
+| **Platform domain** | `packages/server`, `packages/status`, `packages/trpc-openapi` | Persistence, auth support, status state, API contracts | Runtime libraries only |
+| **Discord products** | `bot/*` | Commands, events, bot services, bot repositories | `packages/discord-framework`, own SQLite |
+| **Bot foundation** | `packages/discord-framework` | Lifecycle, routing, permissions, storage, contracts, observability | `discord.js` / voice as optional peers |
+| **UI foundation** | `packages/node` | React components, tokens, component documentation | React ecosystem |
+| **Support tooling** | `scripts/`, `Makefile`, `.github/` | Install, checks, isolation validation, CI, publishing | Repository tools |
 
-### Protect
+### Repository map
 
-- Run the `protect` distribution as a dedicated safety instance for AutoMod and moderation.
-- Track joins, leaves and deleted channels, and keep audit records for investigation.
-- Give each bot instance its own token, data store and Redis namespace.
+```text
+astron-collection/
+├── apps/                         # Platform products
+│   ├── astron/                   # @astron-collection/app — dashboard, API, runtime, desktop shell
+│   ├── api/                      # @astron-collection/api — Inngest background work
+│   ├── schedules/                # @astron-collection/schedules — BullMQ scheduled jobs
+│   ├── status/                   # @astron-collection/status-app — public status page
+│   └── monitoring/               # Go metrics service (outside the pnpm workspace)
+├── bot/                          # Six independent Discord applications
+│   ├── astron/                   # @astron-collection/astron
+│   ├── protect/                  # @astron-collection/protect
+│   ├── logger/                   # @astron-collection/logger
+│   ├── guild/                    # @astron-collection/guild
+│   ├── automations/              # @astron-collection/automations
+│   └── player/                   # @astron-collection/player
+├── packages/
+│   ├── discord-framework/        # Shared bot foundation
+│   ├── server/                   # Platform domain, persistence, auth utilities
+│   ├── status/                   # Status engine, APIs, notification outbox
+│   ├── trpc-openapi/             # tRPC ↔ OpenAPI bridge
+│   ├── mcp/                      # Model Context Protocol server
+│   └── node/                     # Nested React design-system toolchain
+├── web/                          # Separate workspace: website, docs, Dockerfiles, Makefile
+├── scripts/                      # Install, worktree, docs and isolation tooling
+├── docker/                       # Deployment-tooling install helper
+├── .github/                      # CI workflows, templates, support and security files
+├── Dockerfile                    # Platform image: dev / status / platform targets
+├── entrypoint.sh                 # Runtime role selection for the platform image
+├── docker-compose.yml            # Platform stack: postgres, redis, client, api
+├── docker-compose.bots.yml       # Optional local stack with all six bots
+├── Makefile                      # Thin wrapper over pnpm, Docker and scripts
+├── .env.example                  # Platform environment template
+└── pnpm-workspace.yaml           # Workspace and dependency catalog
+```
 
-### Operate
+### Dependency rules
 
-- Manage communities from the Astron Collection dashboard, with projects, environments, servers and deployments.
-- Publish incidents and maintenance windows through the public status page.
-- Monitor resource usage and service health with the Go monitoring service.
-- Schedule recurring jobs and process background work through dedicated services.
+1. A bot depends only on the framework and its runtime. It must never import
+   `apps/*`, `packages/server`, `packages/status` or another bot.
+2. The framework contains no business logic. It does not know what a moderation
+   case, level, workflow or playlist is.
+3. Domain packages do not import applications. Applications compose them.
+4. Applications do not import each other. Shared behaviour belongs in a package.
+5. Web workspaces are independent and can be built without the platform.
+6. Bots never share a database. Cross-bot integration uses event contracts.
+7. Secrets stay at the edge; loggers redact token and secret-shaped values.
 
-### Automate
+### Data ownership
 
-- Drive the platform from its API, the MCP server, or the OpenAPI specification.
-- Generate OpenAPI documentation and TypeScript clients from a single source of truth.
-- Extend the bots with new slash commands and event handlers that are loaded dynamically at startup.
+| Store | Owner | Contents |
+| --- | --- | --- |
+| PostgreSQL | Platform (`apps/astron` / `packages/server`) | Users, organizations, projects, servers, deployments, audit and platform settings |
+| Redis | Platform (`apps/api`, `apps/schedules`, `apps/astron`) | Cache, BullMQ queues, coordination |
+| SQLite `<bot>.sqlite3` | Each bot | That bot's cases, logs, members, workflows, playlists, settings and outbox |
+| Status persistence | `packages/status` / `apps/status` | Status components, incidents, maintenance windows and notification outbox |
 
-## Quick start
+No database is shared between two bots. Bot repositories always filter by
+`guild_id`, and a guild cannot read another guild's rows through a command.
 
-### Requirements
+## 🤖 Discord bots
 
-- **Node.js 24.4+** and **pnpm 10.22+** for local development.
-- A **Discord application** with a bot token and client ID from the [Discord Developer Portal](https://discord.com/developers/applications).
-- **Docker Engine** with the Compose plugin if you prefer containers.
-- **PostgreSQL** and **Redis** for the full control plane (both are provided by the Compose stack).
+| Bot | Package | Domain | Image |
+| --- | --- | --- | --- |
+| **Astron** | `@astron-collection/astron` | General utilities: help, status, server/user/role/channel info, docs, support, invite, language, configuration | `ghcr.io/skygenesisenterprise/astron` |
+| **Protect** | `@astron-collection/protect` | Moderation, cases, quarantine, phishing/raid protection, AutoMod, security findings | `ghcr.io/skygenesisenterprise/astron/protect` |
+| **Logger** | `@astron-collection/logger` | Audit log, message/member/channel/role events, log search, signed event ingest | `ghcr.io/skygenesisenterprise/astron/logger` |
+| **Guild** | `@astron-collection/guild` | Welcome/farewell, autorole, XP and levels, reaction roles, polls, suggestions, birthdays, reminders | `ghcr.io/skygenesisenterprise/astron/guild` |
+| **Automations** | `@astron-collection/automations` | Workflows with message, member-join, cron and contract-event triggers; ordered actions; run history | `ghcr.io/skygenesisenterprise/astron/automations` |
+| **Player** | `@astron-collection/player` | Voice queues, playback controls, playlists, history, yt-dlp/ffmpeg playback | `ghcr.io/skygenesisenterprise/astron/player` |
 
-Install dependencies from the repository root:
+Each bot is a separate Discord application with its own token, application ID,
+command deployment state, minimal intents, SQLite database, health port, named
+volume and container image. Bots can be scaled, restarted, updated or removed
+independently.
+
+### Per-bot layout
+
+```text
+bot/<name>/
+├── index.js               # createServices + startBot; no manually created client
+├── deploy-commands.js     # framework deployment runner
+├── components.js          # optional buttons/selects/modals
+├── config/
+│   ├── bot.js             # identity, intents, defaults, validators
+│   └── env.js             # environment schema and validation
+├── commands/              # only this bot's commands
+├── events/                # gateway listeners or grouped `events` arrays
+├── services/              # business orchestration for this domain
+├── repositories/          # SQL scoped by guild_id
+├── migrations/            # numbered, checksummed SQL migrations
+├── lib/                   # domain views and helpers
+├── test/ or tests/        # node:test suites
+├── Dockerfile
+├── entrypoint.sh
+├── docker-compose.yml
+├── .env.example
+└── README.md
+```
+
+### Shared bot foundation
+
+`packages/discord-framework` provides the technical support layer for every bot.
+It has no runtime dependency: `discord.js` and `@discordjs/voice` are optional
+peers, and external effects are injectable.
+
+| Module | Support provided |
+| --- | --- |
+| `src/lifecycle.js` | Client creation, bootstrap, login retries, `clientReady`, signals, shutdown, health |
+| `src/commands/` | Command contract, per-bot registry, duplicate and foreign-bot rejection, loader |
+| `src/interactions/` | Slash/context routing, components, versioned custom IDs, autocomplete, cooldowns |
+| `src/permissions.js` | Layered, fail-closed user/bot/business authorization |
+| `src/errors.js` | Expected vs unexpected errors with safe user messages |
+| `src/logger.js` | Structured JSON logs with token/secret redaction |
+| `src/config/env.js` | Schema-based environment parsing and required-variable checks |
+| `src/storage/` | SQLite wrapper, migrations, checksum drift detection |
+| `src/settings/` | Per-guild settings defaults and validators |
+| `src/localization/` | Shared French/English catalogs and translator |
+| `src/observability/` | Metrics registry and HTTP health/metrics/ingest server |
+| `src/contracts/` | Versioned events, event bus, transactional outbox, HMAC webhook sink/verifier |
+| `src/ui/` | Formatting helpers plus discord.js embeds/builders |
+| `src/deploy/` | Idempotent command deployment with application guard and dry run |
+| `src/voice/` | Optional official voice presence/session support |
+| `src/bootstrap.js` | One-call service and runtime composition |
+
+The framework suite runs without installing anything:
+
+```bash
+node --disable-warning=ExperimentalWarning --test packages/discord-framework/test/*.test.js
+```
+
+### Bot isolation
+
+Isolation is checked, not assumed:
+
+- each bot has its own command registry, and the framework rejects commands
+  stamped with another bot's name;
+- command and event directories are loaded per bot;
+- `interactionCreate` belongs to the framework and cannot be overridden;
+- `scripts/check-bots.mjs` verifies the six directories, required files, package
+  names, framework imports, catalogues, test directories and forbidden cross-bot
+  imports.
+
+```bash
+node scripts/check-bots.mjs
+```
+
+### Event contracts
+
+Bots integrate through versioned envelopes, never through shared tables. A
+producer writes an event to its SQLite outbox in the same transaction as its
+domain change. A delivery loop posts the envelope to the consumer's signed HTTP
+endpoint. Delivery is at-least-once; consumers deduplicate by event id.
+
+| Event | Producer | Primary consumer |
+| --- | --- | --- |
+| `moderation.case.created` | Protect | Logger |
+| `moderation.case.updated` | Protect | Logger |
+| `security.alert` | Protect | Logger |
+| `member.joined` | Guild | Logger, Automations |
+| `member.left` | Guild | Logger, Automations |
+| `level.up` | Guild | Logger |
+| `suggestion.created` | Guild | Logger |
+| `workflow.executed` | Automations | Logger |
+| `track.started` | Player | Logger |
+
+Envelopes carry an id, type, version, source, timestamp and guild-scoped payload.
+Requests are signed with HMAC-SHA256 over the timestamp and raw body. Leaving
+`ASTRON_EVENT_URL` empty keeps events in the producer's outbox and sends nothing.
+
+## 🖥️ Platform
+
+| Path | Package | Role |
+| --- | --- | --- |
+| `apps/astron` | `@astron-collection/app` | Next.js dashboard, Node API server (tRPC/OpenAPI, better-auth, WebSockets, workers), migrations, optional Electron desktop shell |
+| `apps/api` | `@astron-collection/api` | Inngest background work and HTTP triggers, port 4000 |
+| `apps/schedules` | `@astron-collection/schedules` | BullMQ scheduled and recurring jobs, port 4001 |
+| `apps/status` | `@astron-collection/status-app` | Standalone public status page, port 4100 |
+| `apps/monitoring` | Go module | Host/container metrics, thresholds and callback notifications, port 3001 |
+
+`apps/astron` is the control-plane composition root. It consumes
+`@astron-collection/server`, `@astron-collection/status` and
+`@astron-collection/trpc-openapi`, and it is the only application that applies
+platform migrations.
+
+| Package | Role |
+| --- | --- |
+| `@astron-collection/server` | Domain logic, Drizzle schema and migrations, auth support, integrations |
+| `@astron-collection/status` | Status domain, state computation, persistence, APIs, notification outbox |
+| `@astron-collection/trpc-openapi` | tRPC ↔ OpenAPI adapter |
+| `@astron-collection/mcp` | MCP server over stdio, HTTP or SSE |
+
+The root Compose stack runs exactly four service groups: `postgres`, `redis`,
+`client` and `api`. The client and API share one image digest; only the API holds
+database and Redis credentials and applies migrations.
+
+### Web and design system
+
+`web/` is a separate pnpm workspace with its own Makefile, Compose file and
+Dockerfiles:
+
+| Path | Package | Role | Dev port |
+| --- | --- | --- | --- |
+| `web/apps/website` | `@astron-collection/website` | Marketing site | 3000 |
+| `web/apps/docs` | `@astron-collection/docs` | Documentation and generated API/CLI references | 3001 |
+
+`packages/node` is a nested React design-system workspace.
+`@astron-collection/react` provides components, primitives, tokens and themes;
+`@astron-collection/react-docs-astro` builds the component documentation. Only
+those two package paths are included in the root workspace, so their Vite+,
+Astro and Playwright toolchain stays independent.
+
+## 🧰 Technology
+
+| Area | Stack |
+| --- | --- |
+| Discord bots | Node.js 22+, discord.js 14, plain ESM with JSDoc, `node:sqlite` |
+| Bot foundation | Dependency-free ESM modules, optional `discord.js` / `@discordjs/voice` peers |
+| Platform | TypeScript 7, Next.js 16, tRPC, Drizzle ORM, PostgreSQL, Redis, better-auth, BullMQ, Inngest |
+| Web | Next.js 16, Fumadocs, Tailwind CSS |
+| Design system | React 19, Vite+, Astro, Playwright |
+| Runtime | Docker, Docker Compose, GHCR, GitHub Actions |
+| Quality | Biome, `node:test`, Vitest, CodeQL, dependency review |
+
+## ⚡ Quick start
+
+### Prerequisites
+
+- **Node.js 24.4+** (`.nvmrc` pins `24.4.0`) and **pnpm 12.16.1**
+- A **Discord application** per bot you want to run
+- **Docker Engine** with the Compose plugin for containers
+- **PostgreSQL** and **Redis** only for the full control plane (Compose provides both)
+- **Go 1.21+** only for `apps/monitoring`
+- **ffmpeg** and **yt-dlp** for real Player playback
 
 ```bash
 git clone https://github.com/skygenesisenterprise/astron-collection.git
@@ -137,425 +369,247 @@ cd astron-collection
 pnpm install --frozen-lockfile
 ```
 
-### Run a Discord bot locally
-
-Each bot reads `.env` from its own directory first, then falls back to the workspace root `.env`.
-
-```bash
-cp bot/main/.env.example bot/main/.env
-```
-
-Edit `bot/main/.env` and set at least:
-
-```dotenv
-DISCORD_TOKEN=your-bot-token
-DISCORD_CLIENT_ID=your-application-id
-DISCORD_WELCOME_DM_ENABLED=true
-DISCORD_COMMAND_SCOPE=global
-DISCORD_ANNOUNCE_DEPLOYMENTS=true
-```
-
-Start the bot with hot reload:
-
-```bash
-pnpm --filter=@astron-collection/main run dev
-```
-
-The `predev` hook registers the slash commands before the bot starts. To manage command registration explicitly:
-
-```bash
-pnpm --filter=@astron-collection/main run deploy:commands  # register slash commands
-pnpm --filter=@astron-collection/main run start            # production start
-```
-
-Invite the bot to a server with the `bot` and `applications.commands` scopes, then try `/ping` and `/config`.
-
-### Run a bot with Docker Compose
-
-Every bot directory ships its own `Dockerfile`, `docker-compose.yml` and `.env.example`. For example, to run the full suite bot:
-
-```bash
-cd bot/main
-cp .env.example .env
-# edit .env and set DISCORD_TOKEN and DISCORD_CLIENT_ID
-docker compose up -d --build
-docker compose logs -f
-```
-
-The Compose stack starts the bot and a Redis instance used as an optional cache. Data is persisted in a named volume. Repeat the same steps in `bot/guild`, `bot/logger`, `bot/player` or `bot/protect` to run a dedicated distribution. Each bot uses its own image name and Redis key prefix, so instances do not collide.
-
-Useful Compose commands:
-
-```bash
-docker compose ps
-docker compose logs -f
-docker compose down
-```
-
-`docker compose down` preserves the named data volumes.
-
-### Self-host the full platform
-
-The root Compose stack is made of four service groups only: **postgres** (database), **redis** (cache and queues), **client** (Next.js frontend) and **api** (backend: tRPC/OpenAPI, auth, WebSockets, workers). It needs no Traefik, no Docker Swarm and no host Docker socket.
+### Run the platform
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` before starting the stack and set `POSTGRES_PASSWORD`, `REDIS_PASSWORD` and `BETTER_AUTH_SECRET`. Generate each one with:
-
-```bash
-openssl rand -hex 32
-```
-
-The stack refuses to start while one of them is missing, and the API refuses a weak or known `BETTER_AUTH_SECRET`. Then start it:
+Set `POSTGRES_PASSWORD`, `REDIS_PASSWORD` and `BETTER_AUTH_SECRET` in `.env`.
+Generate each secret with `openssl rand -hex 32`. Then:
 
 ```bash
 docker compose up -d --build
 docker compose logs -f api
 ```
 
-Open [http://localhost:3000](http://localhost:3000) and complete the initial setup. The API is published on [http://localhost:4000](http://localhost:4000); PostgreSQL and Redis are internal only. Keep `.env` private and do not expose the dashboard publicly until authentication and HTTPS are configured.
-
-The stack runs in two profiles on the same four services:
-
-```bash
-make docker-up self           # production profile, self-hosted
-make docker-up cloud          # production profile, Astron Collection Cloud
-docker compose down           # stop — data volumes are preserved
-make docker-dev self          # development profile: hot reload, same four services
-make migrate                  # apply the migrations once
-```
-
-`docker compose down` keeps the database; never run `docker compose down -v` in normal operation. Database backup and restore:
-
-```bash
-make backup                   # writes backups/astron-<date>.sql
-make restore FILE=backups/astron-<date>.sql
-```
-
-To update, pull the revision and rebuild: `git pull && make docker-up`. To develop against the sources on the host instead of containers, use `pnpm install --frozen-lockfile` followed by `pnpm dev` and `pnpm --filter=@astron-collection/api run dev`.
-
-### Makefile shortcuts
-
-The root `Makefile` is a thin wrapper around the existing tools and scripts:
-
-```bash
-make help            # list every target
-make install         # install locally with Docker Compose
-make docker-up       # build and start the stack
-make docker-dev      # run the containerized dev server with hot reload
-make docker-logs     # follow the stack logs
-make docker-down     # stop the stack (volumes preserved)
-make status          # show stack status
-make update          # pull, rebuild and restart
-make doctor          # check installation health
-```
-
-Product selection is done through make goals, for example `make docker-up -- --cloud` or `make docker-up status`.
-
-## How Astron Collection is built
-
-Astron Collection is a pnpm monorepo with a single root lockfile (`pnpm-lock.yaml`) and a workspace definition (`pnpm-workspace.yaml`) spanning `apps/*`, `packages/*`, `web`, `web/apps/*` and `bot/*`.
-
-### Workspace layout
-
-```text
-astron-collection/
-├── apps/                    # Core services and the web control plane
-│   ├── astron/              # @astron-collection/app — dashboard, API server, runtime
-│   ├── api/                 # @astron-collection/api — background work service (Inngest)
-│   ├── schedules/           # @astron-collection/schedules — scheduled jobs (BullMQ)
-│   ├── status/              # @astron-collection/status-app — public status page (Next.js)
-│   └── monitoring/          # Go monitoring service (outside the pnpm workspace)
-├── bot/                     # Discord applications
-│   ├── main/                # @astron-collection/main — complete suite bot
-│   ├── guild/               # @astron-collection/guild — community management bot
-│   ├── logger/              # @astron-collection/logger — logging and audit bot
-│   ├── player/              # @astron-collection/player — voice-capable bot
-│   └── protect/             # @astron-collection/protect — moderation and safety bot
-├── packages/                # Shared libraries
-│   ├── server/              # @astron-collection/server
-│   ├── status/              # @astron-collection/status
-│   ├── trpc-openapi/        # @astron-collection/trpc-openapi
-│   └── mcp/                 # @astron-collection/mcp — MCP server for the API
-├── web/                     # Marketing website + docs (own workspace, Makefile, Dockerfiles)
-│   ├── apps/website/        # @astron-collection/website
-│   └── apps/docs/           # @astron-collection/docs
-├── scripts/                 # Repository tooling (install, worktrees, docs checks)
-├── docker/                  # Deployment-tooling install helper
-├── Dockerfile               # Root image with selfhosted / cloud / console / dev targets
-├── docker-compose.yml       # Self-hosted stack (PostgreSQL, Redis, Traefik, app, status)
-└── Makefile                 # install / dev / docker / operations targets
-```
-
-### Discord applications
-
-The `bot/` workspace contains five deployable Discord distributions. They share the same command and event architecture, so a feature added to one can be reused everywhere; each distribution gets its own token, data directory, image name and Redis key prefix.
-
-| Path | Package | Focus |
-| --- | --- | --- |
-| `bot/main` | `@astron-collection/main` | Complete suite: community, moderation, engagement and operations |
-| `bot/guild` | `@astron-collection/guild` | Community management and member experience |
-| `bot/logger` | `@astron-collection/logger` | Logging, audit trails and activity tracking |
-| `bot/player` | `@astron-collection/player` | Voice-capable distribution built on `@discordjs/voice` |
-| `bot/protect` | `@astron-collection/protect` | Moderation, AutoMod and server safety |
-
-Every bot is built with **discord.js 14** and follows the same structure:
-
-```text
-bot/<name>/
-├── commands/        # Slash commands, loaded dynamically at startup
-├── events/          # Gateway event handlers (members, messages, interactions, ready)
-├── config/          # Environment loading and validation
-├── services/        # Deployment announcements and shared services
-├── utils/           # JSON store, XP, member messages, support tickets
-├── data/            # Persistent JSON state (warnings, tickets, XP, settings, polls)
-├── index.js         # Client bootstrap, command/event loading and reconnect logic
-├── deploy-commands.js
-├── Dockerfile
-├── docker-compose.yml
-└── .env.example
-```
-
-The shared command set includes `/ping`, `/config`, `/welcome`, `/farewell`, `/levels`, `/rank`, `/poll`, `/remind`, `/8ball`, `/dice`, `/ban`, `/kick`, `/mute`, `/unmute`, `/warn`, `/purge`, `/automod`, `/serverinfo`, `/userinfo` and `/prefix`.
-
-### Core services
-
-| Path | Package | Role |
-| --- | --- | --- |
-| `apps/astron` | `@astron-collection/app` | Web dashboard, API server and application runtime |
-| `apps/api` | `@astron-collection/api` | Background and asynchronous work service (Inngest), port 4000 |
-| `apps/schedules` | `@astron-collection/schedules` | Scheduled jobs and recurring tasks (BullMQ), port 4001 |
-| `apps/status` | `@astron-collection/status-app` | Public status page (Next.js), port 4100 |
-| `apps/monitoring` | — (Go) | Resource monitoring and metrics collection service |
-
-### Shared packages
-
-| Path | Package | Role |
-| --- | --- | --- |
-| `packages/server` | `@astron-collection/server` | Core server logic, persistence and platform utilities |
-| `packages/status` | `@astron-collection/status` | Status engine: domain model, state computation, persistence, public/admin APIs and notification outbox |
-| `packages/trpc-openapi` | `@astron-collection/trpc-openapi` | tRPC ↔ OpenAPI integration utilities |
-| `packages/mcp` | `@astron-collection/mcp` | Model Context Protocol server for AI integrations with the Astron Collection API |
-
-### Web properties
-
-| Path | Package | Role |
-| --- | --- | --- |
-| `web/apps/website` | `@astron-collection/website` | Official marketing website |
-| `web/apps/docs` | `@astron-collection/docs` | Product documentation site |
-
-The `web/` directory is its own pnpm workspace root with a dedicated `Makefile`, `Dockerfile.website` / `Dockerfile.docs` and `docker-compose.yml`, so the marketing site and the documentation site can be built and deployed independently of the platform.
-
-### Containers and deployment targets
-
-The root `Dockerfile` exposes several targets:
-
-| Target | Purpose |
+| Service | URL |
 | --- | --- |
-| `selfhosted` | Default self-hosted image, including Docker and deployment tooling |
-| `cloud` | Astron Collection Cloud runtime without the self-hosted tooling |
-| `console` | Console product flavour |
-| `dev` | Development image with hot reload and deployment tooling |
-| `status` | Standalone status page image |
+| Dashboard | [http://localhost:3000](http://localhost:3000) |
+| API | [http://localhost:4000](http://localhost:4000) |
+| Status page (standalone) | [http://localhost:4100](http://localhost:4100) |
 
-The root Compose stack runs exactly four services: `postgres`, `redis`, `client` and `api`. The frontend and the backend are separate images: the client serves the UI and proxies `/api/*` to the API service, and only the API holds the database and Redis credentials and applies migrations. Neither container mounts the host Docker socket. The standalone status page keeps its own `status` image target and is deployed on its own.
+PostgreSQL and Redis stay internal. Keep `.env` private, and do not expose the
+dashboard publicly before authentication and HTTPS are configured.
 
-The bot images are independent and can be deployed one at a time. Each `bot/<name>/docker-compose.yml` starts its bot and a Redis cache, and persists bot data in a named volume.
+### Run one bot locally
 
-## Development
-
-The monorepo uses **Node.js 24.4 or later in the 24.x line** and **pnpm 10.22 or later**. Install dependencies from the repository root:
+Each bot reads `bot/<name>/.env` first, then falls back to the repository root
+`.env`.
 
 ```bash
-pnpm install --frozen-lockfile
+cp bot/logger/.env.example bot/logger/.env
+# set the Discord token and application ID for this bot
+
+pnpm --filter=@astron-collection/logger deploy:commands
+pnpm --filter=@astron-collection/logger dev
 ```
 
-### Root commands
+Swap `logger` for `astron`, `protect`, `guild`, `automations` or `player`. Invite
+the application with the `bot` and `applications.commands` scopes.
 
-| Command | Purpose |
+### Run all six bots
+
+```bash
+for bot in astron automations guild logger player protect; do
+  cp bot/$bot/.env.example bot/$bot/.env
+done
+
+docker compose -f docker-compose.bots.yml up -d --build
+docker compose -f docker-compose.bots.yml ps
+```
+
+Each bot gets its own container, SQLite volume, health port and image. Bots do
+not require the control plane to be running. `docker compose down` preserves the
+data volumes.
+
+## 🛠️ Development
+
+| Command | What it runs |
 | --- | --- |
-| `pnpm dev` | Run the Astron Collection web application |
-| `pnpm build` | Build all workspace packages |
-| `pnpm build:app` | Build the main application only |
-| `pnpm test` | Run the application test suite |
-| `pnpm typecheck` | Type-check workspace packages |
-| `pnpm lint` | Run Biome checks across the workspace |
-| `pnpm setup` | Set up the database and run migrations |
-| `pnpm server:dev` / `pnpm server:build` | Run or build the `@astron-collection/server` package |
-| `pnpm web:dev` / `pnpm web:build` | Run or build the official website |
-| `pnpm docs:dev` / `pnpm docs:build` | Run or build the documentation site |
+| `pnpm dev` | Dashboard/API server in development |
+| `pnpm build` | Recursive workspace build |
+| `pnpm build:app` | Main application build |
+| `pnpm test` | Application test suite |
+| `pnpm test:bots` | Shared Discord framework test suite |
+| `pnpm check:bots` | Six-bot isolation and structure check |
+| `pnpm typecheck` | Recursive TypeScript type-check |
+| `pnpm lint` | Recursive lint/format checks |
+| `pnpm setup` | Platform database setup and migrations |
 | `pnpm generate:openapi` | Regenerate the OpenAPI specification |
+| `pnpm docs:check` | Validate documentation specs, regions and links |
+| `pnpm web:dev` / `pnpm docs:dev` | Marketing site / documentation site |
 | `pnpm changeset` | Add a changeset for a user-facing change |
 
-### Discord bot development
-
-Each bot is an independent Node.js package. Use the filtered workspace commands from the repository root:
+### Platform services
 
 ```bash
-pnpm --filter=@astron-collection/main run dev       # hot reload
-pnpm --filter=@astron-collection/main run start     # production start
-pnpm --filter=@astron-collection/main run deploy:commands
-```
-
-Swap `main` for `guild`, `logger`, `player` or `protect` to work on another distribution. The `dev` and `start` scripts run `deploy-commands.js` first through their `predev` / `prestart` hooks.
-
-To add a feature, create a command or event module that exports the expected shape:
-
-```js
-// commands/example.js
-export const data = new SlashCommandBuilder()
-  .setName("example")
-  .setDescription("An example slash command.");
-
-export async function execute(interaction) {
-  await interaction.reply("Hello from Astron Collection!");
-}
-```
-
-Command files are loaded dynamically from `commands/`, and event files from `events/`. An event may export `once = true` to run only on the first gateway event.
-
-### Bot configuration
-
-Bots read configuration from `bot/<name>/.env`, then from the workspace root `.env`. The core variables are:
-
-| Variable | Required | Description |
-| --- | --- | --- |
-| `DISCORD_TOKEN` | Yes | Bot token from the Discord Developer Portal |
-| `DISCORD_CLIENT_ID` | Yes | Application ID used to register slash commands |
-| `DISCORD_COMMAND_SCOPE` | No | `global` (default) or `none` |
-| `DISCORD_WELCOME_DM_ENABLED` | No | Send welcome direct messages (default `true`) |
-| `DISCORD_ANNOUNCE_DEPLOYMENTS` | No | Announce new deployments in configured channels (default `true`) |
-| `NODE_ENV` | No | `development` or `production` |
-| `LOG_LEVEL` | No | `debug`, `info`, `warn` or `error` |
-| `REDIS_ENABLED` | No | Enable the optional Redis cache |
-| `REDIS_REQUIRED` | No | Fail if Redis is unavailable (default `false`) |
-| `REDIS_URL` | No | Full Redis connection URL, for example `redis://default:password@redis:6379/0` |
-
-When Redis is disabled or unavailable, the bots continue with their local JSON store. Set `REDIS_REQUIRED=true` only if cache availability is mandatory for your deployment.
-
-### Platform development
-
-Run the dashboard against a local PostgreSQL database after filling in `.env` from `.env.example`:
-
-```bash
-pnpm dev
-```
-
-For the supporting services:
-
-```bash
-# Background work service (port 4000)
 pnpm --filter=@astron-collection/api run dev
-
-# Inngest dev server (dashboard on port 8288)
 pnpm --filter=@astron-collection/api run dev:inngest
-
-# Scheduled jobs (port 4001)
 pnpm --filter=@astron-collection/schedules run dev
-
-# Public status page (port 4100)
 pnpm --filter=@astron-collection/status-app run dev
 ```
 
-The standalone status page ships with seed tooling (`make status-seed`) and its own tests. The monitoring service is a Go application under `apps/monitoring` and is intentionally outside the pnpm workspace.
-
 ### Web properties
 
-The marketing site (`web/apps/website`) and the documentation site (`web/apps/docs`) share a dedicated toolchain in `web/`:
-
 ```bash
-make -C web dev web      # run the website
-make -C web dev docs     # run the docs site
-make -C web build        # build both
+make -C web dev web
+make -C web dev docs
+make -C web build
 ```
 
-The docs site also has repository-level checks:
+### Checks
 
 ```bash
-pnpm docs:check          # validate specifications, regions and links
-pnpm docs:check:changed  # validate only changed documentation
-pnpm docs:check:links    # validate links only
+pnpm lint
+pnpm typecheck
+pnpm test
+node scripts/check-bots.mjs
+
+for bot in astron automations guild logger player protect; do
+  node --disable-warning=ExperimentalWarning --test bot/$bot/test*/*.test.js || exit 1
+done
 ```
 
-### Repository conventions
+`astron`, `protect` and `logger` use `test/`; `guild`, `automations` and `player`
+use `tests/`. The isolation check is cheap enough to run on every change.
 
-- Formatting and linting use [Biome](https://biomejs.dev) through `pnpm lint` and `pnpm format-and-lint:fix`.
-- Pull request titles follow [Conventional Commits](https://www.conventionalcommits.org) (`fix: …`, `feat: …`, `docs: …`).
-- Add a changeset with `pnpm changeset` when your change is user-facing.
-- Run `pnpm test`, `pnpm typecheck` and `pnpm lint` before opening a pull request.
-- Never commit bot tokens, OAuth secrets, database credentials or other secrets.
+## 🚀 Deployment
 
-## FAQ
+### Images
 
-### Is Astron Collection free?
+| Product | Image |
+| --- | --- |
+| Platform (self-hosted / cloud / console) | `ghcr.io/skygenesisenterprise/astron-collection` |
+| Astron bot | `ghcr.io/skygenesisenterprise/astron` |
+| Protect bot | `ghcr.io/skygenesisenterprise/astron/protect` |
+| Logger bot | `ghcr.io/skygenesisenterprise/astron/logger` |
+| Guild bot | `ghcr.io/skygenesisenterprise/astron/guild` |
+| Automations bot | `ghcr.io/skygenesisenterprise/astron/automations` |
+| Player bot | `ghcr.io/skygenesisenterprise/astron/player` |
+| Status page | Built from the root Dockerfile `status` target |
+| Website / docs | Separate images under `web/` |
 
-Yes. The project is open source and licensed under the MIT License, and the self-hosted edition is free to run. Some separately published packages or components may carry their own license terms; check the relevant package's license file before redistributing it. A commercial edition with additional features and premium support is maintained by [Sky Genesis Enterprise](https://skygenesisenterprise.com).
+The root Dockerfile supports `dev`, `status` and `platform` targets. `platform`
+is the default. The platform container selects its role at runtime:
+`ASTRON_COLLECTION_ROLE=client`, `api` or `migrate`. The self-hosted, cloud and
+console editions share the same image and differ by runtime configuration, not
+by service topology.
 
-### Do I have to host it myself?
+### Configuration
 
-No. You can run the Discord bots on their own, self-host the full platform with Docker Compose or `make install`, or use the hosted [Astron Collection Cloud](https://app.astron-collection.com) if you would rather not manage the control plane.
+| Scope | Template | Required values |
+| --- | --- | --- |
+| Platform | `.env.example` | `POSTGRES_PASSWORD`, `REDIS_PASSWORD`, `BETTER_AUTH_SECRET`; optional OAuth providers |
+| Each bot | `bot/<name>/.env.example` | That bot's Discord token and application ID; optional guild ID and event settings |
 
-### What do I need to run it?
+Typical bot variables:
 
-For development: Node.js 24.4+, pnpm 10.22+ and a Discord application. For the full platform: PostgreSQL, Redis and a filled-in `.env`. For the containerized stack: Docker Engine with the Compose plugin. The bots only need a bot token and client ID, with Redis optional.
+| Variable | Purpose |
+| --- | --- |
+| `DISCORD_TOKEN` | Bot token for this application |
+| Discord application/client ID | Command deployment identity; must be unique per bot |
+| `DISCORD_GUILD_ID` | Optional guild-scoped deployment during development |
+| `ASTRON_HEALTH_PORT` | Health and metrics HTTP port |
+| `ASTRON_LOG_LEVEL` | `debug`, `info`, `warn`, `error` |
+| `ASTRON_DATABASE_PATH` | SQLite file path |
+| `ASTRON_EVENT_URL` / `ASTRON_EVENT_SECRET` | Outbound contract delivery and signature |
+| `ASTRON_INGEST_PATH` | Logger/Automations signed ingest path |
+| `ASTRON_DEPLOY_COMMANDS` | Deploy once at container start, then remove |
 
-### Can I run several bots at once?
+Each bot must use its own Discord application ID. A global deployment replaces
+that application's entire global command catalogue. Never share one application
+ID between two bots unless you intentionally coordinate their commands in guild
+scope.
 
-Yes. Each distribution has its own token, client ID, data directory, image and Redis key prefix. Create a separate Discord application for each bot, or point several distributions at the same application if you intentionally want shared command registration. Running dedicated instances is recommended so moderation, logging and community features scale and restart independently.
+Secrets belong only in `.env` files or the deployment secret store. They are
+never committed, and structured logs redact token/secret-shaped values.
 
-### Where is the documentation?
+## 📈 Operations
 
-The product documentation lives at [docs.astron-collection.com](https://docs.astron-collection.com). The documentation site in `web/apps/docs` is generated from the same sources as this repository.
+- **Health and metrics** — bots serve `/healthz`, `/livez` and `/metrics` on
+  `ASTRON_HEALTH_PORT`; platform containers use role-aware health checks.
+- **Structured logs** — bots emit JSON lines with `ts`, `level`, `bot`, `msg` and
+  context. Secrets and token-shaped strings are redacted.
+- **Graceful shutdown** — SIGTERM/SIGINT remove listeners, stop timers and voice
+  sessions, close SQLite and destroy the Discord client once.
+- **Migrations** — bot migrations run at startup with checksums; platform
+  migrations run through the API role or `make migrate`.
+- **Backups** — `make backup` dumps PostgreSQL to `backups/`; restore with
+  `make restore FILE=...`. Back up bot volumes (SQLite files) like any database.
+- **Updates** — pull the revision and rebuild the affected products. Bots and the
+  platform update independently; published version tags are immutable.
+- **Outbox retries** — undelivered contract events remain in the producer's
+  outbox and are retried. Consumers deduplicate, so replay is safe.
 
-### How do I get help or report a bug?
+### Command deployment
 
-Join the [Astron Collection Discord](https://discord.gg/GUkDugVh34) for questions, or open a [GitHub issue](https://github.com/skygenesisenterprise/astron-collection/issues) for bugs and feature requests. Never report a security vulnerability in a public issue — see [Security](#security).
+```bash
+pnpm --filter=@astron-collection/<bot> deploy:commands
+```
 
-## Related resources
+Deployment is idempotent: the catalogue is hashed, unchanged catalogues are not
+sent again, and a state file guards against using the wrong application.
 
-### Official
+## 📚 Documentation and support
 
-- Website: [astron-collection.com](https://astron-collection.com)
-- Documentation: [docs.astron-collection.com](https://docs.astron-collection.com)
-- Hosted platform: [app.astron-collection.com](https://app.astron-collection.com)
-- Status page: [status.astron-collection.com](https://status.astron-collection.com)
-- Discord bots: See [`bot/`](bot)
-- Web dashboard: See [`apps/astron`](apps/astron)
-- MCP server: See [`packages/mcp`](packages/mcp)
-- Status engine: See [`packages/status`](packages/status)
+| Resource | Link |
+| --- | --- |
+| Product documentation | [docs.astron-collection.com](https://docs.astron-collection.com) |
+| Website | [astron-collection.com](https://astron-collection.com) |
+| Status page | [status.astron-collection.com](https://status.astron-collection.com) |
+| Bot architecture | [`bot/README.md`](bot/README.md) |
+| Bot framework | [`packages/discord-framework/README.md`](packages/discord-framework/README.md) |
+| MCP server | [`packages/mcp/README.md`](packages/mcp/README.md) |
+| Monitoring | [`apps/monitoring/README.md`](apps/monitoring/README.md) |
+| Community | [Discord](https://discord.gg/GUkDugVh34) |
+| Bugs and requests | [GitHub Issues](https://github.com/skygenesisenterprise/astron-collection/issues) |
+| Commercial support | [Sky Genesis Enterprise](https://skygenesisenterprise.com) |
 
-### Community
+### Common checks
 
-- Questions and discussions: [Astron Collection Discord](https://discord.gg/GUkDugVh34)
-- Bugs and feature requests: [GitHub Issues](https://github.com/skygenesisenterprise/astron-collection/issues)
-- Contribution guide: [`.github/CONTRIBUTING.md`](.github/CONTRIBUTING.md)
-- Code of Conduct: [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md)
+| Symptom | First place to look |
+| --- | --- |
+| A bot exits as unconfigured | Its `bot/<name>/.env`: token and application ID |
+| Slash commands are missing | Run `deploy:commands`; confirm the application ID and scope |
+| Contract events never arrive | `ASTRON_EVENT_URL`, matching secret, ingest path, outbox logs |
+| Player joins but produces no sound | `ffmpeg`, `yt-dlp`, voice permissions, connection logs |
+| The platform refuses to start | Missing `POSTGRES_PASSWORD`, `REDIS_PASSWORD` or a weak `BETTER_AUTH_SECRET` |
+| Two bots overwrite each other's commands | They share an application ID; give each bot its own application |
+| Cross-bot import or structure error | `node scripts/check-bots.mjs` output |
 
-### Commercial
+## 🤝 Contributing
 
-- Commercial edition and premium support: [Sky Genesis Enterprise](https://skygenesisenterprise.com)
-- Contact: [contact@skygenesisenterprise.com](mailto:contact@skygenesisenterprise.com)
+Contributions are welcome. Read the [Code of Conduct](CODE_OF_CONDUCT.md) and the
+[contribution guide](.github/CONTRIBUTING.md), keep pull request titles in
+Conventional Commits format, and add a changeset for user-facing changes.
 
-## Contributing
+```bash
+pnpm lint
+pnpm typecheck
+pnpm test
+node scripts/check-bots.mjs
+```
 
-Contributions and suggestions are welcome. Please read the [Code of Conduct](CODE_OF_CONDUCT.md) before participating, then follow the [contribution guide](.github/CONTRIBUTING.md) for setup and review expectations.
+Please never paste tokens, credentials or customer data into an issue or pull
+request.
 
-- Pick the right [pull request template](.github/PULL_REQUEST_TEMPLATE) for your change.
-- Keep PR titles in Conventional Commits format (`fix: …`, `feat: …`, `docs: …`).
-- Add a changeset with `pnpm changeset` when your change is user-facing.
-- Run `pnpm test`, `pnpm typecheck` and `pnpm lint` before opening a pull request.
-- Never paste tokens, credentials or secrets into an issue or pull request.
+## 🔒 Security
 
-## Security
+Do not report vulnerabilities in public issues. Follow [`SECURITY.md`](SECURITY.md)
+or email [security@skygenesisenterprise.com](mailto:security@skygenesisenterprise.com)
+with reproduction steps.
 
-Do not report security vulnerabilities in public issues. Report them privately to [security@skygenesisenterprise.com](mailto:security@skygenesisenterprise.com) with a detailed description and reproduction steps. See [SECURITY.md](SECURITY.md) for the full policy.
+## 📄 License
 
-## License
+The repository is licensed under the [Apache License 2.0](LICENSE). Some packages
+or included components may carry their own license; check the relevant package's
+license before redistributing it.
 
-The root project is licensed under the [MIT License](LICENSE). Some separately published packages or included components may have their own license terms; check the relevant package's license file before redistributing it.
+---
 
-## Note
+<div align="center">
 
-Astron Collection is an open-source project maintained by [Sky Genesis Enterprise](https://skygenesisenterprise.com). Links to external services are provided for convenience and do not imply endorsement. Check each service's own terms before relying on it in production.
+Maintained by [Sky Genesis Enterprise](https://skygenesisenterprise.com).
+
+</div>
