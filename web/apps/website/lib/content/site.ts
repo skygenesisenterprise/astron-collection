@@ -1,160 +1,138 @@
-import { links } from "./links";
-
-/** Brand facts, navigation, footer and the global calls to action. */
-
-export const site = {
-	name: "Astron Collection",
-	shortName: "Astron",
-	company: "Sky Genesis Enterprise",
-	tagline: "Focused Discord applications. One platform behind them.",
-	description:
-		"Astron Collection is an open-source suite of Discord applications — community, logging, protection, voice — built on a shared framework and managed from one console. Self-host it or use Astron Collection Cloud.",
-	license: "MIT",
-} as const;
-
-export interface NavItem {
-	href: string;
-	label: string;
-	description?: string;
-	external?: boolean;
-}
-
-export interface NavGroup {
-	title: string;
-	items: NavItem[];
-}
-
-/** Primary navigation: five destinations, no more. */
-export const nav: NavItem[] = [
-	{ href: "/applications", label: "Applications" },
-	{ href: "/platform", label: "Platform" },
-	{ href: "/manager", label: "Manager" },
-	{ href: "/developers", label: "Developers" },
-	{ href: "/resources", label: "Resources" },
-];
-
-/** Applications submenu (desktop disclosure + mobile list). */
-export const applicationNav: NavItem[] = [
-	{
-		href: "/applications",
-		label: "All applications",
-		description: "The six applications in the collection",
-	},
-	{
-		href: "/applications/astron",
-		label: "Astron",
-		description: "Community and moderation, in one bot",
-	},
-	{
-		href: "/applications/guild",
-		label: "Astron Guild",
-		description: "Guild center for community management",
-	},
-	{
-		href: "/applications/logger",
-		label: "Astron Logger",
-		description: "Event and audit logging",
-	},
-	{
-		href: "/applications/protect",
-		label: "Astron Protect",
-		description: "Moderation and server safety",
-	},
-	{
-		href: "/applications/player",
-		label: "Astron Player",
-		description: "Voice presence and audio sessions",
-	},
-	{
-		href: "/applications/automation",
-		label: "Astron Automation",
-		description: "Planned — no functionality published yet",
-	},
-];
-
 /**
- * Global actions.
+ * Single source of truth for public destinations, footer and commercial CTAs.
  *
- * `invite` is null until the public Discord invite URLs exist, so every
- * "Add to Discord" control points at the applications page instead of a
- * non-functional OAuth link (see WEBSITE_AUDIT.md, V-07).
+ * Rules:
+ * - Internal links are paths; external destinations are marked `external`.
+ * - No route is listed before it exists.
+ * - Console/authentication lives on a separate service, never reimplemented here.
+ * - Header navigation is defined in `lib/content/navigation.ts`, which imports
+ *   these destinations rather than redeclaring them.
  */
-export const cta = {
-	invite: { href: "/applications", label: "Add to Discord" },
-	console: { href: links.console, label: "Open the console", external: true },
-	docs: { href: links.docs.home, label: "Documentation", external: true },
-	github: { href: links.github.repo, label: "Source code", external: true },
-	discord: { href: links.community.discord, label: "Join the Discord", external: true },
+
+export const links = {
+	docs: {
+		home: 'https://docs.skygenesisenterprise.com',
+		api: 'https://docs.skygenesisenterprise.com/api',
+		tutorials: 'https://docs.skygenesisenterprise.com/tutorials',
+		support: 'https://docs.skygenesisenterprise.com/support',
+		differences: 'https://docs.skygenesisenterprise.com/docs/core/differences',
+	},
+	status: 'https://status.company.com',
+	console: 'https://dash.company.com',
+	blog: 'https://blog.company.com',
+	github: 'https://github.com/skygenesisenterprise/company',
+	githubOrg: 'https://github.com/skygenesisenterprise',
+	trust: '/company/trust',
+	skyGenesis: 'https://skygenesisenterprise.com/',
+	l0ck7: 'https://lk7cloud.com/',
+} as const
+
+export type NavLink = {
+	href: string
+	label: string
+	description?: string
+	external?: boolean
+}
+
+export const emergencyCta = {
+	label: "Under attack?",
+	href: "/products/network-edge",
+	external: false,
 } as const;
 
-export const footerSections: { title: string; links: NavItem[] }[] = [
+export const cta = {
+	primary: { href: '/contact-sales', label: 'Get started' },
+	secondary: { href: '/contact-sales', label: 'Contact sales' },
+	signIn: { href: links.console, label: 'Dashboard', external: true },
+	// The console is a separate identity surface; never implemented here.
+	console: { href: links.console, label: 'Go to console', external: true },
+} as const
+
+export const footerSections: { title: string; links: NavLink[] }[] = [
 	{
-		title: "Applications",
+		title: 'Getting started',
 		links: [
-			{ href: "/applications", label: "Overview" },
-			{ href: "/applications/astron", label: "Astron" },
-			{ href: "/applications/guild", label: "Astron Guild" },
-			{ href: "/applications/logger", label: "Astron Logger" },
-			{ href: "/applications/protect", label: "Astron Protect" },
-			{ href: "/applications/player", label: "Astron Player" },
-			{ href: "/applications/automation", label: "Astron Automation" },
+			{ href: '/pricing', label: 'Plans' },
+			{ href: '/contact-sales', label: 'Contact sales' },
+			{ href: '/company/partners', label: 'Partners' },
+			{ href: '/company/partners', label: 'Find a partner' },
+			{ href: '/solutions/startups', label: 'Startups' },
+			{ href: '/products/security-identity', label: 'Under attack?' },
+			{ href: '/products/domain-services', label: 'Domain name search' },
 		],
 	},
 	{
-		title: "Platform",
+		title: 'Public Interest',
 		links: [
-			{ href: "/platform", label: "Architecture" },
-			{ href: "/manager", label: "Astron Manager" },
-			{ href: "/platform/self-hosted", label: "Self-hosted" },
-			{ href: "/platform/cloud", label: "Cloud" },
-			{ href: "/developers", label: "Developers" },
+			{ href: '/solutions/ai-research', label: 'Project Galileo' },
+			{ href: '/solutions/small-business', label: 'Athenian Project' },
+			{ href: '/solutions/enterprise', label: 'company for Campaigns' },
+			{ href: '/solutions/startups', label: 'Project Fairshot' },
+			{ href: '/company/about', label: 'Impact' },
 		],
 	},
 	{
-		title: "Resources",
+		title: 'Resources',
 		links: [
-			{ href: links.docs.home, label: "Documentation", external: true },
-			{ href: "/developers", label: "API & MCP" },
-			{ href: "/resources/changelog", label: "Changelog" },
-			{ href: "/resources/status", label: "Service status" },
-			{ href: "/resources/community", label: "Community" },
-			{ href: "/resources/contact", label: "Contact" },
+			{ href: '/resources/blog', label: 'App Innovation report' },
+			{ href: '/resources', label: 'company Radar' },
+			{ href: '/resources', label: 'Case studies' },
+			{ href: links.status, label: 'Status', external: true },
+			{ href: '/resources/support', label: 'Support' },
+			{ href: '/resources', label: 'Events' },
+			{ href: '/resources/blog', label: 'Blog' },
 		],
 	},
 	{
-		title: "Project",
+		title: 'Solutions',
 		links: [
-			{ href: "/resources/open-source", label: "Open source (MIT)" },
-			{ href: links.github.repo, label: "GitHub", external: true },
-			{ href: links.github.issues, label: "Issues", external: true },
-			{ href: links.github.discussions, label: "Discussions", external: true },
-			{ href: "/legal/privacy", label: "Privacy" },
-			{ href: "/legal/terms", label: "Terms" },
+			{ href: '/products/security-identity', label: 'Security and identity' },
+			{ href: '/products/public-cloud/gpu', label: 'GPU and AI infrastructure' },
+			{ href: '/products/network-edge', label: 'Web application protection' },
+			{ href: '/products/web-hosting', label: 'Managed web hosting' },
+			{ href: '/products/public-cloud/kubernetes', label: 'Multi-tenant platform development' },
+			{ href: '/products/storage-databases', label: 'Storage and databases' },
+		],
+	},
+	{
+		title: 'Company',
+		links: [
+			{ href: '/company/about', label: 'About' },
+			{ href: '/company/careers', label: 'Careers' },
+			{ href: '/company/about', label: 'Investors' },
+			{ href: '/company/newsroom', label: 'Press' },
+			{ href: '/company/newsroom', label: 'Press kit' },
+			{ href: '/company/infrastructure', label: 'Infrastructure' },
+			{ href: '/company/trust', label: 'Trust & Compliance' },
+		],
+	},
+	{
+		title: 'Compliance',
+		links: [
+			{ href: '/legal/privacy', label: 'Compliance resources' },
+			{ href: '/company/trust', label: 'Trust Hub' },
+			{ href: '/legal/privacy', label: 'Data Protection' },
+			{ href: '/legal/acceptable-use', label: 'Responsible AI' },
+			{ href: '/legal/terms', label: 'Transparency report' },
+			{ href: '/resources/support', label: 'Report abuse' },
+		],
+	},
+	{
+		title: 'Developers',
+		links: [
+			{ href: '/developers', label: 'Developers Hub' },
+			{ href: links.docs.home, label: 'Documentation', external: true },
+			{ href: links.github, label: 'Community', external: true },
+			{ href: '/developers/changelog', label: 'Changelog' },
 		],
 	},
 ];
 
-/** Routes published in the sitemap (single source of truth). */
-export const siteRoutes: { path: string; priority: number }[] = [
-	{ path: "", priority: 1 },
-	{ path: "/applications", priority: 0.95 },
-	{ path: "/applications/astron", priority: 0.9 },
-	{ path: "/applications/guild", priority: 0.8 },
-	{ path: "/applications/logger", priority: 0.8 },
-	{ path: "/applications/protect", priority: 0.8 },
-	{ path: "/applications/player", priority: 0.75 },
-	{ path: "/applications/automation", priority: 0.6 },
-	{ path: "/manager", priority: 0.9 },
-	{ path: "/platform", priority: 0.9 },
-	{ path: "/platform/self-hosted", priority: 0.85 },
-	{ path: "/platform/cloud", priority: 0.85 },
-	{ path: "/developers", priority: 0.85 },
-	{ path: "/resources", priority: 0.7 },
-	{ path: "/resources/community", priority: 0.6 },
-	{ path: "/resources/open-source", priority: 0.6 },
-	{ path: "/resources/changelog", priority: 0.5 },
-	{ path: "/resources/status", priority: 0.5 },
-	{ path: "/resources/contact", priority: 0.6 },
-	{ path: "/legal/privacy", priority: 0.3 },
-	{ path: "/legal/terms", priority: 0.3 },
-];
+export const organisation = {
+	name: 'Company',
+	legalName: 'Sky Genesis Enterprise',
+	positioning: 'European Integrated Cloud Infrastructure',
+	supporting: 'European roots. Global ambitions.',
+	description:
+		'Company is a European integrated cloud infrastructure provider building compute, storage, networking, developer and security services on owned and partner infrastructure.',
+} as const

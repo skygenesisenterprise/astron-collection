@@ -1,64 +1,101 @@
 "use client";
 
-import { Slot } from "@radix-ui/react-slot";
-import { type VariantProps, cva } from "class-variance-authority";
+import { Button as ZenthButton, LinkButton } from "@company/react";
 import * as React from "react";
-
 import { cn } from "@/lib/utils";
 
-/**
- * Button.
- *
- * Feedback starts on pointer-down (`active:`), transitions are limited to
- * colour and transform, and the radius/size scale comes from the tokens.
- */
-const buttonVariants = cva(
-	"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[background-color,color,border-color,transform] duration-150 ease-out active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50",
-	{
-		variants: {
-			variant: {
-				default: "bg-primary text-primary-foreground hover:bg-primary/90",
-				secondary:
-					"border border-border bg-secondary text-secondary-foreground hover:border-border-strong hover:bg-card",
-				outline:
-					"border border-border bg-transparent text-foreground hover:bg-secondary",
-				ghost: "text-muted-foreground hover:bg-secondary hover:text-foreground",
-				danger:
-					"bg-danger text-destructive-foreground hover:bg-danger/90",
-				link: "text-primary underline-offset-4 hover:underline",
-			},
-			size: {
-				sm: "h-8 px-3 text-sm",
-				default: "h-10 px-4",
-				lg: "h-12 px-6 text-base",
-				icon: "h-10 w-10",
-			},
-		},
-		defaultVariants: {
-			variant: "default",
-			size: "default",
-		},
-	},
-);
+type ButtonVariant =
+	| "default"
+	| "destructive"
+	| "outline"
+	| "secondary"
+	| "ghost"
+	| "link";
+
+type ButtonSize = "default" | "sm" | "lg" | "icon";
+
+const VARIANT_MAP = {
+	default: "primary",
+	destructive: "destructive",
+	outline: "outline",
+	secondary: "secondary",
+	ghost: "ghost",
+	link: "ghost",
+} as const;
+
+const SIZE_MAP = {
+	default: "lg",
+	sm: "base",
+	lg: "lg",
+	icon: "lg",
+} as const;
 
 export interface ButtonProps
-	extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-		VariantProps<typeof buttonVariants> {
+	extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+	variant?: ButtonVariant;
+	size?: ButtonSize;
 	asChild?: boolean;
+	children?: React.ReactNode;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-	({ className, variant, size, asChild = false, ...props }, ref) => {
-		const Comp = asChild ? Slot : "button";
+/**
+ * Site-facing adapter over the design-system Button.
+ *
+ * The public API used by the site (`variant`, `size`, `asChild`) is preserved,
+ * but the rendering, tokens and interaction states come from
+ * `@company/react`. `asChild` with a link renders the library's LinkButton
+ * so routing still goes through the shared LinkProvider.
+ */
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+	function Button(
+		{
+			className,
+			variant = "default",
+			size = "default",
+			asChild = false,
+			children,
+			...props
+		},
+		ref,
+	) {
+		const mappedVariant = VARIANT_MAP[variant];
+		const mappedSize = SIZE_MAP[size];
+		const sizing = size === "lg" ? "h-11 px-5" : size === "sm" ? "h-9 px-3" : undefined;
+
+		if (asChild && React.isValidElement(children)) {
+			const child = children as React.ReactElement<{
+				href?: string;
+				children?: React.ReactNode;
+			}>;
+			return (
+				<LinkButton
+					href={child.props.href}
+					variant={mappedVariant}
+					size={mappedSize}
+					className={cn(sizing, className)}
+				>
+					{child.props.children}
+				</LinkButton>
+			);
+		}
+
 		return (
-			<Comp
-				className={cn(buttonVariants({ variant, size, className }))}
+			<ZenthButton
 				ref={ref}
+				variant={mappedVariant}
+				size={mappedSize}
+				className={cn(
+					sizing,
+					variant === "link" &&
+						"h-auto bg-transparent p-0 text-zenth-link underline-offset-4 hover:underline",
+					className,
+				)}
 				{...props}
-			/>
+			>
+				{children}
+			</ZenthButton>
 		);
 	},
 );
-Button.displayName = "Button";
 
-export { Button, buttonVariants };
+Button.displayName = "Button";

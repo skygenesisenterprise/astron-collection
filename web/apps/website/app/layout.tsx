@@ -1,74 +1,92 @@
-import { SITE_URL } from "@/lib/content/links";
-import { site } from "@/lib/content/site";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-
-// Same face and loading strategy as the documentation site.
-const inter = Inter({ subsets: ["latin"], display: "swap" });
-import { themeScript } from "@/lib/theme-script";
-import { Footer } from "@/components/navigation/Footer";
-import { Header } from "@/components/navigation/Header";
-import "@/styles/tailwind.css";
+import { Inter, Lexend } from "next/font/google";
 import type { ReactNode } from "react";
+import "@company/react/styles.css";
+import "@/styles/tailwind.css";
+import { SiteFooter } from "@/components/site/SiteFooter";
+import { SiteHeader } from "@/components/site/SiteHeader";
+import { ThemeProvider } from "@/components/site/ThemeProvider";
+import { ZenthProvider } from "@/components/site/ZenthProvider";
+import { SITE_URL } from "@/lib/domain/queries";
+
+const inter = Inter({
+	subsets: ["latin"],
+	display: "swap",
+	variable: "--font-inter",
+});
+
+const lexend = Lexend({
+	subsets: ["latin"],
+	display: "swap",
+	variable: "--font-lexend",
+});
 
 export const metadata: Metadata = {
 	metadataBase: new URL(SITE_URL),
 	title: {
-		default: `${site.name} — ${site.tagline}`,
-		template: `%s | ${site.name}`,
+		default: "Company — Cloud infrastructure. Without boundaries.",
+		template: "%s | Company",
 	},
-	description: site.description,
-	applicationName: site.name,
+	description:
+		"Hybrid cloud infrastructure from Company: compute, storage, networking, managed services and hosting on owned and partner infrastructure. Availability and pricing published per product and region.",
+	applicationName: "Company",
 	icons: {
-		// The official mark is `public/astron.png`; the smaller sizes are derived
-		// from it by `scripts/generate-brand-assets.mjs`.
-		icon: [
-			{ url: "/astron.png", type: "image/png" },
-			{ url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-		],
+		icon: "/icon.svg",
 		apple: "/apple-touch-icon.png",
 	},
 	openGraph: {
-		title: `${site.name} — ${site.tagline}`,
-		description: site.description,
+		title: "Company — Cloud infrastructure. Without boundaries.",
+		description:
+			"Compute, storage, networking and managed services on owned and partner infrastructure. European roots. Global ambitions.",
 		url: SITE_URL,
-		siteName: site.name,
+		siteName: "Company",
 		locale: "en_GB",
 		type: "website",
-		images: [{ url: "/og.png", width: 1200, height: 630, alt: site.name }],
+		images: "/og.png",
 	},
 	twitter: {
 		card: "summary_large_image",
-		title: `${site.name} — ${site.tagline}`,
-		description: site.description,
+		title: "Company — Cloud infrastructure. Without boundaries.",
+		description:
+			"Hybrid cloud infrastructure with availability published per product and region.",
 		images: ["/og.png"],
 	},
-	alternates: { canonical: SITE_URL },
 };
 
+/**
+ * The public site is light-only. Declaring the mode here — `data-mode`,
+ * `data-zenth-mode`, `color-scheme: light` through the light token block — makes
+ * every page resolve the light values of the library's `light-dark()` tokens,
+ * regardless of the visitor's OS preference or a legacy theme cookie. The dark
+ * theme remains in the design system, unused by the public site.
+ */
 export default function RootLayout({ children }: { children: ReactNode }) {
 	return (
 		<html
 			lang="en"
-			className={`dark ${inter.className} h-full antialiased`}
+			data-zenth-mode="light"
+			data-mode="light"
+			className={`${inter.variable} ${lexend.variable}`}
 			suppressHydrationWarning
 		>
-			<head>
-				{/* Resolves the theme before paint, so there is no light/dark flash. */}
-				<script dangerouslySetInnerHTML={{ __html: themeScript }} />
-			</head>
-			<body className="flex min-h-full flex-col bg-background text-foreground">
-				<a
-					href="#main-content"
-					className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground"
-				>
-					Skip to content
-				</a>
-				<Header />
-				<main id="main-content" tabIndex={-1} className="flex-1">
-					{children}
-				</main>
-				<Footer />
+			<body className="bg-background text-foreground">
+				<ZenthProvider>
+					<ThemeProvider initialTheme="light">
+						<a
+							href="#main-content"
+							className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground"
+						>
+							Skip to content
+						</a>
+						<div className="flex min-h-svh flex-col bg-background">
+							<SiteHeader />
+							<main id="main-content" tabIndex={-1} className="flex-1">
+								{children}
+							</main>
+							<SiteFooter />
+						</div>
+					</ThemeProvider>
+				</ZenthProvider>
 			</body>
 		</html>
 	);

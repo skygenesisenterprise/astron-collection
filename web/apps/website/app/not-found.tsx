@@ -1,36 +1,40 @@
-import { Container } from "@/components/Container";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { Container } from "@/components/Container";
 import Link from "next/link";
 
 export default function NotFound() {
 	return (
 		<Container>
-			<div className="flex flex-col items-start py-24 sm:py-32">
-				<p className="font-mono text-xs uppercase tracking-[0.06em] text-primary">
+			<div className="mx-auto max-w-2xl py-24 text-center">
+				<p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
 					404
 				</p>
-				<h1 className="mt-4 text-4xl text-foreground sm:text-5xl">
+				<h1 className="mt-4 font-display text-3xl tracking-tight sm:text-4xl">
 					This page does not exist
 				</h1>
-				<p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
-					The link may be out of date, or the page may have moved. These are the
-					places most people are looking for.
+				<p className="mt-4 text-base leading-relaxed text-muted-foreground">
+					The address may have changed with the new information architecture.
+					Start from the catalogue, or use search to find a product or page.
 				</p>
-				<div className="mt-8 flex flex-col gap-3 sm:flex-row">
-					<Button className="rounded-full" asChild>
-						<Link href="/">
-							Back to home
-							<ArrowRight className="h-4 w-4" aria-hidden="true" />
-						</Link>
+				<div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+					<Button asChild>
+						<Link href="/products">Browse products</Link>
 					</Button>
-					<Button variant="secondary" className="rounded-full" asChild>
-						<Link href="/applications">Applications</Link>
-					</Button>
-					<Button variant="ghost" className="rounded-full" asChild>
-						<Link href="/resources">Resources</Link>
+					<Button variant="outline" asChild>
+						<Link href="/">Return home</Link>
 					</Button>
 				</div>
+				<p className="mt-8 text-sm text-muted-foreground">
+					Looking for documentation?{" "}
+					<a
+						href="https://docs.company.com"
+						target="_blank"
+						rel="noreferrer"
+						className="text-foreground underline underline-offset-4"
+					>
+						docs.company.com
+					</a>
+				</p>
 			</div>
 		</Container>
 	);
