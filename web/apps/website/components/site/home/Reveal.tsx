@@ -40,7 +40,7 @@ export function Reveal({
 					const element = entry.target as HTMLElement;
 					element.style.setProperty(
 						"--reveal-delay",
-						`${Math.min(batchIndex, 5) * 50}ms`,
+						`${Math.min(batchIndex, 3) * 40}ms`,
 					);
 					element.classList.add("is-visible");
 					observer?.unobserve(element);

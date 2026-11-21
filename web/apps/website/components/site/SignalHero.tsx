@@ -1,8 +1,8 @@
 import { Link } from "@astron-collection/react";
 import { ArrowRight, ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
-import { Container } from "../Container";
 import { homeHero } from "@/lib/content/home";
 import { homeBots } from "@/lib/content/home-collection";
+import { Container } from "../Container";
 
 /**
  * Homepage hero: one saturated brand panel inset into the page, a fine dot
@@ -14,21 +14,8 @@ import { homeBots } from "@/lib/content/home-collection";
 export function SignalHero() {
 	return (
 		<section className="bg-background">
-			<Container className="pt-1.5 sm:pt-2">
+			<Container className="pt-2">
 				<div className="relative overflow-hidden rounded-2xl bg-brand text-brand-foreground">
-					<div
-						className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_95%_85%_at_50%_45%,transparent_38%,rgba(0,0,0,0.16))]"
-						aria-hidden="true"
-					/>
-					<div
-						className="signal-dots absolute inset-0 opacity-80"
-						aria-hidden="true"
-					/>
-					<div
-						className="pointer-events-none absolute inset-x-0 bottom-0 h-72 bg-[radial-gradient(ellipse_75%_100%_at_50%_100%,rgba(255,255,255,0.55),transparent_72%)]"
-						aria-hidden="true"
-					/>
-
 					<div className="relative mx-auto flex min-h-[calc(85svh_-_5.25rem)] max-w-5xl flex-col px-6 pb-6 pt-16 sm:min-h-[calc(85svh_-_5.625rem)] lg:min-h-[calc(85svh_-_6rem)]">
 						<div className="flex flex-1 flex-col items-center justify-center py-10 text-center">
 							<p className="mb-6 flex items-center gap-2 text-sm text-brand-foreground/80">
@@ -60,9 +47,7 @@ export function SignalHero() {
 
 								<Link
 									href={homeHero.secondaryCta.href}
-									target={
-										homeHero.secondaryCta.external ? "_blank" : undefined
-									}
+									target={homeHero.secondaryCta.external ? "_blank" : undefined}
 									rel={
 										homeHero.secondaryCta.external ? "noreferrer" : undefined
 									}
@@ -85,7 +70,7 @@ export function SignalHero() {
 							<ul className="grid grid-cols-3 gap-x-4 gap-y-4 sm:grid-cols-6">
 								{homeBots.map((bot, index) => (
 									<li key={bot.id} className="min-w-0 text-center sm:text-left">
-										<span className="font-mono text-[11px] tabular-nums text-brand-foreground/50">
+										<span className="font-mono text-xs tabular-nums text-brand-foreground/50">
 											{String(index + 1).padStart(2, "0")}
 										</span>
 										<span className="mt-1 block truncate text-sm font-medium text-brand-foreground">

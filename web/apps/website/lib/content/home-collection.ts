@@ -13,10 +13,7 @@
  * - Every external destination is a URL already published in the repository.
  */
 
-import {
-	getProductMenuFamily,
-	type ProductMenuFamily,
-} from "./navigation";
+import { getProductMenuFamily, type ProductMenuFamily } from "./navigation";
 import { links, siteTitle } from "./site";
 
 export const homeDestinations = {
@@ -40,9 +37,7 @@ export const BOT_IDS = [
 export type BotId = (typeof BOT_IDS)[number];
 
 /** Resolve one of the six published bot families without a second record. */
-export function getHomeBot(
-	id: BotId,
-): ProductMenuFamily & { id: BotId } {
+export function getHomeBot(id: BotId): ProductMenuFamily & { id: BotId } {
 	const bot = getProductMenuFamily(id);
 	if (!bot) {
 		throw new Error(`Unknown Astron Collection bot: ${id}`);
@@ -52,7 +47,6 @@ export function getHomeBot(
 
 export const homeBots: (ProductMenuFamily & { id: BotId })[] =
 	BOT_IDS.map(getHomeBot);
-
 
 /** Resolve capability ids against the published family record. */
 export function getPublishedCapabilities(
@@ -77,8 +71,7 @@ export const collectionSection = {
 	highlight: "One collection",
 	description:
 		"Astron Collection is six Discord bots, each built around one clear job: run the platform, automate the routine, manage the community, keep the record, play the audio and protect the server.",
-	body:
-		"The bots share a collection and a public identity. Each one keeps its own scope, so you can start with the surface your server needs today and add another without relearning the collection.",
+	body: "The bots share a collection and a public identity. Each one keeps its own scope, so you can start with the surface your server needs today and add another without relearning the collection.",
 	primary: {
 		href: "#bots",
 		label: "Install a bot",
@@ -89,8 +82,7 @@ export const collectionSection = {
 		label: "Open the dashboard",
 		external: true,
 	},
-	note:
-		"One collection, six separate scopes. No implied integration between them.",
+	note: "One collection, six separate scopes. No implied integration between them.",
 } as const;
 
 /* -------------------------------------------------------------------------- */
@@ -103,7 +95,6 @@ export const botsSection = {
 	title: "Choose a bot. Read its published scope",
 	description:
 		"The selector is the shortest route into the collection. Every capability below is the same record that drives the product navigation, so the homepage cannot drift from the rest of the site.",
-	note: "The panel is an interface schematic, not a screenshot.",
 } as const;
 
 /* -------------------------------------------------------------------------- */
@@ -125,8 +116,7 @@ export const needsSection = {
 	title: "Start with what your server actually does",
 	description:
 		"The collection is easier to read by job than by feature count. Pick the work you need covered; the index points to the bot that publishes it.",
-	note:
-		"A need is a way into the collection, not a bundle. Each bot keeps its own scope.",
+	note: "A need is a way into the collection, not a bundle. Each bot keeps its own scope.",
 } as const;
 
 export const homeNeeds: HomeNeed[] = [
@@ -204,8 +194,7 @@ export const ecosystemSection = {
 	title: "The collection covers the day, not just the setup",
 	description:
 		"A server moves between arrival, interaction, routine, safety, memory and atmosphere. The six bots are arranged around those surfaces, so the collection reads as one operation.",
-	note:
-		"The stages describe coverage, not a shared data flow between the bots.",
+	note: "The stages describe coverage, not a shared data flow between the bots.",
 } as const;
 
 export const ecosystemStages: EcosystemStage[] = [
@@ -282,8 +271,7 @@ export const dashboardSection = {
 		label: "Open the dashboard",
 		external: true,
 	},
-	note:
-		"The panel on this page is an editorial schematic of that boundary, not a screenshot of the dashboard.",
+	note: "The panel is a schematic of that boundary, not a screenshot.",
 } as const;
 
 /* -------------------------------------------------------------------------- */
@@ -303,8 +291,7 @@ export const developersSection = {
 	title: "A platform you can inspect and extend",
 	description:
 		"Commands, applications, integrations and extensions are part of the scope Astron publishes. The documentation and the public repository are where that surface is maintained.",
-	note:
-		"A public repository is not a support contract. Issues and releases describe what is currently provided, and they remain the maintained record.",
+	note: "A public repository is not a support contract. Issues and releases describe what is currently provided, and they remain the maintained record.",
 } as const;
 
 export const developerLinks: DeveloperLink[] = [
@@ -354,8 +341,6 @@ export const communitySection = {
 		label: "GitHub discussions",
 		external: true,
 	},
-	note:
-		"No member count, response time or support commitment is claimed on this page.",
 } as const;
 
 /* -------------------------------------------------------------------------- */
@@ -374,7 +359,7 @@ export const homeCta = {
 	eyebrow: "Next step",
 	title: "Your server. Six bots. One collection",
 	description:
-		"Choose a bot to install, open the dashboard or join the community. Every route below is maintained today.",
+		"Choose a bot to install, open the dashboard or join the community.",
 	pathways: [
 		{
 			label: "Install a bot",

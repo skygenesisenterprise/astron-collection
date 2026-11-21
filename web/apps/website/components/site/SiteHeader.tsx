@@ -125,7 +125,7 @@ function HeaderPill({
 			variant="outline"
 			size="sm"
 			external={external}
-			className="h-9 rounded-full border-border bg-transparent px-4 text-[15px] font-medium text-foreground ring-0 hover:border-foreground/30 hover:bg-muted hover:text-foreground"
+			className="h-9 rounded-lg border-border bg-transparent px-4 text-sm font-medium text-foreground ring-0 hover:border-foreground/30 hover:bg-muted hover:text-foreground"
 		>
 			{label}
 		</LinkButton>
@@ -234,7 +234,7 @@ function DesktopNavItem({
 						>
 							{section.label}
 							<CaretUpDown
-								className="size-3 text-foreground/60"
+								className="size-4 text-foreground/60"
 								aria-hidden="true"
 							/>
 						</Button>
@@ -315,7 +315,7 @@ function DesktopNavItem({
 									className="text-primary"
 								>
 									See all {section.label.toLowerCase()}
-									<ArrowRight className="size-3.5" aria-hidden="true" />
+									<ArrowRight className="size-4" aria-hidden="true" />
 								</LinkButton>
 							)}
 						</div>
@@ -426,12 +426,12 @@ function MobileMenu({
 																		href={column.href}
 																		variant="plain"
 																		onClick={onClose}
-																		className="text-[11px] font-semibold uppercase tracking-[0.16em] text-foreground no-underline!"
+																		className="text-xs font-medium text-foreground no-underline!"
 																	>
 																		{column.title}
 																	</Link>
 																) : (
-																	<p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+																	<p className="text-xs font-medium text-muted-foreground">
 																		{column.title}
 																	</p>
 																)}
@@ -493,7 +493,7 @@ function MobileMenu({
 							variant="current"
 							target={item.external ? "_blank" : undefined}
 							rel={item.external ? "noreferrer" : undefined}
-							className="rounded-full border border-border px-3 py-1.5 text-xs text-muted-foreground no-underline hover:border-foreground/30 hover:text-foreground"
+							className="rounded-md border border-border px-3 py-2 text-xs text-muted-foreground no-underline hover:border-foreground/30 hover:text-foreground"
 						>
 							{item.label}
 						</Link>
@@ -579,7 +579,7 @@ export function SiteHeader() {
 						aria-label="Astron Collection home"
 						className="flex shrink-0 items-center justify-self-start no-underline!"
 					>
-						<span className="whitespace-nowrap font-display text-[11px] font-bold uppercase tracking-[0.12em] text-foreground sm:text-[12px] xl:text-[14px] xl:tracking-[0.14em]">
+						<span className="whitespace-nowrap font-display text-sm font-medium text-foreground">
 							Astron Collection
 						</span>
 					</Link>
@@ -607,7 +607,7 @@ export function SiteHeader() {
 						</nav>
 					</div>
 
-					<div className="flex items-center gap-2.5 justify-self-end">
+					<div className="flex items-center gap-2 justify-self-end">
 						<nav
 							aria-label="Utility"
 							className="hidden items-center gap-2 md:flex"
@@ -638,9 +638,9 @@ export function SiteHeader() {
 							className="h-9 w-9 text-muted-foreground hover:bg-muted hover:text-foreground lg:hidden"
 						>
 							{mobileOpen ? (
-								<X className="size-5" aria-hidden="true" />
+								<X className="size-4" aria-hidden="true" />
 							) : (
-								<List className="size-5" aria-hidden="true" />
+								<List className="size-4" aria-hidden="true" />
 							)}
 						</Button>
 					</div>

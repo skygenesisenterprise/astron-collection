@@ -51,7 +51,7 @@ export function SectionIntro({
 				<p
 					data-reveal
 					className={cn(
-						"flex items-center gap-2.5 text-sm",
+						"flex items-center gap-2 text-sm",
 						centered && "justify-center",
 						inverse ? "text-brand-foreground/80" : "text-muted-foreground",
 					)}
