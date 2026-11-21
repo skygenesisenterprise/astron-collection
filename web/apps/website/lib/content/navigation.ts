@@ -15,13 +15,9 @@
  *   the field stays unset rather than inventing an availability claim.
  */
 
-import {
-	productCategories,
-	type NavCategory,
-} from "./ecosystem";
+import { type NavCategory, productCategories } from "./ecosystem";
 import { links } from "./site";
 
-export { productCategories } from "./ecosystem";
 export type {
 	NavCategory,
 	NavMaturity,
@@ -29,13 +25,15 @@ export type {
 	NavProductKind,
 	ProductCategoryId,
 } from "./ecosystem";
+export { productCategories } from "./ecosystem";
 
 export type NavSectionId =
 	| "products"
 	| "solutions"
 	| "developers"
 	| "resources"
-	| "company";
+	| "company"
+	| "pricing";
 
 export interface NavLink {
 	href: string;
@@ -61,15 +59,313 @@ export interface NavSection {
 	footerLinks: NavLink[];
 	/** Only the Products section carries the formal product categories. */
 	categories?: NavCategory[];
+	families?: ProductMenuFamily[];
+}
+
+export interface ProductMenuCapability {
+	id: string;
+	label: string;
+	description: string;
+	href: string;
+}
+
+export interface ProductMenuFamily {
+	id: string;
+	label: string;
+	description: string;
+	href: string;
+	capabilities: ProductMenuCapability[];
 }
 
 const CATALOGUE_HREF = "/products";
-const DEVELOPER_PLATFORM_HREF = "/products/developer-platform";
+
+interface ProductMenuCapabilityInput {
+	id: string;
+	label: string;
+	description: string;
+}
+
+interface ProductMenuFamilyInput {
+	id: string;
+	label: string;
+	description: string;
+	capabilities: ProductMenuCapabilityInput[];
+}
+
+function withProductRoutes(
+	families: ProductMenuFamilyInput[],
+): ProductMenuFamily[] {
+	return families.map((family) => ({
+		...family,
+		href: `/products/${family.id}`,
+		capabilities: family.capabilities.map((capability) => ({
+			...capability,
+			href: `/products/${family.id}/${capability.id}`,
+		})),
+	}));
+}
+
+export const productMenuFamilies: ProductMenuFamily[] = withProductRoutes([
+	{
+		id: "astron",
+		label: "Astron",
+		description: "Core Platform",
+		capabilities: [
+			{
+				id: "commands",
+				label: "Commands",
+				description: "Interact with your server through powerful commands.",
+			},
+			{
+				id: "applications",
+				label: "Applications",
+				description: "Manage applications and server functionality.",
+			},
+			{
+				id: "permissions",
+				label: "Permissions",
+				description: "Control access to commands and capabilities.",
+			},
+			{
+				id: "integrations",
+				label: "Integrations",
+				description: "Connect external services and platforms.",
+			},
+			{
+				id: "extensions",
+				label: "Extensions",
+				description: "Extend functionality through custom components.",
+			},
+			{
+				id: "configuration",
+				label: "Configuration",
+				description: "Customize and manage your Astron experience.",
+			},
+		],
+	},
+	{
+		id: "automations",
+		label: "Automations",
+		description: "Workflow Automation",
+		capabilities: [
+			{
+				id: "workflows",
+				label: "Workflows",
+				description: "Design and orchestrate automated processes.",
+			},
+			{
+				id: "triggers",
+				label: "Triggers",
+				description: "Initiate workflows from events and conditions.",
+			},
+			{
+				id: "actions",
+				label: "Actions",
+				description: "Execute operations across your server.",
+			},
+			{
+				id: "schedules",
+				label: "Schedules",
+				description: "Automate recurring tasks and operations.",
+			},
+			{
+				id: "executions",
+				label: "Executions",
+				description: "Monitor workflow execution and results.",
+			},
+			{
+				id: "templates",
+				label: "Templates",
+				description: "Deploy reusable automation templates.",
+			},
+		],
+	},
+	{
+		id: "guild",
+		label: "Guild",
+		description: "Community Management",
+		capabilities: [
+			{
+				id: "members",
+				label: "Members",
+				description: "Manage community members and their activity.",
+			},
+			{
+				id: "roles",
+				label: "Roles",
+				description: "Organize roles and community permissions.",
+			},
+			{
+				id: "welcome",
+				label: "Welcome",
+				description: "Create personalized member onboarding experiences.",
+			},
+			{
+				id: "engagement",
+				label: "Engagement",
+				description: "Encourage participation and community activity.",
+			},
+			{
+				id: "moderation",
+				label: "Moderation",
+				description: "Manage interactions and community standards.",
+			},
+			{
+				id: "server-management",
+				label: "Server Management",
+				description: "Centralize everyday server administration.",
+			},
+		],
+	},
+	{
+		id: "logger",
+		label: "Logger",
+		description: "Observability and Auditing",
+		capabilities: [
+			{
+				id: "audit-logs",
+				label: "Audit Logs",
+				description: "Track administrative changes and actions.",
+			},
+			{
+				id: "event-logs",
+				label: "Event Logs",
+				description: "Record important server events.",
+			},
+			{
+				id: "message-logs",
+				label: "Message Logs",
+				description: "Monitor message-related activity.",
+			},
+			{
+				id: "member-logs",
+				label: "Member Logs",
+				description: "Track membership and profile changes.",
+			},
+			{
+				id: "moderation-logs",
+				label: "Moderation Logs",
+				description: "Maintain records of moderation actions.",
+			},
+			{
+				id: "log-management",
+				label: "Log Management",
+				description: "Organize and manage historical records.",
+			},
+		],
+	},
+	{
+		id: "player",
+		label: "Player",
+		description: "Audio Platform",
+		capabilities: [
+			{
+				id: "playback",
+				label: "Playback",
+				description: "Control audio playback in voice channels.",
+			},
+			{
+				id: "playlists",
+				label: "Playlists",
+				description: "Create and manage music collections.",
+			},
+			{
+				id: "queue-management",
+				label: "Queue Management",
+				description: "Organize and control playback queues.",
+			},
+			{
+				id: "audio-sources",
+				label: "Audio Sources",
+				description: "Access supported audio providers.",
+			},
+			{
+				id: "voice-sessions",
+				label: "Voice Sessions",
+				description: "Manage active audio sessions.",
+			},
+			{
+				id: "audio-settings",
+				label: "Audio Settings",
+				description: "Customize playback and audio behavior.",
+			},
+		],
+	},
+	{
+		id: "protect",
+		label: "Protect",
+		description: "Security Platform",
+		capabilities: [
+			{
+				id: "anti-spam",
+				label: "Anti-Spam",
+				description: "Prevent unwanted and repetitive messages.",
+			},
+			{
+				id: "anti-raid",
+				label: "Anti-Raid",
+				description: "Defend against coordinated server attacks.",
+			},
+			{
+				id: "auto-moderation",
+				label: "Auto Moderation",
+				description: "Enforce automated moderation policies.",
+			},
+			{
+				id: "verification",
+				label: "Verification",
+				description: "Verify members before granting access.",
+			},
+			{
+				id: "security-rules",
+				label: "Security Rules",
+				description: "Define and enforce protection policies.",
+			},
+			{
+				id: "threat-detection",
+				label: "Threat Detection",
+				description: "Identify suspicious activities and threats.",
+			},
+		],
+	},
+]);
+
+export function getProductMenuFamily(id: string | undefined) {
+	return productMenuFamilies.find((family) => family.id === id);
+}
+
+export function getProductMenuCapability(
+	familyId: string | undefined,
+	capabilityId: string | undefined,
+) {
+	return getProductMenuFamily(familyId)?.capabilities.find(
+		(capability) => capability.id === capabilityId,
+	);
+}
+
+function astronFamilyHref(familyId: string) {
+	const family = getProductMenuFamily(familyId);
+	if (!family) throw new Error(`Unknown Astron Collection family: ${familyId}`);
+	return family.href;
+}
+
+function astronLink(familyId: string, capabilityId: string): NavLink {
+	const capability = getProductMenuCapability(familyId, capabilityId);
+	if (!capability) {
+		throw new Error(
+			`Unknown Astron Collection capability: ${familyId}/${capabilityId}`,
+		);
+	}
+	return {
+		href: capability.href,
+		label: capability.label,
+		description: capability.description,
+	};
+}
 
 /**
- * The five primary entries, in the fixed institutional order. Pricing is
- * deliberately absent: it remains reachable from the product catalogue and
- * the footer, where it is contextually meaningful.
+ * The six primary entries, in the fixed institutional order. Pricing is a
+ * direct page link after the Astron Collection project entry.
  */
 export const mainNav: NavSection[] = [
 	{
@@ -80,6 +376,7 @@ export const mainNav: NavSection[] = [
 			"The SGE product ecosystem, organised in six official categories.",
 		columns: [],
 		categories: productCategories,
+		families: productMenuFamilies,
 		footerLinks: [
 			{
 				href: CATALOGUE_HREF,
@@ -103,56 +400,46 @@ export const mainNav: NavSection[] = [
 		label: "Solutions",
 		href: "/solutions",
 		description:
-			"Use-case paths that combine products around an organisation's problem.",
+			"Use-case paths built from the Astron Collection product families.",
 		columns: [
 			{
-				title: "Infrastructure and operations",
+				title: "Community operations",
+				href: astronFamilyHref("guild"),
 				links: [
-					{
-						href: "/solutions/enterprise",
-						label: "Enterprise infrastructure",
-						description: "Dedicated estates with a written operating scope",
-					},
-					{
-						href: "/solutions/hosting-providers",
-						label: "Hosting providers",
-						description: "Capacity and primitives for a platform",
-					},
-					{
-						href: "/solutions/ai-research",
-						label: "AI and research",
-						description: "Accelerators, storage and repeatable environments",
-					},
+					astronLink("guild", "members"),
+					astronLink("guild", "roles"),
+					astronLink("guild", "welcome"),
+					astronLink("guild", "moderation"),
 				],
 			},
 			{
-				title: "Build and run",
+				title: "Server automation",
+				href: astronFamilyHref("automations"),
 				links: [
-					{
-						href: "/solutions/developers",
-						label: "Developer infrastructure",
-						description: "Provisioning, delivery and operations for engineering teams",
-					},
-					{
-						href: "/solutions/startups",
-						label: "Startups",
-						description: "Start with one product and keep the exit ramp",
-					},
+					astronLink("automations", "workflows"),
+					astronLink("automations", "triggers"),
+					astronLink("automations", "actions"),
+					astronLink("automations", "schedules"),
 				],
 			},
 			{
-				title: "Business and organisation",
+				title: "Trust and moderation",
+				href: astronFamilyHref("protect"),
 				links: [
-					{
-						href: "/solutions/small-business",
-						label: "Small business",
-						description: "Websites, mail and the infrastructure behind them",
-					},
-					{
-						href: "/contact-sales",
-						label: "Discuss a requirement",
-						description: "Describe the workload, region and constraints",
-					},
+					astronLink("protect", "anti-spam"),
+					astronLink("protect", "anti-raid"),
+					astronLink("protect", "verification"),
+					astronLink("protect", "security-rules"),
+				],
+			},
+			{
+				title: "Activity and insight",
+				href: astronFamilyHref("logger"),
+				links: [
+					astronLink("logger", "audit-logs"),
+					astronLink("logger", "event-logs"),
+					astronLink("logger", "message-logs"),
+					astronLink("logger", "log-management"),
 				],
 			},
 		],
@@ -165,95 +452,46 @@ export const mainNav: NavSection[] = [
 		id: "developers",
 		label: "Developers",
 		description:
-			"Documentation, publishing surfaces and the open-source projects behind the platforms.",
+			"Integration surfaces exposed by the Astron Collection products.",
 		columns: [
 			{
-				title: "Documentation",
+				title: "Commands and applications",
+				href: astronFamilyHref("astron"),
 				links: [
-					{
-						href: "/resources/documentation",
-						label: "Documentation",
-						description: "Product guides and installation notes",
-					},
-					{
-						href: "/resources/api",
-						label: "API reference",
-						description: "The public HTTP API",
-					},
-					{
-						href: "/resources/tutorials",
-						label: "Tutorials",
-						description: "End-to-end walkthroughs",
-					},
-					{
-						href: "/infrastructure/architecture",
-						label: "Architecture guides",
-						description: "Resource model and building blocks",
-					},
+					astronLink("astron", "commands"),
+					astronLink("astron", "applications"),
+					astronLink("astron", "integrations"),
+					astronLink("astron", "extensions"),
 				],
 			},
 			{
-				title: "Developer platforms",
-				href: DEVELOPER_PLATFORM_HREF,
+				title: "Workflow engine",
+				href: astronFamilyHref("automations"),
 				links: [
-					{
-						href: DEVELOPER_PLATFORM_HREF,
-						label: "Giteria",
-						description: "Git hosting and code collaboration",
-					},
-					{
-						href: DEVELOPER_PLATFORM_HREF,
-						label: "EDL",
-						description: "Engineering and developer tooling",
-					},
-					{
-						href: DEVELOPER_PLATFORM_HREF,
-						label: "React SDS",
-						description: "Design-system components",
-					},
-					{
-						href: DEVELOPER_PLATFORM_HREF,
-						label: "React Zicons",
-						description: "Icon set",
-					},
-					{
-						href: DEVELOPER_PLATFORM_HREF,
-						label: "React Desktop",
-						description: "Desktop-style interface components",
-					},
-					{
-						href: DEVELOPER_PLATFORM_HREF,
-						label: "Enterprise Action",
-						description: "Enterprise pipeline automation",
-					},
+					astronLink("automations", "workflows"),
+					astronLink("automations", "triggers"),
+					astronLink("automations", "actions"),
+					astronLink("automations", "executions"),
 				],
 			},
 			{
-				title: "Community and open source",
+				title: "Events and audit",
+				href: astronFamilyHref("logger"),
 				links: [
-					{
-						href: links.githubOrg,
-						label: "GitHub organisation",
-						description: "All Sky Genesis Enterprise repositories",
-						external: true,
-					},
-					{
-						href: links.github,
-						label: "Source code",
-						description: "This website's repository",
-						external: true,
-					},
-					{
-						href: "/resources/support",
-						label: "Support routes",
-						description: "Documentation, status and contact",
-					},
-					{
-						href: links.status,
-						label: "Service status",
-						description: "Operational state",
-						external: true,
-					},
+					astronLink("logger", "audit-logs"),
+					astronLink("logger", "event-logs"),
+					astronLink("logger", "member-logs"),
+					astronLink("logger", "moderation-logs"),
+				],
+			},
+			{
+				title: "Voice and media",
+				href: astronFamilyHref("player"),
+				links: [
+					astronLink("player", "playback"),
+					astronLink("player", "playlists"),
+					astronLink("player", "audio-sources"),
+					astronLink("player", "voice-sessions"),
 				],
 			},
 		],
@@ -266,89 +504,46 @@ export const mainNav: NavSection[] = [
 		id: "resources",
 		label: "Resources",
 		href: "/resources",
-		description:
-			"Institutional information, technical knowledge and communication.",
+		description: "Learning paths for the Astron Collection product families.",
 		columns: [
 			{
-				title: "Knowledge",
+				title: "Getting started with Astron",
+				href: astronFamilyHref("astron"),
 				links: [
-					{
-						href: "/resources/documentation",
-						label: "Documentation",
-						description: "Guides maintained with the platform",
-					},
-					{
-						href: "/resources/api",
-						label: "API reference",
-						description: "Endpoints, authentication and errors",
-					},
-					{
-						href: "/resources/tutorials",
-						label: "Tutorials",
-						description: "Walkthroughs with prerequisites",
-					},
-					{
-						href: "/infrastructure/architecture",
-						label: "Architecture resources",
-						description: "How the primitives fit together",
-					},
+					astronLink("astron", "commands"),
+					astronLink("astron", "applications"),
+					astronLink("astron", "configuration"),
+					astronLink("astron", "permissions"),
 				],
 			},
 			{
-				title: "News and media",
+				title: "Automation patterns",
+				href: astronFamilyHref("automations"),
 				links: [
-					{
-						href: links.blog,
-						label: "Blog",
-						description: "Engineering notes and product changes",
-						external: true,
-					},
-					{
-						href: "/company/newsroom",
-						label: "Newsroom",
-						description: "Announcements and press enquiries",
-					},
+					astronLink("automations", "workflows"),
+					astronLink("automations", "triggers"),
+					astronLink("automations", "actions"),
+					astronLink("automations", "templates"),
 				],
 			},
 			{
-				title: "Support",
+				title: "Community playbooks",
+				href: astronFamilyHref("guild"),
 				links: [
-					{
-						href: "/resources/support",
-						label: "Support",
-						description: "How to get help, and what each route covers",
-					},
-					{
-						href: links.status,
-						label: "Service status",
-						description: "Live operational state",
-						external: true,
-					},
-					{
-						href: "/company/contact",
-						label: "Contact",
-						description: "Sales, partnership and security routes",
-					},
+					astronLink("guild", "members"),
+					astronLink("guild", "roles"),
+					astronLink("guild", "welcome"),
+					astronLink("guild", "engagement"),
 				],
 			},
 			{
-				title: "Infrastructure",
+				title: "Safety playbooks",
+				href: astronFamilyHref("protect"),
 				links: [
-					{
-						href: "/infrastructure",
-						label: "Infrastructure overview",
-						description: "Owned and partner capacity, stated plainly",
-					},
-					{
-						href: "/infrastructure/locations",
-						label: "Locations",
-						description: "Regions and their verification state",
-					},
-					{
-						href: "/infrastructure/data-centers",
-						label: "Data centres",
-						description: "Owned facilities and partner facilities",
-					},
+					astronLink("protect", "anti-spam"),
+					astronLink("protect", "anti-raid"),
+					astronLink("protect", "verification"),
+					astronLink("protect", "threat-detection"),
 				],
 			},
 		],
@@ -362,115 +557,136 @@ export const mainNav: NavSection[] = [
 		label: "Astron Collection",
 		href: "/company",
 		description:
-			"Sky Genesis Enterprise as an organisation: structure, partners and responsibility.",
+			"The open-source Astron Collection project: source, governance, releases and support.",
 		columns: [
 			{
-				title: "About SGE",
+				title: "Project",
+				href: "/company/about",
 				links: [
 					{
 						href: "/company/about",
-						label: "About us",
-						description: "Who we are and what we build",
+						label: "Overview",
+						description: "The project and the team behind it",
 					},
 					{
-						href: "/company/careers",
-						label: "Careers",
-						description: "Roles, published when they are open",
+						href: links.github,
+						label: "Repository",
+						description: "Code, history and repository activity",
+						external: true,
 					},
 					{
-						href: "/company/newsroom",
-						label: "Newsroom",
-						description: "Astron Collection and product announcements",
+						href: links.docs.home,
+						label: "Documentation",
+						description: "Product and operator guides",
+						external: true,
 					},
 					{
-						href: "/company/contact",
-						label: "Contact",
-						description: "Choose the route that matches your request",
+						href: links.status,
+						label: "Status",
+						description: "Current operational state",
+						external: true,
 					},
 				],
 			},
 			{
-				title: "Partners and ecosystem",
+				title: "Source",
 				links: [
-					{
-						href: "/company/partners",
-						label: "Our partners",
-						description: "Infrastructure suppliers and service partners",
-					},
-					{
-						href: "/infrastructure/partners",
-						label: "Infrastructure partners",
-						description: "The provider of record per product",
-					},
 					{
 						href: links.githubOrg,
-						label: "Open source ecosystem",
-						description: "Repositories and contribution routes",
+						label: "Organisation",
+						description: "All Sky Genesis Enterprise repositories",
 						external: true,
 					},
 					{
-						href: links.skyGenesis,
-						label: "Sky Genesis Enterprise",
-						description: "The organisation behind the brand",
+						href: links.github,
+						label: "Source code",
+						description: "The main project repository",
+						external: true,
+					},
+					{
+						href: `${links.github}/issues`,
+						label: "Issues",
+						description: "Bugs and feature requests",
+						external: true,
+					},
+					{
+						href: `${links.github}/pulls`,
+						label: "Pull requests",
+						description: "Open and merged changes",
 						external: true,
 					},
 				],
 			},
 			{
-				title: "Trust and responsibility",
+				title: "Community",
 				links: [
 					{
-						href: "/legal/privacy",
-						label: "Privacy",
-						description: "How personal data is handled",
+						href: `${links.github}/discussions`,
+						label: "Discussions",
+						description: "Questions and design conversation",
+						external: true,
 					},
 					{
-						href: "/legal/terms",
-						label: "Terms of service",
-						description: "The terms governing use",
+						href: `${links.github}/graphs/contributors`,
+						label: "Contributors",
+						description: "People who build the project",
+						external: true,
 					},
 					{
-						href: "/legal/acceptable-use",
-						label: "Acceptable use",
-						description: "What may not run on the platform",
+						href: `${links.github}/blob/master/CODE_OF_CONDUCT.md`,
+						label: "Code of conduct",
+						description: "Rules for participation",
+						external: true,
 					},
 					{
-						href: "/legal/cookies",
-						label: "Cookies",
-						description: "What the website stores",
+						href: `${links.github}/blob/master/Governance.md`,
+						label: "Governance",
+						description: "How decisions are made",
+						external: true,
 					},
 				],
 			},
 			{
-				title: "Infrastructure",
+				title: "Releases and support",
 				links: [
 					{
-						href: "/infrastructure",
-						label: "Infrastructure overview",
-						description: "The hybrid operating model",
+						href: `${links.github}/releases`,
+						label: "Releases",
+						description: "Published versions and notes",
+						external: true,
 					},
 					{
-						href: "/infrastructure/architecture",
-						label: "Architecture",
-						description: "Technical building blocks",
+						href: `${links.github}/blob/master/SECURITY.md`,
+						label: "Security policy",
+						description: "How to report vulnerabilities",
+						external: true,
 					},
 					{
-						href: "/infrastructure/locations",
-						label: "Locations",
-						description: "Regions, verification state",
+						href: links.docs.support,
+						label: "Documentation support",
+						description: "Guides for getting help",
+						external: true,
 					},
 					{
-						href: "/infrastructure/global-network",
-						label: "Global network",
-						description: "Connectivity, published and unpublished",
+						href: "/resources/support",
+						label: "Support routes",
+						description: "Internal support destinations",
 					},
 				],
 			},
 		],
 		footerLinks: [
-			{ href: "/company", label: "Astron Collection overview" },
-			{ href: "/contact-sales", label: "Contact sales" },
+			{ href: links.github, label: "Project repository", external: true },
+			{ href: `${links.github}/releases`, label: "Releases", external: true },
 		],
+	},
+	{
+		id: "pricing",
+		label: "Pricing",
+		href: "/pricing",
+		description: "Plans and billing models for the Astron Collection.",
+		columns: [],
+		footerLinks: [],
 	},
 ];
 

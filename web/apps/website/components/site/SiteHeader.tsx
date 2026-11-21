@@ -1,6 +1,11 @@
 "use client";
 
-import { Button, DropdownMenu, Link, LinkButton } from "@astron-collection/react";
+import {
+	Button,
+	DropdownMenu,
+	Link,
+	LinkButton,
+} from "@astron-collection/react";
 import {
 	ArrowRight,
 	CaretDown,
@@ -12,10 +17,10 @@ import { usePathname, useRouter } from "next/navigation";
 import * as React from "react";
 import {
 	mainNav,
-	utilityNav,
 	type NavLink,
 	type NavSection,
 	type NavSectionId,
+	utilityNav,
 } from "@/lib/content/navigation";
 import { searchIndex } from "@/lib/content/search-index";
 import { cta } from "@/lib/content/site";
@@ -67,9 +72,9 @@ function columnWidthClass(count: number) {
 }
 
 /**
- * The panel is made of columns. Products carries the six formal categories, so
+ * The panel is made of columns. Products carries the six product families, so
  * they are mapped onto the same column shape instead of a bespoke mega panel:
- * one column per category, its projects listed below.
+ * one column per family, its capabilities listed below.
  */
 interface PanelColumn {
 	title: string;
@@ -78,6 +83,17 @@ interface PanelColumn {
 }
 
 function panelColumns(section: NavSection): PanelColumn[] {
+	if (section.families?.length) {
+		return section.families.map((family) => ({
+			title: family.label,
+			href: family.href,
+			links: family.capabilities.map((capability) => ({
+				href: capability.href,
+				label: capability.label,
+				description: capability.description,
+			})),
+		}));
+	}
 	if (section.categories?.length) {
 		return section.categories.map((category) => ({
 			title: category.name,
@@ -198,9 +214,7 @@ function DesktopNavItem({
 		>
 			<DropdownMenu
 				open={open}
-				onOpenChange={(next) =>
-					next ? onOpen(section.id) : onScheduleClose()
-				}
+				onOpenChange={(next) => (next ? onOpen(section.id) : onScheduleClose())}
 			>
 				<span
 					ref={triggerRef}
@@ -267,6 +281,7 @@ function DesktopNavItem({
 											)}
 										</div>
 									) : null}
+
 									{column.links.map((item) => (
 										<DropdownMenu.LinkItem
 											key={`${column.title}-${item.label}-${item.href}`}
@@ -424,7 +439,9 @@ function MobileMenu({
 														) : null}
 														<ul>
 															{column.links.map((item) => (
-																<li key={`${column.title}-${item.label}-${item.href}`}>
+																<li
+																	key={`${column.title}-${item.label}-${item.href}`}
+																>
 																	<Link
 																		href={item.href}
 																		variant="current"
@@ -515,7 +532,9 @@ export function SiteHeader() {
 	const [mobileOpen, setMobileOpen] = React.useState(false);
 	// One shared menu state: hovering any item switches the open panel, so no
 	// item can be left in a stale "open" state that never re-opens.
-	const [openSection, setOpenSection] = React.useState<NavSectionId | null>(null);
+	const [openSection, setOpenSection] = React.useState<NavSectionId | null>(
+		null,
+	);
 	const closeTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
 	const cancelClose = React.useCallback(() => {
@@ -557,11 +576,11 @@ export function SiteHeader() {
 					<Link
 						href="/"
 						variant="plain"
-						aria-label="Sky Genesis Enterprise home"
+						aria-label="Astron Collection home"
 						className="flex shrink-0 items-center justify-self-start no-underline!"
 					>
 						<span className="whitespace-nowrap font-display text-[11px] font-bold uppercase tracking-[0.12em] text-foreground sm:text-[12px] xl:text-[14px] xl:tracking-[0.14em]">
-							Sky Genesis Enterprise
+							Astron Collection
 						</span>
 					</Link>
 
@@ -589,13 +608,19 @@ export function SiteHeader() {
 					</div>
 
 					<div className="flex items-center gap-2.5 justify-self-end">
-						<nav aria-label="Utility" className="hidden items-center gap-2 md:flex">
+						<nav
+							aria-label="Utility"
+							className="hidden items-center gap-2 md:flex"
+						>
 							<HeaderPill
 								href={cta.signIn.href}
 								label={cta.signIn.label}
 								external
 							/>
-							<HeaderPill href={cta.secondary.href} label={cta.secondary.label} />
+							<HeaderPill
+								href={cta.secondary.href}
+								label={cta.secondary.label}
+							/>
 						</nav>
 						<SiteSearch
 							entries={searchIndex}

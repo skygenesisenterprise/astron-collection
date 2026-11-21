@@ -1,10 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
 	mainNav,
-	productCategories,
-	utilityNav,
 	type NavLink,
 	type NavSection,
+	productCategories,
+	productMenuFamilies,
+	utilityNav,
 } from "./navigation";
 
 const PRIMARY_LABELS = [
@@ -13,6 +14,7 @@ const PRIMARY_LABELS = [
 	"Developers",
 	"Resources",
 	"Astron Collection",
+	"Pricing",
 ];
 
 const CATEGORY_IDS = [
@@ -38,35 +40,45 @@ function sectionLinks(section: NavSection): NavLink[] {
 const allSectionLinks = mainNav.flatMap(sectionLinks);
 
 describe("primary navigation", () => {
-	it("contains exactly the five institutional entries in order", () => {
+	it("contains exactly the six institutional entries in order", () => {
 		expect(mainNav.map((section) => section.label)).toEqual(PRIMARY_LABELS);
 	});
 
-	it("does not expose pricing as a primary entry", () => {
-		expect(mainNav.some((section) => section.label.toLowerCase() === "pricing")).toBe(
-			false,
-		);
-		// Pricing may exist as a contextual footer link in the Products menu.
-		const primaryDestinations = mainNav
-			.map((section) => section.href)
-			.filter(Boolean);
-		expect(primaryDestinations).not.toContain("/pricing");
+	it("keeps Pricing as a direct link after Astron Collection", () => {
+		const pricing = mainNav.find((section) => section.id === "pricing");
+		expect(pricing?.href).toBe("/pricing");
+		expect(pricing?.columns).toHaveLength(0);
+		expect(mainNav.at(-2)?.id).toBe("company");
+		expect(mainNav.at(-1)?.id).toBe("pricing");
 	});
 
 	it("gives every entry its own destination or menu", () => {
 		for (const section of mainNav) {
-			const hasMenu = section.columns.length > 0 || Boolean(section.categories?.length);
+			const hasMenu =
+				section.columns.length > 0 || Boolean(section.categories?.length);
 			expect(hasMenu || Boolean(section.href)).toBe(true);
+		}
+	});
+
+	it("gives every menu entry four groups of four links", () => {
+		const excluded = new Set(["products", "pricing"]);
+		for (const section of mainNav.filter((entry) => !excluded.has(entry.id))) {
+			expect(section.columns).toHaveLength(4);
+			for (const column of section.columns) {
+				expect(column.links).toHaveLength(4);
+			}
 		}
 	});
 });
 
 describe("product categories", () => {
 	it("defines the six official categories in a stable order", () => {
-		expect(productCategories.map((category) => category.id)).toEqual(CATEGORY_IDS);
-		expect(mainNav.find((section) => section.id === "products")?.categories).toBe(
-			productCategories,
+		expect(productCategories.map((category) => category.id)).toEqual(
+			CATEGORY_IDS,
 		);
+		expect(
+			mainNav.find((section) => section.id === "products")?.categories,
+		).toBe(productCategories);
 	});
 
 	it("keeps every category populated and described", () => {
@@ -74,6 +86,17 @@ describe("product categories", () => {
 			expect(category.products.length).toBeGreaterThan(0);
 			expect(category.description.length).toBeGreaterThan(0);
 			expect(category.href.startsWith("/")).toBe(true);
+		}
+	});
+
+	it("defines six product families with six capabilities each", () => {
+		expect(productMenuFamilies).toHaveLength(6);
+		for (const family of productMenuFamilies) {
+			expect(family.capabilities).toHaveLength(6);
+			expect(family.href).toMatch(/^\/products\/[a-z-]+$/);
+			for (const capability of family.capabilities) {
+				expect(capability.href).toBe(`${family.href}/${capability.id}`);
+			}
 		}
 	});
 
@@ -85,7 +108,9 @@ describe("product categories", () => {
 			"security-identity",
 			"business-productivity",
 		]);
-		expect(productCategories.some((category) => category.name === "Aether")).toBe(false);
+		expect(
+			productCategories.some((category) => category.name === "Aether"),
+		).toBe(false);
 	});
 
 	it("does not list a product twice", () => {
@@ -96,7 +121,12 @@ describe("product categories", () => {
 	});
 
 	it("only claims maturity for entries that declare it", () => {
-		const allowed = new Set(["available", "preview", "active-development", "research"]);
+		const allowed = new Set([
+			"available",
+			"preview",
+			"active-development",
+			"research",
+		]);
 		for (const category of productCategories) {
 			for (const product of category.products) {
 				if (product.maturity) expect(allowed.has(product.maturity)).toBe(true);
