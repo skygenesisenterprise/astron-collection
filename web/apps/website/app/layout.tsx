@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { ThemeProvider } from "@/components/site/ThemeProvider";
 import { ZenthProvider } from "@/components/site/ZenthProvider";
+import { siteTitle } from "@/lib/content/site";
 import { SITE_URL } from "@/lib/domain/queries";
 
 const inter = Inter({
@@ -24,7 +25,7 @@ const lexend = Lexend({
 export const metadata: Metadata = {
 	metadataBase: new URL(SITE_URL),
 	title: {
-		default: "Astron Collection — Cloud infrastructure. Without boundaries.",
+		default: siteTitle,
 		template: "%s | Astron Collection",
 	},
 	description:
@@ -35,7 +36,7 @@ export const metadata: Metadata = {
 		apple: "/apple-touch-icon.png",
 	},
 	openGraph: {
-		title: "Astron Collection — Cloud infrastructure. Without boundaries.",
+		title: siteTitle,
 		description:
 			"Compute, storage, networking and managed services on owned and partner infrastructure. European roots. Global ambitions.",
 		url: SITE_URL,
@@ -46,7 +47,7 @@ export const metadata: Metadata = {
 	},
 	twitter: {
 		card: "summary_large_image",
-		title: "Astron Collection — Cloud infrastructure. Without boundaries.",
+		title: siteTitle,
 		description:
 			"Hybrid cloud infrastructure with availability published per product and region.",
 		images: ["/og.png"],

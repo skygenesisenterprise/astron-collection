@@ -1,18 +1,20 @@
 import type { Metadata } from "next";
 import { SignalHero } from "@/components/site/SignalHero";
+import { BotsSection } from "@/components/site/home/bots-section";
 import { BuildSection } from "@/components/site/home/build-section";
-import { DomainsSection } from "@/components/site/home/domains-section";
+import { CollectionSection } from "@/components/site/home/collection-section";
+import { CommunitySection } from "@/components/site/home/community-section";
+import { DashboardSection } from "@/components/site/home/dashboard-section";
+import { DevelopersSection } from "@/components/site/home/developers-section";
 import { EcosystemSection } from "@/components/site/home/ecosystem-section";
-import { EngineeringPrinciplesSection } from "@/components/site/home/engineering-principles-section";
-import { FeaturedProjectsSection } from "@/components/site/home/featured-projects-section";
-import { IntroductionSection } from "@/components/site/home/introduction-section";
-import { NewsSection } from "@/components/site/home/news-section";
-import { PartnersSection } from "@/components/site/home/partners-section";
+import { NeedsSection } from "@/components/site/home/needs-section";
 import { Reveal } from "@/components/site/home/Reveal";
-import { ResearchSection } from "@/components/site/home/research-section";
-import { homeSeo, productCategories } from "@/lib/content/ecosystem";
-import { links } from "@/lib/content/site";
-import { SITE_URL, pageMetadata } from "@/lib/domain/queries";
+import {
+	homeBots,
+	homeDestinations,
+	homeSeo,
+} from "@/lib/content/home-collection";
+import { SITE_NAME, SITE_URL, pageMetadata } from "@/lib/domain/queries";
 
 const baseMetadata = pageMetadata({
 	title: homeSeo.title,
@@ -20,13 +22,14 @@ const baseMetadata = pageMetadata({
 	path: "/",
 });
 
-/** The global title template still carries the site brand; the homepage
- * declares the group name explicitly for social and structured data. */
+/** The homepage is the Astron Collection surface; social metadata names that
+ * collection explicitly instead of inheriting the wider group identity. */
 export const metadata: Metadata = {
 	...baseMetadata,
+	title: { absolute: homeSeo.title },
 	openGraph: {
 		...(baseMetadata.openGraph ?? {}),
-		siteName: "Sky Genesis Enterprise",
+		siteName: SITE_NAME,
 	},
 };
 
@@ -35,42 +38,42 @@ const structuredData = {
 	"@graph": [
 		{
 			"@type": "Organization",
-			name: "Sky Genesis Enterprise",
+			name: SITE_NAME,
 			url: SITE_URL,
 			logo: `${SITE_URL}/icon.svg`,
 			description: homeSeo.description,
-			sameAs: [links.skyGenesis, links.githubOrg],
+			sameAs: [homeDestinations.repository, homeDestinations.discord],
 		},
 		{
 			"@type": "WebSite",
-			name: "Sky Genesis Enterprise",
+			name: SITE_NAME,
 			url: SITE_URL,
 			inLanguage: "en",
-			potentialAction: {
-				"@type": "SearchAction",
-				target: `${SITE_URL}/products?q={search_term_string}`,
-				"query-input": "required name=search_term_string",
-			},
 		},
 		{
 			"@type": "ItemList",
-			name: "Sky Genesis Enterprise technology domains",
-			itemListElement: productCategories.map((category, index) => ({
+			name: "Astron Collection Discord bots",
+			itemListElement: homeBots.map((bot, index) => ({
 				"@type": "ListItem",
 				position: index + 1,
-				name: category.name,
-				url: `${SITE_URL}${category.href}`,
+				item: {
+					"@type": "SoftwareApplication",
+					name: bot.label,
+					description: bot.description,
+					applicationCategory: "Discord bot",
+					operatingSystem: "Discord",
+				},
 			})),
 		},
 	],
 };
 
 /**
- * Homepage composition, after the protected hero: the institutional
- * introduction, the six technology domains, the ecosystem relationships, the
- * featured projects, the engineering principles, partners, research, news and
- * the closing panel. All editorial content comes from `lib/content`; the
- * footer in the root layout is protected.
+ * Homepage composition, after the protected hero: the collection statement,
+ * the six-bot selector, the by-need index, the server-surface overview, the
+ * dashboard boundary, the developer surfaces, the community panel and the
+ * closing route panel. Bot names and capabilities come from the same records
+ * as the header navigation; the hero and root-layout footer are untouched.
  */
 export default function HomePage() {
 	return (
@@ -84,14 +87,13 @@ export default function HomePage() {
 				<SignalHero />
 				<Reveal>
 					<div className="zenth-root isolate bg-background font-sans">
-						<IntroductionSection />
-						<DomainsSection />
+						<CollectionSection />
+						<BotsSection />
+						<NeedsSection />
 						<EcosystemSection />
-						<FeaturedProjectsSection />
-						<EngineeringPrinciplesSection />
-						<PartnersSection />
-						<ResearchSection />
-						<NewsSection />
+						<DashboardSection />
+						<DevelopersSection />
+						<CommunitySection />
 						<BuildSection />
 					</div>
 				</Reveal>

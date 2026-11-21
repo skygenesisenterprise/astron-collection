@@ -164,3 +164,4 @@ skills-lock.json
 .agents/
 
 *.sqlite3
+*.sqlite3-*

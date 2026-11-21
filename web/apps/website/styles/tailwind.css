@@ -303,6 +303,41 @@
 		@apply mt-4;
 	}
 
+	/* Homepage bot selector: native radio inputs drive one detail panel, so the
+	 * section works without JavaScript and keeps arrow-key navigation. Hidden
+	 * panels use `display: none`, which also removes their links from the tab
+	 * order; the selected label is styled through :has(). */
+	.bot-panel-item {
+		display: none;
+	}
+
+	.bot-selector:has(#home-bot-astron:checked) #home-bot-panel-astron,
+	.bot-selector:has(#home-bot-automations:checked) #home-bot-panel-automations,
+	.bot-selector:has(#home-bot-guild:checked) #home-bot-panel-guild,
+	.bot-selector:has(#home-bot-logger:checked) #home-bot-panel-logger,
+	.bot-selector:has(#home-bot-player:checked) #home-bot-panel-player,
+	.bot-selector:has(#home-bot-protect:checked) #home-bot-panel-protect {
+		display: block;
+	}
+
+	.bot-item:has(input:checked) .bot-trigger {
+		background: var(--background);
+	}
+
+	.bot-item:has(input:checked) .bot-name {
+		color: var(--primary);
+	}
+
+	.bot-item:has(input:checked) .bot-marker {
+		transform: rotate(45deg);
+		color: var(--primary);
+	}
+
+	.bot-item:has(input:focus-visible) .bot-trigger {
+		outline: 2px solid var(--ring);
+		outline-offset: -2px;
+	}
+
 	/* FAQ: the native <details> keeps its keyboard and screen-reader semantics;
 	 * the wrapper only animates the answer when the question opens. */
 	.faq-answer {

@@ -9,6 +9,9 @@
  *   these destinations rather than redeclaring them.
  */
 
+export const siteTitle =
+	"Astron Collection | The Best Discord suite for You";
+
 export const links = {
 	docs: {
 		home: 'https://docs.skygenesisenterprise.com',

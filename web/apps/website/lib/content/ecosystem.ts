@@ -203,10 +203,6 @@ export const productCategories: NavCategory[] = [
 		href: CATALOGUE_HREF,
 		products: [
 			{ name: "Guilderia", description: "Community platform" },
-			{
-				name: "Astron Collection",
-				description: "Digital collection and media experiences",
-			},
 			{ name: "Kami-Sama", description: "Interactive community platform" },
 			{
 				name: "The Etheria Times",
@@ -248,12 +244,18 @@ export const featuredProjectNames = [
 
 export function getFeaturedProjects(): CataloguedProject[] {
 	return featuredProjectNames.flatMap((name) => {
-		for (const category of productCategories) {
-			const product = category.products.find((entry) => entry.name === name);
-			if (product) return [{ product, category }];
-		}
-		return [];
+		const project = getProjectByName(name);
+		return project ? [project] : [];
 	});
+}
+
+/** Resolve a project by name without re-declaring its category or copy. */
+export function getProjectByName(name: string): CataloguedProject | undefined {
+	for (const category of productCategories) {
+		const product = category.products.find((entry) => entry.name === name);
+		if (product) return { product, category };
+	}
+	return undefined;
 }
 
 export function getCategoryById(
@@ -362,6 +364,23 @@ export function getFamilies(): EcosystemFamily[] {
 	return [...families.values()];
 }
 
+/** One line per family, taken from the published family note. */
+export const familyNotes: Record<string, string> = {
+	Zenth: "Anchors the cloud and infrastructure work.",
+	Aether:
+		"A shared identity across the identity, workplace and collaboration projects.",
+};
+
+/** Representative independent projects: they belong to no family. */
+export const independentProjects = [
+	"Notploy",
+	"Giteria",
+	"Guilderia",
+	"VaelixBank",
+	"Nocker",
+	"Kami-Sama",
+] as const;
+
 /* -------------------------------------------------------------------------- */
 /* 04 — Featured projects                                                     */
 /* -------------------------------------------------------------------------- */
@@ -384,6 +403,124 @@ export const projectState = {
 		integration: "Integration",
 	},
 } as const;
+
+/* -------------------------------------------------------------------------- */
+/* 01 — Featured showcase                                                    */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The lead product is shown with a real console screenshot published with the
+ * project. The secondary panels are schematic compositions, which is why the
+ * section note says so explicitly rather than implying four live interfaces.
+ */
+export const featuredShowcase = {
+	eyebrow: "Featured products",
+	title: "See the product before the catalogue.",
+	description:
+		"A short, curated look at what the group builds: deployment, cloud infrastructure, identity and code collaboration. Each project keeps the domain that documents it.",
+	lead: {
+		name: "Notploy",
+		proposition:
+			"Application deployment and hosting, organised by project and environment.",
+		detail:
+			"Projects, environments and services live in one console. The screenshot is the deployment dashboard: the services running in a production environment, their state and the actions available on each.",
+		image: {
+			src: "/images/notploy-projects-dashboard.png",
+			alt: "Notploy console showing the services running in a production environment",
+			width: 1024,
+			height: 496,
+		},
+	},
+	secondaryNames: ["Astron Collection", "Aether Identity", "Giteria"],
+	note:
+		"Notploy is shown with a screenshot of its console. The other panels are illustrative compositions, not live interfaces. Availability is only stated where the catalogue verifies it.",
+} as const;
+
+/* -------------------------------------------------------------------------- */
+/* 02 — Discover by need                                                      */
+/* -------------------------------------------------------------------------- */
+
+export const needsSection = {
+	eyebrow: "Discover by need",
+	title: "Start with the job, not the org chart.",
+	description:
+		"The domains describe how the group is organised. This is the other direction: pick what you are trying to do and the catalogue points to the projects that do it.",
+	note: "A need is a way into the catalogue, not a product bundle. Projects grouped under one need keep their own pages and their own published state.",
+} as const;
+
+export interface HomeNeed {
+	id: string;
+	number: string;
+	title: string;
+	description: string;
+	categoryId: ProductCategoryId;
+	/** Existing destination for this need. */
+	href: string;
+	action: string;
+}
+
+export const homeNeeds: HomeNeed[] = [
+	{
+		id: "run-infrastructure",
+		number: "01",
+		title: "Run infrastructure",
+		description:
+			"Compute, hosting and deployment for teams that operate their own workloads.",
+		categoryId: "cloud-infrastructure",
+		href: "/solutions/enterprise",
+		action: "Enterprise infrastructure path",
+	},
+	{
+		id: "ship-software",
+		number: "02",
+		title: "Ship software",
+		description:
+			"Source hosting, deployment and developer tooling between a commit and a running environment.",
+		categoryId: "developer-platform",
+		href: "/solutions/developers",
+		action: "Developer solution path",
+	},
+	{
+		id: "control-access",
+		number: "03",
+		title: "Control access",
+		description:
+			"Identity, secrets and private connectivity as separate projects that an access model can combine.",
+		categoryId: "security-identity",
+		href: "/products/security-identity",
+		action: "Security & Identity domain",
+	},
+	{
+		id: "equip-a-team",
+		number: "04",
+		title: "Equip a team",
+		description:
+			"Mail, documents, calendars and meetings within one workplace family.",
+		categoryId: "business-productivity",
+		href: "/products",
+		action: "Workplace projects in the catalogue",
+	},
+	{
+		id: "build-a-community",
+		number: "05",
+		title: "Build a community",
+		description:
+			"Community platforms, editorial publishing and interactive digital experiences.",
+		categoryId: "communication-experiences",
+		href: "/products",
+		action: "Experiences in the catalogue",
+	},
+	{
+		id: "specialised-platforms",
+		number: "06",
+		title: "Explore specialised platforms",
+		description:
+			"Financial infrastructure and focused platforms developed outside the general cloud catalogue.",
+		categoryId: "financial-platforms",
+		href: "/products",
+		action: "Specialised projects in the catalogue",
+	},
+];
 
 /* -------------------------------------------------------------------------- */
 /* 04 — Solutions and technologies                                            */
@@ -540,6 +677,31 @@ export const engineeringSection = {
 	note: independenceSection.note,
 	countLabel: "published constraints",
 } as const;
+
+export const builtDifferentlySection = {
+	eyebrow: "Built differently",
+	title: "Constraints, not badges.",
+	description:
+		"Five engineering choices shape how the group designs, publishes and operates software. They are written down so they can be checked against the projects.",
+	links: [
+		{ href: "/company/trust", label: "How trust is published" },
+		{ href: "/company/about", label: "About Sky Genesis Enterprise" },
+	],
+} as const;
+
+/** Concrete engineering choice behind each published principle. */
+export const principleChoices: Record<string, string> = {
+	"Software freedom":
+		"Source is published where a project allows it, and self-hosting is a documented way to run the software rather than a reduced edition.",
+	"Infrastructure independence":
+		"Provider choices are documented per project, so capacity can move without changing the product.",
+	Interoperability:
+		"Interfaces and data formats are written down, so a component can be replaced instead of captured.",
+	"Responsible engineering":
+		"Security decisions ship with the documentation, and no audit, certification or compliance result is claimed here.",
+	"Long-term sustainability":
+		"Projects carry their own documentation and hand-over path, so maintenance does not depend on the original team.",
+};
 
 /* -------------------------------------------------------------------------- */
 /* 07 — Open source and developers                                            */
@@ -729,12 +891,12 @@ export const researchAreas = [
 /* -------------------------------------------------------------------------- */
 
 export const newsSection = {
-	eyebrow: "News and insights",
-	title: "Where the group publishes.",
+	eyebrow: "Publishing",
+	title: "Where the work is announced.",
 	description:
-		"Astron Collection and product communication is published through the newsroom, the blog and the repositories. This page does not generate announcements to fill a layout.",
+		"Product changes, engineering notes and repository activity are published through these channels. The homepage does not generate announcements to fill the space.",
 	emptyState:
-		"No announcement is published here yet. When there is something to announce, it will appear in the newsroom and in the repository history first.",
+		"No announcement is published on the homepage. Newsroom posts and repository releases appear first in the channels listed here.",
 } as const;
 
 export const newsDestinations = [
@@ -768,11 +930,42 @@ export const newsDestinations = [
 /* 10 — Final call to action                                                  */
 /* -------------------------------------------------------------------------- */
 
+export interface HomeCtaPathway {
+	label: string;
+	description: string;
+	href: string;
+	external?: boolean;
+}
+
+export const homeCtaPathways: HomeCtaPathway[] = [
+	{
+		label: "Explore products",
+		description: "The full catalogue, organised by domain.",
+		href: "/products",
+	},
+	{
+		label: "Build with the platform",
+		description: "Documentation, API reference and tutorials.",
+		href: "/resources",
+	},
+	{
+		label: "Contribute",
+		description: "Repositories, issues and contribution history.",
+		href: links.githubOrg,
+		external: true,
+	},
+	{
+		label: "Contact the group",
+		description: "Institutional, press and commercial enquiries.",
+		href: "/company/contact",
+	},
+];
+
 export const homeCta = {
-	eyebrow: "Work with us",
-	title: "Explore, contribute or partner.",
+	eyebrow: "Next step",
+	title: "Pick a route into the ecosystem.",
 	description:
-		"Whether you are evaluating infrastructure, contributing to a project, or exploring a partnership, there is a route that matches the conversation.",
+		"Evaluate a product, build against the documentation, contribute in the open or start a conversation. Each path below is maintained.",
 	primary: { href: "/products", label: "Explore the ecosystem" },
 	secondary: { href: "/company/contact", label: "Work with us" },
 	tertiary: {
@@ -780,6 +973,7 @@ export const homeCta = {
 		label: "GitHub",
 		external: true,
 	},
+	pathways: homeCtaPathways,
 	note: "No product on this website is presented as commercially available without a verified state.",
 } as const;
 

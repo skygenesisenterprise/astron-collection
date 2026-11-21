@@ -1,101 +1,86 @@
-import { Link } from "@astron-collection/react";
 import { Container } from "@/components/Container";
 import {
 	ecosystemSection,
-	getFamilies,
-	solutionPatterns,
-} from "@/lib/content/ecosystem";
+	ecosystemStages,
+	getHomeBot,
+	getPublishedCapabilities,
+} from "@/lib/content/home-collection";
 import { SectionIntro } from "./SectionIntro";
-import { SocketMark } from "./marks";
 
 /**
- * 03 — Our ecosystem. Families are derived from the catalogue; the combination
- * patterns keep their published relationship label, which is what separates a
- * documented path from a conceptual one. Both groups sit on the centre line as
- * equal cards, and the relationship label carries the socket mark instead of a
- * badge, so the two kinds of path are told apart without a second colour.
+ * 04 — One server, six surfaces. A dark editorial ledger instead of six equal
+ * cards: the statement stays in a sticky column while each stage occupies one
+ * row, with its bot and the published capability labels. No second taxonomy and
+ * no implied data flow.
  */
 export function EcosystemSection() {
-	const families = getFamilies();
-
 	return (
 		<section
-			aria-labelledby="ecosystem-title"
-			className="bg-background py-24 sm:py-32"
+			id="surfaces"
+			aria-labelledby="surfaces-title"
+			className="relative scroll-mt-24 overflow-hidden bg-ink py-24 text-ink-foreground sm:py-32"
 		>
-			<Container>
-				<SectionIntro
-					id="ecosystem-title"
-					title={ecosystemSection.title}
-					description={ecosystemSection.description}
-					align="center"
-				/>
-
-				<dl
-					data-reveal
-					className="mx-auto mt-16 grid max-w-4xl gap-6 sm:grid-cols-2"
-				>
-					{families.map((family) => (
-						<div
-							key={family.name}
-							className="rounded-2xl border border-border bg-card p-6"
-						>
-							<dt className="font-display text-lg font-medium text-foreground">
-								{family.name}
-							</dt>
-							<dd className="mt-2 text-sm leading-6 text-muted-foreground">
-								{family.categories
-									.map((category) => category.name)
-									.join(" · ")}
-								<span className="mt-2 block text-xs leading-5 text-muted-foreground">
-									{family.projects.join(", ")}
-								</span>
-							</dd>
-						</div>
-					))}
-				</dl>
-
-				<p className="mx-auto mt-6 max-w-2xl text-center text-sm leading-6 text-muted-foreground">
-					{ecosystemSection.note}
-				</p>
-
-				<div data-reveal className="mt-16">
-					<div className="mx-auto max-w-2xl text-center">
-						<h3 className="font-display text-2xl font-medium text-foreground">
-							How the initiatives are combined
-						</h3>
-						<p className="mt-2 text-sm text-muted-foreground">
-							Two labels: a documented path, or a conceptual combination
+			<div
+				className="signal-dots absolute inset-0 opacity-15"
+				aria-hidden="true"
+			/>
+			<Container className="relative">
+				<div className="grid gap-12 lg:grid-cols-[minmax(0,0.4fr)_minmax(0,0.6fr)] lg:gap-20">
+					<div className="lg:sticky lg:top-24 lg:self-start">
+						<SectionIntro
+							id="surfaces-title"
+							index={ecosystemSection.index}
+							eyebrow={ecosystemSection.eyebrow}
+							title={ecosystemSection.title}
+							description={ecosystemSection.description}
+							tone="inverse"
+						/>
+						<p className="mt-6 max-w-md text-sm leading-6 text-white/50">
+							{ecosystemSection.note}
 						</p>
 					</div>
 
-					<ul className="mx-auto mt-8 grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
-						{solutionPatterns.map((pattern) => (
-							<li
-								key={pattern.id}
-								className="flex h-full min-w-0 flex-col rounded-2xl border border-border bg-card p-6"
-							>
-								<h4 className="font-display text-lg font-medium text-foreground">
-									{pattern.title}
-								</h4>
-								<p className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
-									<SocketMark />
-									{pattern.relationship}
-								</p>
-								<p className="mt-3 text-sm leading-6 text-muted-foreground">
-									{pattern.productNames.join(" · ")}
-								</p>
-								<Link
-									href={pattern.href}
-									variant="plain"
-									className="mt-auto inline-flex w-fit items-center pt-6 text-sm font-medium text-primary no-underline hover:underline"
+					<ol className="border-t border-white/10">
+						{ecosystemStages.map((stage, index) => {
+							const bot = getHomeBot(stage.botId);
+							const capabilities = getPublishedCapabilities(
+								stage.botId,
+								stage.capabilityIds,
+							);
+
+							return (
+								<li
+									key={stage.id}
+									className="grid gap-4 border-b border-white/10 py-6 sm:grid-cols-[minmax(0,0.4fr)_minmax(0,0.6fr)] sm:gap-8"
 								>
-									Open this path
-									<span className="sr-only">: {pattern.title}</span>
-								</Link>
-							</li>
-						))}
-					</ul>
+									<div className="min-w-0">
+										<div className="flex items-baseline gap-3">
+											<span className="font-mono text-[11px] tabular-nums text-white/40">
+												{String(index + 1).padStart(2, "0")}
+											</span>
+											<span className="font-mono text-[11px] text-white/45">
+												{stage.label}
+											</span>
+										</div>
+										<h3 className="mt-2 font-display text-2xl font-medium tracking-tight text-white">
+											{bot.label}
+										</h3>
+									</div>
+
+									<div className="min-w-0">
+										<p className="text-sm leading-6 text-white/70">
+											{stage.detail}
+										</p>
+										<p className="mt-2 font-mono text-[11px] leading-5 text-white/40">
+											{capabilities
+												.map((capability) => capability.label)
+												.join(" · ")}
+										</p>
+									</div>
+								</li>
+							);
+						})}
+					</ol>
 				</div>
 			</Container>
 		</section>

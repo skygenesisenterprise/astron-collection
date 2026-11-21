@@ -1,28 +1,25 @@
 import { Link } from "@astron-collection/react";
 import { ArrowRight, ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { Container } from "@/components/Container";
-import { homeCta } from "@/lib/content/ecosystem";
+import { homeCta } from "@/lib/content/home-collection";
 
 /**
- * Closing bookend to the hero: the same saturated brand panel inset into the
- * white stage, the same fine dot field, an oversized centred headline and one
- * pill action. Reusing the hero's panel verbatim — its container edges, its
- * texture, its control shape — is what makes the page open and close on one
- * continuous stage. The closing panel is shorter, keeps a single primary
- * action, and carries the published-state note on the white stage below so the
- * panel itself stays as clean as the hero.
+ * 08 — Closing panel. The hero's saturated surface and dot field return with a
+ * different composition: the statement on the left and one clear install route
+ * above three quieter ones on the right. The vertical hierarchy replaces the
+ * previous four equal tiles.
  */
 export function BuildSection() {
 	return (
 		<section
-			id="build"
-			aria-labelledby="build-heading"
-			className="bg-background pb-24 pt-2 sm:pb-32"
+			id="start"
+			aria-labelledby="start-heading"
+			className="scroll-mt-24 bg-background pb-24 pt-4 sm:pb-32"
 		>
 			<Container>
 				<div className="relative overflow-hidden rounded-2xl bg-brand text-brand-foreground">
 					<div
-						className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_95%_85%_at_50%_45%,transparent_38%,rgba(0,0,0,0.16))]"
+						className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_95%_85%_at_50%_45%,transparent_38%,rgba(0,0,0,0.18))]"
 						aria-hidden="true"
 					/>
 					<div
@@ -30,56 +27,109 @@ export function BuildSection() {
 						aria-hidden="true"
 					/>
 					<div
-						className="pointer-events-none absolute inset-x-0 bottom-0 h-72 bg-[radial-gradient(ellipse_75%_100%_at_50%_100%,rgba(255,255,255,0.55),transparent_72%)]"
+						className="pointer-events-none absolute inset-x-0 bottom-0 h-72 bg-[radial-gradient(ellipse_75%_100%_at_50%_100%,rgba(255,255,255,0.45),transparent_72%)]"
 						aria-hidden="true"
 					/>
 
-					<div className="relative mx-auto flex min-h-[60svh] max-w-4xl flex-col items-center justify-center px-6 py-24 text-center">
-						<p className="text-sm text-brand-foreground/90">
-							{homeCta.eyebrow}
-						</p>
-						<h2
-							id="build-heading"
-							className="mt-4 max-w-3xl font-display text-5xl font-medium leading-[1.04] tracking-tight text-brand-foreground sm:text-6xl"
-						>
-							{homeCta.title}
-						</h2>
-						<p className="mt-6 max-w-xl text-base leading-relaxed text-brand-foreground/95 sm:text-lg">
-							{homeCta.description}
-						</p>
-
-						<Link
-							href={homeCta.primary.href}
-							className="mt-9 inline-flex h-12 items-center gap-2 rounded-full bg-brand-foreground px-7 text-base font-medium text-ink no-underline shadow-sm transition-[background-color,transform] duration-150 hover:bg-brand-foreground/90 active:scale-[0.98]"
-						>
-							{homeCta.primary.label}
-							<ArrowRight className="size-4" aria-hidden="true" />
-						</Link>
-
-						<div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-							<Link
-								href={homeCta.secondary.href}
-								variant="plain"
-								className="inline-flex min-h-10 items-center text-sm font-medium text-brand-foreground no-underline underline-offset-4 hover:underline"
+					<div className="relative grid gap-12 px-6 py-14 sm:px-10 sm:py-16 lg:grid-cols-[minmax(0,0.55fr)_minmax(0,0.45fr)] lg:items-center lg:gap-16 lg:px-12 lg:py-20">
+						<div className="min-w-0">
+							<p className="text-sm text-brand-foreground/85">
+								<span className="font-mono text-xs tabular-nums">
+									{homeCta.index}
+								</span>{" "}
+								· {homeCta.eyebrow}
+							</p>
+							<h2
+								id="start-heading"
+								className="mt-4 max-w-xl font-display text-4xl font-medium leading-[1.04] tracking-tight text-brand-foreground sm:text-5xl"
 							>
-								{homeCta.secondary.label}
-							</Link>
-							<span
-								className="h-3 w-px bg-brand-foreground/40"
-								aria-hidden="true"
-							/>
-							<Link
-								href={homeCta.tertiary.href}
-								variant="plain"
-								target="_blank"
-								rel="noreferrer"
-								className="inline-flex min-h-10 items-center gap-1.5 text-sm font-medium text-brand-foreground no-underline underline-offset-4 hover:underline"
-							>
-								{homeCta.tertiary.label}
-								<ArrowUpRight className="size-4" aria-hidden="true" />
-								<span className="sr-only"> (opens in a new tab)</span>
-							</Link>
+								{homeCta.title}
+							</h2>
+							<p className="mt-5 max-w-lg text-base leading-7 text-brand-foreground/90">
+								{homeCta.description}
+							</p>
 						</div>
+
+						<ul
+							data-reveal
+							className="overflow-hidden rounded-xl border border-brand-foreground/20 bg-brand/70"
+						>
+							{homeCta.pathways.map((pathway, index) => {
+								const primary = index === 0;
+								return (
+									<li key={pathway.label} className="min-w-0">
+										<Link
+											href={pathway.href}
+											variant="plain"
+											target={pathway.external ? "_blank" : undefined}
+											rel={pathway.external ? "noreferrer" : undefined}
+											className={
+												primary
+													? "group flex min-h-36 flex-col justify-between gap-8 bg-brand-foreground p-6 text-ink no-underline transition-colors duration-150 hover:bg-brand-foreground/90"
+													: "group flex min-w-0 items-center justify-between gap-4 border-t border-brand-foreground/20 px-5 py-4 text-brand-foreground no-underline transition-colors duration-150 hover:bg-brand/60"
+											}
+										>
+											{primary ? (
+												<>																	<span className="flex items-start justify-between gap-4">
+																		<span className="text-base font-medium">
+																			{pathway.label}
+																		</span>
+																		{pathway.external ? (
+																			<ArrowUpRight
+																				className="size-4 shrink-0 opacity-70"
+																				aria-hidden="true"
+																			/>
+																		) : (
+																			<ArrowRight
+																				className="size-4 shrink-0 opacity-70 transition-transform duration-150 group-hover:translate-x-0.5"
+																				aria-hidden="true"
+																			/>
+																		)}
+																		{pathway.external ? (
+																			<span className="sr-only">
+																				{" "}
+																				(opens in a new tab)
+																			</span>
+																		) : null}
+																	</span>
+													<span className="text-sm leading-5 text-ink/70">
+														{pathway.description}
+													</span>
+												</>
+											) : (
+												<>
+													<span className="min-w-0">
+														<span className="block text-sm font-medium">
+															{pathway.label}
+														</span>
+														<span className="mt-0.5 block text-xs leading-5 text-brand-foreground/70">
+															{pathway.description}
+														</span>
+													</span>
+													{pathway.external ? (
+														<ArrowUpRight
+															className="size-4 shrink-0 opacity-70"
+															aria-hidden="true"
+														/>
+													) : (
+														<ArrowRight
+															className="size-4 shrink-0 opacity-70 transition-transform duration-150 group-hover:translate-x-0.5"
+															aria-hidden="true"
+														/>
+													)}
+													{pathway.external ? (
+														<span className="sr-only">
+															{" "}
+															(opens in a new tab)
+														</span>
+													) : null}
+												</>
+											)}
+										</Link>
+									</li>
+								);
+							})}
+						</ul>
 					</div>
 				</div>
 

@@ -1,17 +1,25 @@
 /**
- * Content for the protected homepage hero (`SignalHero`).
+ * Content for the homepage hero (`SignalHero`).
  *
- * The hero is preserved unchanged by the homepage workstream, so its copy
- * stays here rather than being folded into the new ecosystem content.
- * Everything below the hero is defined in `lib/content/ecosystem.ts`.
+ * The hero names the six-bot collection and carries the one install route; the
+ * detailed scope for each bot stays in `home-collection.ts`.
  */
 
+import { links } from "./site";
+
 export const homeHero = {
-	eyebrow: "Enterprise cloud infrastructure",
-	title: "Cloud infrastructure.",
-	highlight: "Boundaries you can verify.",
+	eyebrow: "Astron Collection · Discord suite",
+	title: "Six Discord bots",
+	highlight: "One server, covered",
 	description:
-		"Compute, storage, networking and platform services on infrastructure operated by Astron Collection or a named partner. Availability and commercial state are published per product and region.",
-	primaryCta: { href: "/products", label: "Explore products" },
-	secondaryCta: { href: "/pricing", label: "View pricing" },
+		"Astron, Automations, Guild, Logger, Player and Protect cover commands, workflows, community, records, audio and safety — each with its own published scope.",
+	primaryCta: {
+		href: "#bots",
+		label: "Install a bot",
+	},
+	secondaryCta: {
+		href: links.console,
+		label: "Open the dashboard",
+		external: true,
+	},
 } as const;
