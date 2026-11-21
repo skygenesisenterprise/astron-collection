@@ -6,7 +6,7 @@ import {
   EVENT_TYPES,
   NotFoundError,
   UserInputError,
-} from "../../../packages/discord-framework/src/index.js";
+} from "@astron-collection/discord-framework";
 
 export function createSuggestionService({ repo, outbox, metrics }) {
   function create({ guildId, channelId, authorId, content }) {

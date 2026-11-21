@@ -1,7 +1,7 @@
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 
-import { defineCommand, EPHEMERAL } from "../../../packages/discord-framework/src/index.js";
-import { formatList, successEmbed } from "../../../packages/discord-framework/src/ui/index.js";
+import { defineCommand, EPHEMERAL } from "@astron-collection/discord-framework";
+import { formatList, successEmbed } from "@astron-collection/discord-framework/ui";
 import { requireGuild } from "../lib/guards.js";
 
 const MAX_ROLES = 10;

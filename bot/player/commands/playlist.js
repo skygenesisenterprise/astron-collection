@@ -2,12 +2,12 @@ import { randomUUID } from "node:crypto";
 
 import { SlashCommandBuilder } from "discord.js";
 
-import { defineCommand, EPHEMERAL } from "../../../packages/discord-framework/src/index.js";
+import { defineCommand, EPHEMERAL } from "@astron-collection/discord-framework";
 import {
   formatDuration,
   formatList,
   successEmbed,
-} from "../../../packages/discord-framework/src/ui/index.js";
+} from "@astron-collection/discord-framework/ui";
 
 export default defineCommand({
   data: new SlashCommandBuilder()

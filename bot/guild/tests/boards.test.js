@@ -7,7 +7,7 @@ import { after, before, describe, it } from "node:test";
 import {
   createDatabase,
   runMigrations,
-} from "../../../packages/discord-framework/src/index.js";
+} from "@astron-collection/discord-framework";
 import { createBoardRepository } from "../repositories/boards.js";
 import { createPollService } from "../services/polls.js";
 import { createSuggestionService } from "../services/suggestions.js";

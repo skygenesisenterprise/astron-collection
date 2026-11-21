@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "discord.js";
 
-import { defineCommand } from "../../../packages/discord-framework/src/index.js";
+import { defineCommand } from "@astron-collection/discord-framework";
 import { statusRefreshRow } from "../components.js";
 
 export default defineCommand({

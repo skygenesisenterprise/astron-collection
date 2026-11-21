@@ -9,7 +9,7 @@ import {
   createMemoryDatabase,
   createOutbox,
   runMigrations,
-} from "../../../packages/discord-framework/src/index.js";
+} from "@astron-collection/discord-framework";
 import { createCaseRepository } from "../repositories/cases.js";
 import { createCaseService } from "../services/case-service.js";
 

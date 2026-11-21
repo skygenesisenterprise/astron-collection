@@ -10,11 +10,11 @@ RUN apk add --no-cache ca-certificates tzdata wget
 
 WORKDIR /app/bot/protect
 
+COPY packages/discord-framework /app/packages/discord-framework
 COPY bot/protect/package.json ./
 RUN npm install --omit=dev --no-audit --no-fund
 
 COPY bot/protect/ ./
-COPY packages/discord-framework /app/packages/discord-framework
 
 RUN mkdir -p /app/packages /app/bot/protect/data \
     && ln -sfn /app/bot/protect/node_modules /app/packages/node_modules

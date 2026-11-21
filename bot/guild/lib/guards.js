@@ -1,4 +1,4 @@
-import { UserInputError } from "../../../packages/discord-framework/src/index.js";
+import { UserInputError } from "@astron-collection/discord-framework";
 
 export function requireGuild(interaction) {
   if (!interaction.inCachedGuild()) {

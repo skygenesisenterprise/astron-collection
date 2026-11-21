@@ -5,8 +5,8 @@ import {
   EPHEMERAL,
   formatNumber,
   timestamp,
-} from "../../../packages/discord-framework/src/index.js";
-import { infoEmbed } from "../../../packages/discord-framework/src/ui/index.js";
+} from "@astron-collection/discord-framework";
+import { infoEmbed } from "@astron-collection/discord-framework/ui";
 
 export default defineCommand({
   data: new SlashCommandBuilder()

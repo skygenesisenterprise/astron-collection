@@ -2,7 +2,13 @@
 
 export const BOT = "player";
 
-export const INTENTS = ["Guilds", "GuildVoiceStates", "GuildMessages", "MessageContent"];
+export const INTENTS = [
+  "Guilds",
+  "GuildMembers",
+  "GuildVoiceStates",
+  "GuildMessages",
+  "MessageContent",
+];
 export const PARTIALS = ["Channel"];
 
 export const SETTINGS_DEFAULTS = Object.freeze({

@@ -6,7 +6,7 @@ import {
   EVENT_TYPES,
   NotFoundError,
   UserInputError,
-} from "../../../packages/discord-framework/src/index.js";
+} from "@astron-collection/discord-framework";
 import { ACTION_TYPES, TRIGGER_TYPES } from "../config/bot.js";
 import { validateCron } from "./cron.js";
 

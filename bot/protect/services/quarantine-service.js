@@ -5,7 +5,7 @@
  * refused instead of silently applying an incomplete action.
  */
 
-import { AstronError, PermissionError } from "../../../packages/discord-framework/src/index.js";
+import { AstronError, PermissionError } from "@astron-collection/discord-framework";
 
 export function createQuarantineService({ repo, settings, logger }) {
   async function apply({ guild, member, reason, actorId }) {

@@ -1,6 +1,6 @@
 /** Execution history, with idempotency keys. */
 
-import { fromJson, toJson } from "../../../packages/discord-framework/src/index.js";
+import { fromJson, toJson } from "@astron-collection/discord-framework";
 
 export function createRunRepository({ db }) {
   function hasRun(workflowId, idempotencyKey) {

@@ -11,7 +11,7 @@ export const INTENTS = [
   "GuildModeration",
 ];
 
-export const PARTIALS = ["Channel", "Message", "GuildMember", "User", "Role"];
+export const PARTIALS = ["Channel", "Message", "GuildMember", "User"];
 
 export const CATEGORIES = Object.freeze([
   "messages",

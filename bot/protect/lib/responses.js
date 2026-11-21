@@ -1,5 +1,5 @@
-import { EPHEMERAL, UserInputError, formatDuration } from "../../../packages/discord-framework/src/index.js";
-import { infoEmbed } from "../../../packages/discord-framework/src/ui/index.js";
+import { EPHEMERAL, UserInputError, formatDuration } from "@astron-collection/discord-framework";
+import { infoEmbed } from "@astron-collection/discord-framework/ui";
 
 export function requireGuild(interaction) {
   if (!interaction.inCachedGuild()) {

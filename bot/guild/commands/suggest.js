@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from "discord.js";
 
-import { defineCommand, EPHEMERAL } from "../../../packages/discord-framework/src/index.js";
-import { successEmbed } from "../../../packages/discord-framework/src/ui/index.js";
+import { defineCommand, EPHEMERAL } from "@astron-collection/discord-framework";
+import { successEmbed } from "@astron-collection/discord-framework/ui";
 import { suggestionComponents, suggestionEmbed } from "../lib/board-views.js";
 import { requireGuild } from "../lib/guards.js";
 

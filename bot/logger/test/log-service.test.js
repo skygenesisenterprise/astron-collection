@@ -8,7 +8,7 @@ import {
   createEvent,
   createMemoryDatabase,
   runMigrations,
-} from "../../../packages/discord-framework/src/index.js";
+} from "@astron-collection/discord-framework";
 import { createLogEntryRepository } from "../repositories/log-entries.js";
 import { createLogService } from "../services/log-service.js";
 

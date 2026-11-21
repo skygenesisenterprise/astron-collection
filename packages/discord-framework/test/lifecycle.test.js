@@ -105,6 +105,27 @@ describe("bot runtime", () => {
     assert.equal(health.commands, 0);
   });
 
+  it("sets and refreshes the guild/member activity counts", async () => {
+    const client = fakeClient();
+    const presences = [];
+    client.user.setPresence = async (presence) => presences.push(presence);
+    const { runtime } = await buildRuntime({ client });
+
+    await runtime.start();
+    await tick();
+
+    assert.equal(presences.at(-1).activities[0].name, "1 Guild - 3 Member");
+
+    client.guilds.cache.set("guild-2", { id: "guild-2", memberCount: 4 });
+    client.emit("guildCreate", client.guilds.cache.get("guild-2"));
+    client.guilds.cache.get("110000000000000000").memberCount = 5;
+    client.emit("guildMemberAdd", {});
+    await tick(1_100);
+
+    assert.equal(presences.at(-1).activities[0].name, "2 Guild - 9 Member");
+    await runtime.stop();
+  });
+
   it("retries a network failure with exponential delay", async () => {
     let calls = 0;
     const client = fakeClient();

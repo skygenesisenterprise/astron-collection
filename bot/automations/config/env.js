@@ -9,7 +9,7 @@ import {
   defineConfigSchema,
   loadConfig,
   runtimeVariables,
-} from "../../../packages/discord-framework/src/index.js";
+} from "@astron-collection/discord-framework";
 import { BOT } from "./bot.js";
 
 const botRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");

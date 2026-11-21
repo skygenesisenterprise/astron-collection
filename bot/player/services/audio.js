@@ -8,7 +8,7 @@
 
 import { spawn } from "node:child_process";
 
-import { UserInputError } from "../../../packages/discord-framework/src/index.js";
+import { UserInputError } from "@astron-collection/discord-framework";
 
 export function createAudioAdapter({ logger, ytdlpPath = "yt-dlp" }) {
   let voicePromise = null;

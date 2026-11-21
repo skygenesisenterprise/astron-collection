@@ -14,7 +14,7 @@ import {
   NotFoundError,
   UserInputError,
   nowIso,
-} from "../../../packages/discord-framework/src/index.js";
+} from "@astron-collection/discord-framework";
 
 const MAX_TEMPLATE = 1500;
 

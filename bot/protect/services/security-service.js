@@ -6,7 +6,7 @@
  * The thresholds are per-guild settings, never global constants.
  */
 
-import { EVENT_TYPES, nowIso } from "../../../packages/discord-framework/src/index.js";
+import { EVENT_TYPES, nowIso } from "@astron-collection/discord-framework";
 
 const WINDOW_MS = 60_000;
 const SUSPICIOUS_HOSTS = [

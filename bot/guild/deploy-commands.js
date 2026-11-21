@@ -5,7 +5,7 @@ import {
   createCommandRegistry,
   createLogger,
   runCommandDeployment,
-} from "../../packages/discord-framework/src/index.js";
+} from "@astron-collection/discord-framework";
 import { BOT } from "./config/bot.js";
 import { env } from "./config/env.js";
 

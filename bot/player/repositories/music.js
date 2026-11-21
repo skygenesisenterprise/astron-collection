@@ -1,6 +1,6 @@
 /** Playback history and playlists. */
 
-import { nowIso } from "../../../packages/discord-framework/src/index.js";
+import { nowIso } from "@astron-collection/discord-framework";
 
 export function createMusicRepository({ db, clock = () => new Date() }) {
   function historyAdd({ id, guildId, url, title, durationSeconds, requestedBy }) {

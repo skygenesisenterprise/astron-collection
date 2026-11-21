@@ -14,6 +14,7 @@ packages/discord-framework/   shared technical mechanisms
 | Module | Responsibility |
 | --- | --- |
 | `src/lifecycle.js` | client creation, bootstrap, login retries, `clientReady`, SIGTERM/SIGINT, shutdown, health |
+| `src/presence.js` | shared guild/member-count activity, refreshed on guild and member events |
 | `src/commands/contract.js` | command contract: definition, id, category, handler, availability, permissions, cooldown, metadata |
 | `src/commands/registry.js` | per-bot registry, duplicate detection, **foreign-bot rejection** |
 | `src/commands/loader.js` | command/event discovery inside one directory, per-file error containment |
@@ -111,8 +112,12 @@ router answers the user accordingly.
 - `createBotRuntime({ bot, config, logger, registry, commandsDir, eventsDir, voice })`
   loads the bot catalogue, registers `interactionCreate`, loads the bot's events
   (each wrapped in its own error boundary), logs in with exponential-backoff
-  retries on network errors, starts voice presence on `clientReady`, and stops
-  once: listeners removed, voice connection destroyed, client destroyed.
+  retries on network errors, starts voice presence and shared guild/member-count
+  status on `clientReady`, and stops once: listeners removed, voice connection
+  destroyed, client destroyed.
+- `createGuildMemberPresence({ client, logger })` exposes the same status manager
+  for bots with custom lifecycle wiring. It sets `{guild count} Guild - {member
+  count} Member` and debounces guild/member event updates.
 - `interactionCreate` belongs to the framework: a bot event with that name is
   skipped.
 - Every log line is JSON: `{ ts, level, bot, msg, ...context }`. Keys matching

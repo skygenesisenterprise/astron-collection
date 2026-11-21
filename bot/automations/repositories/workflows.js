@@ -1,6 +1,6 @@
 /** Workflow definitions, triggers and ordered actions. */
 
-import { fromJson, nowIso, toJson } from "../../../packages/discord-framework/src/index.js";
+import { fromJson, nowIso, toJson } from "@astron-collection/discord-framework";
 
 export function createWorkflowRepository({ db, clock = () => new Date() }) {
   function create({ id, guildId, name, description = "", createdBy }) {

@@ -12,7 +12,7 @@ import {
   PermissionError,
   UserInputError,
   checkModerationHierarchy,
-} from "../../../packages/discord-framework/src/index.js";
+} from "@astron-collection/discord-framework";
 
 const MAX_TIMEOUT_SECONDS = 28 * 24 * 60 * 60;
 

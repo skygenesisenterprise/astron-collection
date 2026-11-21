@@ -1,6 +1,6 @@
 /** SQL for audit entries; filtering, retention and projection live in the service. */
 
-import { fromJson, toJson } from "../../../packages/discord-framework/src/index.js";
+import { fromJson, toJson } from "@astron-collection/discord-framework";
 
 export function createLogEntryRepository({ db }) {
   function insert(entry) {

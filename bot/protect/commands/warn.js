@@ -1,7 +1,7 @@
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 
-import { defineCommand, EPHEMERAL, formatList } from "../../../packages/discord-framework/src/index.js";
-import { successEmbed, warningEmbed } from "../../../packages/discord-framework/src/ui/index.js";
+import { defineCommand, EPHEMERAL, formatList } from "@astron-collection/discord-framework";
+import { successEmbed, warningEmbed } from "@astron-collection/discord-framework/ui";
 import { caseEmbed, caseSummary, reasonOf, requireGuild } from "../lib/responses.js";
 
 export default defineCommand({

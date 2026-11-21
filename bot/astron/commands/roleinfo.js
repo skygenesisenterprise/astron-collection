@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from "discord.js";
 
-import { defineCommand, timestamp } from "../../../packages/discord-framework/src/index.js";
-import { infoEmbed } from "../../../packages/discord-framework/src/ui/index.js";
+import { defineCommand, timestamp } from "@astron-collection/discord-framework";
+import { infoEmbed } from "@astron-collection/discord-framework/ui";
 
 export default defineCommand({
   data: new SlashCommandBuilder()

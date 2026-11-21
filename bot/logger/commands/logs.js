@@ -8,8 +8,8 @@ import {
   defineCommand,
   EPHEMERAL,
   formatList,
-} from "../../../packages/discord-framework/src/index.js";
-import { infoEmbed, successEmbed } from "../../../packages/discord-framework/src/ui/index.js";
+} from "@astron-collection/discord-framework";
+import { infoEmbed, successEmbed } from "@astron-collection/discord-framework/ui";
 import { CATEGORIES } from "../config/bot.js";
 
 export default defineCommand({

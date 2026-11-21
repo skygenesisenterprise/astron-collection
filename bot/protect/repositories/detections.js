@@ -1,6 +1,6 @@
 /** Security detections, kept locally and mirrored as security.alert events. */
 
-import { nowIso } from "../../../packages/discord-framework/src/index.js";
+import { nowIso } from "@astron-collection/discord-framework";
 
 export function createDetectionRepository({ db, clock = () => new Date() }) {
   function record({ guildId, userId = null, channelId = null, kind, severity, detail, actionTaken }) {

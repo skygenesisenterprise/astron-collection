@@ -8,7 +8,7 @@ import {
   createMetrics,
   createSettingsStore,
   runMigrations,
-} from "../../../packages/discord-framework/src/index.js";
+} from "@astron-collection/discord-framework";
 import { BOT, SETTINGS_DEFAULTS, SETTINGS_VALIDATORS } from "../config/bot.js";
 import { createLogEntryRepository } from "../repositories/log-entries.js";
 import { createLogService } from "./log-service.js";

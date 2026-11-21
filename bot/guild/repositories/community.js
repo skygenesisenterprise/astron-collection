@@ -1,6 +1,6 @@
 /** Birthdays, reminders and reaction-role panels. */
 
-import { fromJson, nowIso, toJson } from "../../../packages/discord-framework/src/index.js";
+import { fromJson, nowIso, toJson } from "@astron-collection/discord-framework";
 
 export function createCommunityRepository({ db, clock = () => new Date() }) {
   function birthdaySet({ guildId, userId, month, day, year = null }) {

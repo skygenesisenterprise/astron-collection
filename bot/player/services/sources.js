@@ -9,7 +9,7 @@
 import { execFile as execFileCallback } from "node:child_process";
 import { promisify } from "node:util";
 
-import { UserInputError } from "../../../packages/discord-framework/src/index.js";
+import { UserInputError } from "@astron-collection/discord-framework";
 
 const execFile = promisify(execFileCallback);
 const URL_PATTERN = /^https?:\/\//i;

@@ -1,6 +1,6 @@
 /** Quarantine records: the roles a member had before isolation. */
 
-import { fromJson, nowIso, toJson } from "../../../packages/discord-framework/src/index.js";
+import { fromJson, nowIso, toJson } from "@astron-collection/discord-framework";
 
 export function createQuarantineRepository({ db, clock = () => new Date() }) {
   function record({ guildId, userId, roleIds }) {

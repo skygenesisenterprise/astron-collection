@@ -11,9 +11,9 @@ import {
   EVENT_TYPES,
   nowIso,
   validateEvent,
-} from "../../../packages/discord-framework/src/index.js";
+} from "@astron-collection/discord-framework";
 import { LOG_COLORS } from "../config/bot.js";
-import { paginate } from "../../../packages/discord-framework/src/storage/values.js";
+import { paginate } from "@astron-collection/discord-framework";
 import { projectDiscordEvent } from "./discord-event-projector.js";
 
 const MAX_SUMMARY_LENGTH = 500;

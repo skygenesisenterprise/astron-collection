@@ -1,7 +1,7 @@
 # Astron — independent image.
 #
 # Build context is the repository root because the image ships the bot and the
-# shared framework it imports relatively:
+# shared framework imported as @astron-collection/discord-framework:
 #
 #   /app/bot/astron                  this bot, its migrations and data volume
 #   /app/packages/discord-framework  the shared foundation
@@ -19,11 +19,11 @@ RUN apk add --no-cache ca-certificates tzdata wget
 
 WORKDIR /app/bot/astron
 
+COPY packages/discord-framework /app/packages/discord-framework
 COPY bot/astron/package.json ./
 RUN npm install --omit=dev --no-audit --no-fund
 
 COPY bot/astron/ ./
-COPY packages/discord-framework /app/packages/discord-framework
 
 RUN mkdir -p /app/packages /app/bot/astron/data \
     && ln -sfn /app/bot/astron/node_modules /app/packages/node_modules

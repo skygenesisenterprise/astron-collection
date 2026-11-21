@@ -9,7 +9,7 @@ import {
   createLogger,
   startBot,
   verifySignature,
-} from "../../packages/discord-framework/src/index.js";
+} from "@astron-collection/discord-framework";
 import { BOT, INTENTS, PARTIALS } from "./config/bot.js";
 import { env } from "./config/env.js";
 import { createServices } from "./services/index.js";

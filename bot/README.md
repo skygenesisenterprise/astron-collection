@@ -18,12 +18,16 @@ in CI, together with the required files and the shared-framework import.
 
 ## Shared foundation
 
-`packages/discord-framework` contains technical capabilities only: lifecycle,
+`packages/discord-framework`, imported as `@astron-collection/discord-framework`,
+contains technical capabilities only: lifecycle,
 command contract and loader, interaction router and components, permissions,
 errors, structured logs, configuration, command deployment, voice presence,
 SQLite storage and checksummed migrations, settings, localization, health and
 metrics, UI builders, event contracts/outbox/signed webhooks, and the bootstrap
 helper.
+
+All six bots use the same presence format: `{guild count} Guild - {member count} Member`.
+Counts sum each bot's cached guild member totals and refresh on guild/member events.
 
 ## Cross-bot contracts
 

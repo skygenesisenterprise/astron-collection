@@ -12,7 +12,7 @@ import {
   EVENT_TYPES,
   NotFoundError,
   nowIso,
-} from "../../../packages/discord-framework/src/index.js";
+} from "@astron-collection/discord-framework";
 
 export function createCaseService({ db, repo, outbox, logger, clock = () => new Date() }) {
   function create({

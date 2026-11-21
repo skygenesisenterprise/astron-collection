@@ -13,6 +13,7 @@
     "typecheck": "node --check index.js"
   },
   "dependencies": {
+    "@astron-collection/discord-framework": "file:../../packages/discord-framework",
     "@discordjs/voice": "^0.19.0",
     "discord.js": "^14.27.0",
     "dotenv": "^17.2.3",

@@ -5,7 +5,7 @@ import {
   createCommandDefinition,
   createCommandRegistry,
   defineCommand,
-} from "../../../packages/discord-framework/src/index.js";
+} from "@astron-collection/discord-framework";
 import { createHelpService } from "../services/help-service.js";
 import { createInfoService } from "../services/info-service.js";
 

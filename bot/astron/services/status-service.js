@@ -4,8 +4,8 @@ import {
   COLORS,
   formatDuration,
   formatNumber,
-} from "../../../packages/discord-framework/src/ui/format.js";
-import { embed } from "../../../packages/discord-framework/src/ui/embeds.js";
+} from "@astron-collection/discord-framework/ui";
+import { embed } from "@astron-collection/discord-framework/ui";
 
 export function createStatusService({ bot, config, db, registry, metrics }) {
   function databaseOk() {

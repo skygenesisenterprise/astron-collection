@@ -14,7 +14,8 @@ import path from "node:path";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const BOTS_DIR = path.join(ROOT, "bot");
-const FRAMEWORK_IMPORT = /(^|\/)packages\/discord-framework\/src\/index\.js$/;
+const FRAMEWORK_IMPORT =
+  /(?:^|\/)packages\/discord-framework\/src\/index\.js$|^@astron-collection\/discord-framework(?:$|\/)/;
 const EXPECTED_BOTS = ["astron", "automations", "guild", "logger", "player", "protect"];
 const REQUIRED_ENTRIES = [
   "index.js",

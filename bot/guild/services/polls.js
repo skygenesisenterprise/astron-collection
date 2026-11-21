@@ -2,7 +2,7 @@
 
 import { randomUUID } from "node:crypto";
 
-import { NotFoundError, UserInputError } from "../../../packages/discord-framework/src/index.js";
+import { NotFoundError, UserInputError } from "@astron-collection/discord-framework";
 
 export function createPollService({ repo, metrics, clock = () => new Date() }) {
   function create({ guildId, channelId, question, options, createdBy }) {

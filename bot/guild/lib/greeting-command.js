@@ -1,7 +1,7 @@
 import { ChannelType, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 
-import { defineCommand, EPHEMERAL } from "../../../packages/discord-framework/src/index.js";
-import { infoEmbed, successEmbed } from "../../../packages/discord-framework/src/ui/index.js";
+import { defineCommand, EPHEMERAL } from "@astron-collection/discord-framework";
+import { infoEmbed, successEmbed } from "@astron-collection/discord-framework/ui";
 import { requireGuild } from "./guards.js";
 
 /**

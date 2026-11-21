@@ -11,6 +11,7 @@ import {
   validateEvent,
   verifySignature,
 } from "../src/contracts/index.js";
+import { SIGNATURE_HEADER, TIMESTAMP_HEADER } from "../src/index.js";
 import { createMemoryDatabase } from "../src/storage/index.js";
 
 const GUILD_ID = "110000000000000000";
@@ -133,6 +134,11 @@ describe("event bus", () => {
 });
 
 describe("webhook transport", () => {
+  it("exports webhook header names from the framework entrypoint", () => {
+    assert.equal(SIGNATURE_HEADER, "x-astron-signature");
+    assert.equal(TIMESTAMP_HEADER, "x-astron-timestamp");
+  });
+
   it("signs the exact body and verifies it", async () => {
     const secret = "0123456789abcdef0123456789abcdef";
     const requests = [];

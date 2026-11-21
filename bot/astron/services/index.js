@@ -16,7 +16,7 @@ import {
   createSettingsStore,
   createWebhookSink,
   runMigrations,
-} from "../../../packages/discord-framework/src/index.js";
+} from "@astron-collection/discord-framework";
 import { BOT, SETTINGS_DEFAULTS, SETTINGS_VALIDATORS } from "../config/bot.js";
 import { createGuildEventRepository } from "../repositories/guild-events.js";
 import { createHelpService } from "./help-service.js";

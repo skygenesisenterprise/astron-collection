@@ -1,6 +1,6 @@
 /** Player embeds shared by commands. */
 
-import { formatDuration, formatList, infoEmbed } from "../../../packages/discord-framework/src/ui/index.js";
+import { formatDuration, formatList, infoEmbed } from "@astron-collection/discord-framework/ui";
 import { LOOP_MODES } from "../config/bot.js";
 
 export function trackLabel(track) {

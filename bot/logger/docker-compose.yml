@@ -3,7 +3,7 @@ services:
     build:
       context: ../..
       dockerfile: bot/logger/Dockerfile
-    image: ${ASTRON_BOT_IMAGE:-ghcr.io/skygenesisenterprise/logger}:${ASTRON_BOT_VERSION:-latest}
+    image: ${ASTRON_BOT_IMAGE:-ghcr.io/skygenesisenterprise/astron-logger}:${ASTRON_BOT_VERSION:-latest}
     container_name: logger-bot
     restart: unless-stopped
     env_file:

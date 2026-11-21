@@ -1,6 +1,6 @@
 /** Guild interactive components: poll buttons, suggestion votes, role menus. */
 
-import { EPHEMERAL } from "../../packages/discord-framework/src/index.js";
+import { EPHEMERAL } from "@astron-collection/discord-framework";
 import { pollComponents, pollEmbed, suggestionComponents, suggestionEmbed, splitBoardValue } from "./lib/board-views.js";
 
 export function registerComponents({ components, services }) {

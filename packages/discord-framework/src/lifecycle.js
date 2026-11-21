@@ -9,6 +9,7 @@
 import { ConfigurationError } from "./errors.js";
 import { createInteractionRouter } from "./interactions/router.js";
 import { loadCommands, loadEvents } from "./commands/loader.js";
+import { createGuildMemberPresence } from "./presence.js";
 
 const RETRYABLE_NETWORK_CODES = new Set([
   "EAI_AGAIN",
@@ -109,6 +110,7 @@ export async function createBotRuntime({
 
   const discordClient =
     client ?? (await createDiscordClient({ intents, partials, loadDiscord }));
+  const memberPresence = createGuildMemberPresence({ client: discordClient, logger });
 
   const router = createInteractionRouter({
     bot,
@@ -139,6 +141,7 @@ export async function createBotRuntime({
 
   async function onReady() {
     readyAt = clock();
+    void memberPresence.start();
     logger.info("bot ready", {
       user: discordClient.user?.tag ?? "unknown",
       guilds: discordClient.guilds?.cache?.size ?? 0,
@@ -256,6 +259,7 @@ export async function createBotRuntime({
       discordClient.off("error", onError);
       discordClient.off("shardError", onShardError);
       discordClient.off("warn", onWarn);
+      memberPresence.stop();
     });
 
     if (signalHandlers) installProcessHandlers();

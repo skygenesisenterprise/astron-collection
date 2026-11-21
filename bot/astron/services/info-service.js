@@ -5,7 +5,7 @@
  * without the Discord client and reusable from slash commands and context menus.
  */
 
-import { formatNumber, timestamp } from "../../../packages/discord-framework/src/ui/format.js";
+import { formatNumber, timestamp } from "@astron-collection/discord-framework/ui";
 
 export function createInfoService({ bot, config }) {
   function guildInfo(guild) {

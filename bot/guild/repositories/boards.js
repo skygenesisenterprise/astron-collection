@@ -1,6 +1,6 @@
 /** Polls, votes, suggestions and suggestion votes. */
 
-import { fromJson, nowIso, toJson } from "../../../packages/discord-framework/src/index.js";
+import { fromJson, nowIso, toJson } from "@astron-collection/discord-framework";
 
 export function createBoardRepository({ db, clock = () => new Date() }) {
   function pollCreate({ id, guildId, channelId, messageId = null, question, options, createdBy }) {

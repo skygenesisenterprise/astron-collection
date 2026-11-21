@@ -55,6 +55,9 @@ pnpm --filter @astron-collection/player start
 Docker: `docker compose -f bot/player/docker-compose.yml up -d`.
 Health and metrics: `/healthz`, `/livez`, `/metrics` (port 3015).
 
+Player uses the privileged `GuildMembers` intent to keep its member count current.
+Enable this intent for the Player application in the Discord Developer Portal.
+
 ## Tests
 
 ```sh

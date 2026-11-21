@@ -1,7 +1,7 @@
 import { ActionRowBuilder, StringSelectMenuBuilder } from "discord.js";
 
-import { encodeCustomId } from "../../../packages/discord-framework/src/index.js";
-import { COLORS } from "../../../packages/discord-framework/src/ui/index.js";
+import { encodeCustomId } from "@astron-collection/discord-framework";
+import { COLORS } from "@astron-collection/discord-framework/ui";
 
 export function panelEmbed(panel) {
   return {

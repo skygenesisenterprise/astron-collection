@@ -2,7 +2,7 @@
 
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 
-import { encodeCustomId } from "../../packages/discord-framework/src/index.js";
+import { encodeCustomId } from "@astron-collection/discord-framework";
 
 export const STATUS_REFRESH_ID = encodeCustomId({ namespace: "status", action: "refresh" });
 

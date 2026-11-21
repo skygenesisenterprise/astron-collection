@@ -3,8 +3,8 @@ import { SlashCommandBuilder } from "discord.js";
 import {
   defineCommand,
   formatDuration,
-} from "../../../packages/discord-framework/src/index.js";
-import { infoEmbed } from "../../../packages/discord-framework/src/ui/index.js";
+} from "@astron-collection/discord-framework";
+import { infoEmbed } from "@astron-collection/discord-framework/ui";
 import { LINKS } from "../config/bot.js";
 
 export default defineCommand({

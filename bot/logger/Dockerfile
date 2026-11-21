@@ -10,11 +10,11 @@ RUN apk add --no-cache ca-certificates tzdata wget
 
 WORKDIR /app/bot/logger
 
+COPY packages/discord-framework /app/packages/discord-framework
 COPY bot/logger/package.json ./
 RUN npm install --omit=dev --no-audit --no-fund
 
 COPY bot/logger/ ./
-COPY packages/discord-framework /app/packages/discord-framework
 
 RUN mkdir -p /app/packages /app/bot/logger/data \
     && ln -sfn /app/bot/logger/node_modules /app/packages/node_modules

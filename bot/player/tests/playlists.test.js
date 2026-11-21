@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { after, before, describe, it } from "node:test";
 
-import { createDatabase, runMigrations } from "../../../packages/discord-framework/src/index.js";
+import { createDatabase, runMigrations } from "@astron-collection/discord-framework";
 import { createMusicRepository } from "../repositories/music.js";
 
 const directory = mkdtempSync(path.join(tmpdir(), "astron-player-"));

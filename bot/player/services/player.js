@@ -6,7 +6,7 @@ import {
   EVENT_TYPES,
   UserInputError,
   NotFoundError,
-} from "../../../packages/discord-framework/src/index.js";
+} from "@astron-collection/discord-framework";
 
 export function createPlayerService({
   queue,

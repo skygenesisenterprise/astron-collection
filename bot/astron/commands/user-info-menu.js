@@ -1,6 +1,6 @@
 import { ApplicationCommandType, ContextMenuCommandBuilder } from "discord.js";
 
-import { defineCommand } from "../../../packages/discord-framework/src/index.js";
+import { defineCommand } from "@astron-collection/discord-framework";
 import { executeUserInfo } from "./userinfo.js";
 
 export default defineCommand({

@@ -6,7 +6,7 @@
  * deterministic and documented instead of the ambiguous classic OR rule.
  */
 
-import { UserInputError } from "../../../packages/discord-framework/src/index.js";
+import { UserInputError } from "@astron-collection/discord-framework";
 
 const FIELDS = [
   { name: "minute", min: 0, max: 59 },

@@ -2,13 +2,13 @@
 
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 
-import { encodeCustomId } from "../../../packages/discord-framework/src/index.js";
+import { encodeCustomId } from "@astron-collection/discord-framework";
 import {
   COLORS,
   formatNumber,
   percent,
   progressBar,
-} from "../../../packages/discord-framework/src/ui/index.js";
+} from "@astron-collection/discord-framework/ui";
 
 function optionLines(options, counts, total) {
   return options

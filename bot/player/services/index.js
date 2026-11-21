@@ -10,7 +10,7 @@ import {
   createSettingsStore,
   createWebhookSink,
   runMigrations,
-} from "../../../packages/discord-framework/src/index.js";
+} from "@astron-collection/discord-framework";
 import { BOT, SETTINGS_DEFAULTS, SETTINGS_VALIDATORS } from "../config/bot.js";
 import { createMusicRepository } from "../repositories/music.js";
 import { createAudioAdapter } from "./audio.js";

@@ -5,8 +5,8 @@ import {
   defineCommand,
   EPHEMERAL,
   securityFindings,
-} from "../../../packages/discord-framework/src/index.js";
-import { infoEmbed, successEmbed, warningEmbed } from "../../../packages/discord-framework/src/ui/index.js";
+} from "@astron-collection/discord-framework";
+import { infoEmbed, successEmbed, warningEmbed } from "@astron-collection/discord-framework/ui";
 import { requireGuild } from "../lib/responses.js";
 
 function enabledLabel(value) {

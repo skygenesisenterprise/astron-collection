@@ -7,8 +7,8 @@ import {
 import {
   defineCommand,
   EPHEMERAL,
-} from "../../../packages/discord-framework/src/index.js";
-import { infoEmbed, successEmbed } from "../../../packages/discord-framework/src/ui/index.js";
+} from "@astron-collection/discord-framework";
+import { infoEmbed, successEmbed } from "@astron-collection/discord-framework/ui";
 
 const OPTION_KEYS = {
   locale: "locale",

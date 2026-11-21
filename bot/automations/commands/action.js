@@ -1,7 +1,7 @@
 import { ChannelType, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 
-import { defineCommand, EPHEMERAL, EVENT_TYPES } from "../../../packages/discord-framework/src/index.js";
-import { formatList, successEmbed } from "../../../packages/discord-framework/src/ui/index.js";
+import { defineCommand, EPHEMERAL, EVENT_TYPES } from "@astron-collection/discord-framework";
+import { formatList, successEmbed } from "@astron-collection/discord-framework/ui";
 
 export default defineCommand({
   data: new SlashCommandBuilder()

@@ -1,4 +1,4 @@
-import { EVENT_TYPES } from "../../../packages/discord-framework/src/index.js";
+import { EVENT_TYPES } from "@astron-collection/discord-framework";
 
 export const name = "messageCreate";
 

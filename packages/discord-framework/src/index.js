@@ -116,6 +116,7 @@ export {
 } from "./localization/index.js";
 
 export { createHealthServer, createMetrics } from "./observability/index.js";
+export { createGuildMemberPresence } from "./presence.js";
 
 export {
   DAY_MS,
@@ -151,6 +152,8 @@ export {
   CONTRACT_VERSION,
   EVENT_CONTRACTS,
   EVENT_TYPES,
+  SIGNATURE_HEADER,
+  TIMESTAMP_HEADER,
   createCollectingSink,
   createEvent,
   createEventBus,
