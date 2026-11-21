@@ -51,7 +51,9 @@ class PayloadTooLargeError extends Error {}
 async function readJsonBody(request: Request, maxBytes: number): Promise<unknown> {
   const text = await request.text();
   if (Buffer.byteLength(text, "utf8") > maxBytes) {
-    throw new PayloadTooLargeError("Request body exceeds ASTRON_COLLECTION_MCP_HTTP_MAX_BODY_BYTES");
+    throw new PayloadTooLargeError(
+      "Request body exceeds ASTRON_COLLECTION_MCP_HTTP_MAX_BODY_BYTES",
+    );
   }
   if (text.trim() === "") return undefined;
   return JSON.parse(text) as unknown;

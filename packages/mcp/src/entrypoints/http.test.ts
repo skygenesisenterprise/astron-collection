@@ -151,7 +151,9 @@ describe("HTTP transport", () => {
   });
 
   it("enforces the configured body size limit", async () => {
-    const { baseUrl } = await start(testConfig({ ASTRON_COLLECTION_MCP_HTTP_MAX_BODY_BYTES: "1024" }));
+    const { baseUrl } = await start(
+      testConfig({ ASTRON_COLLECTION_MCP_HTTP_MAX_BODY_BYTES: "1024" }),
+    );
 
     const response = await fetch(`${baseUrl}/mcp`, {
       method: "POST",

@@ -201,7 +201,9 @@ export class OperationStore {
     } catch (error) {
       const code = (error as NodeJS.ErrnoException).code;
       if (code === "ENOENT") return;
-      throw new Error(`Could not read ASTRON_COLLECTION_MCP_OPERATION_STORE at ${path}`, { cause: error });
+      throw new Error(`Could not read ASTRON_COLLECTION_MCP_OPERATION_STORE at ${path}`, {
+        cause: error,
+      });
     }
   }
 

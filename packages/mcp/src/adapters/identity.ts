@@ -96,7 +96,8 @@ export class IdentityResolver {
     );
     if (!permissions) {
       throw new ApiError({
-        message: "The Astron Collection API returned an unexpected permission set; refusing to execute",
+        message:
+          "The Astron Collection API returned an unexpected permission set; refusing to execute",
         code: "internal_error",
       });
     }

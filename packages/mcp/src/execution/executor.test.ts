@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { z } from "zod";
-import { IdentityResolver } from "../adapters/identity.js";
 import { ApiError } from "../adapters/astronCollectionApi.js";
+import { IdentityResolver } from "../adapters/identity.js";
 import { getOperationStatusCapability } from "../capabilities/operations.js";
 import type { McpConfig } from "../config.js";
 import { loadConfig } from "../config.js";

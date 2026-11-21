@@ -12,30 +12,40 @@ function env(overrides: Record<string, string | undefined> = {}): NodeJS.Process
 
 describe("validateAstronCollectionUrl", () => {
   it("accepts http(s) origins and removes trailing slashes", () => {
-    expect(validateAstronCollectionUrl("https://astron-collection.example.com/")).toBe("https://astron-collection.example.com");
+    expect(validateAstronCollectionUrl("https://astron-collection.example.com/")).toBe(
+      "https://astron-collection.example.com",
+    );
     expect(validateAstronCollectionUrl("http://localhost:3000/astron-collection/")).toBe(
       "http://localhost:3000/astron-collection",
     );
   });
 
   it("rejects non-http protocols", () => {
-    expect(() => validateAstronCollectionUrl("ftp://astron-collection.example.com")).toThrow(/http/);
+    expect(() => validateAstronCollectionUrl("ftp://astron-collection.example.com")).toThrow(
+      /http/,
+    );
     expect(() => validateAstronCollectionUrl("file:///etc/passwd")).toThrow(/http/);
   });
 
   it("rejects embedded credentials", () => {
-    expect(() => validateAstronCollectionUrl("https://user:pass@astron-collection.example.com")).toThrow(
-      /credentials/,
-    );
+    expect(() =>
+      validateAstronCollectionUrl("https://user:pass@astron-collection.example.com"),
+    ).toThrow(/credentials/);
   });
 
   it("rejects query strings and fragments", () => {
-    expect(() => validateAstronCollectionUrl("https://astron-collection.example.com?x=1")).toThrow(/query/);
-    expect(() => validateAstronCollectionUrl("https://astron-collection.example.com#frag")).toThrow(/fragment/);
+    expect(() => validateAstronCollectionUrl("https://astron-collection.example.com?x=1")).toThrow(
+      /query/,
+    );
+    expect(() => validateAstronCollectionUrl("https://astron-collection.example.com#frag")).toThrow(
+      /fragment/,
+    );
   });
 
   it("rejects relative and malformed URLs", () => {
-    expect(() => validateAstronCollectionUrl("astron-collection.example.com")).toThrow(/absolute URL/);
+    expect(() => validateAstronCollectionUrl("astron-collection.example.com")).toThrow(
+      /absolute URL/,
+    );
   });
 });
 
@@ -53,13 +63,15 @@ describe("loadConfig", () => {
   });
 
   it("requires an API key", () => {
-    expect(() => loadConfig({ ASTRON_COLLECTION_URL: "https://astron-collection.example.com" })).toThrow(
-      /ASTRON_COLLECTION_API_KEY/,
-    );
+    expect(() =>
+      loadConfig({ ASTRON_COLLECTION_URL: "https://astron-collection.example.com" }),
+    ).toThrow(/ASTRON_COLLECTION_API_KEY/);
   });
 
   it("rejects API keys with whitespace", () => {
-    expect(() => loadConfig(env({ ASTRON_COLLECTION_API_KEY: "key with space" }))).toThrow(/whitespace/);
+    expect(() => loadConfig(env({ ASTRON_COLLECTION_API_KEY: "key with space" }))).toThrow(
+      /whitespace/,
+    );
   });
 
   it("makes advanced mode opt-in and read-only by default", () => {
@@ -70,7 +82,10 @@ describe("loadConfig", () => {
 
   it("honors an explicit advanced profile", () => {
     const config = loadConfig(
-      env({ ASTRON_COLLECTION_MCP_MODE: "advanced", ASTRON_COLLECTION_MCP_ADVANCED_PROFILE: "full" }),
+      env({
+        ASTRON_COLLECTION_MCP_MODE: "advanced",
+        ASTRON_COLLECTION_MCP_ADVANCED_PROFILE: "full",
+      }),
     );
     expect(config.advanced.profile).toBe("full");
   });
@@ -83,7 +98,9 @@ describe("loadConfig", () => {
   });
 
   it("lets an explicit mode override a legacy selection", () => {
-    const config = loadConfig(env({ ASTRON_COLLECTION_MCP_MODE: "business", ASTRON_COLLECTION_TOOL_PRESET: "deploy" }));
+    const config = loadConfig(
+      env({ ASTRON_COLLECTION_MCP_MODE: "business", ASTRON_COLLECTION_TOOL_PRESET: "deploy" }),
+    );
     expect(config.mode).toBe("business");
   });
 
@@ -111,9 +128,16 @@ describe("loadConfig", () => {
     expect(() => loadConfig(env({ ASTRON_COLLECTION_MCP_ENVIRONMENT: "onprem" }))).toThrow(
       /ASTRON_COLLECTION_MCP_ENVIRONMENT/,
     );
-    expect(() => loadConfig(env({ ASTRON_COLLECTION_MCP_MODE: "everything" }))).toThrow(/ASTRON_COLLECTION_MCP_MODE/);
+    expect(() => loadConfig(env({ ASTRON_COLLECTION_MCP_MODE: "everything" }))).toThrow(
+      /ASTRON_COLLECTION_MCP_MODE/,
+    );
     expect(() =>
-      loadConfig(env({ ASTRON_COLLECTION_MCP_MODE: "advanced", ASTRON_COLLECTION_MCP_ADVANCED_PROFILE: "safe" })),
+      loadConfig(
+        env({
+          ASTRON_COLLECTION_MCP_MODE: "advanced",
+          ASTRON_COLLECTION_MCP_ADVANCED_PROFILE: "safe",
+        }),
+      ),
     ).toThrow(/ASTRON_COLLECTION_MCP_ADVANCED_PROFILE/);
   });
 
@@ -127,14 +151,20 @@ describe("loadConfig", () => {
   });
 
   it("rejects short approval and HTTP tokens", () => {
-    expect(() => loadConfig(env({ ASTRON_COLLECTION_MCP_APPROVAL_TOKEN: "short" }))).toThrow(/at least 16/);
-    expect(() => loadConfig(env({ ASTRON_COLLECTION_MCP_HTTP_TOKEN: "short" }))).toThrow(/at least 16/);
+    expect(() => loadConfig(env({ ASTRON_COLLECTION_MCP_APPROVAL_TOKEN: "short" }))).toThrow(
+      /at least 16/,
+    );
+    expect(() => loadConfig(env({ ASTRON_COLLECTION_MCP_HTTP_TOKEN: "short" }))).toThrow(
+      /at least 16/,
+    );
   });
 
   it("validates custom headers through the shared parser", () => {
     expect(() =>
       loadConfig(
-        env({ ASTRON_COLLECTION_CUSTOM_HEADERS: JSON.stringify({ Authorization: "Bearer override" }) }),
+        env({
+          ASTRON_COLLECTION_CUSTOM_HEADERS: JSON.stringify({ Authorization: "Bearer override" }),
+        }),
       ),
     ).toThrow(/reserved/);
   });

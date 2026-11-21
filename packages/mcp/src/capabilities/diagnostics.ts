@@ -303,7 +303,8 @@ const FAILURE_SIGNALS: FailureSignal[] = [
   {
     pattern: /cannot connect to the docker daemon|cannot connect to docker/i,
     summary: "The deployment could not reach the Docker daemon",
-    nextStep: "Check that Docker is running on the target server and reachable by Astron Collection.",
+    nextStep:
+      "Check that Docker is running on the target server and reachable by Astron Collection.",
   },
   {
     pattern: /npm err!|yarn error|pnpm err|failed to compile|build failed/i,

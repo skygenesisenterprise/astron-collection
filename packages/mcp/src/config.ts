@@ -147,7 +147,9 @@ export function validateAstronCollectionUrl(raw: string): string {
     throw new Error("Environment variable ASTRON_COLLECTION_URL must not contain credentials");
   }
   if (url.search || url.hash) {
-    throw new Error("Environment variable ASTRON_COLLECTION_URL must not contain a query string or fragment");
+    throw new Error(
+      "Environment variable ASTRON_COLLECTION_URL must not contain a query string or fragment",
+    );
   }
 
   return `${url.origin}${url.pathname}`.replace(/\/+$/, "");
@@ -271,7 +273,9 @@ function parseOptionalHttpUrl(name: string, value: string | undefined): string |
 function loadHttp(env: NodeJS.ProcessEnv): HttpConfig {
   const token = env.ASTRON_COLLECTION_MCP_HTTP_TOKEN?.trim() || undefined;
   if (token !== undefined && token.length < 16) {
-    throw new Error("Environment variable ASTRON_COLLECTION_MCP_HTTP_TOKEN must be at least 16 characters");
+    throw new Error(
+      "Environment variable ASTRON_COLLECTION_MCP_HTTP_TOKEN must be at least 16 characters",
+    );
   }
 
   return {
@@ -300,7 +304,10 @@ function loadHttp(env: NodeJS.ProcessEnv): HttpConfig {
       1_024,
       16 * 1024 * 1024,
     ),
-    ...(parseOptionalHttpUrl("ASTRON_COLLECTION_MCP_PUBLIC_BASE_URL", env.ASTRON_COLLECTION_MCP_PUBLIC_BASE_URL)
+    ...(parseOptionalHttpUrl(
+      "ASTRON_COLLECTION_MCP_PUBLIC_BASE_URL",
+      env.ASTRON_COLLECTION_MCP_PUBLIC_BASE_URL,
+    )
       ? {
           publicBaseUrl: parseOptionalHttpUrl(
             "ASTRON_COLLECTION_MCP_PUBLIC_BASE_URL",
@@ -308,7 +315,10 @@ function loadHttp(env: NodeJS.ProcessEnv): HttpConfig {
           ) as string,
         }
       : {}),
-    ...(parseOptionalHttpUrl("ASTRON_COLLECTION_MCP_OAUTH_ISSUER", env.ASTRON_COLLECTION_MCP_OAUTH_ISSUER)
+    ...(parseOptionalHttpUrl(
+      "ASTRON_COLLECTION_MCP_OAUTH_ISSUER",
+      env.ASTRON_COLLECTION_MCP_OAUTH_ISSUER,
+    )
       ? {
           oauthIssuer: parseOptionalHttpUrl(
             "ASTRON_COLLECTION_MCP_OAUTH_ISSUER",
@@ -328,7 +338,9 @@ function loadMode(env: NodeJS.ProcessEnv): {
   advanced: AdvancedSelection;
 } {
   const legacySelection: LegacyToolSelection = {
-    ...(env.ASTRON_COLLECTION_TOOL_PRESET ? { preset: env.ASTRON_COLLECTION_TOOL_PRESET.trim() } : {}),
+    ...(env.ASTRON_COLLECTION_TOOL_PRESET
+      ? { preset: env.ASTRON_COLLECTION_TOOL_PRESET.trim() }
+      : {}),
     enabledTags: parseList(env.ASTRON_COLLECTION_ENABLED_TAGS),
     disabledTags: parseList(env.ASTRON_COLLECTION_DISABLED_TAGS),
   };
@@ -389,8 +401,20 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): McpConfig {
       1_000,
       MAX_TIMEOUT_MS,
     ),
-    retryAttempts: parseInteger("ASTRON_COLLECTION_RETRY_ATTEMPTS", env.ASTRON_COLLECTION_RETRY_ATTEMPTS, 2, 0, 5),
-    retryDelayMs: parseInteger("ASTRON_COLLECTION_RETRY_DELAY", env.ASTRON_COLLECTION_RETRY_DELAY, 1_000, 100, 30_000),
+    retryAttempts: parseInteger(
+      "ASTRON_COLLECTION_RETRY_ATTEMPTS",
+      env.ASTRON_COLLECTION_RETRY_ATTEMPTS,
+      2,
+      0,
+      5,
+    ),
+    retryDelayMs: parseInteger(
+      "ASTRON_COLLECTION_RETRY_DELAY",
+      env.ASTRON_COLLECTION_RETRY_DELAY,
+      1_000,
+      100,
+      30_000,
+    ),
     redactEnv: parseBoolean(env.ASTRON_COLLECTION_REDACT_ENV, true),
     redactFields: parsedFields.length > 0 ? parsedFields : DEFAULT_REDACTED_FIELDS,
     environment: parseChoice(

@@ -47,7 +47,9 @@ export function parseCustomHeaders(rawHeaders: string | undefined): Record<strin
   const customHeaders: Record<string, string> = {};
   for (const [name, value] of Object.entries(parsed)) {
     if (name.trim() === "") {
-      throw new Error("Environment variable ASTRON_COLLECTION_CUSTOM_HEADERS contains an empty header name");
+      throw new Error(
+        "Environment variable ASTRON_COLLECTION_CUSTOM_HEADERS contains an empty header name",
+      );
     }
 
     if (!HEADER_NAME_PATTERN.test(name)) {

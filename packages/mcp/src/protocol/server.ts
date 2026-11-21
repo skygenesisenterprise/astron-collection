@@ -1,8 +1,8 @@
 import { randomUUID } from "node:crypto";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { type CallToolResult, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
-import { IdentityResolver } from "../adapters/identity.js";
 import { AstronCollectionApi } from "../adapters/astronCollectionApi.js";
+import { IdentityResolver } from "../adapters/identity.js";
 import { buildCatalog, CapabilityRegistry, type Catalog } from "../catalog/registry.js";
 import { getConfig, type McpConfig } from "../config.js";
 import type { ApiPort } from "../contracts/api.js";

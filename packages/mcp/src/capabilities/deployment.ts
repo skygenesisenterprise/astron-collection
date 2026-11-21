@@ -201,7 +201,12 @@ export const executeDeploymentCapability = defineCapability({
   },
   inputSchema: z.object({
     applicationId,
-    title: z.string().min(1).max(200).optional().describe("Deployment title shown in Astron Collection"),
+    title: z
+      .string()
+      .min(1)
+      .max(200)
+      .optional()
+      .describe("Deployment title shown in Astron Collection"),
     description: z.string().max(2_000).optional().describe("Optional deployment description"),
     idempotencyKey,
     approvalToken,
