@@ -43,11 +43,12 @@ describe("bot configuration", () => {
 
   it("falls back to the shared credentials and says to scope them", () => {
     const config = parseBotConfig(
-      { DISCORD_TOKEN: "shared-token", DISCORD_CLIENT_ID: "123456789012345678" },
+      { DISCORD_TOKEN: "shared-token", DISCORD_APPLICATION_ID: "123456789012345678" },
       { bot: "protect" },
     );
 
     assert.equal(config.token, "shared-token");
+    assert.equal(config.clientId, "123456789012345678");
     assert.equal(config.usesSharedCredentials, true);
     assert.deepEqual(
       config.warnings.map((warning) => warning.variable).sort(),

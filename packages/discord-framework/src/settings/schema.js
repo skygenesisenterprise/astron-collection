@@ -192,7 +192,12 @@ export function botCredentialVariables(bot) {
     },
     {
       key: "clientId",
-      env: [`ASTRON_${prefix}_DISCORD_CLIENT_ID`, "DISCORD_CLIENT_ID"],
+      env: [
+        `ASTRON_${prefix}_DISCORD_CLIENT_ID`,
+        `ASTRON_${prefix}_DISCORD_APPLICATION_ID`,
+        "DISCORD_CLIENT_ID",
+        "DISCORD_APPLICATION_ID",
+      ],
       required: true,
       description: "This bot's Discord application id.",
     },
@@ -200,7 +205,10 @@ export function botCredentialVariables(bot) {
 }
 
 /** Variables every bot needs, independent of its domain. */
-export function runtimeVariables() {
+export function runtimeVariables({
+  eventUrlEnv = ["ASTRON_EVENT_URL"],
+  eventSecretEnv = ["ASTRON_EVENT_SECRET"],
+} = {}) {
   return [
     {
       key: "logLevel",
@@ -222,10 +230,10 @@ export function runtimeVariables() {
     { key: "commandScope", env: ["ASTRON_COMMAND_SCOPE"], type: "enum", values: ["global", "guild", "none"], default: "global" },
     { key: "commandGuildId", env: ["ASTRON_COMMAND_GUILD_ID"], default: "" },
     { key: "dataDir", env: ["ASTRON_DATA_DIR"], default: "" },
-    { key: "eventUrl", env: ["ASTRON_EVENT_URL"], default: "" },
+    { key: "eventUrl", env: eventUrlEnv, default: "" },
     {
       key: "eventSecret",
-      env: ["ASTRON_EVENT_SECRET"],
+      env: eventSecretEnv,
       default: "",
       secret: true,
       description: "HMAC secret shared with the event consumer.",

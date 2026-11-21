@@ -2,8 +2,10 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
 import {
+  botCredentialVariables,
   defineConfigSchema,
   loadConfig,
+  runtimeVariables,
 } from "../src/settings/schema.js";
 import { createSettingsStore } from "../src/settings/store.js";
 import { createMemoryDatabase } from "../src/storage/index.js";
@@ -24,6 +26,27 @@ const schema = defineConfigSchema({
 });
 
 describe("configuration schema", () => {
+  it("allows bots to extend shared event environment aliases without duplicate keys", () => {
+    const configSchema = defineConfigSchema({
+      bot: "automations",
+      variables: runtimeVariables({
+        eventUrlEnv: ["ASTRON_EVENT_URL", "ASTRON_LOGGER_EVENT_URL"],
+        eventSecretEnv: ["ASTRON_OUTBOUND_SECRET", "ASTRON_EVENT_SECRET"],
+      }),
+    });
+    const config = loadConfig({
+      schema: configSchema,
+      env: {
+        ASTRON_LOGGER_EVENT_URL: "https://logger.example/ingest/events",
+        ASTRON_OUTBOUND_SECRET: "outbound-secret",
+      },
+    });
+
+    assert.equal(config.values.eventUrl, "https://logger.example/ingest/events");
+    assert.equal(config.values.eventSecret, "outbound-secret");
+    assert.equal(config.ok, true);
+  });
+
   it("loads typed values from the bot-specific variables", () => {
     const config = loadConfig({
       schema,
@@ -48,6 +71,23 @@ describe("configuration schema", () => {
 
     assert.equal(config.ok, false);
     assert.deepEqual(config.missing, ["ASTRON_GUILD_DISCORD_TOKEN"]);
+  });
+
+  it("accepts DISCORD_APPLICATION_ID as the Discord application credential", () => {
+    const configSchema = defineConfigSchema({
+      bot: "automations",
+      variables: botCredentialVariables("automations"),
+    });
+    const config = loadConfig({
+      schema: configSchema,
+      env: {
+        DISCORD_TOKEN: "bot-token",
+        DISCORD_APPLICATION_ID: "123456789012345678",
+      },
+    });
+
+    assert.equal(config.ok, true);
+    assert.equal(config.values.clientId, "123456789012345678");
   });
 
   it("falls back to a default and never echoes a secret", () => {

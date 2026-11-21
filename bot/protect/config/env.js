@@ -23,20 +23,11 @@ const schema = defineConfigSchema({
   bot: BOT,
   variables: [
     ...botCredentialVariables(BOT),
-    ...runtimeVariables(),
+    ...runtimeVariables({
+      eventUrlEnv: ["ASTRON_EVENT_URL", "ASTRON_LOGGER_EVENT_URL"],
+      eventSecretEnv: ["ASTRON_EVENT_SECRET", "ASTRON_LOGGER_EVENT_SECRET"],
+    }),
     { key: "databasePath", env: ["ASTRON_DATABASE_PATH"], default: "" },
-    {
-      key: "eventUrl",
-      env: ["ASTRON_EVENT_URL", "ASTRON_LOGGER_EVENT_URL"],
-      default: "",
-      description: "Logger ingest endpoint for moderation events.",
-    },
-    {
-      key: "eventSecret",
-      env: ["ASTRON_EVENT_SECRET", "ASTRON_LOGGER_EVENT_SECRET"],
-      default: "",
-      secret: true,
-    },
     {
       key: "reviewChannelId",
       env: ["ASTRON_REVIEW_CHANNEL_ID"],

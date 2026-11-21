@@ -59,7 +59,12 @@ export function credentialEnvKeys(bot) {
   const prefix = toEnvPrefix(bot);
   return {
     token: [`ASTRON_${prefix}_DISCORD_TOKEN`, "DISCORD_TOKEN"],
-    clientId: [`ASTRON_${prefix}_DISCORD_CLIENT_ID`, "DISCORD_CLIENT_ID"],
+    clientId: [
+      `ASTRON_${prefix}_DISCORD_CLIENT_ID`,
+      `ASTRON_${prefix}_DISCORD_APPLICATION_ID`,
+      "DISCORD_CLIENT_ID",
+      "DISCORD_APPLICATION_ID",
+    ],
   };
 }
 
@@ -92,10 +97,10 @@ export function parseBotConfig(source = process.env, { bot = "unknown", required
       "using the shared DISCORD_TOKEN; set the bot-specific variable so each bot has its own token",
     );
   }
-  if (clientId.source === "DISCORD_CLIENT_ID") {
+  if (["DISCORD_CLIENT_ID", "DISCORD_APPLICATION_ID"].includes(clientId.source)) {
     warn(
       keys.clientId[0],
-      "using the shared DISCORD_CLIENT_ID; each bot needs its own Discord application",
+      "using a shared Discord application id; each bot needs its own Discord application",
     );
   }
 
@@ -139,7 +144,9 @@ export function parseBotConfig(source = process.env, { bot = "unknown", required
     clientId: clientId.value,
     tokenEnvVar: token.source,
     clientIdEnvVar: clientId.source,
-    usesSharedCredentials: token.source === "DISCORD_TOKEN" || clientId.source === "DISCORD_CLIENT_ID",
+    usesSharedCredentials:
+      token.source === "DISCORD_TOKEN" ||
+      ["DISCORD_CLIENT_ID", "DISCORD_APPLICATION_ID"].includes(clientId.source),
     environment: readString(source, ["NODE_ENV"], "development"),
     version: readString(source, ["APP_VERSION"], "1.1.0"),
     commitSha: readString(source, ["GIT_COMMIT_SHA", "COMMIT_SHA"], "unknown"),
