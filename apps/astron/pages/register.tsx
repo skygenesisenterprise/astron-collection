@@ -47,6 +47,8 @@ const REGISTER_PATH = "/register";
 const LOGIN_PATH = "/login";
 /** The organization step owns onboarding after the user account exists. */
 const CREATE_ACCOUNT_PATH = "/create-account";
+/** Where a freshly created account lands once its session exists. */
+const CHANNELS_PATH = "/channels/me";
 
 function GoogleMark({ className = "size-4" }: { className?: string }) {
 	return (
@@ -162,10 +164,10 @@ export default function RegisterPage({ IS_CLOUD }: Props) {
 		try {
 			const { error } = await authClient.signIn.social({
 				provider,
-				// Existing accounts finish on the sign-in page, new accounts continue
-				// to the organization step.
+				// Existing accounts finish on the sign-in page, new accounts land on
+				// their channels.
 				callbackURL: LOGIN_PATH,
-				newUserCallbackURL: CREATE_ACCOUNT_PATH,
+				newUserCallbackURL: CHANNELS_PATH,
 				errorCallbackURL: REGISTER_PATH,
 			});
 			if (error) {
@@ -209,8 +211,8 @@ export default function RegisterPage({ IS_CLOUD }: Props) {
 			}
 
 			// Cloud installations disable `autoSignIn` on sign-up, so the account
-			// exists without a session yet. Open it explicitly before onboarding:
-			// without one, /create-account would send the new account to /login.
+			// exists without a session yet. Open it explicitly before moving on:
+			// without one, /channels/me would send the new account to /login.
 			const { data: signedIn } = await authClient.getSession();
 			if (!signedIn?.session) {
 				const { error: signInError } = await authClient.signIn.email({
@@ -234,7 +236,7 @@ export default function RegisterPage({ IS_CLOUD }: Props) {
 
 			toast.success("Account created successfully");
 			// Document navigation so the next request carries the fresh session.
-			window.location.assign(CREATE_ACCOUNT_PATH);
+			window.location.assign(CHANNELS_PATH);
 		} catch {
 			toast.error("An error occurred while creating your account");
 		} finally {

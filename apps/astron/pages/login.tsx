@@ -12,7 +12,6 @@ import {
 	isAdminPresent,
 } from "@astron-collection/server";
 import { validateRequest } from "@astron-collection/server/lib/auth";
-import { readOnboardingStatus } from "@astron-collection/server/services/onboarding";
 import { standardSchemaResolver as zodResolver } from "@hookform/resolvers/standard-schema";
 import {
 	DiscordLogoIcon,
@@ -49,32 +48,16 @@ const SAVED_LOGIN_KEY = "astron-collection.saved-login";
 const LOGIN_PATH = "/login";
 /** The second factor lives on its own page; login only hands the challenge over. */
 const TWO_FACTOR_PATH = "/two-factor";
-/** Where a signed-in account that owns no workspace finishes onboarding. */
-const CREATE_ACCOUNT_PATH = "/create-account";
+/** Post-login landing page, resolved by the server after the session exists. */
+const CHANNELS_PATH = "/channels/me";
 
 /**
- * Opens the workspace of the account that just signed in. The active
- * organization lives in the session, not in the sign-in response, so it is read
- * back once the session cookie exists.
+ * Finishes a successful sign-in with a document navigation. The next request
+ * carries the fresh session cookie, so `/login` answers with a 307 to the
+ * channels page instead of the client guessing a destination.
  */
-async function openWorkspace() {
-	let organizationId: string | null = null;
-	try {
-		const { data } = await authClient.getSession();
-		const session = data?.session as
-			| { activeOrganizationId?: string | null }
-			| null
-			| undefined;
-		organizationId = session?.activeOrganizationId ?? null;
-	} catch {
-		// Reading the session back must not block a successful sign-in.
-	}
-
-	// Document navigation: the workspace route owns the dashboard, and the next
-	// request carries the fresh session instead of the client guessing.
-	window.location.assign(
-		organizationId ? `/${organizationId}/home` : CREATE_ACCOUNT_PATH,
-	);
+function finishSignIn() {
+	window.location.assign(LOGIN_PATH);
 }
 
 /**
@@ -332,7 +315,7 @@ export default function LoginPage({ IS_CLOUD, enforceSSO }: Props) {
 			}
 
 			toast.success("Logged in successfully");
-			await openWorkspace();
+			finishSignIn();
 		} catch {
 			toast.error("An error occurred while logging in");
 		} finally {
@@ -586,18 +569,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
 	if (IS_CLOUD) {
 		try {
-			const { user, session } = await validateRequest(context.req);
+			const { user } = await validateRequest(context.req);
 			if (user) {
-				// The workspace stored on the session may have been deleted since:
-				// only persisted memberships decide where the account belongs.
-				const status = await readOnboardingStatus(
-					user.id,
-					session?.activeOrganizationId,
-				);
+				// A signed-in visitor belongs to the channels page. `permanent: false`
+				// answers with a 307, so the destination stays a server decision.
 				return {
 					redirect: {
 						permanent: false,
-						destination: status.destination ?? CREATE_ACCOUNT_PATH,
+						destination: CHANNELS_PATH,
 					},
 				};
 			}
@@ -615,17 +594,15 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 	// `/login` always renders, including before the first admin exists: the page
 	// uses `hasAdmin` to show the setup CTA, so no 307 to `/register` is needed.
 	const hasAdmin = await isAdminPresent();
-	const { user, session } = await validateRequest(context.req);
+	const { user } = await validateRequest(context.req);
 
 	if (user) {
-		const status = await readOnboardingStatus(
-			user.id,
-			session?.activeOrganizationId,
-		);
+		// Same 307 as above: signing in and coming back here both land on the
+		// channels page.
 		return {
 			redirect: {
 				permanent: false,
-				destination: status.destination ?? CREATE_ACCOUNT_PATH,
+				destination: CHANNELS_PATH,
 			},
 		};
 	}
