@@ -34,7 +34,26 @@ import { ldapSso } from "./plugins/ldap-sso";
 import { socialSso } from "./plugins/social-sso";
 import { webauthnTwoFactor } from "./plugins/webauthn-two-factor";
 
-const resolveTrustedOrigins = async (opts?: { request?: Request }) => {
+/**
+ * Better Auth calls a dynamic `trustedOrigins` function with the raw `Request`
+ * (and some internal paths pass a `{ request }` wrapper). Accept both shapes so
+ * a proxied dashboard host such as `dash.astron-collection.localhost` is
+ * actually seen by the resolver.
+ */
+type TrustedOriginInput = Request | { request?: Request };
+
+const normalizeTrustedOriginRequest = (
+	input?: TrustedOriginInput,
+): Request | undefined => {
+	if (!input) return undefined;
+	if (typeof (input as Request).headers?.get === "function") {
+		return input as Request;
+	}
+	return (input as { request?: Request }).request;
+};
+
+const resolveTrustedOrigins = async (input?: TrustedOriginInput) => {
+	const opts = input ? { request: normalizeTrustedOriginRequest(input) } : undefined;
 	try {
 		if (IS_CLOUD) {
 			return await getTrustedOrigins();
@@ -111,8 +130,39 @@ const resolveTrustedOrigins = async (opts?: { request?: Request }) => {
 	}
 };
 
+/**
+ * Auth callbacks and state cookies must use the exact host the browser is on.
+ * A static `BETTER_AUTH_URL` of `localhost:3000` breaks the OAuth state cookie
+ * when the panel is opened at `dash.astron-collection.localhost`: Discord
+ * redirects to `localhost`, which is a different cookie host.
+ *
+ * Self-hosted installs therefore derive the base URL from the request while
+ * keeping an allowlist. Cloud keeps its single canonical URL.
+ */
+const resolveAuthBaseURL = (): string | { allowedHosts: string[]; fallback: string } => {
+	const fallback =
+		process.env.BETTER_AUTH_URL ?? "http://localhost:3000";
+	if (IS_CLOUD) return fallback;
+
+	const hosts = new Set<string>();
+	try {
+		hosts.add(new URL(fallback).host);
+	} catch {}
+	for (const origin of (process.env.BETTER_AUTH_TRUSTED_ORIGINS ?? "").split(",")) {
+		try {
+			const value = origin.trim();
+			if (value) hosts.add(new URL(value).host);
+		} catch {}
+	}
+	hosts.add("localhost:3000");
+	hosts.add("127.0.0.1:3000");
+
+	return { allowedHosts: Array.from(hosts), fallback };
+};
+
 const createBetterAuth = () =>
 	betterAuth({
+		baseURL: resolveAuthBaseURL(),
 		database: drizzleAdapter(db, {
 			provider: "pg",
 			schema: schema,
@@ -156,6 +206,8 @@ const createBetterAuth = () =>
 		// Only register a social provider when its credentials are configured:
 		// an entry with missing env vars makes better-auth warn on every boot
 		// and offers a sign-in path that can never succeed.
+		// Both local (DISCORD_*) and deployment (OAUTH_DISCORD_*) names are
+		// accepted; Compose ships the latter.
 		socialProviders: {
 			...(process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET
 				? {
@@ -173,21 +225,48 @@ const createBetterAuth = () =>
 						},
 					}
 				: {}),
+			// Better Auth keeps `identify` and `email` as this provider's default
+			// scopes; `guilds` is added for the directory. No `bot` scope is ever
+			// requested here — installation is a separate OAuth flow.
+			...((process.env.DISCORD_CLIENT_ID ??
+				process.env.OAUTH_DISCORD_CLIENT_ID) &&
+			(process.env.DISCORD_CLIENT_SECRET ??
+				process.env.OAUTH_DISCORD_CLIENT_SECRET)
+				? {
+						discord: {
+							clientId:
+								process.env.DISCORD_CLIENT_ID ??
+								process.env.OAUTH_DISCORD_CLIENT_ID!,
+							clientSecret:
+								process.env.DISCORD_CLIENT_SECRET ??
+								process.env.OAUTH_DISCORD_CLIENT_SECRET!,
+							scope: ["guilds"],
+							// Better Auth defaults to `prompt=none`, which cannot grant a
+							// newly added `guilds` scope when the app was already
+							// authorized for identify/email only.
+							prompt: "consent",
+						},
+					}
+				: {}),
 		},
 		logger: {
 			disabled: process.env.NODE_ENV === "production",
 		},
-		trustedOrigins: async (opts: any) => {
-			return resolveTrustedOrigins(opts);
-		},
+		trustedOrigins: async (request?: TrustedOriginInput) =>
+			resolveTrustedOrigins(request),
 		hooks: {
 			before: createAuthMiddleware(async (ctx) => {
-				const request =
-					(ctx as any).request || (ctx.context as any)?.request || null;
-				ctx.context.trustedOrigins = [
-					...(ctx.context.baseURL ? [new URL(ctx.context.baseURL).origin] : []),
-					...(await resolveTrustedOrigins(request ? { request } : undefined)),
-				].filter(Boolean as any);
+				const request = (ctx as any).request || (ctx.context as any)?.request;
+				// Append to the per-request list Better Auth already resolved from
+				// env/settings/plugins. Replacing it used to drop
+				// BETTER_AUTH_TRUSTED_ORIGINS, which broke proxied dashboard hosts.
+				ctx.context.trustedOrigins = Array.from(
+					new Set([
+						...(ctx.context.trustedOrigins ?? []),
+						...(ctx.context.baseURL ? [new URL(ctx.context.baseURL).origin] : []),
+						...(await resolveTrustedOrigins(request)),
+					].filter((origin): origin is string => Boolean(origin))),
+				);
 
 				const isBlockedAuthPath =
 					ctx.path.startsWith("/sign-in/email") ||
@@ -566,6 +645,10 @@ const { handler, api } = globalForAuth.betterAuthInstance;
 
 const _auth = {
 	handler,
+	// Server-side only: resolves the token from the Better Auth `account` row,
+	// refreshing it through the provider when needed. Never re-exported to a
+	// client bundle.
+	getAccessToken: api.getAccessToken,
 	createApiKey: api.createApiKey,
 	registerSSOProvider: api.registerSSOProvider,
 	updateSSOProvider: api.updateSSOProvider,

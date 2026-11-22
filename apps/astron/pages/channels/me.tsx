@@ -19,7 +19,7 @@ import { useState } from "react";
 import {
 	formatManagerDay,
 	MANAGER_ACTIVITY,
-	MANAGER_SERVERS,
+	toManagerServer,
 } from "@/components/manager/data/contracts";
 import { ManagerShell } from "@/components/manager/layout/manager-shell";
 import type { ManagerUser } from "@/components/manager/server";
@@ -32,6 +32,7 @@ import {
 	StatusPill,
 } from "@/components/manager/shared/states";
 import { cn } from "@/lib/utils";
+import { api } from "@/utils/api";
 
 const HOME_TABS: Array<{
 	href: string;
@@ -97,14 +98,17 @@ const QUICK_LINKS: Array<{
  */
 export default function PersonalHomePage({ user }: { user: ManagerUser }) {
 	const [query, setQuery] = useState("");
+	const serversQuery = api.discord.guilds.list.useQuery(undefined, {
+		staleTime: 30_000,
+		refetchOnWindowFocus: true,
+	});
 
 	const needle = query.trim().toLowerCase();
 	const searching = needle.length > 0;
+	const allServers = (serversQuery.data?.servers ?? []).map(toManagerServer);
 	const visibleServers = searching
-		? MANAGER_SERVERS.servers.filter((server) =>
-				server.name.toLowerCase().includes(needle),
-			)
-		: MANAGER_SERVERS.servers;
+		? allServers.filter((server) => server.name.toLowerCase().includes(needle))
+		: allServers;
 	const visibleLinks = searching
 		? QUICK_LINKS.filter((link) =>
 				`${link.label} ${link.description}`.toLowerCase().includes(needle),
@@ -229,8 +233,10 @@ export default function PersonalHomePage({ user }: { user: ManagerUser }) {
 									description={
 										searching
 											? `Nothing matches “${query.trim()}”. Clear the search to see everything.`
-											: (MANAGER_SERVERS.reason ??
-												"Join a Discord server with Astron installed and it will appear here.")
+											: serversQuery.isPending
+												? "Loading the servers you can manage from Discord…"
+												: (serversQuery.data?.reason ??
+													"You are not an owner or administrator of any of your Discord servers.")
 									}
 									action={
 										<ActionLink href="/channels/me/servers" size="sm">

@@ -12,6 +12,7 @@ import { communityRouter } from "./routers/community";
 import { composeRouter } from "./routers/compose";
 import { deploymentRouter } from "./routers/deployment";
 import { destinationRouter } from "./routers/destination";
+import { discordRouter } from "./routers/discord";
 import { dnsProviderRouter } from "./routers/dns-provider";
 import { dockerRouter } from "./routers/docker";
 import { dockerDiskUsageRouter } from "./routers/docker-disk-usage";
@@ -88,6 +89,7 @@ export const appRouter = createTRPCRouter({
 	compose: composeRouter,
 	deployment: deploymentRouter,
 	destination: destinationRouter,
+	discord: discordRouter,
 	dnsProvider: dnsProviderRouter,
 	docker: dockerRouter,
 	dockerDiskUsage: dockerDiskUsageRouter,

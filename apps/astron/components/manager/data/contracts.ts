@@ -1,87 +1,89 @@
 /**
  * Personal Space data contracts.
  *
- * The application only renders data it actually has. Several concepts the
- * Personal Space is designed around — the Discord guild directory, Astron bot
- * installations, user notifications and a personal activity feed — have no
- * database model in this repository yet. Instead of inventing rows, each
- * contract below describes the shape the UI already consumes, together with an
- * explicitly empty snapshot and the backend capability that must be added to
- * make it real.
+ * Guild data comes from the backend directory (`discord.guilds.list`). The
+ * canonical shapes live in the server package and are imported as types only,
+ * so no database or OAuth code reaches the browser bundle. The UI keeps its
+ * own naming (`iconUrl`, `id`) as an adapter for the existing components.
  *
- * Required backend work (not implemented here):
- * 1. A Discord guild directory resolved from the user's OAuth guild scopes,
- *    exposing membership, bot installation, workspace availability and the
- *    caller's workspace authorization as four independent values.
- * 2. A notification store addressed to a user (read/unread, category, target),
- *    with mark-as-read and mark-all-as-read mutations.
- * 3. A personal activity feed written by account, connection, security and
- *    workspace events.
- * 4. A saved-items store scoped to the user, keyed by a typed item reference.
- *
- * None of these values are fabricated: every consumer receives the empty
- * snapshots below until a real source is wired in.
+ * Notification, activity and saved-item collections remain local empty
+ * snapshots until their own stores exist; they are never filled with invented
+ * rows.
  */
+import type {
+	DiscordConnectionStatus,
+	DiscordGuildListResult,
+	DiscordGuildSyncStatus,
+	DiscordServerItem,
+	DiscordServerProduct,
+} from "@astron-collection/server/services/discord-guild-directory/contracts";
 
-/** Whether the signed-in user is a member of the Discord server. */
-export type DiscordMembershipState = "member" | "unknown";
+export type {
+	AstronInstallationState,
+	DiscordMembershipState,
+	WorkspaceAuthorizationState,
+	WorkspaceAvailabilityState,
+} from "@astron-collection/server/services/discord-guild-directory/contracts";
 
-/** Whether an Astron bot is installed in the Discord server. */
-export type AstronInstallationState = "installed" | "not-installed" | "unknown";
+export type ManagerServerProduct = DiscordServerProduct;
 
-/** Whether Astron Manager can expose a workspace for the server. */
-export type WorkspaceAvailabilityState =
-	| "available"
-	| "unavailable"
-	| "unknown";
-
-/**
- * What the signed-in user may do inside the workspace. This is resolved
- * server-side; a Discord membership or an installation never implies it.
- */
-export type WorkspaceAuthorizationState =
-	| "administrator"
-	| "manage-server"
-	| "none"
-	| "unknown";
-
-export interface ManagerServerProduct {
+/** A server entry of the rail, with legacy UI aliases. */
+export interface ManagerServer extends DiscordServerItem {
+	/** @deprecated Use `guildId`; the Discord snowflake is the canonical id. */
 	id: string;
-	name: string;
-	enabled: boolean;
-}
-
-/**
- * A server entry of the rail. The four state fields stay separate on purpose:
- * membership, installation, workspace availability and authorization are
- * different questions with different answers.
- */
-export interface ManagerServer {
-	id: string;
-	name: string;
+	/** @deprecated Use `icon`. */
 	iconUrl: string | null;
-	membership: DiscordMembershipState;
-	installation: AstronInstallationState;
-	workspace: WorkspaceAvailabilityState;
-	authorization: WorkspaceAuthorizationState;
-	products: ManagerServerProduct[];
 }
 
 export interface ManagerServersSnapshot {
-	status: "ready" | "unavailable";
+	status: DiscordGuildListResult["status"];
 	servers: ManagerServer[];
 	/** Human-readable reason the directory cannot be listed; null when ready. */
 	reason: string | null;
+	manageableOnly: boolean;
+	connection: DiscordConnectionStatus;
+	sync: DiscordGuildSyncStatus;
+}
+
+/** Adapts a backend item to the names the existing rail components use. */
+export function toManagerServer(server: DiscordServerItem): ManagerServer {
+	return { ...server, id: server.guildId, iconUrl: server.icon };
 }
 
 export const SERVER_DIRECTORY_UNAVAILABLE_REASON =
-	"This deployment has no Discord guild directory or Astron bot registry connected, so your servers cannot be listed yet.";
+	"Link your Discord account to list the servers you can manage.";
 
-/** The rail and the server pages both read this snapshot. */
+/** Empty fallback used before the first query resolves; never a data source. */
 export const MANAGER_SERVERS: ManagerServersSnapshot = {
 	status: "unavailable",
 	servers: [],
 	reason: SERVER_DIRECTORY_UNAVAILABLE_REASON,
+	manageableOnly: true,
+	connection: {
+		linked: false,
+		status: "disconnected",
+		lastAttemptAt: null,
+		lastSuccessfulSyncAt: null,
+		lastError: null,
+		errorCode: null,
+		guildCount: 0,
+		consecutiveFailures: 0,
+		accountId: null,
+		discordUserId: null,
+		scopes: [],
+		canListGuilds: false,
+		linkedAt: null,
+	},
+	sync: {
+		linked: false,
+		status: "disconnected",
+		lastAttemptAt: null,
+		lastSuccessfulSyncAt: null,
+		lastError: null,
+		errorCode: null,
+		guildCount: 0,
+		consecutiveFailures: 0,
+	},
 };
 
 export type NotificationCategory =

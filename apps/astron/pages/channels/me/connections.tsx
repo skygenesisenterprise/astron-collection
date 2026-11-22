@@ -117,6 +117,9 @@ export default function ConnectionsPage({ user }: { user: ManagerUser }) {
 			const { error: linkError } = await authClient.linkSocial({
 				provider: providerId,
 				callbackURL: CALLBACK_URL,
+				// Discord scopes come from the provider config: Better Auth adds
+				// `identify`/`email` and the server adds `guilds`. Passing scopes
+				// here would duplicate them. The `bot` scope is never requested.
 			});
 			if (linkError) {
 				toast.error(

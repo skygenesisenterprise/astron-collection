@@ -1,19 +1,48 @@
-import { PlusIcon } from "@phosphor-icons/react";
+"use client";
+
+import { ArrowsClockwiseIcon, PlusIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { MANAGER_SERVERS } from "../data/contracts";
+import { api } from "@/utils/api";
+import {
+	type ManagerServersSnapshot,
+	toManagerServer,
+} from "../data/contracts";
 
 /**
  * Persistent server rail.
  *
- * The Personal Space entry is always present. Server entries come exclusively
- * from the guild directory contract; because this deployment has no directory
- * yet, the rail renders the empty state affordance instead of placeholder
- * servers. Adding a real source only means filling `MANAGER_SERVERS.servers`.
+ * Every entry comes from the authenticated guild directory. Bot installations
+ * are only enrichment and never decide which servers are listed. The query is
+ * shared with the personal home and the server directory, so a refresh or a
+ * permission change updates every surface.
  */
-export function ServerRail({ pathname }: { pathname: string }) {
+export function ServerRail({
+	pathname,
+	initialServers,
+}: {
+	pathname: string;
+	initialServers?: ManagerServersSnapshot;
+}) {
+	const utils = api.useUtils();
+	const query = api.discord.guilds.list.useQuery(undefined, {
+		initialData: initialServers,
+		refetchOnWindowFocus: true,
+		staleTime: 30_000,
+		retry: 1,
+	});
+	const sync = api.discord.guilds.sync.useMutation({
+		onSuccess: async () => {
+			await utils.discord.guilds.list.invalidate();
+		},
+	});
+
 	const personalActive =
 		pathname === "/channels/me" || pathname.startsWith("/channels/me/");
+	const servers = (query.data?.servers ?? []).map(toManagerServer);
+	const disconnected = query.data?.connection.linked === false;
+	const loading = query.isPending && !query.data;
+	const hasError = query.isError;
 
 	return (
 		<nav
@@ -44,12 +73,12 @@ export function ServerRail({ pathname }: { pathname: string }) {
 
 			<span aria-hidden="true" className="my-1 h-px w-8 bg-zenth-line" />
 
-			{MANAGER_SERVERS.servers.map((server) => {
-				const href = `/channels/${server.id}`;
+			{servers.map((server) => {
+				const href = `/channels/${server.guildId}`;
 				const active = pathname === href || pathname.startsWith(`${href}/`);
 				return (
 					<Link
-						key={server.id}
+						key={server.guildId}
 						href={href}
 						aria-label={`Open the ${server.name} workspace`}
 						aria-current={active ? "page" : undefined}
@@ -85,14 +114,57 @@ export function ServerRail({ pathname }: { pathname: string }) {
 				);
 			})}
 
+			{loading && (
+				<div
+					role="status"
+					aria-label="Loading servers"
+					className="size-12 animate-pulse rounded-2xl bg-zenth-tint"
+				/>
+			)}
+
+			{hasError && (
+				<Link
+					href="/channels/me/servers"
+					title="Could not load servers — open the server directory to retry"
+					aria-label="Could not load servers"
+					className="flex size-12 items-center justify-center rounded-2xl border border-dashed border-zenth-danger/40 text-xs text-zenth-danger"
+				>
+					!
+				</Link>
+			)}
+
 			<Link
 				href="/channels/me/servers"
-				aria-label="Add or browse Discord servers"
-				title="Add or browse servers"
+				aria-label={
+					disconnected ? "Connect Discord to list servers" : "Add or browse Discord servers"
+				}
+				title={disconnected ? "Connect Discord" : "Add or browse servers"}
 				className="flex size-12 items-center justify-center rounded-2xl border border-dashed border-zenth-line text-zenth-subtle transition-colors outline-none hover:border-zenth-strong/40 hover:text-zenth-strong focus-visible:ring-2 focus-visible:ring-zenth-focus"
 			>
 				<PlusIcon aria-hidden="true" className="size-5" />
 			</Link>
+
+			{query.data?.connection.linked && (
+				<button
+					type="button"
+					onClick={() => sync.mutate()}
+					disabled={sync.isPending}
+					aria-label="Refresh server list"
+					title={sync.isPending ? "Refreshing…" : "Refresh server list"}
+					className="flex size-9 items-center justify-center rounded-xl text-zenth-subtle transition-colors outline-none hover:bg-zenth-tint hover:text-zenth-strong focus-visible:ring-2 focus-visible:ring-zenth-focus disabled:opacity-50"
+				>
+					<ArrowsClockwiseIcon
+						aria-hidden="true"
+						className={cn("size-4", sync.isPending && "animate-spin")}
+					/>
+				</button>
+			)}
+
+			{!loading && servers.length === 0 && (
+				<p className="px-1 text-center text-[10px] leading-tight text-zenth-subtle">
+					{disconnected ? "Connect Discord" : "No manageable servers"}
+				</p>
+			)}
 		</nav>
 	);
 }

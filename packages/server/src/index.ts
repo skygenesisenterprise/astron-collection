@@ -25,6 +25,7 @@ export * from "./services/compose";
 export * from "./services/deployment";
 export * from "./services/deployment-target";
 export * from "./services/destination";
+export * from "./services/discord-guild-directory";
 export * from "./services/dns-provider";
 export * from "./services/docker";
 export * from "./services/docker-image";

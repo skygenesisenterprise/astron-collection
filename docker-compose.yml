@@ -317,6 +317,14 @@ services:
     image: ${ASTRON_COLLECTION_IMAGE:-ghcr.io/skygenesisenterprise/astron-manager}:${ASTRON_COLLECTION_VERSION:-latest}
     container_name: astron-collection-api
     restart: unless-stopped
+    # Docker's embedded resolver inherits the host's systemd-resolved stub
+    # (127.0.0.53) as its upstream. That address is not a resolver inside the
+    # container, so external names fail with EAI_AGAIN. The API needs them for
+    # the Discord OAuth token exchange and for /users/@me/guilds. Docker still
+    # handles compose service names through its embedded DNS.
+    dns:
+      - ${ASTRON_COLLECTION_DNS_RESOLVER_1:-1.1.1.1}
+      - ${ASTRON_COLLECTION_DNS_RESOLVER_2:-8.8.8.8}
     volumes:
       # The API creates networks, containers and services for the applications
       # deployed from the dashboard: without this mount it logs ENOENT

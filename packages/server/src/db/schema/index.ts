@@ -11,6 +11,7 @@ export * from "./community";
 export * from "./compose";
 export * from "./deployment";
 export * from "./destination";
+export * from "./discord";
 export * from "./dns-provider";
 export * from "./domain";
 export * from "./environment";
