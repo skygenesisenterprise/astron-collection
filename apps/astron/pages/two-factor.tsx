@@ -1,16 +1,12 @@
-import {
-	GlobeIcon,
-	KeyIcon,
-	WarningCircleIcon,
-} from "@phosphor-icons/react";
-import { startAuthentication } from "@simplewebauthn/browser";
 import { Banner, Button, Field, Input, Text } from "@astron-collection/react";
 import { validateRequest } from "@astron-collection/server/lib/auth";
+import { KeyIcon, WarningCircleIcon } from "@phosphor-icons/react";
+import { startAuthentication } from "@simplewebauthn/browser";
 import type { GetServerSidePropsContext } from "next";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { type FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { AuthLayout, fieldLabel } from "@/components/auth/auth-layout";
 import { authClient } from "@/lib/auth-client";
 import {
 	getTwoFactorMethod,
@@ -50,7 +46,11 @@ function workspaceDestination(organizationId: string | null | undefined) {
 function resolveFactor(summary: TwoFactorMethodSummary): Factor {
 	if (summary.method === "securityKey") return "securityKey";
 	if (summary.method === "totp") return "totp";
-	return summary.hasTotp ? "totp" : summary.hasSecurityKey ? "securityKey" : "totp";
+	return summary.hasTotp
+		? "totp"
+		: summary.hasSecurityKey
+			? "securityKey"
+			: "totp";
 }
 
 /**
@@ -231,7 +231,9 @@ export default function TwoFactorPage() {
 			// Dismissing the browser's key prompt is not an error worth a banner
 			// toast, but the page must stay usable for a second attempt.
 			if (isCeremonyCancellation(caught)) {
-				setError("The security key prompt was cancelled. Try again when you're ready.");
+				setError(
+					"The security key prompt was cancelled. Try again when you're ready.",
+				);
 				return;
 			}
 			const message =
@@ -248,14 +250,21 @@ export default function TwoFactorPage() {
 	const isSecurityKeyScreen = state === "ready" && factor === "securityKey";
 	const heading = isSecurityKeyScreen
 		? "Verify with a security key"
-		: "Two-Factor Authentication";
+		: "Two-factor authentication";
+	const subtitle =
+		state === "loading"
+			? "Checking your sign-in…"
+			: isSecurityKeyScreen
+				? "Use the security key registered on this account."
+				: "Enter a code from your authenticator app.";
+
 	const errorBanner = error && (
 		<Banner
 			variant="error"
 			size="sm"
 			icon={<WarningCircleIcon className="size-4" />}
 			description={error}
-			className="mt-6"
+			className="mt-5"
 		/>
 	);
 
@@ -266,9 +275,9 @@ export default function TwoFactorPage() {
 					variant="secondary"
 					size="sm"
 					as="p"
-					DANGEROUS_className="mt-6 text-center"
+					DANGEROUS_className="mt-5 text-center text-zenth-subtle"
 				>
-					Checking your sign-in…
+					Waiting for the server…
 				</Text>
 			);
 		}
@@ -281,13 +290,13 @@ export default function TwoFactorPage() {
 						size="sm"
 						icon={<WarningCircleIcon className="size-4" />}
 						description="This sign-in expired or was already used. Sign in again to start a new one."
-						className="mt-6"
+						className="mt-5"
 					/>
 					<Button
 						type="button"
 						variant="primary"
 						size="lg"
-						className="mt-6 w-full justify-center rounded-lg"
+						className="mt-4 w-full justify-center rounded-[3px]"
 						onClick={() => router.replace(RESTART_LOGIN_PATH)}
 					>
 						Return to sign in
@@ -299,7 +308,7 @@ export default function TwoFactorPage() {
 		if (isSecurityKeyScreen) {
 			return (
 				<>
-					<div className="mt-8 flex justify-center">
+					<div className="mt-5 flex justify-center">
 						<KeyIcon
 							className="size-14 text-zenth-brand"
 							weight="duotone"
@@ -310,11 +319,11 @@ export default function TwoFactorPage() {
 						variant="secondary"
 						size="sm"
 						as="p"
-						DANGEROUS_className="mt-6 text-center leading-relaxed"
+						DANGEROUS_className="mt-4 text-center leading-relaxed text-zenth-subtle"
 					>
 						Insert your security key and touch it to verify your identity. If
-						your device offers a passkey, confirm with Face ID, a fingerprint
-						or your screen lock.
+						your device offers a passkey, confirm with Face ID, a fingerprint or
+						your screen lock.
 					</Text>
 
 					{errorBanner}
@@ -323,11 +332,11 @@ export default function TwoFactorPage() {
 						<form
 							method="post"
 							onSubmit={onSubmitCode}
-							className="mt-8 space-y-5"
+							className="mt-5 space-y-5"
 							id="two-factor-recovery-form"
 						>
 							<Field
-								label="Recovery code"
+								label={fieldLabel("Recovery code")}
 								description="Codes look like ABCDE-FGHJKM. Each one works only once."
 							>
 								<Input
@@ -341,6 +350,7 @@ export default function TwoFactorPage() {
 									autoFocus
 									value={code}
 									onChange={(event) => setCode(event.target.value)}
+									className="bg-zenth-base rounded-[3px]"
 								/>
 							</Field>
 
@@ -348,7 +358,7 @@ export default function TwoFactorPage() {
 								type="submit"
 								variant="primary"
 								size="lg"
-								className="w-full justify-center rounded-lg"
+								className="w-full justify-center rounded-[3px]"
 								loading={isSubmitting}
 							>
 								Verify recovery code
@@ -358,7 +368,7 @@ export default function TwoFactorPage() {
 									type="button"
 									variant="ghost"
 									size="sm"
-									className="mx-auto"
+									className="mx-auto text-zenth-subtle"
 									onClick={toggleRecovery}
 								>
 									Use your security key instead
@@ -366,13 +376,13 @@ export default function TwoFactorPage() {
 							</div>
 						</form>
 					) : (
-						<div className="mt-8 space-y-3">
+						<div className="mt-5 space-y-3">
 							<Button
 								type="button"
 								variant="primary"
 								size="lg"
 								icon={KeyIcon}
-								className="w-full justify-center rounded-lg"
+								className="w-full justify-center rounded-[3px]"
 								loading={isKeyLoading}
 								onClick={signInWithSecurityKey}
 							>
@@ -383,7 +393,7 @@ export default function TwoFactorPage() {
 									type="button"
 									variant="ghost"
 									size="sm"
-									className="mx-auto"
+									className="mx-auto text-zenth-subtle"
 									onClick={toggleRecovery}
 								>
 									Can&apos;t access your 2FA device or backup codes?
@@ -397,25 +407,18 @@ export default function TwoFactorPage() {
 
 		return (
 			<>
-				<Text
-					variant="secondary"
-					size="sm"
-					as="p"
-					DANGEROUS_className="mt-6 text-center leading-relaxed"
-				>
-					Enter an authenticator app code or a recovery code:
-				</Text>
-
 				{errorBanner}
 
 				<form
 					method="post"
 					onSubmit={onSubmitCode}
-					className="mt-6 space-y-5"
+					className="mt-5 space-y-5"
 					id="two-factor-form"
 				>
 					<Field
-						label={recoveryMode ? "Recovery code" : "Authenticator app code"}
+						label={fieldLabel(
+							recoveryMode ? "Recovery code" : "Authenticator app code",
+						)}
 						description={
 							recoveryMode
 								? "Codes look like ABCDE-FGHJKM. Each one works only once."
@@ -434,6 +437,7 @@ export default function TwoFactorPage() {
 							autoFocus
 							value={code}
 							onChange={(event) => setCode(event.target.value)}
+							className="bg-zenth-base rounded-[3px]"
 						/>
 					</Field>
 
@@ -442,7 +446,7 @@ export default function TwoFactorPage() {
 							type="button"
 							variant="ghost"
 							size="sm"
-							className="mx-auto"
+							className="mx-auto text-zenth-subtle"
 							onClick={toggleRecovery}
 						>
 							{recoveryMode
@@ -451,16 +455,14 @@ export default function TwoFactorPage() {
 						</Button>
 					</div>
 
-					<div className="h-px w-full bg-zenth-line" aria-hidden="true" />
-
 					<Button
 						type="submit"
 						variant="primary"
 						size="lg"
-						className="w-full justify-center rounded-lg"
+						className="w-full justify-center rounded-[3px]"
 						loading={isSubmitting}
 					>
-						Log in
+						Login
 					</Button>
 				</form>
 
@@ -470,7 +472,7 @@ export default function TwoFactorPage() {
 							type="button"
 							variant="ghost"
 							size="sm"
-							className="mx-auto"
+							className="mx-auto text-zenth-subtle"
 							onClick={useSecurityKeyInstead}
 						>
 							Use a security key instead
@@ -482,61 +484,35 @@ export default function TwoFactorPage() {
 	})();
 
 	return (
-		<main
-			data-zenth-mode="light"
-			className="flex min-h-svh flex-col bg-zenth-base text-zenth-default"
-		>
-			<Head>
-				<title>Astron Collection Dashboard | Two-factor authentication</title>
-			</Head>
-			<header className="flex h-20 items-center justify-end gap-4 px-6">
-				<div className="flex items-center gap-3">
+		<AuthLayout
+			pageTitle="Astron Collection | Two-factor authentication"
+			headingId="two-factor-heading"
+			title={heading}
+			subtitle={subtitle}
+			action={
+				<Button
+					variant="secondary"
+					onClick={() => router.push(RESTART_LOGIN_PATH)}
+				>
+					Back to sign in
+				</Button>
+			}
+			footnote={
+				state === "ready" && (
 					<Text
 						variant="secondary"
-						size="sm"
-						as="span"
-						DANGEROUS_className="inline-flex items-center gap-1.5"
+						size="xs"
+						as="p"
+						DANGEROUS_className="text-center leading-relaxed text-zenth-subtle"
 					>
-						<GlobeIcon className="size-4" aria-hidden="true" />
-						English
+						Lost access to your 2FA device and recovery codes? Contact your
+						administrator to unlock the account.
 					</Text>
-					<Button
-						variant="outline"
-						onClick={() => router.push(RESTART_LOGIN_PATH)}
-					>
-						Back to sign in
-					</Button>
-				</div>
-			</header>
-
-			<section
-				aria-labelledby="two-factor-heading"
-				aria-busy={state === "loading"}
-				className="flex flex-1 justify-center px-6 pt-12 pb-12 sm:px-4"
-			>
-				<div className="w-full max-w-[22.75rem]">
-					<Text
-						id="two-factor-heading"
-						variant="heading1"
-						as="h1"
-						DANGEROUS_className="text-center text-[1.75rem] leading-9 tracking-[-0.02em]"
-					>
-						{heading}
-					</Text>
-
-					{panel}
-
-					{state === "ready" && (
-						<div className="mt-10 border-t border-zenth-line pt-5 text-center">
-							<Text variant="secondary" size="xs" as="p">
-								Lost access to your 2FA device and recovery codes? Contact your
-								administrator to unlock the account.
-							</Text>
-						</div>
-					)}
-				</div>
-			</section>
-		</main>
+				)
+			}
+		>
+			<div aria-busy={state === "loading"}>{panel}</div>
+		</AuthLayout>
 	);
 }
 

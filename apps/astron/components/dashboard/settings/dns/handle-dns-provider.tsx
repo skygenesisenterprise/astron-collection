@@ -79,7 +79,7 @@ const PROVIDER_TYPES = [
 type ProviderType = (typeof PROVIDER_TYPES)[number];
 
 const CATEGORY_BY_TYPE: Record<ProviderType, string> = {
-	astron-collection: "managed",
+	"astron-collection": "managed",
 	route53: "managed",
 	porkbun: "managed",
 	infomaniak: "managed",

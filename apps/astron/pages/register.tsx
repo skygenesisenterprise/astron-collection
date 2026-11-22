@@ -1,14 +1,4 @@
-import { standardSchemaResolver as zodResolver } from "@hookform/resolvers/standard-schema";
 import {
-	DiscordLogoIcon,
-	EyeIcon,
-	EyeSlashIcon,
-	GithubLogoIcon,
-	GlobeIcon,
-	WarningCircleIcon,
-} from "@phosphor-icons/react";
-import {
-	Banner,
 	Button,
 	Field,
 	Input,
@@ -18,13 +8,20 @@ import {
 import { IS_CLOUD, isAdminPresent } from "@astron-collection/server";
 import { validateRequest } from "@astron-collection/server/lib/auth";
 import { readOnboardingStatus } from "@astron-collection/server/services/onboarding";
+import { standardSchemaResolver as zodResolver } from "@hookform/resolvers/standard-schema";
+import {
+	DiscordLogoIcon,
+	EyeIcon,
+	EyeSlashIcon,
+	GithubLogoIcon,
+} from "@phosphor-icons/react";
 import type { GetServerSidePropsContext } from "next";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { AuthLayout, fieldLabel } from "@/components/auth/auth-layout";
 import { pushToDataLayer } from "@/lib/analytics";
 import { authClient } from "@/lib/auth-client";
 import { appRouter } from "@/server/api/root";
@@ -85,40 +82,25 @@ function MicrosoftMark({ className = "size-4" }: { className?: string }) {
 	);
 }
 
-function OrDivider() {
-	return (
-		<div className="my-6 flex items-center gap-4" aria-hidden="true">
-			<span className="h-px flex-1 bg-zenth-line" />
-			<Text
-				variant="secondary"
-				size="xs"
-				as="span"
-				DANGEROUS_className="font-medium tracking-[0.1em] uppercase"
-			>
-				or
-			</Text>
-			<span className="h-px flex-1 bg-zenth-line" />
-		</div>
-	);
-}
-
 /** Text link built on the design-system Link (no app-specific styling). */
 function AuthLink({
 	href,
 	children,
 	external = false,
 	inline = false,
+	className,
 }: {
 	href: string;
 	children: React.ReactNode;
 	external?: boolean;
 	inline?: boolean;
+	className?: string;
 }) {
 	return (
 		<KumoLink
 			href={href}
 			variant={inline ? "inline" : "plain"}
-			className="font-medium"
+			className={["font-medium", className].filter(Boolean).join(" ")}
 			{...(external ? { target: "_blank", rel: "noreferrer" } : {})}
 		>
 			{children}
@@ -141,6 +123,7 @@ export default function RegisterPage({ IS_CLOUD }: Props) {
 	const [error, setError] = useState<string | null>(null);
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+	const [showMoreOptions, setShowMoreOptions] = useState(false);
 	const registerForm = useForm<RegisterForm>({
 		resolver: zodResolver(RegisterSchema),
 		defaultValues: {
@@ -264,242 +247,260 @@ export default function RegisterPage({ IS_CLOUD }: Props) {
 	const confirmPasswordError =
 		registerForm.formState.errors.confirmPassword?.message;
 
-	const registerPanel = (
-		<>
-			{IS_CLOUD && (
-				<div className="mt-6 grid grid-cols-2 gap-2">
-					<Button
-						variant="outline"
+	const form = (
+		<form
+			method="post"
+			onSubmit={registerForm.handleSubmit(onSubmit)}
+			className="mt-5 space-y-5"
+			id="register-form"
+		>
+			<Field
+				label={fieldLabel("Email")}
+				error={emailError ? { message: emailError, match: true } : undefined}
+			>
+				<Input
+					type="email"
+					autoComplete="email"
+					size="lg"
+					aria-invalid={Boolean(emailError)}
+					className="bg-zenth-base rounded-[3px]"
+					{...registerForm.register("email")}
+				/>
+			</Field>
+
+			<Field
+				label={
+					<>
+						{fieldLabel("Password")}
+						{passwordError && (
+							<span className="ml-2 text-xs font-normal text-zenth-danger normal-case">
+								— {passwordError}
+							</span>
+						)}
+					</>
+				}
+			>
+				<div className="relative w-full">
+					<Input
+						type={showPassword ? "text" : "password"}
+						autoComplete="new-password"
 						size="lg"
-						className="w-full justify-center"
-						loading={socialLoading === "google"}
-						disabled={socialLoading !== null}
-						onClick={() => onSocialSignUp("google")}
-					>
-						<GoogleMark />
-						Google
-					</Button>
+						aria-invalid={Boolean(passwordError)}
+						className="w-full bg-zenth-base rounded-[3px] pr-11"
+						{...registerForm.register("password")}
+					/>
 					<Button
-						variant="outline"
-						size="lg"
-						className="w-full justify-center"
-						icon={GithubLogoIcon}
-						loading={socialLoading === "github"}
-						disabled={socialLoading !== null}
-						onClick={() => onSocialSignUp("github")}
+						type="button"
+						variant="ghost"
+						shape="square"
+						size="sm"
+						onClick={() => setShowPassword((value) => !value)}
+						aria-label={showPassword ? "Hide password" : "Show password"}
+						aria-pressed={showPassword}
+						className="absolute top-1/2 right-1.5 -translate-y-1/2 text-zenth-subtle hover:text-zenth-default"
 					>
-						GitHub
-					</Button>
-					<Button
-						variant="outline"
-						size="lg"
-						className="w-full justify-center"
-						icon={DiscordLogoIcon}
-						loading={socialLoading === "discord"}
-						disabled={socialLoading !== null}
-						onClick={() => onSocialSignUp("discord")}
-					>
-						Discord
-					</Button>
-					<Button
-						variant="outline"
-						size="lg"
-						className="w-full justify-center"
-						loading={socialLoading === "microsoft"}
-						disabled={socialLoading !== null}
-						onClick={() => onSocialSignUp("microsoft")}
-					>
-						<MicrosoftMark />
-						Microsoft
+						{showPassword ? (
+							<EyeSlashIcon className="size-4" />
+						) : (
+							<EyeIcon className="size-4" />
+						)}
 					</Button>
 				</div>
-			)}
-			{IS_CLOUD && <OrDivider />}
-			<form
-				method="post"
-				onSubmit={registerForm.handleSubmit(onSubmit)}
-				className={IS_CLOUD ? "mt-6 space-y-5" : "mt-8 space-y-5"}
-				id="register-form"
+			</Field>
+
+			<Field
+				label={
+					<>
+						{fieldLabel("Confirm password")}
+						{confirmPasswordError && (
+							<span className="ml-2 text-xs font-normal text-zenth-danger normal-case">
+								— {confirmPasswordError}
+							</span>
+						)}
+					</>
+				}
 			>
-				<Field
-					label="Email"
-					error={emailError ? { message: emailError, match: true } : undefined}
-				>
+				<div className="relative w-full">
 					<Input
-						type="email"
-						placeholder="john@example.com"
-						autoComplete="email"
+						type={showConfirmPassword ? "text" : "password"}
+						autoComplete="new-password"
 						size="lg"
-						{...registerForm.register("email")}
+						aria-invalid={Boolean(confirmPasswordError)}
+						className="w-full bg-zenth-base rounded-[3px] pr-11"
+						{...registerForm.register("confirmPassword")}
 					/>
-				</Field>
+					<Button
+						type="button"
+						variant="ghost"
+						shape="square"
+						size="sm"
+						onClick={() => setShowConfirmPassword((value) => !value)}
+						aria-label={
+							showConfirmPassword
+								? "Hide password confirmation"
+								: "Show password confirmation"
+						}
+						aria-pressed={showConfirmPassword}
+						className="absolute top-1/2 right-1.5 -translate-y-1/2 text-zenth-subtle hover:text-zenth-default"
+					>
+						{showConfirmPassword ? (
+							<EyeSlashIcon className="size-4" />
+						) : (
+							<EyeIcon className="size-4" />
+						)}
+					</Button>
+				</div>
+			</Field>
 
-				<Field
-					label="Password"
-					error={
-						passwordError ? { message: passwordError, match: true } : undefined
-					}
+			{error && (
+				<Text
+					variant="secondary"
+					size="xs"
+					as="p"
+					DANGEROUS_className="text-xs leading-snug text-zenth-danger"
 				>
-					<div className="relative w-full">
-						<Input
-							type={showPassword ? "text" : "password"}
-							placeholder="Create a password"
-							autoComplete="new-password"
-							size="lg"
-							className="w-full pr-12"
-							{...registerForm.register("password")}
-						/>
-						<Button
-							type="button"
-							variant="ghost"
-							shape="square"
-							size="sm"
-							onClick={() => setShowPassword((value) => !value)}
-							aria-label={showPassword ? "Hide password" : "Show password"}
-							aria-pressed={showPassword}
-							className="absolute top-1/2 right-1.5 -translate-y-1/2"
-						>
-							{showPassword ? (
-								<EyeSlashIcon className="size-4" />
-							) : (
-								<EyeIcon className="size-4" />
-							)}
-						</Button>
-					</div>
-				</Field>
-
-				<Field
-					label="Confirm password"
-					error={
-						confirmPasswordError
-							? { message: confirmPasswordError, match: true }
-							: undefined
-					}
-				>
-					<div className="relative w-full">
-						<Input
-							type={showConfirmPassword ? "text" : "password"}
-							placeholder="Repeat your password"
-							autoComplete="new-password"
-							size="lg"
-							className="w-full pr-12"
-							{...registerForm.register("confirmPassword")}
-						/>
-						<Button
-							type="button"
-							variant="ghost"
-							shape="square"
-							size="sm"
-							onClick={() => setShowConfirmPassword((value) => !value)}
-							aria-label={
-								showConfirmPassword
-									? "Hide password confirmation"
-									: "Show password confirmation"
-							}
-							aria-pressed={showConfirmPassword}
-							className="absolute top-1/2 right-1.5 -translate-y-1/2"
-						>
-							{showConfirmPassword ? (
-								<EyeSlashIcon className="size-4" />
-							) : (
-								<EyeIcon className="size-4" />
-							)}
-						</Button>
-					</div>
-				</Field>
-
-				<Button
-					type="submit"
-					variant="primary"
-					size="lg"
-					className="w-full justify-center rounded-lg"
-					loading={isRegisterLoading}
-				>
-					Create account
-				</Button>
-			</form>
-			<div className="mt-6 space-y-1 text-center">
-				<Text variant="secondary" size="sm">
-					Already have an account?{" "}
-					<AuthLink href={LOGIN_PATH}>Sign in</AuthLink>
+					{error}
 				</Text>
-			</div>
-			<Text
-				variant="secondary"
-				size="xs"
-				as="p"
-				DANGEROUS_className="mt-7 text-center leading-relaxed"
+			)}
+
+			<Button
+				type="submit"
+				variant="primary"
+				size="lg"
+				className="mt-1 w-full justify-center rounded-[3px]"
+				loading={isRegisterLoading}
 			>
-				By continuing, you agree to the Astron Collection{" "}
-				<AuthLink href="https://astron-collection.com/legal/terms" external inline>
-					Terms of Service
-				</AuthLink>
-				,{" "}
-				<AuthLink href="https://astron-collection.com/legal/privacy" external inline>
-					Privacy Policy
-				</AuthLink>{" "}
-				and{" "}
-				<AuthLink href="https://astron-collection.com/legal/cookies" external inline>
-					Cookie Policy
-				</AuthLink>
-				.
-			</Text>
-		</>
+				Create account
+			</Button>
+		</form>
 	);
 
 	return (
-		<main
-			data-zenth-mode="light"
-			className="flex min-h-svh flex-col bg-zenth-base text-zenth-default"
-		>
-			<Head>
-				<title>Astron Collection Dashboard | Manage Your Account</title>
-			</Head>
-			<header className="flex h-20 items-center justify-end gap-4 px-6">
-				<div className="flex items-center gap-3">
+		<AuthLayout
+			pageTitle="Astron Collection | Create your account"
+			headingId="register-heading"
+			title="Create an account"
+			subtitle="We're so excited to see you again!"
+			action={
+				IS_CLOUD ? (
+					<Button variant="secondary" onClick={() => router.push(LOGIN_PATH)}>
+						Login
+					</Button>
+				) : undefined
+			}
+			footnote={
+				<>
+					{IS_CLOUD && (
+						<>
+							<div className="text-center">
+								<Button
+									type="button"
+									variant="ghost"
+									size="sm"
+									className="mx-auto text-xs text-zenth-subtle"
+									onClick={() => setShowMoreOptions((value) => !value)}
+									aria-expanded={showMoreOptions}
+								>
+									{showMoreOptions
+										? "Hide sign-up options"
+										: "More sign-up options"}
+								</Button>
+							</div>
+							{showMoreOptions && (
+								<div className="mt-3 grid grid-cols-2 gap-2">
+									<Button
+										variant="outline"
+										size="lg"
+										className="w-full justify-center rounded-[3px]"
+										loading={socialLoading === "google"}
+										disabled={socialLoading !== null}
+										onClick={() => onSocialSignUp("google")}
+									>
+										<GoogleMark />
+										Google
+									</Button>
+									<Button
+										variant="outline"
+										size="lg"
+										className="w-full justify-center rounded-[3px]"
+										icon={GithubLogoIcon}
+										loading={socialLoading === "github"}
+										disabled={socialLoading !== null}
+										onClick={() => onSocialSignUp("github")}
+									>
+										GitHub
+									</Button>
+									<Button
+										variant="outline"
+										size="lg"
+										className="w-full justify-center rounded-[3px]"
+										icon={DiscordLogoIcon}
+										loading={socialLoading === "discord"}
+										disabled={socialLoading !== null}
+										onClick={() => onSocialSignUp("discord")}
+									>
+										Discord
+									</Button>
+									<Button
+										variant="outline"
+										size="lg"
+										className="w-full justify-center rounded-[3px]"
+										loading={socialLoading === "microsoft"}
+										disabled={socialLoading !== null}
+										onClick={() => onSocialSignUp("microsoft")}
+									>
+										<MicrosoftMark />
+										Microsoft
+									</Button>
+								</div>
+							)}
+						</>
+					)}
 					<Text
 						variant="secondary"
-						size="sm"
-						as="span"
-						DANGEROUS_className="inline-flex items-center gap-1.5"
+						size="xs"
+						as="p"
+						DANGEROUS_className="mt-4 text-center leading-relaxed text-zenth-subtle"
 					>
-						<GlobeIcon className="size-4" aria-hidden="true" />
-						English
+						By continuing, you agree to the Astron Collection{" "}
+						<AuthLink
+							href="https://astron-collection.com/legal/terms"
+							external
+							inline
+						>
+							Terms of Service
+						</AuthLink>
+						,{" "}
+						<AuthLink
+							href="https://astron-collection.com/legal/privacy"
+							external
+							inline
+						>
+							Privacy Policy
+						</AuthLink>{" "}
+						and{" "}
+						<AuthLink
+							href="https://astron-collection.com/legal/cookies"
+							external
+							inline
+						>
+							Cookie Policy
+						</AuthLink>
+						.
 					</Text>
-					<Button variant="outline" onClick={() => router.push(LOGIN_PATH)}>
-						Sign in
-					</Button>
-				</div>
-			</header>
-
-			<section
-				aria-labelledby="register-heading"
-				className="flex flex-1 justify-center px-6 pt-12 pb-12 sm:px-4"
+				</>
+			}
+		>
+			{form}
+			<Text
+				variant="secondary"
+				size="sm"
+				as="p"
+				DANGEROUS_className="mt-3 text-sm text-zenth-subtle"
 			>
-				<div className="w-full max-w-[22.75rem]">
-					<Text
-						id="register-heading"
-						variant="heading1"
-						as="h1"
-						DANGEROUS_className="text-center text-[1.75rem] leading-9 tracking-[-0.02em]"
-					>
-						Create your Astron Collection account
-					</Text>
-
-					{error && (
-						<Banner
-							variant="error"
-							size="sm"
-							icon={<WarningCircleIcon className="size-4" />}
-							description={error}
-							className="mt-6"
-						/>
-					)}
-
-					{registerPanel}
-				</div>
-			</section>
-		</main>
+				Have an account? <AuthLink href={LOGIN_PATH}>Login</AuthLink>
+			</Text>
+		</AuthLayout>
 	);
 }
 

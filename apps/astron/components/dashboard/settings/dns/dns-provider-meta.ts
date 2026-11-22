@@ -1,7 +1,7 @@
 import type { DnsProviderIconKey } from "@/components/icons/dns-provider-icons";
 
 export const dnsProviderLabels: Record<string, string> = {
-	astron-collection: "Astron Collection",
+	"astron-collection": "Astron Collection",
 	route53: "AWS Route53",
 	porkbun: "Porkbun",
 	infomaniak: "Infomaniak",

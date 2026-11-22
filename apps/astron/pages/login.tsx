@@ -1,21 +1,9 @@
-import { standardSchemaResolver as zodResolver } from "@hookform/resolvers/standard-schema";
-import {
-	DiscordLogoIcon,
-	EyeIcon,
-	EyeSlashIcon,
-	GithubLogoIcon,
-	GlobeIcon,
-	LockKeyIcon,
-	WarningCircleIcon,
-} from "@phosphor-icons/react";
 import {
 	Banner,
 	Button,
-	Checkbox,
 	Field,
 	Input,
 	Link as KumoLink,
-	LayerCard,
 	Text,
 } from "@astron-collection/react";
 import {
@@ -25,13 +13,21 @@ import {
 } from "@astron-collection/server";
 import { validateRequest } from "@astron-collection/server/lib/auth";
 import { readOnboardingStatus } from "@astron-collection/server/services/onboarding";
+import { standardSchemaResolver as zodResolver } from "@hookform/resolvers/standard-schema";
+import {
+	DiscordLogoIcon,
+	EyeIcon,
+	EyeSlashIcon,
+	GithubLogoIcon,
+	LockKeyIcon,
+} from "@phosphor-icons/react";
 import type { GetServerSidePropsContext } from "next";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { AuthLayout, fieldLabel } from "@/components/auth/auth-layout";
 import { SignInWithSSO } from "@/components/proprietary/sso/sign-in-with-sso";
 import { authClient } from "@/lib/auth-client";
 import { getTwoFactorMethod } from "@/lib/webauthn-two-factor";
@@ -161,40 +157,25 @@ function MicrosoftMark({ className = "size-4" }: { className?: string }) {
 	);
 }
 
-function OrDivider() {
-	return (
-		<div className="my-6 flex items-center gap-4" aria-hidden="true">
-			<span className="h-px flex-1 bg-zenth-line" />
-			<Text
-				variant="secondary"
-				size="xs"
-				as="span"
-				DANGEROUS_className="font-medium tracking-[0.1em] uppercase"
-			>
-				or
-			</Text>
-			<span className="h-px flex-1 bg-zenth-line" />
-		</div>
-	);
-}
-
 /** Text link built on the design-system Link (no app-specific styling). */
 function AuthLink({
 	href,
 	children,
 	external = false,
 	inline = false,
+	className,
 }: {
 	href: string;
 	children: React.ReactNode;
 	external?: boolean;
 	inline?: boolean;
+	className?: string;
 }) {
 	return (
 		<KumoLink
 			href={href}
 			variant={inline ? "inline" : "plain"}
-			className="font-medium"
+			className={["font-medium", className].filter(Boolean).join(" ")}
 			{...(external ? { target: "_blank", rel: "noreferrer" } : {})}
 		>
 			{children}
@@ -216,10 +197,8 @@ export default function LoginPage({ IS_CLOUD, enforceSSO }: Props) {
 		null,
 	);
 	const [error, setError] = useState<string | null>(null);
-	const [rememberDevice, setRememberDevice] = useState(true);
-	const [savedLogin, setSavedLogin] = useState<SavedLogin | null>(null);
-	const [showSavedProfiles, setShowSavedProfiles] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
+	const [showMoreOptions, setShowMoreOptions] = useState(false);
 	const loginForm = useForm<LoginForm>({
 		resolver: zodResolver(LoginSchema),
 		defaultValues: {
@@ -256,7 +235,6 @@ export default function LoginPage({ IS_CLOUD, enforceSSO }: Props) {
 	useEffect(() => {
 		const saved = readSavedLogin();
 		if (!saved) return;
-		setSavedLogin(saved);
 		if (!loginForm.getValues("email")) {
 			loginForm.setValue("email", saved.email);
 		}
@@ -290,10 +268,7 @@ export default function LoginPage({ IS_CLOUD, enforceSSO }: Props) {
 	}, []);
 
 	const persistLogin = (email: string, method: string) => {
-		if (!rememberDevice) return;
-		const value = { email, method };
-		writeSavedLogin(value);
-		setSavedLogin(value);
+		writeSavedLogin({ email, method });
 	};
 
 	const onSocialSignIn = async (provider: SocialProvider) => {
@@ -365,100 +340,52 @@ export default function LoginPage({ IS_CLOUD, enforceSSO }: Props) {
 		}
 	};
 
-	const passwordError = loginForm.formState.errors.password?.message;
+	// Provider and credential failures read next to the password label, the way
+	// the reference presents a rejected sign-in.
+	const passwordError = loginForm.formState.errors.password?.message ?? error;
 	const emailError = loginForm.formState.errors.email?.message;
 
-	const loginPanel = (
+	const form = (
 		<>
-			{" "}
-			{IS_CLOUD && (
-				<div className="mt-6 grid grid-cols-2 gap-2">
-					<Button
-						variant="outline"
-						size="lg"
-						className="w-full justify-center"
-						loading={socialLoading === "google"}
-						disabled={socialLoading !== null}
-						onClick={() => onSocialSignIn("google")}
-					>
-						<GoogleMark />
-						Google
-					</Button>
-					<Button
-						variant="outline"
-						size="lg"
-						className="w-full justify-center"
-						icon={GithubLogoIcon}
-						loading={socialLoading === "github"}
-						disabled={socialLoading !== null}
-						onClick={() => onSocialSignIn("github")}
-					>
-						GitHub
-					</Button>
-					<Button
-						variant="outline"
-						size="lg"
-						className="w-full justify-center"
-						icon={DiscordLogoIcon}
-						loading={socialLoading === "discord"}
-						disabled={socialLoading !== null}
-						onClick={() => onSocialSignIn("discord")}
-					>
-						Discord
-					</Button>
-					<Button
-						variant="outline"
-						size="lg"
-						className="w-full justify-center"
-						loading={socialLoading === "microsoft"}
-						disabled={socialLoading !== null}
-						onClick={() => onSocialSignIn("microsoft")}
-					>
-						<MicrosoftMark />
-						Microsoft
-					</Button>
-				</div>
-			)}
-			{IS_CLOUD && (
-				<div className="mt-2">
-					{/* Managed cloud always offers SSO: an organization may not have a
-					    source configured, so the local form remains the fallback. */}
-					<SignInWithSSO />
-				</div>
-			)}
-			{IS_CLOUD && <OrDivider />}
 			<form
 				method="post"
 				onSubmit={loginForm.handleSubmit(onSubmit)}
-				className={IS_CLOUD ? "mt-6 space-y-5" : "mt-8 space-y-5"}
+				className="mt-5 space-y-5"
 				id="login-form"
 			>
 				<Field
-					label="Email"
+					label={fieldLabel("Email")}
 					error={emailError ? { message: emailError, match: true } : undefined}
 				>
 					<Input
 						type="email"
-						placeholder="john@example.com"
 						autoComplete="email"
 						size="lg"
+						aria-invalid={Boolean(emailError)}
+						className="bg-zenth-base rounded-[3px]"
 						{...loginForm.register("email")}
 					/>
 				</Field>
 
 				<Field
-					label="Password"
-					error={
-						passwordError ? { message: passwordError, match: true } : undefined
+					label={
+						<>
+							{fieldLabel("Password")}
+							{passwordError && (
+								<span className="ml-2 text-xs font-normal text-zenth-danger normal-case">
+									— {passwordError}
+								</span>
+							)}
+						</>
 					}
 				>
 					<div className="relative w-full">
 						<Input
 							type={showPassword ? "text" : "password"}
-							placeholder="Enter your password"
 							autoComplete="current-password"
 							size="lg"
-							className="w-full pr-12"
+							aria-invalid={Boolean(passwordError)}
+							className="w-full bg-zenth-base rounded-[3px] pr-11"
 							{...loginForm.register("password")}
 						/>
 						<Button
@@ -469,7 +396,7 @@ export default function LoginPage({ IS_CLOUD, enforceSSO }: Props) {
 							onClick={() => setShowPassword((value) => !value)}
 							aria-label={showPassword ? "Hide password" : "Show password"}
 							aria-pressed={showPassword}
-							className="absolute top-1/2 right-1.5 -translate-y-1/2"
+							className="absolute top-1/2 right-1.5 -translate-y-1/2 text-zenth-subtle hover:text-zenth-default"
 						>
 							{showPassword ? (
 								<EyeSlashIcon className="size-4" />
@@ -480,194 +407,174 @@ export default function LoginPage({ IS_CLOUD, enforceSSO }: Props) {
 					</div>
 				</Field>
 
-				<Checkbox
-					label="Save the email address and login method on this device"
-					checked={rememberDevice}
-					onCheckedChange={(checked) => setRememberDevice(checked === true)}
-				/>
+				<div>
+					<AuthLink
+						href={
+							IS_CLOUD
+								? "/reset-password"
+								: "https://docs.astron-collection.com/docs/core/reset-password"
+						}
+						external={!IS_CLOUD}
+						className="text-sm text-zenth-link"
+					>
+						Forgot your password?
+					</AuthLink>
+				</div>
 
 				<Button
 					type="submit"
 					variant="primary"
 					size="lg"
-					className="w-full justify-center rounded-lg"
+					className="mt-1 w-full justify-center rounded-[3px]"
 					loading={isLoginLoading}
 				>
-					Sign in
+					Login
 				</Button>
 			</form>
-			<div className="mt-6 text-center">
-				<Button
-					type="button"
-					variant="ghost"
-					size="sm"
-					className="mx-auto"
-					onClick={() => setShowSavedProfiles((value) => !value)}
-					aria-expanded={showSavedProfiles}
-				>
-					{showSavedProfiles ? "Hide saved profiles" : "Show saved profiles"}
-				</Button>
-				{showSavedProfiles && (
-					<LayerCard className="mt-2 p-3 text-left">
-						{savedLogin ? (
-							<div className="flex items-center justify-between gap-3">
-								<div className="min-w-0">
-									<Text size="sm" bold truncate>
-										{savedLogin.email}
-									</Text>
-									<Text variant="secondary" size="xs">
-										{savedLogin.method === "password"
-											? "Email and password"
-											: savedLogin.method}
-									</Text>
-								</div>
-								<div className="flex shrink-0 items-center gap-1">
-									<Button
-										type="button"
-										variant="ghost"
-										size="sm"
-										onClick={() => {
-											loginForm.setValue("email", savedLogin.email, {
-												shouldValidate: true,
-											});
-											setShowSavedProfiles(false);
-										}}
-									>
-										Use
-									</Button>
-									<Button
-										type="button"
-										variant="ghost"
-										size="sm"
-										onClick={() => {
-											writeSavedLogin(null);
-											setSavedLogin(null);
-											setShowSavedProfiles(false);
-										}}
-									>
-										Forget
-									</Button>
-								</div>
-							</div>
-						) : (
-							<Text variant="secondary" size="xs">
-								No saved profile on this device.
-							</Text>
-						)}
-					</LayerCard>
-				)}
-			</div>
-			<div className="mt-6 space-y-1 text-center">
-				{IS_CLOUD && (
-					<Text variant="secondary" size="sm">
-						Don&apos;t have an account?{" "}
-						<AuthLink href="/register">Sign up</AuthLink>
-					</Text>
-				)}
-				<Text variant="secondary" size="sm">
-					Forgot your email or password?{" "}
-					{IS_CLOUD ? (
-						<AuthLink href="/reset-password">Reset it</AuthLink>
-					) : (
-						<AuthLink
-							href="https://docs.astron-collection.com/docs/core/reset-password"
-							external
-						>
-							Reset it
-						</AuthLink>
-					)}
-				</Text>
-			</div>
 			<Text
 				variant="secondary"
-				size="xs"
+				size="sm"
 				as="p"
-				DANGEROUS_className="mt-7 text-center leading-relaxed"
+				DANGEROUS_className="mt-3 text-sm text-zenth-subtle"
 			>
-				By continuing, you agree to the Astron Collection{" "}
-				<AuthLink href="https://astron-collection.com/legal/terms" external inline>
-					Terms of Service
-				</AuthLink>
-				,{" "}
-				<AuthLink href="https://astron-collection.com/legal/privacy" external inline>
-					Privacy Policy
-				</AuthLink>{" "}
-				and{" "}
-				<AuthLink href="https://astron-collection.com/legal/cookies" external inline>
-					Cookie Policy
-				</AuthLink>
-				.
+				Need an account? <AuthLink href="/register">Register</AuthLink>
 			</Text>
 		</>
 	);
 
 	return (
-		<main
-			data-zenth-mode="light"
-			className="flex min-h-svh flex-col bg-zenth-base text-zenth-default"
-		>
-			<Head>
-				<title>Astron Collection Dashbord | Manage Your Account</title>
-			</Head>
-			<header className="flex h-20 items-center justify-end gap-4 px-6">
-				<div className="flex items-center gap-3">
+		<AuthLayout
+			pageTitle="Astron Collection | Sign in"
+			headingId="login-heading"
+			title="Welcome back!"
+			subtitle="We're so excited to see you again!"
+			action={
+				IS_CLOUD ? (
+					<Button variant="secondary" onClick={() => router.push("/register")}>
+						Sign up
+					</Button>
+				) : undefined
+			}
+			footnote={
+				<>
+					{IS_CLOUD && (
+						<>
+							<div className="text-center">
+								<Button
+									type="button"
+									variant="ghost"
+									size="sm"
+									className="mx-auto text-xs text-zenth-subtle"
+									onClick={() => setShowMoreOptions((value) => !value)}
+									aria-expanded={showMoreOptions}
+								>
+									{showMoreOptions
+										? "Hide sign-in options"
+										: "More sign-in options"}
+								</Button>
+							</div>
+							{showMoreOptions && (
+								<div className="mt-3 space-y-2">
+									<div className="grid grid-cols-2 gap-2">
+										<Button
+											variant="outline"
+											size="lg"
+											className="w-full justify-center rounded-[3px]"
+											loading={socialLoading === "google"}
+											disabled={socialLoading !== null}
+											onClick={() => onSocialSignIn("google")}
+										>
+											<GoogleMark />
+											Google
+										</Button>
+										<Button
+											variant="outline"
+											size="lg"
+											className="w-full justify-center rounded-[3px]"
+											icon={GithubLogoIcon}
+											loading={socialLoading === "github"}
+											disabled={socialLoading !== null}
+											onClick={() => onSocialSignIn("github")}
+										>
+											GitHub
+										</Button>
+										<Button
+											variant="outline"
+											size="lg"
+											className="w-full justify-center rounded-[3px]"
+											icon={DiscordLogoIcon}
+											loading={socialLoading === "discord"}
+											disabled={socialLoading !== null}
+											onClick={() => onSocialSignIn("discord")}
+										>
+											Discord
+										</Button>
+										<Button
+											variant="outline"
+											size="lg"
+											className="w-full justify-center rounded-[3px]"
+											loading={socialLoading === "microsoft"}
+											disabled={socialLoading !== null}
+											onClick={() => onSocialSignIn("microsoft")}
+										>
+											<MicrosoftMark />
+											Microsoft
+										</Button>
+									</div>
+									<SignInWithSSO />
+								</div>
+							)}
+						</>
+					)}
 					<Text
 						variant="secondary"
+						size="xs"
+						as="p"
+						DANGEROUS_className="mt-4 text-center leading-relaxed text-zenth-subtle"
+					>
+						By continuing, you agree to the Astron Collection{" "}
+						<AuthLink
+							href="https://astron-collection.com/legal/terms"
+							external
+							inline
+						>
+							Terms of Service
+						</AuthLink>
+						,{" "}
+						<AuthLink
+							href="https://astron-collection.com/legal/privacy"
+							external
+							inline
+						>
+							Privacy Policy
+						</AuthLink>{" "}
+						and{" "}
+						<AuthLink
+							href="https://astron-collection.com/legal/cookies"
+							external
+							inline
+						>
+							Cookie Policy
+						</AuthLink>
+						.
+					</Text>
+				</>
+			}
+		>
+			{!IS_CLOUD && enforceSSO ? (
+				<div className="mt-6 space-y-4">
+					<Banner
+						variant="secondary"
 						size="sm"
-						as="span"
-						DANGEROUS_className="inline-flex items-center gap-1.5"
-					>
-						<GlobeIcon className="size-4" aria-hidden="true" />
-						English
-					</Text>
-					{IS_CLOUD && (
-						<Button variant="outline" onClick={() => router.push("/register")}>
-							Sign up
-						</Button>
-					)}
+						icon={<LockKeyIcon className="size-4" />}
+						description="Your administrator requires single sign-on."
+					/>
+					<SignInWithSSO enforce />
 				</div>
-			</header>
-
-			<section
-				aria-labelledby="login-heading"
-				className="flex flex-1 justify-center px-6 pt-12 pb-12 sm:px-4"
-			>
-				<div className="w-full max-w-[22.75rem]">
-					<Text
-						id="login-heading"
-						variant="heading1"
-						as="h1"
-						DANGEROUS_className="text-center text-[1.75rem] leading-9 tracking-[-0.02em]"
-					>
-						Sign in to Astron Collection
-					</Text>
-
-					{error && (
-						<Banner
-							variant="error"
-							size="sm"
-							icon={<WarningCircleIcon className="size-4" />}
-							description={error}
-							className="mt-6"
-						/>
-					)}
-
-					{!IS_CLOUD && enforceSSO ? (
-						<div className="mt-8 space-y-4">
-							<Banner
-								variant="secondary"
-								size="sm"
-								icon={<LockKeyIcon className="size-4" />}
-								description="Your administrator requires single sign-on."
-							/>
-							<SignInWithSSO enforce />
-						</div>
-					) : (
-						loginPanel
-					)}
-				</div>
-			</section>
-		</main>
+			) : (
+				form
+			)}
+		</AuthLayout>
 	);
 }
 
@@ -705,17 +612,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 		};
 	}
 
+	// `/login` always renders, including before the first admin exists: the page
+	// uses `hasAdmin` to show the setup CTA, so no 307 to `/register` is needed.
 	const hasAdmin = await isAdminPresent();
-
-	if (!hasAdmin) {
-		return {
-			redirect: {
-				permanent: false,
-				destination: "/register",
-			},
-		};
-	}
-
 	const { user, session } = await validateRequest(context.req);
 
 	if (user) {

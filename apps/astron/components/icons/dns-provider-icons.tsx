@@ -211,7 +211,7 @@ export const AstronCollectionInternalIcon = ({ className }: Props) => (
 );
 
 export const dnsProviderIcons = {
-	astron-collection: AstronCollectionIcon,
+	"astron-collection": AstronCollectionIcon,
 	route53: Route53Icon,
 	porkbun: PorkbunIcon,
 	infomaniak: InfomaniakIcon,

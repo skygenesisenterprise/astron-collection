@@ -7,6 +7,15 @@ node_modules
 .turbo
 coverage
 
+# Runtime state written by the API into the bind-mounted source tree (Traefik
+# config, logs, SSH keys). The dev container creates `apps/astron/.docker/ssh`
+# as root with 0700, which otherwise makes `docker build` fail with
+# "open .../ssh: permission denied" while loading the build context.
+apps/astron/.docker
+apps/astron/.docker/**
+**/.docker
+**/.docker/**
+
 # Status engine runtime state (SQLite database, snapshot, backups). The
 # container keeps it in a volume, never in the build context.
 apps/status/data

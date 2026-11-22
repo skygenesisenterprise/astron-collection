@@ -57,11 +57,10 @@ if [ "$ROLE" = "healthcheck" ]; then
 	probe_role="${ASTRON_COLLECTION_ROLE:-api}"
 	case "$probe_role" in
 	client)
-		# Probe the login page directly: `/` is a deliberate 307 to `/login`, so
-		# probing it produced a `/ 307` + `/login 200` pair in the logs on every
-		# healthcheck interval.
-		probe="http://127.0.0.1:${PORT:-3000}/login"
-		exec node -e "fetch(process.argv[1]).then((r) => process.exit(r.status < 500 ? 0 : 1)).catch(() => process.exit(1))" "$probe"
+		# Plain TCP probe: no HTTP GET at all. Fetching `/login` produced an
+		# automatic GET on every healthcheck interval, and any 307 to `/register`
+		# on a fresh install made the probe follow it and log both routes.
+		exec node -e "const net=require('node:net');const s=net.connect(Number(process.argv[1]),'127.0.0.1');s.on('connect',()=>{s.destroy();process.exit(0)});s.on('error',()=>process.exit(1))" "${PORT:-3000}"
 		;;
 	status)
 		probe="http://127.0.0.1:${PORT:-4200}/api/v1/pages"
@@ -129,10 +128,13 @@ if [ "$MODE" = "development" ]; then
 	RUNNER=(pnpm exec tsx -r dotenv/config)
 	SCRIPT_DIR="."
 	SCRIPT_EXT="ts"
-	# The dev script is a plain `tsx` process (no watcher of its own), so Compose
-	# uses `sync+restart` for apps/astron and packages: a saved source file is
-	# copied in and the container is restarted in place.
-	SERVER_CMD=(pnpm dev)
+	# `pnpm dev` is the Next.js frontend (`next dev --port 3000`): running it here
+	# made the API container serve the dashboard on 3000 instead of the backend on
+	# 4000. `pnpm dev:api` starts `tsx watch server/server.ts`, which honours PORT.
+	# Compose still uses `sync+restart` for apps/astron and packages because inotify
+	# events are unreliable through bind mounts: a saved source file is copied in
+	# and the container is restarted in place.
+	SERVER_CMD=(pnpm dev:api)
 else
 	log "role: ${ROLE} (production, app dir: $(pwd))"
 	RUNNER=(node -r dotenv/config)

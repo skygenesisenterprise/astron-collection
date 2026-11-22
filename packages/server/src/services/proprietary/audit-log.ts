@@ -1,9 +1,18 @@
 import { db } from "@astron-collection/server/db";
-import type { AuditAction, AuditResourceType } from "@astron-collection/server/db/schema";
+import type {
+	AuditAction,
+	AuditResourceType,
+} from "@astron-collection/server/db/schema";
 import { auditLog } from "@astron-collection/server/db/schema";
 import { and, asc, desc, eq, gte, ilike, lte, or } from "drizzle-orm";
 
 export type { AuditAction, AuditResourceType };
+
+type Database = typeof db;
+/** A database handle or an open transaction: audit writes work in both. */
+export type AuditExecutor =
+	| Database
+	| Parameters<Parameters<Database["transaction"]>[0]>[0];
 
 export interface CreateAuditLogInput {
 	organizationId: string;
@@ -18,22 +27,39 @@ export interface CreateAuditLogInput {
 }
 
 /**
- * Creates an audit log entry. Fire-and-forget safe — errors are swallowed
- * so a logging failure never breaks the main operation.
+ * Inserts an audit entry through `executor`, throwing on failure.
+ *
+ * Pass the transaction that performs the business write to commit the event
+ * atomically with it: the workspace and its audit row then exist together or
+ * not at all. The audit sink is the same PostgreSQL database, so there is no
+ * delivery to retry and no outbox to drain.
+ */
+export const insertAuditLog = async (
+	input: CreateAuditLogInput,
+	executor: AuditExecutor = db,
+) => {
+	await executor.insert(auditLog).values({
+		organizationId: input.organizationId,
+		userId: input.userId,
+		userEmail: input.userEmail,
+		userRole: input.userRole,
+		action: input.action,
+		resourceType: input.resourceType,
+		resourceId: input.resourceId,
+		resourceName: input.resourceName,
+		metadata: input.metadata ? JSON.stringify(input.metadata) : undefined,
+	});
+};
+
+/**
+ * Creates an audit log entry outside a business transaction. Fire-and-forget
+ * safe — errors are swallowed so a logging failure never breaks the main
+ * operation. Workspace creation uses `insertAuditLog` inside its transaction
+ * instead, where losing the event is not acceptable.
  */
 export const createAuditLog = async (input: CreateAuditLogInput) => {
 	try {
-		await db.insert(auditLog).values({
-			organizationId: input.organizationId,
-			userId: input.userId,
-			userEmail: input.userEmail,
-			userRole: input.userRole,
-			action: input.action,
-			resourceType: input.resourceType,
-			resourceId: input.resourceId,
-			resourceName: input.resourceName,
-			metadata: input.metadata ? JSON.stringify(input.metadata) : undefined,
-		});
+		await insertAuditLog(input);
 	} catch (err) {
 		console.error("[audit-log] Failed to create audit log entry:", err);
 	}

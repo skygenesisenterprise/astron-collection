@@ -43,8 +43,11 @@
 # watch` process required and no copy delay. The image keeps its own node_modules
 # and `.next/dev` (the Next development output), so host dependencies never
 # shadow the Linux ones it installed.
-# The API receives sources through `develop.watch` sync+restart (its `dev` script
-# is a plain `tsx` process, not `tsx watch`). Only a lockfile change rebuilds the image.
+# The API bind-mounts the same sources and runs `pnpm dev:api` (`tsx watch
+# server/server.ts`), so a saved file is picked up by the watcher itself — no
+# `develop.watch` restart loop. `pnpm dev` is the *frontend* script
+# (`next dev --port 3000`) and must never be used for this role. Only a lockfile
+# change rebuilds the image.
 #
 # Both modes publish the same ports, so they are mutually exclusive: stop one
 # before starting the other with `make docker-down`.
@@ -236,7 +239,8 @@ services:
         condition: service_started
     healthcheck:
       # Role-aware probe baked into the image (entrypoint.sh healthcheck): the
-      # client checks `/login`, the API checks `/api/health`.
+      # client only checks that port 3000 accepts TCP connections (no HTTP GET,
+      # no `/login` request), the API checks `/api/health`.
       test: ["CMD", "/usr/local/bin/entrypoint.sh", "healthcheck"]
       interval: 30s
       # Development roles compile Next.js routes on first request, which can
@@ -261,6 +265,11 @@ services:
       # volumes are initialised from the image, so pnpm's symlinks keep
       # resolving in it.
       - /usr/src/app/apps/astron/node_modules
+      # The app writes runtime state (Traefik config, logs, SSH keys) to
+      # `.docker/` as root. Keep it in a volume instead of the bind-mounted
+      # source tree, so it never leaks root-owned 0700 dirs into the build
+      # context and breaks the next `docker compose build`.
+      - astron-collection-config:/usr/src/app/apps/astron/.docker
       # Next separates the outputs: `next dev` writes to `.next/dev` while
       # `next build` keeps `.next`. Mount exactly the development subtree, so the
       # dev server owns its compilation cache and never picks up a stale host
@@ -280,9 +289,12 @@ services:
   #
   # Node server: tRPC and OpenAPI routes, better-auth, WebSockets, BullMQ workers
   # and cron jobs. It owns both dependency connections and closes them on SIGTERM.
-  # Same image as `client` (`ASTRON_COLLECTION_IMAGE`), role `api`: `node
-  # dist/server.mjs` in production, `tsx server/server.ts` in development, chosen by
-  # ASTRON_COLLECTION_BUILD_TARGET.
+  # Same image as `client` (`ASTRON_COLLECTION_IMAGE`), role `api`: the backend
+  # entry point `apps/astron/server/server.ts` imports `@astron-collection/server`
+  # (packages/server). It runs as `node dist/server.mjs` in production or
+  # `pnpm dev:api` (`tsx watch server/server.ts`) in development — selected by
+  # ASTRON_COLLECTION_MODE, never ASTRON_COLLECTION_BUILD_TARGET. It listens on
+  # PORT=4000 and is the only process that applies migrations.
   #
   # It is the only service with PostgreSQL and Redis credentials, and the only one
   # that applies migrations: once at startup (ASTRON_COLLECTION_RUN_MIGRATIONS=1,
@@ -310,6 +322,18 @@ services:
       # deployed from the dashboard: without this mount it logs ENOENT
       # /var/run/docker.sock and deployment management cannot work.
       - ${DOCKER_SOCKET_PATH:-/var/run/docker.sock}:/var/run/docker.sock
+      # Development hot reload (inert in production): mount the same sources as
+      # the client. This is also what gives the API the workspace packages'
+      # built `dist/` (e.g. @astron-collection/react/styles.css), which
+      # .dockerignore excludes from the image. Without it, /api/health and every
+      # /api/trpc/* call fail with "Module not found ... styles.css".
+      - ./apps/astron:/usr/src/app/apps/astron
+      - ./packages:/usr/src/app/packages
+      # Dependencies and Next dev output stay owned by the image/container: the
+      # host's native modules and build cache must never shadow the Linux ones.
+      - /usr/src/app/apps/astron/node_modules
+      - /usr/src/app/apps/astron/.next/dev
+      - astron-collection-config:/usr/src/app/apps/astron/.docker
     environment:
       <<: *api-environment
       # Selects the backend role in the shared entrypoint.
@@ -343,31 +367,13 @@ services:
       retries: 10
       start_period: 180s
     develop:
-      # Development only (see the client service above). The API runs under a
-      # plain `tsx` dev server (`pnpm dev`), so synchronised changes need a
-      # container restart to take effect. `packages/server` is imported from
-      # source and is synchronised too. Only a lockfile change requires a rebuild.
-      # Host artifacts are excluded: the container owns its node_modules and
-      # build output.
+      # Hot reload is handled by `pnpm dev:api` (`tsx watch`) over the bind mounts
+      # above. Do NOT add `action: restart` rules here: the API writes runtime
+      # files (Traefik configs, logs, SSH keys) on every boot, and a watcher would
+      # treat them as source changes and restart the container in a loop. Those
+      # files now live in the `astron-collection-config` volume. Only a lockfile
+      # change needs a rebuild.
       watch:
-        - action: sync+restart
-          path: ./apps/astron
-          target: /usr/src/app/apps/astron
-          ignore:
-            - .next/
-            - node_modules/
-            - dist/
-            - .turbo/
-            - electron/release/
-            - electron/out/
-        - action: sync+restart
-          path: ./packages
-          target: /usr/src/app/packages
-          ignore:
-            - "**/node_modules/"
-            - "**/.next/"
-            - "**/.turbo/"
-            - "**/coverage/"
         - action: rebuild
           path: pnpm-lock.yaml
     networks:
@@ -380,6 +386,10 @@ volumes:
     name: astron-collection-postgres-data
   astron-collection-redis-data:
     name: astron-collection-redis-data
+  # Runtime config written by the app (Traefik files, logs, SSH keys). Kept out
+  # of the bind-mounted source tree so the Docker build context stays readable.
+  astron-collection-config:
+    name: astron-collection-config
 
 networks:
   # Single internal bridge network. PostgreSQL and Redis are reachable only through
