@@ -158,7 +158,7 @@ astron-collection/
 ├── Dockerfile                    # Platform image: dev / status / platform targets
 ├── entrypoint.sh                 # Runtime role selection for the platform image
 ├── docker-compose.yml            # Platform stack: postgres, redis, client, api
-├── docker-compose.bots.yml       # Optional local stack with all six bots
+├── bot/<name>/docker-compose.yml # One standalone Compose project per bot
 ├── Makefile                      # Thin wrapper over pnpm, Docker and scripts
 ├── .env.example                  # Platform environment template
 └── pnpm-workspace.yaml           # Workspace and dependency catalog
@@ -193,11 +193,11 @@ No database is shared between two bots. Bot repositories always filter by
 | Bot | Package | Domain | Image |
 | --- | --- | --- | --- |
 | **Astron** | `@astron-collection/astron` | General utilities: help, status, server/user/role/channel info, docs, support, invite, language, configuration | `ghcr.io/skygenesisenterprise/astron` |
-| **Protect** | `@astron-collection/protect` | Moderation, cases, quarantine, phishing/raid protection, AutoMod, security findings | `ghcr.io/skygenesisenterprise/astron/protect` |
-| **Logger** | `@astron-collection/logger` | Audit log, message/member/channel/role events, log search, signed event ingest | `ghcr.io/skygenesisenterprise/astron/logger` |
-| **Guild** | `@astron-collection/guild` | Welcome/farewell, autorole, XP and levels, reaction roles, polls, suggestions, birthdays, reminders | `ghcr.io/skygenesisenterprise/astron/guild` |
-| **Automations** | `@astron-collection/automations` | Workflows with message, member-join, cron and contract-event triggers; ordered actions; run history | `ghcr.io/skygenesisenterprise/astron/automations` |
-| **Player** | `@astron-collection/player` | Voice queues, playback controls, playlists, history, yt-dlp/ffmpeg playback | `ghcr.io/skygenesisenterprise/astron/player` |
+| **Protect** | `@astron-collection/protect` | Moderation, cases, quarantine, phishing/raid protection, AutoMod, security findings | `ghcr.io/skygenesisenterprise/astron-protect` |
+| **Logger** | `@astron-collection/logger` | Audit log, message/member/channel/role events, log search, signed event ingest | `ghcr.io/skygenesisenterprise/astron-logger` |
+| **Guild** | `@astron-collection/guild` | Welcome/farewell, autorole, XP and levels, reaction roles, polls, suggestions, birthdays, reminders | `ghcr.io/skygenesisenterprise/astron-guild` |
+| **Automations** | `@astron-collection/automations` | Workflows with message, member-join, cron and contract-event triggers; ordered actions; run history | `ghcr.io/skygenesisenterprise/astron-automations` |
+| **Player** | `@astron-collection/player` | Voice queues, playback controls, playlists, history, yt-dlp/ffmpeg playback | `ghcr.io/skygenesisenterprise/astron-player` |
 
 Each bot is a separate Discord application with its own token, application ID,
 command deployment state, minimal intents, SQLite database, health port, named
@@ -408,20 +408,26 @@ pnpm --filter=@astron-collection/logger dev
 Swap `logger` for `astron`, `protect`, `guild`, `automations` or `player`. Invite
 the application with the `bot` and `applications.commands` scopes.
 
-### Run all six bots
+### Run the bots
+
+Each bot is its own Compose project: one image, one process, one SQLite volume
+and one published health port (3010–3015). They can be started independently,
+in any order, without the control plane.
 
 ```bash
 for bot in astron automations guild logger player protect; do
-  cp bot/$bot/.env.example bot/$bot/.env
+  cp bot/$bot/.env.example bot/$bot/.env   # then fill in that bot's credentials
 done
 
-docker compose -f docker-compose.bots.yml up -d --build
-docker compose -f docker-compose.bots.yml ps
+docker compose -f bot/astron/docker-compose.yml up -d --build
+docker compose -f bot/astron/docker-compose.yml ps
+# or: make docker-up astron   (swap astron for any other bot name)
 ```
 
-Each bot gets its own container, SQLite volume, health port and image. Bots do
-not require the control plane to be running. `docker compose down` preserves the
-data volumes.
+`docker compose -f bot/<name>/docker-compose.yml down` preserves that bot's data
+volume. Cross-bot event delivery uses each bot's published port through
+`host.docker.internal` (already mapped in every Compose file); no shared network
+or Redis is required.
 
 ## 🛠️ Development
 
@@ -480,21 +486,21 @@ use `tests/`. The isolation check is cheap enough to run on every change.
 
 | Product | Image |
 | --- | --- |
-| Platform (self-hosted / cloud / console) | `ghcr.io/skygenesisenterprise/astron-collection` |
+| Platform (self-hosted / cloud) | `ghcr.io/skygenesisenterprise/astron-manager` |
 | Astron bot | `ghcr.io/skygenesisenterprise/astron` |
-| Protect bot | `ghcr.io/skygenesisenterprise/astron/protect` |
-| Logger bot | `ghcr.io/skygenesisenterprise/astron/logger` |
-| Guild bot | `ghcr.io/skygenesisenterprise/astron/guild` |
-| Automations bot | `ghcr.io/skygenesisenterprise/astron/automations` |
-| Player bot | `ghcr.io/skygenesisenterprise/astron/player` |
+| Protect bot | `ghcr.io/skygenesisenterprise/astron-protect` |
+| Logger bot | `ghcr.io/skygenesisenterprise/astron-logger` |
+| Guild bot | `ghcr.io/skygenesisenterprise/astron-guild` |
+| Automations bot | `ghcr.io/skygenesisenterprise/astron-automations` |
+| Player bot | `ghcr.io/skygenesisenterprise/astron-player` |
 | Status page | Built from the root Dockerfile `status` target |
 | Website / docs | Separate images under `web/` |
 
 The root Dockerfile supports `dev`, `status` and `platform` targets. `platform`
 is the default. The platform container selects its role at runtime:
-`ASTRON_COLLECTION_ROLE=client`, `api` or `migrate`. The self-hosted, cloud and
-console editions share the same image and differ by runtime configuration, not
-by service topology.
+`ASTRON_COLLECTION_ROLE=client`, `api` or `migrate`. The self-hosted and cloud
+contexts share the same `astron-manager` image and differ only by build args and
+runtime configuration, not by service topology.
 
 ### Configuration
 

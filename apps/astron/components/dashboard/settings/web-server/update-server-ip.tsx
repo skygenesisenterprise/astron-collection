@@ -4,7 +4,7 @@ import {
 	describeIpScope,
 	isLocalIpScope,
 	isValidIpAddress,
-} from "@notploy/server/utils/ip-address";
+} from "@astron-collection/server/utils/ip-address";
 import { ChevronsUpDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";

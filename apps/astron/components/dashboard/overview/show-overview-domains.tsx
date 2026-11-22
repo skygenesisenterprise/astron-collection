@@ -1,5 +1,5 @@
-import type { OverviewDomainSortBy } from "@notploy/server/services/overview-shared";
-import { sortOverviewDomains } from "@notploy/server/services/overview-shared";
+import type { OverviewDomainSortBy } from "@astron-collection/server/services/overview-shared";
+import { sortOverviewDomains } from "@astron-collection/server/services/overview-shared";
 import { ExternalLink, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";

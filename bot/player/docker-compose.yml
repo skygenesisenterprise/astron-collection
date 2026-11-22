@@ -1,3 +1,5 @@
+# Player — one image, one process, one volume. ffmpeg and yt-dlp are embedded in
+# the image, so playback needs no sidecar.
 name: astron-player
 
 services:
@@ -5,16 +7,43 @@ services:
     build:
       context: ../..
       dockerfile: bot/player/Dockerfile
-    image: ghcr.io/skygenesisenterprise/astron/player:local
+      args:
+        ASTRON_COLLECTION_VERSION: ${ASTRON_COLLECTION_VERSION:-2.0.0}
+    image: ${ASTRON_BOT_IMAGE:-ghcr.io/skygenesisenterprise/astron-player}:${ASTRON_BOT_VERSION:-latest}
+    container_name: player-bot
     restart: unless-stopped
     env_file:
-      - .env
+      - path: .env
+        required: false
     environment:
-      ASTRON_HEALTH_PORT: "3015"
+      NODE_ENV: ${NODE_ENV:-production}
+      APP_VERSION: ${ASTRON_COLLECTION_VERSION:-2.0.0}
+      DISCORD_TOKEN: ${DISCORD_TOKEN:-}
+      DISCORD_APPLICATION_ID: ${DISCORD_APPLICATION_ID:-}
+      DISCORD_GUILD_ID: ${DISCORD_GUILD_ID:-}
+      ASTRON_LOG_LEVEL: ${ASTRON_LOG_LEVEL:-info}
+      ASTRON_DATA_DIR: /app/bot/player/data
       ASTRON_DATABASE_PATH: /app/bot/player/data/player.sqlite3
+      ASTRON_HEALTH_PORT: "3015"
+      ASTRON_DEPLOY_COMMANDS: ${ASTRON_DEPLOY_COMMANDS:-false}
       ASTRON_YTDLP_PATH: /usr/local/bin/yt-dlp
+      ASTRON_EVENT_URL: ${ASTRON_EVENT_URL:-}
+      ASTRON_EVENT_SECRET: ${ASTRON_EVENT_SECRET:-}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "3015:3015"
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app/bot/player
+          ignore:
+            - .env
+            - data/
+            - node_modules/
+        - action: rebuild
+          path: ../../packages/discord-framework
     volumes:
       - player-data:/app/bot/player/data
     healthcheck:

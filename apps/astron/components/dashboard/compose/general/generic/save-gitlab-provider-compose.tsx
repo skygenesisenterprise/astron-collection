@@ -1,4 +1,4 @@
-import { VALID_BRANCH_REGEX } from "@notploy/server/utils/git-branch-validation";
+import { VALID_BRANCH_REGEX } from "@astron-collection/server/utils/git-branch-validation";
 import { standardSchemaResolver as zodResolver } from "@hookform/resolvers/standard-schema";
 import { CheckIcon, ChevronsUpDown, X } from "lucide-react";
 import Link from "next/link";

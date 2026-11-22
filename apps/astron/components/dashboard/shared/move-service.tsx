@@ -1,4 +1,4 @@
-import type { ServiceType } from "@notploy/server/db/schema";
+import type { ServiceType } from "@astron-collection/server/db/schema";
 import { FolderInput } from "lucide-react";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";

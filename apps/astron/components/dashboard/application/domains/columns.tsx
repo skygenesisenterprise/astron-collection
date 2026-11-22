@@ -1,4 +1,4 @@
-import { getDomainRequirements } from "@notploy/server/utils/domain-scope";
+import { getDomainRequirements } from "@astron-collection/server/utils/domain-scope";
 import type { ColumnDef } from "@tanstack/react-table";
 import {
 	ArrowUpDown,

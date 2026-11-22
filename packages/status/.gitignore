@@ -157,6 +157,6 @@ yarn.lock
 build/
 
 # Written by `make docker-build` / `make docker-up`: the product
-# (self|cloud|console) remembered for the next start. Local state, never committed.
+# (self|cloud) remembered for the next start. Local state, never committed.
 .make-product
 .pnpm-store/

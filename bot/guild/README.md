@@ -61,7 +61,7 @@ pnpm --filter @astron-collection/guild start
 Docker:
 
 ```sh
-docker build -f bot/guild/Dockerfile -t ghcr.io/skygenesisenterprise/astron/guild .
+docker build -f bot/guild/Dockerfile -t ghcr.io/skygenesisenterprise/astron-guild .
 docker compose -f bot/guild/docker-compose.yml up -d
 ```
 

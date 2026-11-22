@@ -166,7 +166,7 @@ install_astron-collection() {
       --update-order stop-first \
       --constraint 'node.role == manager' \
       -e POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password \
-     ghcr.io/skygenesisenterprise/astron-collection:latest
+     ghcr.io/skygenesisenterprise/astron-manager:latest
 
 
     docker run -d \
@@ -223,10 +223,10 @@ update_astron-collection() {
     echo "Updating Astron Collection..."
     
     # Pull the latest image
-    docker pullghcr.io/skygenesisenterprise/astron-collection:latest
+    docker pullghcr.io/skygenesisenterprise/astron-manager:latest
 
     # Update the service
-    docker service update --imageghcr.io/skygenesisenterprise/astron-collection:latest astron-collection
+    docker service update --imageghcr.io/skygenesisenterprise/astron-manager:latest astron-collection
 
     echo "Astron Collection has been updated to the latest version."
 }
@@ -323,7 +323,7 @@ docker service create \
   --constraint 'node.role == manager' \
   -e POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password \
   -e BETTER_AUTH_SECRET_FILE=/run/secrets/astron_collectionauth_secret \
- ghcr.io/skygenesisenterprise/astron-collection:latest
+ ghcr.io/skygenesisenterprise/astron-manager:latest
 
 # 6. Create the Traefik container
 # Astron Collection generates the Traefik configuration in /etc/astron-collection/traefik

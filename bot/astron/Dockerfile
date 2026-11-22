@@ -1,39 +1,41 @@
-# Astron — independent image.
+# Astron — independent image. Build context is the repository root:
 #
-# Build context is the repository root because the image ships the bot and the
-# shared framework imported as @astron-collection/discord-framework:
+#   docker build -f bot/astron/Dockerfile \
+#     -t ghcr.io/skygenesisenterprise/astron:local .
 #
-#   /app/bot/astron                  this bot, its migrations and data volume
-#   /app/packages/discord-framework  the shared foundation
-#   /app/packages/node_modules       symlink, so the framework resolves discord.js
-#
-# Build: docker build -f bot/astron/Dockerfile -t astron .
+# The shared @astron-collection/discord-framework comes from the same context.
+# Nothing else is required: one image, one process, one data volume.
 FROM node:24-alpine
 
-ARG APP_VERSION=2.0.0
+ARG ASTRON_COLLECTION_VERSION=2.0.0
 ENV NODE_ENV=production \
-    APP_VERSION=${APP_VERSION} \
-    ASTRON_DATA_DIR=/app/bot/astron/data
+    APP_VERSION=${ASTRON_COLLECTION_VERSION} \
+    ASTRON_DATA_DIR=/app/bot/astron/data \
+    ASTRON_HEALTH_PORT=3010 \
+    NPM_CONFIG_UPDATE_NOTIFIER=false
 
-RUN apk add --no-cache ca-certificates tzdata wget
+RUN apk add --no-cache ca-certificates tzdata
 
 WORKDIR /app/bot/astron
 
-COPY packages/discord-framework /app/packages/discord-framework
+COPY packages/discord-framework/package.json /app/packages/discord-framework/package.json
 COPY bot/astron/package.json ./
 RUN npm install --omit=dev --no-audit --no-fund
 
+COPY packages/discord-framework /app/packages/discord-framework
 COPY bot/astron/ ./
 
+# The framework resolves its peers from its real path (/app/packages/...), so
+# point that path at the bot's node_modules instead of installing a second copy.
 RUN mkdir -p /app/packages /app/bot/astron/data \
     && ln -sfn /app/bot/astron/node_modules /app/packages/node_modules
 
-COPY bot/astron/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY bot/astron/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 VOLUME ["/app/bot/astron/data"]
-EXPOSE 8080
+EXPOSE 3010
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-  CMD wget -qO- http://127.0.0.1:8080/healthz >/dev/null || exit 1
+  CMD node -e "fetch('http://127.0.0.1:'+(process.env.ASTRON_HEALTH_PORT||3010)+'/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

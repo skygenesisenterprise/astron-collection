@@ -509,7 +509,7 @@ describe("update check", () => {
 			await reloadDockerResource("astron-collection", undefined, "0.30.7");
 
 			expect(execAsync).toHaveBeenLastCalledWith(
-				"docker service update --force --image ghcr.io/skygenesisenterprise/astron-collection:v0.30.7-app astron-collection",
+				"docker service update --force --image ghcr.io/skygenesisenterprise/astron-manager:v0.30.7-app astron-collection",
 			);
 		});
 	});
@@ -517,6 +517,6 @@ describe("update check", () => {
 	it("publishes the self-hosted image on the GitHub Container Registry", async () => {
 		const { ASTRON_COLLECTION_IMAGE } = await importFresh();
 
-		expect(ASTRON_COLLECTION_IMAGE).toBe("ghcr.io/skygenesisenterprise/astron-collection");
+		expect(ASTRON_COLLECTION_IMAGE).toBe("ghcr.io/skygenesisenterprise/astron-manager");
 	});
 });

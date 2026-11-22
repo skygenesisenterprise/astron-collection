@@ -1,4 +1,4 @@
-import { createMetricUsage } from "@notploy/server/monitoring/status";
+import { createMetricUsage } from "@astron-collection/server/monitoring/status";
 import { Cpu, HardDrive, Loader2, MemoryStick, Network } from "lucide-react";
 import { useEffect, useState } from "react";
 import { MetricUsage } from "@/components/dashboard/monitoring/metric-usage";

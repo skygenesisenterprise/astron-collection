@@ -1,3 +1,4 @@
+# Guild — one image, one process, one volume. No Redis, no shared database.
 name: astron-guild
 
 services:
@@ -5,15 +6,42 @@ services:
     build:
       context: ../..
       dockerfile: bot/guild/Dockerfile
-    image: ghcr.io/skygenesisenterprise/astron/guild:local
+      args:
+        ASTRON_COLLECTION_VERSION: ${ASTRON_COLLECTION_VERSION:-2.0.0}
+    image: ${ASTRON_BOT_IMAGE:-ghcr.io/skygenesisenterprise/astron-guild}:${ASTRON_BOT_VERSION:-latest}
+    container_name: guild-bot
     restart: unless-stopped
     env_file:
-      - .env
+      - path: .env
+        required: false
     environment:
-      ASTRON_HEALTH_PORT: "3013"
+      NODE_ENV: ${NODE_ENV:-production}
+      APP_VERSION: ${ASTRON_COLLECTION_VERSION:-2.0.0}
+      DISCORD_TOKEN: ${DISCORD_TOKEN:-}
+      DISCORD_APPLICATION_ID: ${DISCORD_APPLICATION_ID:-}
+      DISCORD_GUILD_ID: ${DISCORD_GUILD_ID:-}
+      ASTRON_LOG_LEVEL: ${ASTRON_LOG_LEVEL:-info}
+      ASTRON_DATA_DIR: /app/bot/guild/data
       ASTRON_DATABASE_PATH: /app/bot/guild/data/guild.sqlite3
+      ASTRON_HEALTH_PORT: "3013"
+      ASTRON_DEPLOY_COMMANDS: ${ASTRON_DEPLOY_COMMANDS:-false}
+      ASTRON_EVENT_URL: ${ASTRON_EVENT_URL:-}
+      ASTRON_EVENT_SECRET: ${ASTRON_EVENT_SECRET:-}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "3013:3013"
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app/bot/guild
+          ignore:
+            - .env
+            - data/
+            - node_modules/
+        - action: rebuild
+          path: ../../packages/discord-framework
     volumes:
       - guild-data:/app/bot/guild/data
     healthcheck:

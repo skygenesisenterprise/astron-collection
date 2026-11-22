@@ -1,5 +1,5 @@
-import type { OverviewBackup } from "@notploy/server/services/overview-shared";
-import { getBackupOverviewIcon } from "@notploy/server/services/overview-shared";
+import type { OverviewBackup } from "@astron-collection/server/services/overview-shared";
+import { getBackupOverviewIcon } from "@astron-collection/server/services/overview-shared";
 import {
 	ArrowUpDown,
 	CircuitBoard,

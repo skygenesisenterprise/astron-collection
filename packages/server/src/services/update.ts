@@ -19,13 +19,15 @@ import semver from "semver";
 export const ASTRON_COLLECTION_GITHUB_REPOSITORY = "skygenesisenterprise/astron-collection";
 
 /**
- * Self-hosted image published by .github/workflows/docker-publish.yml. Releases
- * are consumed from the GitHub Releases API, images from the GitHub Container
- * Registry, so no Docker Hub credential is involved anymore.
+ * Official platform image published by .github/workflows/docker-publish.yml.
+ * The self-hosted and cloud contexts share this one image; only the build args
+ * and the runtime environment differ. Releases are consumed from the GitHub
+ * Releases API, images from the GitHub Container Registry, so no Docker Hub
+ * credential is involved anymore.
  */
-export const ASTRON_COLLECTION_IMAGE = `ghcr.io/${ASTRON_COLLECTION_GITHUB_REPOSITORY}`;
+export const ASTRON_COLLECTION_IMAGE = "ghcr.io/skygenesisenterprise/astron-manager";
 
-/** Suffix docker-publish.yml appends to the self-hosted image: `v1.2.3-app` publishes `ghcr.io/skygenesisenterprise/astron-collection:v1.2.3-app`. */
+/** Suffix docker-publish.yml appends to the self-hosted image: `v1.2.3-app` publishes `ghcr.io/skygenesisenterprise/astron-manager:v1.2.3-app`. */
 const APP_TAG_SUFFIX = "-app";
 
 /** Matches the self-hosted release tags only, so the other images of the publish matrix (`-cloud`, `-mcp`, ...) are ignored. */

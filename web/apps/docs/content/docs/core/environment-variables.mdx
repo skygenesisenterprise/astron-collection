@@ -16,11 +16,11 @@ for every secret, for example with `openssl rand -hex 32`.
 
 | Variable | Default | Description |
 | --- | --- | --- |
-| `ASTRON_COLLECTION_FLAVOR` | `selfhosted` | Selects the mode and Dockerfile target: `selfhosted`, `cloud` or `console`. |
-| `ASTRON_COLLECTION_IMAGE` | `ghcr.io/skygenesisenterprise/astron-collection` | Image reference; override for a mirror. |
+| `ASTRON_COLLECTION_FLAVOR` | `selfhosted` | Selects the build context: `selfhosted` or `cloud`. Both use the same `astron-manager` image. |
+| `ASTRON_COLLECTION_IMAGE` | `ghcr.io/skygenesisenterprise/astron-manager` | Image reference; override for a mirror. |
 | `ASTRON_COLLECTION_VERSION` | `latest` | Image tag to run. |
-| `IS_CLOUD` | `false` | Switches the app to cloud behaviour (managed queue, billing). Set automatically for `cloud` and `console`. |
-| `ASTRON_COLLECTION_PRODUCT` | _(derived)_ | Explicit product override (`self`, `cloud`, `console`). Cloud and console require a **signed entitlement**. |
+| `IS_CLOUD` | `false` | Switches the app to cloud behaviour (managed queue, billing). Set automatically for `cloud`. |
+| `ASTRON_COLLECTION_PRODUCT` | _(derived)_ | Explicit product override (`self` or `cloud`). Cloud requires a **signed entitlement**. |
 
 ## Networking
 

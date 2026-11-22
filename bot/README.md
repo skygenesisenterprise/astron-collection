@@ -7,11 +7,11 @@ database, tests, Docker image and deployment.
 | Bot | Directory | Image | Port | Owns |
 | --- | --- | --- | --- | --- |
 | Astron | `bot/astron` | `ghcr.io/skygenesisenterprise/astron` | 3010 | General: help, status, info, docs, support, invite, language, config |
-| Protect | `bot/protect` | `ghcr.io/skygenesisenterprise/astron/protect` | 3011 | Moderation, cases, quarantine, security, raid protection |
-| Logger | `bot/logger` | `ghcr.io/skygenesisenterprise/astron/logger` | 3012 | Audit log, message/member/role/channel events, log search, signed ingest |
-| Guild | `bot/guild` | `ghcr.io/skygenesisenterprise/astron/guild` | 3013 | Welcome, autorole, XP/levels, reaction roles, polls, suggestions, birthdays, reminders |
-| Automations | `bot/automations` | `ghcr.io/skygenesisenterprise/astron/automations` | 3014 | Workflows: message/member/schedule/event triggers and ordered actions |
-| Player | `bot/player` | `ghcr.io/skygenesisenterprise/astron/player` | 3015 | Voice queues, playback controls, playlists, history |
+| Protect | `bot/protect` | `ghcr.io/skygenesisenterprise/astron-protect` | 3011 | Moderation, cases, quarantine, security, raid protection |
+| Logger | `bot/logger` | `ghcr.io/skygenesisenterprise/astron-logger` | 3012 | Audit log, message/member/role/channel events, log search, signed ingest |
+| Guild | `bot/guild` | `ghcr.io/skygenesisenterprise/astron-guild` | 3013 | Welcome, autorole, XP/levels, reaction roles, polls, suggestions, birthdays, reminders |
+| Automations | `bot/automations` | `ghcr.io/skygenesisenterprise/astron-automations` | 3014 | Workflows: message/member/schedule/event triggers and ordered actions |
+| Player | `bot/player` | `ghcr.io/skygenesisenterprise/astron-player` | 3015 | Voice queues, playback controls, playlists, history |
 
 No bot loads another bot's catalogue. `node scripts/check-bots.mjs` enforces it
 in CI, together with the required files and the shared-framework import.
@@ -57,13 +57,18 @@ for bot in astron automations guild logger player protect; do
 done
 # Fill credentials (and a shared ASTRON_EVENT_SECRET) in each .env.
 
-docker compose -f docker-compose.bots.yml up -d --build
-docker compose -f docker-compose.bots.yml ps
+docker compose -f bot/astron/docker-compose.yml up -d --build
+docker compose -f bot/astron/docker-compose.yml ps
 ```
 
-Every container exposes `/healthz`, `/livez` and `/metrics`. Data lives in a
-named volume per bot. Stop with `docker compose -f docker-compose.bots.yml down`
-(volumes are preserved).
+Repeat the two commands with any other bot directory: each has its own Compose
+project, so the six can run independently on ports 3010–3015. Every container
+exposes `/healthz`, `/livez` and `/metrics`. Data lives in a named volume per
+bot; `docker compose -f bot/<name>/docker-compose.yml down` preserves it.
+
+Cross-bot event delivery uses the published ingest port through
+`host.docker.internal` (mapped in each Compose file), e.g.
+`ASTRON_EVENT_URL=http://host.docker.internal:3012/ingest/events`.
 
 Without Docker, each bot runs from its directory:
 

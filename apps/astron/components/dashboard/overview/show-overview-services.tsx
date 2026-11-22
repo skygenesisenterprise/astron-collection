@@ -1,6 +1,6 @@
 "use client";
 
-import type { OverviewServiceType } from "@notploy/server/services/overview-shared";
+import type { OverviewServiceType } from "@astron-collection/server/services/overview-shared";
 import {
 	type ColumnDef,
 	flexRender,

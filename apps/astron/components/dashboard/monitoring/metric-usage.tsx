@@ -3,7 +3,7 @@ import {
 	type MetricThresholds,
 	DEFAULT_THRESHOLDS,
 	getMetricStatus,
-} from "@notploy/server/monitoring/status";
+} from "@astron-collection/server/monitoring/status";
 import type { LucideIcon } from "lucide-react";
 import type * as React from "react";
 import { Badge } from "@/components/ui/badge";

@@ -5,8 +5,8 @@
 # Built from the repository root: the whole monorepo is one pnpm workspace with
 # a single `pnpm-lock.yaml`, so only the root context is ever used.
 #
-#   docker build -t astron-collection .                    # the platform image (default target)
-#   docker build --target dev -t astron-collection-dev .   # development image
+#   docker build -t astron-manager .                      # the platform image (default target)
+#   docker build --target dev -t astron-manager-dev .      # development image
 #   docker build --target status -t astron-collection-status .
 #   docker buildx build --target platform .
 #
@@ -17,9 +17,10 @@
 #   status      standalone status page (separate product, not part of the stack)
 #   platform    client AND api in one artifact — LAST => default target
 #
-# One image per edition, never one per service: `self`, `cloud` and `console` each
-# publish a single image (.github/workflows/docker-publish.yml), and the role of a
-# container is chosen at runtime rather than at build time:
+# One official image for both contexts, never one per service: `self` and `cloud`
+# publish the same `astron-manager` image with different build args
+# (.github/workflows/docker-publish.yml), and the role of a container is chosen
+# at runtime rather than at build time:
 #
 #   ASTRON_COLLECTION_ROLE=client   `next start`                    (port 3000)
 #   ASTRON_COLLECTION_ROLE=api      `node dist/server.mjs`          (port 4000)
@@ -88,6 +89,11 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 # a network round-trip from every build without changing the produced artifacts.
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+# NEXT_PUBLIC_* values are inlined by Next at build time. Declared here so the
+# `client` and `api` services can pass the exact same build args for the one
+# shared image instead of silently ignoring the arg.
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 
 # Server bundle (esbuild: dist/server.mjs, dist/migration.mjs, …) and Next build.
 RUN pnpm --filter=./apps/astron run build
@@ -152,7 +158,7 @@ ENV ASTRON_COLLECTION_ROLE=status
 ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]
 
 # ---------------------------------------------------------------------------
-# Platform — the single image of an edition (`self`, `cloud`, `console`).
+# Platform — the single image of the self and cloud contexts.
 #
 # It carries both runtimes, and nothing else:
 #
@@ -166,7 +172,7 @@ ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]
 #
 # The edition is baked in as a default (`ASTRON_COLLECTION_FLAVOR` /
 # `ASTRON_COLLECTION_PRODUCT`, the values docker-publish.yml passes) and can be
-# overridden at runtime, which is what `make docker-up self|cloud|console` does.
+# overridden at runtime, which is what `make docker-up self|cloud` does.
 # ---------------------------------------------------------------------------
 FROM base AS platform
 WORKDIR /app
@@ -199,8 +205,8 @@ ARG ASTRON_COLLECTION_FLAVOR=selfhosted
 ARG ASTRON_COLLECTION_PRODUCT=self
 ENV ASTRON_COLLECTION_FLAVOR=${ASTRON_COLLECTION_FLAVOR}
 ENV ASTRON_COLLECTION_PRODUCT=${ASTRON_COLLECTION_PRODUCT}
-LABEL org.opencontainers.image.title="astron-collection" \
-      org.opencontainers.image.description="Astron Collection platform — client and API in one image" \
+LABEL org.opencontainers.image.title="astron-manager" \
+      org.opencontainers.image.description="Astron Manager platform — client and API in one image" \
       org.opencontainers.image.source="https://github.com/skygenesisenterprise/astron-collection" \
       org.opencontainers.image.version="${ASTRON_COLLECTION_VERSION}" \
       org.opencontainers.image.licenses="Apache-2.0"

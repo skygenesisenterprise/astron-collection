@@ -1,4 +1,4 @@
-import type { VaultSecretRecord } from "@notploy/server";
+import type { VaultSecretRecord } from "@astron-collection/server";
 import {
 	ArrowLeft,
 	Check,

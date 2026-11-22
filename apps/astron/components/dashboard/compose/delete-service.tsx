@@ -1,4 +1,4 @@
-import type { ServiceType } from "@notploy/server/db/schema";
+import type { ServiceType } from "@astron-collection/server/db/schema";
 import { standardSchemaResolver as zodResolver } from "@hookform/resolvers/standard-schema";
 import copy from "copy-to-clipboard";
 import { Copy, Trash2 } from "lucide-react";

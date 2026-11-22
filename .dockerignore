@@ -28,14 +28,29 @@ web/apps/website/.next
 .gitignore
 .github
 
-# Local environment files (keep the committed *.example files)
+# Bot runtime state: SQLite files and local caches must never be baked into an
+# image — each bot mounts its own named volume at /app/bot/<bot>/data.
+bot/*/data
+bot/*/.data
+
+# Local environment files (keep the committed *.example files). `**/.env` is
+# required here: each bot has its own `.env` next to its Dockerfile, and the bot
+# build context is the repository root. Without it those secrets are copied by
+# `COPY bot/<bot>/ ./`.
 .env
 .env.production
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+**/.env
+**/.env.production
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
 !.env.example
+!**/.env.example
 
 # Editor / OS noise
 .DS_Store

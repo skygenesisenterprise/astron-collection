@@ -1,4 +1,4 @@
-import type { CertificateStatus } from "@notploy/server";
+import type { CertificateStatus } from "@astron-collection/server";
 
 /** Certificate states from issue #59: pending, active, expiring, expired. */
 export type CertificateLifecycleStatus = CertificateStatus;

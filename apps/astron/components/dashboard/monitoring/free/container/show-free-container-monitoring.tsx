@@ -1,5 +1,5 @@
-import { createMetricUsage } from "@notploy/server/monitoring/status";
-import { formatMb } from "@notploy/server/monitoring/units";
+import { createMetricUsage } from "@astron-collection/server/monitoring/status";
+import { formatMb } from "@astron-collection/server/monitoring/units";
 import { Cpu, HardDrive, MemoryStick } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";

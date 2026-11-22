@@ -1,4 +1,4 @@
-import type { findEnvironmentsByProjectId } from "@notploy/server";
+import type { findEnvironmentsByProjectId } from "@astron-collection/server";
 import { ChevronDownIcon, PencilIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useRouter } from "next/router";
 import { useState } from "react";

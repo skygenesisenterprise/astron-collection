@@ -1,4 +1,4 @@
-import { createMetricUsage } from "@notploy/server/monitoring/status";
+import { createMetricUsage } from "@astron-collection/server/monitoring/status";
 import {
 	Check,
 	ChevronDown,

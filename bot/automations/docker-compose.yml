@@ -1,3 +1,5 @@
+# Automations — one image, one process, one volume. No Redis, no shared database.
+# The signed ingest endpoint is published on 3014 for event producers.
 name: astron-automations
 
 services:
@@ -5,15 +7,44 @@ services:
     build:
       context: ../..
       dockerfile: bot/automations/Dockerfile
-    image: ghcr.io/skygenesisenterprise/astron/automations:local
+      args:
+        ASTRON_COLLECTION_VERSION: ${ASTRON_COLLECTION_VERSION:-2.0.0}
+    image: ${ASTRON_BOT_IMAGE:-ghcr.io/skygenesisenterprise/astron-automations}:${ASTRON_BOT_VERSION:-latest}
+    container_name: automations-bot
     restart: unless-stopped
     env_file:
-      - .env
+      - path: .env
+        required: false
     environment:
-      ASTRON_HEALTH_PORT: "3014"
+      NODE_ENV: ${NODE_ENV:-production}
+      APP_VERSION: ${ASTRON_COLLECTION_VERSION:-2.0.0}
+      DISCORD_TOKEN: ${DISCORD_TOKEN:-}
+      DISCORD_APPLICATION_ID: ${DISCORD_APPLICATION_ID:-}
+      DISCORD_GUILD_ID: ${DISCORD_GUILD_ID:-}
+      ASTRON_LOG_LEVEL: ${ASTRON_LOG_LEVEL:-info}
+      ASTRON_DATA_DIR: /app/bot/automations/data
       ASTRON_DATABASE_PATH: /app/bot/automations/data/automations.sqlite3
+      ASTRON_HEALTH_PORT: "3014"
+      ASTRON_DEPLOY_COMMANDS: ${ASTRON_DEPLOY_COMMANDS:-false}
+      ASTRON_INGEST_PATH: ${ASTRON_INGEST_PATH:-/ingest/events}
+      ASTRON_EVENT_SECRET: ${ASTRON_EVENT_SECRET:-}
+      ASTRON_OUTBOUND_SECRET: ${ASTRON_OUTBOUND_SECRET:-}
+      ASTRON_EVENT_URL: ${ASTRON_EVENT_URL:-}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "3014:3014"
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app/bot/automations
+          ignore:
+            - .env
+            - data/
+            - node_modules/
+        - action: rebuild
+          path: ../../packages/discord-framework
     volumes:
       - automations-data:/app/bot/automations/data
     healthcheck:

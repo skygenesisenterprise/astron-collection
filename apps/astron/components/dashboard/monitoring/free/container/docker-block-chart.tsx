@@ -1,4 +1,4 @@
-import { formatMb, toMb } from "@notploy/server/monitoring/units";
+import { formatMb, toMb } from "@astron-collection/server/monitoring/units";
 import { format } from "date-fns";
 import { Area, AreaChart, CartesianGrid, YAxis } from "recharts";
 import {

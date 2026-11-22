@@ -1,23 +1,36 @@
 #!/usr/bin/env bash
 #
-# Astron Collection container entrypoint — the single place that decides how a
-# container starts. Every target of the root Dockerfile calls this script, and the
-# role is selected by ASTRON_COLLECTION_ROLE (or by the first argument, which is how
-# the one-shot `migrate` job asks for the migrations):
+# Astron Manager container entrypoint — the single place that decides how a
+# container starts. Every runtime target of the root Dockerfile (`dev`, `status`,
+# `platform`) calls this script:
 #
-#   api       backend: wait for PostgreSQL, optionally migrate, exec dist/server.mjs
-#   migrate   one-shot job: wait for PostgreSQL, apply the migrations, exit
-#   client    frontend: exec `next start` (or `next dev` in development)
-#   status    standalone status page (apps/status), independent from the stack
-#   healthcheck  probe the container role and exit (used by Docker HEALTHCHECK)
+#   platform  the one `astron-manager` image, shared by the `self` and `cloud`
+#             contexts (they differ by build args, not by image); the role below
+#             is chosen at runtime, never at build time
+#   dev       the same monorepo with sources + dev dependencies, synchronised by
+#             Compose's `develop.watch`
+#   status    the standalone status page (astron-collection-status)
+#
+# The role is selected by ASTRON_COLLECTION_ROLE, or by the first argument — which
+# is how the one-shot `migrate` job and the Docker HEALTHCHECK ask for it:
+#
+#   api          backend: wait for PostgreSQL, optionally migrate, exec dist/server.mjs
+#   migrate      one-shot job: wait for PostgreSQL, apply the migrations, exit
+#   client       frontend: exec `next start` (or `next dev` in development)
+#   status       standalone status page (apps/status), independent from the stack
+#   healthcheck  probe the container role on its own port and exit
 #
 # Flow of the backend roles:
-#   1. resolve mode (development | production)
-#   2. locate the app directory (production runs in /app, dev runs in the
-#      monorepo workspace)
+#   1. resolve mode (development | production) from ASTRON_COLLECTION_MODE / NODE_ENV
+#   2. locate the app directory (production runs in /app, dev in /usr/src/app)
 #   3. wait for PostgreSQL to accept connections
-#   4. apply database migrations (always for `migrate`, opt-in for `api`)
+#   4. apply database migrations (always for `migrate`, once for the single API)
 #   5. exec the server
+#
+# Modes and roles come from docker-compose.yml: every service states its role,
+# PORT and HOST explicitly, and `make docker-up|docker-dev [self|cloud]` keeps the
+# build target, mode and runtime environment in sync. Client and API therefore run
+# the exact same image digest — nothing here is baked per service.
 #
 # Escape hatches:
 #   ASTRON_COLLECTION_ROLE=api|client|migrate|status  select the role explicitly
@@ -47,12 +60,20 @@ prod | production) MODE="production" ;;
 	;;
 esac
 
-log() { printf '[astron-collection] %s\n' "$*"; }
+# Platform roles run in `astron-manager`; the status role has its own image and
+# label. Keep the log prefix aligned with the image that is actually running.
+if [ "$ROLE" = "status" ]; then
+	LOG_PREFIX="astron-collection-status"
+else
+	LOG_PREFIX="astron-manager"
+fi
+log() { printf '[%s] %s\n' "$LOG_PREFIX" "$*"; }
 
 # --- Healthcheck ------------------------------------------------------------
-# One image serves every role, so the Docker HEALTHCHECK cannot hard-code a
-# single path: it asks the entrypoint, which probes the *container* role
-# (ASTRON_COLLECTION_ROLE) on its own port. Exits 0 when the app answers.
+# One `astron-manager` image serves the client and API roles, and the status image
+# reuses the same probe. The Docker HEALTHCHECK cannot hard-code a path: it asks
+# the entrypoint, which probes the *container* role (ASTRON_COLLECTION_ROLE) on
+# its own port. Exits 0 when the app answers.
 if [ "$ROLE" = "healthcheck" ]; then
 	probe_role="${ASTRON_COLLECTION_ROLE:-api}"
 	case "$probe_role" in
@@ -85,13 +106,16 @@ fi
 # its state in a SQLite file under STATUS_DATA_DIR.
 if [ "$ROLE" = "status" ]; then
 	STATUS_CONTAINER_PORT="${PORT:-4200}"
+	# The status stage sets PORT (4200) but no HOST, so default to all interfaces
+	# like Compose does for the other web service instead of binding to HOSTNAME.
+	STATUS_BIND_HOST="${HOST:-0.0.0.0}"
 	if [ "$MODE" = "development" ]; then
 		log "role: status (development, port ${STATUS_CONTAINER_PORT})"
 		[ -d ./apps/status ] && cd apps/status
-		exec pnpm exec next dev -p "${STATUS_CONTAINER_PORT}"
+		exec pnpm exec next dev -p "${STATUS_CONTAINER_PORT}" -H "${STATUS_BIND_HOST}"
 	fi
 	log "role: status (production, port ${STATUS_CONTAINER_PORT}, dir: $(pwd))"
-	exec ./node_modules/.bin/next start -p "${STATUS_CONTAINER_PORT}" -H "${HOSTNAME:-0.0.0.0}"
+	exec ./node_modules/.bin/next start -p "${STATUS_CONTAINER_PORT}" -H "${STATUS_BIND_HOST}"
 fi
 
 # --- Frontend ---------------------------------------------------------------
@@ -100,7 +124,9 @@ fi
 # never starts a worker: it holds no database or Redis credentials at all.
 if [ "$ROLE" = "client" ]; then
 	CLIENT_CONTAINER_PORT="${PORT:-3000}"
-	CLIENT_BIND_HOST="${HOST:-${HOSTNAME:-0.0.0.0}}"
+	# Compose sets HOST=0.0.0.0 on the client service; keep the same fallback if
+	# the image is run standalone (the platform stage only sets PORT).
+	CLIENT_BIND_HOST="${HOST:-0.0.0.0}"
 	if [ "$MODE" = "development" ]; then
 		log "role: client (development, port ${CLIENT_CONTAINER_PORT})"
 		[ -d ./apps/astron ] && cd apps/astron
@@ -145,8 +171,9 @@ else
 fi
 
 # --- Migrations ------------------------------------------------------------
-# Only the `migrate` job and an explicitly opted-in API run them: two API
-# replicas must never race on the same schema.
+# Only the one-shot `migrate` job and an opted-in API run them. Compose enables
+# ASTRON_COLLECTION_RUN_MIGRATIONS=1 on its single API service; additional replicas
+# must set it to 0 so they never race on the same schema.
 RUN_MIGRATIONS="0"
 if [ "$ROLE" = "migrate" ] || [ "${ASTRON_COLLECTION_RUN_MIGRATIONS:-0}" = "1" ]; then
 	RUN_MIGRATIONS="1"
@@ -168,5 +195,5 @@ if [ "$ROLE" = "migrate" ]; then
 fi
 
 # --- Start -----------------------------------------------------------------
-log "starting Astron Collection (${ROLE})..."
+log "starting Astron Manager (${ROLE})..."
 exec "${SERVER_CMD[@]}"

@@ -1,22 +1,57 @@
-# Astron alone: one image, one process, one volume. No Redis, no shared database.
+# Astron — one image, one process, one volume. No Redis, no shared database.
+# Works from its own directory: docker compose up -d --build
+name: astron-astron
+
 services:
   astron:
     build:
       context: ../..
       dockerfile: bot/astron/Dockerfile
+      args:
+        ASTRON_COLLECTION_VERSION: ${ASTRON_COLLECTION_VERSION:-2.0.0}
     image: ${ASTRON_BOT_IMAGE:-ghcr.io/skygenesisenterprise/astron}:${ASTRON_BOT_VERSION:-latest}
     container_name: astron-bot
     restart: unless-stopped
+    # `.env` is optional so credentials can also come from the shell.
     env_file:
-      - .env
+      - path: .env
+        required: false
     environment:
       NODE_ENV: ${NODE_ENV:-production}
+      APP_VERSION: ${ASTRON_COLLECTION_VERSION:-2.0.0}
+      DISCORD_TOKEN: ${DISCORD_TOKEN:-}
+      DISCORD_APPLICATION_ID: ${DISCORD_APPLICATION_ID:-}
+      DISCORD_GUILD_ID: ${DISCORD_GUILD_ID:-}
+      ASTRON_LOG_LEVEL: ${ASTRON_LOG_LEVEL:-info}
       ASTRON_DATA_DIR: /app/bot/astron/data
-      ASTRON_HEALTH_PORT: "8080"
+      ASTRON_DATABASE_PATH: /app/bot/astron/data/astron.sqlite3
+      ASTRON_HEALTH_PORT: "3010"
+      ASTRON_DEPLOY_COMMANDS: ${ASTRON_DEPLOY_COMMANDS:-false}
+      ASTRON_DOCS_URL: ${ASTRON_DOCS_URL:-https://docs.astron-collection.com}
+      ASTRON_SUPPORT_URL: ${ASTRON_SUPPORT_URL:-https://github.com/SkyGenesisEnterprise/astron-collection/issues}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "3010:3010"
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app/bot/astron
+          ignore:
+            - .env
+            - data/
+            - node_modules/
+        - action: rebuild
+          path: ../../packages/discord-framework
     volumes:
       - astron-data:/app/bot/astron/data
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/healthz"]
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3010/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
       interval: 30s
       timeout: 5s
       retries: 3
@@ -24,4 +59,3 @@ services:
 
 volumes:
   astron-data:
-    name: astron-data

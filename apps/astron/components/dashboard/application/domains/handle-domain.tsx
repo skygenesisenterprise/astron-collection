@@ -2,11 +2,11 @@ import { standardSchemaResolver as zodResolver } from "@hookform/resolvers/stand
 import {
 	deriveInternalDnsZone,
 	getDomainRequirements,
-} from "@notploy/server/utils/domain-scope";
+} from "@astron-collection/server/utils/domain-scope";
 import {
 	INVALID_HOSTNAME_MESSAGE,
 	VALID_HOSTNAME_REGEX,
-} from "@notploy/server/utils/hostname-validation";
+} from "@astron-collection/server/utils/hostname-validation";
 import { DatabaseZap, Dices, RefreshCw, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";

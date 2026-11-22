@@ -1,4 +1,4 @@
-import type { IUpdateStatusData } from "@notploy/server/index";
+import type { IUpdateStatusData } from "@astron-collection/server/index";
 import {
 	Bug,
 	Download,

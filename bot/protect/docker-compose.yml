@@ -1,21 +1,57 @@
+# Protect — one image, one process, one volume. No Redis, no shared database.
+# Works from its own directory: docker compose up -d --build
+name: astron-protect
+
 services:
   protect:
     build:
       context: ../..
       dockerfile: bot/protect/Dockerfile
-    image: ${ASTRON_BOT_IMAGE:-ghcr.io/skygenesisenterprise/protect}:${ASTRON_BOT_VERSION:-latest}
+      args:
+        ASTRON_COLLECTION_VERSION: ${ASTRON_COLLECTION_VERSION:-2.0.0}
+    image: ${ASTRON_BOT_IMAGE:-ghcr.io/skygenesisenterprise/astron-protect}:${ASTRON_BOT_VERSION:-latest}
     container_name: protect-bot
     restart: unless-stopped
     env_file:
-      - .env
+      - path: .env
+        required: false
     environment:
       NODE_ENV: ${NODE_ENV:-production}
+      APP_VERSION: ${ASTRON_COLLECTION_VERSION:-2.0.0}
+      DISCORD_TOKEN: ${DISCORD_TOKEN:-}
+      DISCORD_APPLICATION_ID: ${DISCORD_APPLICATION_ID:-}
+      DISCORD_GUILD_ID: ${DISCORD_GUILD_ID:-}
+      ASTRON_LOG_LEVEL: ${ASTRON_LOG_LEVEL:-info}
       ASTRON_DATA_DIR: /app/bot/protect/data
-      ASTRON_HEALTH_PORT: "8080"
+      ASTRON_DATABASE_PATH: /app/bot/protect/data/protect.sqlite3
+      ASTRON_HEALTH_PORT: "3011"
+      ASTRON_DEPLOY_COMMANDS: ${ASTRON_DEPLOY_COMMANDS:-false}
+      ASTRON_REVIEW_CHANNEL_ID: ${ASTRON_REVIEW_CHANNEL_ID:-}
+      ASTRON_EVENT_URL: ${ASTRON_EVENT_URL:-}
+      ASTRON_EVENT_SECRET: ${ASTRON_EVENT_SECRET:-}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "3011:3011"
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app/bot/protect
+          ignore:
+            - .env
+            - data/
+            - node_modules/
+        - action: rebuild
+          path: ../../packages/discord-framework
     volumes:
       - protect-data:/app/bot/protect/data
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/healthz"]
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3011/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
       interval: 30s
       timeout: 5s
       retries: 3
@@ -23,4 +59,3 @@ services:
 
 volumes:
   protect-data:
-    name: protect-data

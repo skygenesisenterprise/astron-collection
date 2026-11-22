@@ -9,7 +9,7 @@ export const GATEWAY_ERRORS_RESOURCE_NAME = "astron-collection-gateway-errors";
 export const GATEWAY_ERRORS_INTERNAL_PORT = 8080;
 export const GATEWAY_ERRORS_NETWORK = "astron-collection-network";
 
-const DEFAULT_IMAGE = "ghcr.io/skygenesisenterprise/astron-collection:latest";
+const DEFAULT_IMAGE = "ghcr.io/skygenesisenterprise/astron-manager:latest";
 const DEFAULT_VERSION_TAG = "latest";
 
 type Docker = Awaited<ReturnType<typeof getRemoteDocker>>;

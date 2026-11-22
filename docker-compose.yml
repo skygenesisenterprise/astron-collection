@@ -21,7 +21,7 @@
 #   dev    ASTRON_COLLECTION_MODE=development ASTRON_COLLECTION_BUILD_TARGET=dev \
 #          NODE_ENV=development docker compose --profile dev up --build --watch
 #
-# `make docker-up [self|cloud|console]` and `make docker-dev [self|cloud|console]` set that whole
+# `make docker-up [self|cloud]` and `make docker-dev [self|cloud]` set that whole
 # environment for you — they are the supported entry points, because a Compose file
 # cannot switch a service's build target from a profile.
 #
@@ -41,6 +41,21 @@
 #
 # Both modes publish the same two ports, so they are mutually exclusive: stop one
 # before starting the other with `make docker-down`.
+#
+# ---------------------------------------------------------------------------
+# Local domains — dev profile only
+# ---------------------------------------------------------------------------
+# `make docker-dev` attaches a stable hostname to each web service on the internal
+# network:
+#
+#   client  dash.astron-collection.localhost   (dashboard)
+#   api     api.astron-collection.localhost    (backend and WebSockets)
+#
+# `.localhost` always resolves to 127.0.0.1, so
+# `http://dash.astron-collection.localhost:3000` works without editing the hosts
+# file. The aliases exist only when the dev environment sets
+# ASTRON_COLLECTION_DEV_CLIENT_DOMAIN / ASTRON_COLLECTION_DEV_API_DOMAIN: the prod
+# profile falls back to the plain service names and publishes no extra hostname.
 #
 # ---------------------------------------------------------------------------
 # How the client talks to the API
@@ -75,13 +90,12 @@ x-api-environment: &api-environment
   BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET is required — see .env.example}
   BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://localhost:3000}
   BETTER_AUTH_TRUSTED_ORIGINS: ${BETTER_AUTH_TRUSTED_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}
-  # --- Environment (self | cloud | console) --------------------------------
-  # `self` is the self-hosted platform, `cloud` is Astron Collection Cloud and
-  # `console` is Astron Collection Console (the cloud-side fleet manager). All three
-  # run the exact same images and services: the environment only changes runtime
+  # --- Environment (self | cloud) -------------------------------------------
+  # `self` is the self-hosted platform and `cloud` is Astron Manager Cloud. Both
+  # run the same image and services: the environment only changes runtime
   # behaviour (IS_CLOUD and ASTRON_COLLECTION_PRODUCT), never the container
   # topology. Selected by the Makefile:
-  #   make docker-up self | make docker-up cloud | make docker-up console
+  #   make docker-up self | make docker-up cloud
   ASTRON_COLLECTION_FLAVOR: ${ASTRON_COLLECTION_FLAVOR:-selfhosted}
   ASTRON_COLLECTION_PRODUCT: ${ASTRON_COLLECTION_PRODUCT:-self}
   IS_CLOUD: ${IS_CLOUD:-false}
@@ -179,12 +193,16 @@ services:
       dockerfile: Dockerfile
       target: ${ASTRON_COLLECTION_BUILD_TARGET:-platform}
       args:
+        # Both services build the same image: keep the exact same args on `api`
+        # so a later build cannot overwrite the self/cloud context of this one.
         # Baked into the browser bundle: origin used for the WebSocket connection.
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4000}
         ASTRON_COLLECTION_VERSION: ${ASTRON_COLLECTION_VERSION:-latest}
-    # The same image as `api`: the edition (self | cloud | console) picks the tag,
-    # the role decides what the container runs.
-    image: ${ASTRON_COLLECTION_IMAGE:-ghcr.io/skygenesisenterprise/astron-collection}:${ASTRON_COLLECTION_VERSION:-latest}
+        ASTRON_COLLECTION_FLAVOR: ${ASTRON_COLLECTION_FLAVOR:-selfhosted}
+        ASTRON_COLLECTION_PRODUCT: ${ASTRON_COLLECTION_PRODUCT:-self}
+    # The same image as `api`: `self` and `cloud` share this tag and differ by
+    # build args; the role decides what the container runs.
+    image: ${ASTRON_COLLECTION_IMAGE:-ghcr.io/skygenesisenterprise/astron-manager}:${ASTRON_COLLECTION_VERSION:-latest}
     container_name: astron-collection-client
     restart: unless-stopped
     environment:
@@ -232,7 +250,11 @@ services:
         - action: rebuild
           path: pnpm-lock.yaml
     networks:
-      - astron-collection
+      astron-collection:
+        # Dev-profile domain (`make docker-dev`). Prod uses the plain service
+        # name, which is already an implicit alias, so it exposes nothing new.
+        aliases:
+          - ${ASTRON_COLLECTION_DEV_CLIENT_DOMAIN:-astron-collection-client}
 
   # -------------------------------------------------------------------------
   # GROUP 4 — BACKEND
@@ -255,10 +277,12 @@ services:
       dockerfile: Dockerfile
       target: ${ASTRON_COLLECTION_BUILD_TARGET:-platform}
       args:
+        # Identical to `client`: one shared `astron-manager` image, no drift.
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4000}
         ASTRON_COLLECTION_VERSION: ${ASTRON_COLLECTION_VERSION:-latest}
         ASTRON_COLLECTION_FLAVOR: ${ASTRON_COLLECTION_FLAVOR:-selfhosted}
         ASTRON_COLLECTION_PRODUCT: ${ASTRON_COLLECTION_PRODUCT:-self}
-    image: ${ASTRON_COLLECTION_IMAGE:-ghcr.io/skygenesisenterprise/astron-collection}:${ASTRON_COLLECTION_VERSION:-latest}
+    image: ${ASTRON_COLLECTION_IMAGE:-ghcr.io/skygenesisenterprise/astron-manager}:${ASTRON_COLLECTION_VERSION:-latest}
     container_name: astron-collection-api
     restart: unless-stopped
     environment:
@@ -300,7 +324,10 @@ services:
         - action: rebuild
           path: pnpm-lock.yaml
     networks:
-      - astron-collection
+      astron-collection:
+        # Dev-profile domain (`make docker-dev`); prod keeps the service name.
+        aliases:
+          - ${ASTRON_COLLECTION_DEV_API_DOMAIN:-astron-collection-api}
 
 volumes:
   # Application data. Deleting these volumes destroys the database and the queued

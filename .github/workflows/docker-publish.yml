@@ -8,29 +8,29 @@ name: Docker Publish
 # A release tag always looks like `v<major>.<minor>.<patch>-<suffix>` and each
 # suffix publishes exactly one image, so products are released independently:
 #
-#   v1.3.0-app             -> ghcr.io/<owner>/astron-collection
-#   v1.3.0-cloud           -> ghcr.io/<owner>/astron-collection-cloud
-#   v1.3.0-console         -> ghcr.io/<owner>/astron-collection-console
+#   v1.3.0-app             -> ghcr.io/<owner>/astron-manager
+#   v1.3.0-cloud           -> ghcr.io/<owner>/astron-manager (-cloud tag)
 #   v1.3.0-status          -> ghcr.io/<owner>/astron-collection-status
 #   v1.3.0-mcp             -> ghcr.io/<owner>/astron-collection-mcp
 #   v1.3.0-github          -> ghcr.io/<owner>/astron-collection-github
 #   v1.3.0-astron          -> ghcr.io/<owner>/astron
-#   v1.3.0-protect         -> ghcr.io/<owner>/astron/protect
-#   v1.3.0-logger          -> ghcr.io/<owner>/astron/logger
-#   v1.3.0-automations     -> ghcr.io/<owner>/astron/automations
-#   v1.3.0-player          -> ghcr.io/<owner>/astron/player
-#   v1.3.0-guild           -> ghcr.io/<owner>/astron/guild
+#   v1.3.0-protect         -> ghcr.io/<owner>/astron-protect
+#   v1.3.0-logger          -> ghcr.io/<owner>/astron-logger
+#   v1.3.0-automations     -> ghcr.io/<owner>/astron-automations
+#   v1.3.0-player          -> ghcr.io/<owner>/astron-player
+#   v1.3.0-guild           -> ghcr.io/<owner>/astron-guild
 #
 # The catalog in `select` is the single place to add or change a product: it
 # carries the image, the build context, the Dockerfile, the target and the
 # release metadata. `select` filters it down to the entry the pushed tag names,
 # so a tag push shows exactly one publish job instead of the whole catalog.
 #
-# Platform editions publish a single image per edition. `astron-collection` and
-# `astron-collection-cloud` both come from the `platform` target of the root
-# Dockerfile, which ships the client *and* the API artifacts; the container role
-# is chosen at runtime with `ASTRON_COLLECTION_ROLE=client|api`. PostgreSQL and
-# Redis stay upstream images and are never built or pushed here.
+# Both platform contexts publish the same official image, `astron-manager`, from
+# the `platform` target of the root Dockerfile, which ships the client *and* the
+# API artifacts. `-app` builds the self-hosted context, `-cloud` builds the cloud
+# context; only the build args differ. The container role is chosen at runtime
+# with `ASTRON_COLLECTION_ROLE=client|api`. PostgreSQL and Redis stay upstream
+# images and are never built or pushed here.
 #
 # The bots are independent products: own Dockerfile, own build context, own
 # release cycle. A bot whose directory does not exist yet (`bot/automation`) is
@@ -41,10 +41,12 @@ name: Docker Publish
 #   v1.3.0        immutable version tag (never overwritten, see `guard`)
 #   sha-<short>   commit traceability
 #   latest        floating tag of that product only
-# `astron-collection` additionally carries `v1.3.0-app`, because the self-hosted
-# updater (packages/server/src/services/update.ts) pulls the release tag itself as
-# the image tag; the alias keeps existing installations updating without a code
-# change.
+# `astron-manager` additionally carries `v1.3.0-app` (self) and `v1.3.0-cloud`
+# (cloud): the two builds share one image repository, so each context needs its
+# own immutable tag. The self-hosted updater
+# (packages/server/src/services/update.ts) pulls `v1.2.3-app` as its image tag.
+# Only the self build publishes `sha-<short>` and `latest` to avoid two different
+# artifacts fighting over the same floating tags.
 #
 # Only `-app` is published as GitHub's `latest` release: a running server
 # resolves `/releases/latest` through the Releases API, and install scripts are
@@ -59,7 +61,6 @@ on:
     tags:
       - "v*.*.*-app"
       - "v*.*.*-cloud"
-      - "v*.*.*-console"
       - "v*.*.*-status"
       - "v*.*.*-mcp"
       - "v*.*.*-github"
@@ -138,6 +139,8 @@ jobs:
           #   platforms       defaults to linux/amd64,linux/arm64
           #   build_args      extra `--build-arg`, newline separated
           #   compat_suffix   extra tag to publish for backward compatibility
+          #   version_tag_suffix  extra suffix on the immutable version tag, used when
+          #                       two builds share one image (the cloud context)
           #   release_name    title of the GitHub Release ("Astron Collection {name} {version}")
           #   release_assets  whether the release carries the install scripts
           #   fallback        build context used when the primary one is absent
@@ -145,7 +148,7 @@ jobs:
           read -r -d '' CATALOG <<'JSON' || true
           [
             {
-              "image": "astron-collection",
+              "image": "astron-manager",
               "tag_suffix": "-app",
               "context": ".",
               "file": "./Dockerfile",
@@ -153,30 +156,21 @@ jobs:
               "platforms": "linux/amd64",
               "build_args": "ASTRON_COLLECTION_FLAVOR=selfhosted\nASTRON_COLLECTION_PRODUCT=self",
               "compat_suffix": "-app",
-              "description": "Astron Collection Self - self-hosted platform (client and API in one image)",
+              "description": "Astron Manager self-hosted platform (client and API in one image)",
               "release_name": "App",
               "release_assets": true
             },
             {
-              "image": "astron-collection-cloud",
+              "image": "astron-manager",
               "tag_suffix": "-cloud",
+              "version_tag_suffix": "-cloud",
               "context": ".",
               "file": "./Dockerfile",
               "target": "platform",
               "platforms": "linux/amd64",
               "build_args": "ASTRON_COLLECTION_FLAVOR=cloud\nASTRON_COLLECTION_PRODUCT=cloud",
-              "description": "Astron Collection Cloud - hosted platform (client and API in one image)",
+              "description": "Astron Manager Cloud - hosted context (client and API in one image)",
               "release_name": "Cloud",
-              "release_assets": true
-            },
-            {
-              "image": "astron-collection-console",
-              "tag_suffix": "-console",
-              "context": ".",
-              "file": "./Dockerfile",
-              "target": "console",
-              "description": "Astron Collection Console - instance and fleet management",
-              "release_name": "Console",
               "release_assets": true
             },
             {
@@ -218,7 +212,7 @@ jobs:
               "release_assets": false
             },
             {
-              "image": "astron/protect",
+              "image": "astron-protect",
               "tag_suffix": "-protect",
               "context": ".",
               "file": "./bot/protect/Dockerfile",
@@ -227,7 +221,7 @@ jobs:
               "release_assets": false
             },
             {
-              "image": "astron/logger",
+              "image": "astron-logger",
               "tag_suffix": "-logger",
               "context": ".",
               "file": "./bot/logger/Dockerfile",
@@ -236,7 +230,7 @@ jobs:
               "release_assets": false
             },
             {
-              "image": "astron/automations",
+              "image": "astron-automations",
               "tag_suffix": "-automations",
               "context": ".",
               "file": "./bot/automations/Dockerfile",
@@ -245,7 +239,7 @@ jobs:
               "release_assets": false
             },
             {
-              "image": "astron/player",
+              "image": "astron-player",
               "tag_suffix": "-player",
               "context": ".",
               "file": "./bot/player/Dockerfile",
@@ -254,7 +248,7 @@ jobs:
               "release_assets": false
             },
             {
-              "image": "astron/guild",
+              "image": "astron-guild",
               "tag_suffix": "-guild",
               "context": ".",
               "file": "./bot/guild/Dockerfile",
@@ -304,7 +298,7 @@ jobs:
           done
 
           if [ -z "$context" ]; then
-            echo "::notice::skipping $image: neither '$(jq -r '.[0].context' <<< "$selected")/${image##*/}/Dockerfile' nor its fallback is in the tree yet"
+            echo "::notice::skipping $image: neither '$(jq -r '.[0].file' <<< "$selected")' nor its fallback is in the tree yet"
             out enabled "false"
             out release_title "Astron Collection $(jq -r '.[0].release_name' <<< "$selected") $version (skipped)"
             {
@@ -340,6 +334,7 @@ jobs:
               platforms: (.platforms // "linux/amd64,linux/arm64"),
               build_args: ((.build_args // "") | gsub("\\$\\{VERSION\\}"; $version)),
               compat_suffix: (.compat_suffix // ""),
+              version_tag_suffix: (.version_tag_suffix // ""),
               description: .description
             }]' <<< "$selected")
 
@@ -412,9 +407,10 @@ jobs:
         env:
           IMAGE_REF: ${{ env.IMAGE_PREFIX }}/${{ matrix.image }}
           VERSION: ${{ needs.select.outputs.version }}
+          VERSION_TAG_SUFFIX: ${{ matrix.version_tag_suffix }}
         run: |
           set -euo pipefail
-          ref="${IMAGE_REF}:${VERSION}"
+          ref="${IMAGE_REF}:${VERSION}${VERSION_TAG_SUFFIX}"
           if docker buildx imagetools inspect "$ref" >/dev/null 2>&1; then
             echo "published=true" >> "$GITHUB_OUTPUT"
             echo "::warning::${ref} already exists; this run publishes nothing and does not overwrite it. Bump the version to publish a new image."
@@ -428,10 +424,10 @@ jobs:
         with:
           images: ${{ env.IMAGE_PREFIX }}/${{ matrix.image }}
           tags: |
-            type=raw,value=${{ needs.select.outputs.version }}
+            type=raw,value=${{ needs.select.outputs.version }}${{ matrix.version_tag_suffix }}
             type=raw,value=${{ needs.select.outputs.version }}-app,enable=${{ matrix.compat_suffix == '-app' }}
-            type=sha,format=short,prefix=sha-
-            type=raw,value=latest
+            type=sha,format=short,prefix=sha-,enable=${{ matrix.version_tag_suffix == '' }}
+            type=raw,value=latest,enable=${{ matrix.version_tag_suffix == '' }}
           labels: |
             org.opencontainers.image.title=${{ matrix.image }}
             org.opencontainers.image.description=${{ matrix.description }}

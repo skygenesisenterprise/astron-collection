@@ -1,21 +1,60 @@
+# Logger — one image, one process, one volume. Its signed ingest endpoint is
+# published so the other bots can deliver events without a shared network.
+name: astron-logger
+
 services:
   logger:
     build:
       context: ../..
       dockerfile: bot/logger/Dockerfile
+      args:
+        ASTRON_COLLECTION_VERSION: ${ASTRON_COLLECTION_VERSION:-2.0.0}
     image: ${ASTRON_BOT_IMAGE:-ghcr.io/skygenesisenterprise/astron-logger}:${ASTRON_BOT_VERSION:-latest}
     container_name: logger-bot
     restart: unless-stopped
     env_file:
-      - .env
+      - path: .env
+        required: false
     environment:
       NODE_ENV: ${NODE_ENV:-production}
+      APP_VERSION: ${ASTRON_COLLECTION_VERSION:-2.0.0}
+      DISCORD_TOKEN: ${DISCORD_TOKEN:-}
+      DISCORD_APPLICATION_ID: ${DISCORD_APPLICATION_ID:-}
+      DISCORD_GUILD_ID: ${DISCORD_GUILD_ID:-}
+      ASTRON_LOG_LEVEL: ${ASTRON_LOG_LEVEL:-info}
       ASTRON_DATA_DIR: /app/bot/logger/data
-      ASTRON_HEALTH_PORT: "8080"
+      ASTRON_DATABASE_PATH: /app/bot/logger/data/logger.sqlite3
+      ASTRON_HEALTH_PORT: "3012"
+      ASTRON_DEPLOY_COMMANDS: ${ASTRON_DEPLOY_COMMANDS:-false}
+      ASTRON_INGEST_PATH: ${ASTRON_INGEST_PATH:-/ingest/events}
+      ASTRON_EVENT_SECRET: ${ASTRON_EVENT_SECRET:-}
+      ASTRON_EXPORT_MAX_ROWS: ${ASTRON_EXPORT_MAX_ROWS:-5000}
+      # `.env` may already use the prefixed form; both are supported by the bot.
+      ASTRON_LOGGER_DISCORD_TOKEN: ${ASTRON_LOGGER_DISCORD_TOKEN:-}
+      ASTRON_LOGGER_DISCORD_CLIENT_ID: ${ASTRON_LOGGER_DISCORD_CLIENT_ID:-}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "3012:3012"
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app/bot/logger
+          ignore:
+            - .env
+            - data/
+            - node_modules/
+        - action: rebuild
+          path: ../../packages/discord-framework
     volumes:
       - logger-data:/app/bot/logger/data
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/healthz"]
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3012/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
       interval: 30s
       timeout: 5s
       retries: 3
@@ -23,4 +62,3 @@ services:
 
 volumes:
   logger-data:
-    name: logger-data
