@@ -737,7 +737,7 @@ const EXTERNAL_DESTINATIONS = {
 	},
 	support: {
 		label: "Support",
-		href: "https://discord.gg/GUkDugVh34",
+		href: "https://astron-collection.com/community",
 		icon: CircleHelp,
 	},
 } satisfies Record<string, ExternalNavigationDestination>;

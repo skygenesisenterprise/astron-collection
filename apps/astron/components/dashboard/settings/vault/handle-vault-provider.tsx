@@ -838,7 +838,7 @@ export const HandleVaultProvider = ({ vaultProviderId }: Props) => {
 						Reference secrets in your environment variables with{" "}
 						{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
 						<code>{"${{vault.<name>.<secret>}}"}</code>. Secrets are fetched at
-						deploy time and never stored in Notploy.
+						deploy time and never stored in astron-collection.
 					</DialogDescription>
 				</DialogHeader>
 				{isError && <AlertBlock type="error">{error?.message}</AlertBlock>}
@@ -1511,7 +1511,7 @@ export const HandleVaultProvider = ({ vaultProviderId }: Props) => {
 											<FormLabel>Service account</FormLabel>
 											<FormControl>
 												<Input
-													placeholder="notploy@my-project.iam.gserviceaccount.com"
+													placeholder="astron-collection@my-project.iam.gserviceaccount.com"
 													{...field}
 												/>
 											</FormControl>
@@ -1854,10 +1854,10 @@ export const HandleVaultProvider = ({ vaultProviderId }: Props) => {
 										</FormControl>
 										<FormDescription>
 											Directory holding Docker/Swarm secrets (or any folder of
-											secret files) mounted into the Notploy service. Values are
+											secret files) mounted into the astron-collection service. Values are
 											read from these files — Docker never exposes Swarm secret
 											values through its API. The connection test uses the Docker
-											socket, so mount /var/run/docker.sock into Notploy too.
+											socket, so mount /var/run/docker.sock into astron-collection too.
 										</FormDescription>
 										<FormMessage />
 									</FormItem>
@@ -1906,7 +1906,7 @@ export const HandleVaultProvider = ({ vaultProviderId }: Props) => {
 								<code>{"${{vault.<name>.path/to/document}}"}</code>, or{" "}
 								{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
 								<code>{"${{vault.<name>.path/to/document:field}}"}</code> to pick a
-								value inside a JSON document. Notploy issues{" "}
+								value inside a JSON document. astron-collection issues{" "}
 								<code>GET</code> requests with the token as
 								<code> Authorization: Bearer</code>.
 							</FormDescription>

@@ -189,7 +189,7 @@ export const SetupServer = ({ serverId, asButton = false }: Props) => {
 											Automatic process
 										</span>
 										<Link
-											href="https://docs.notploy.com/docs/core/remote-servers/instructions#requirements"
+											href="https://docs.astron-collection.com/docs/core/remote-servers/instructions#requirements"
 											target="_blank"
 											className="text-primary flex flex-row gap-2"
 										>

@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { ASTRON_COLLECTION_TEMPLATES_ENABLED } from "@astron-collection/server/constants";
 import { TEMPLATES_BASE_URL } from "@astron-collection/server/templates/github";
 import {
 	getLocalBlueprintsDir,
@@ -16,6 +17,12 @@ export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse,
 ) {
+	// The gallery is disabled by default: never serve (or redirect to) its
+	// assets when the feature flag is off.
+	if (!ASTRON_COLLECTION_TEMPLATES_ENABLED) {
+		return res.status(404).json({ message: "Templates are disabled" });
+	}
+
 	if (req.method !== "GET") {
 		res.setHeader("Allow", "GET");
 		return res.status(405).json({ message: "Method not allowed" });

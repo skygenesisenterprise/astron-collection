@@ -60,7 +60,7 @@ export const UpdateServer = ({
 	const [isChecking, setIsChecking] = useState(false);
 	const { refetch: refetchUpdateStatus } =
 		api.settings.getUpdateStatus.useQuery(undefined, { enabled: false });
-	const { data: notployVersion } = api.settings.getNotployVersion.useQuery();
+	const { data: astronCollectionVersion } = api.settings.getAstronCollectionVersion.useQuery();
 	const { data: releaseTag } = api.settings.getReleaseTag.useQuery();
 	const [isOpenInternal, setIsOpenInternal] = useState(false);
 
@@ -145,11 +145,11 @@ export const UpdateServer = ({
 					<DialogTitle className="text-2xl font-semibold mr-auto">
 						Web Server Update
 					</DialogTitle>
-					{notployVersion && (
+					{astronCollectionVersion && (
 						<div className="flex items-center gap-1.5 rounded-full px-3 py-1 bg-muted">
 							<Server className="h-4 w-4 text-muted-foreground" />
 							<span className="text-sm text-muted-foreground">
-								{notployVersion}{" "}
+								{astronCollectionVersion}{" "}
 								{(releaseTag === "canary" || releaseTag === "feature") &&
 									`(${releaseTag})`}
 							</span>
@@ -167,7 +167,7 @@ export const UpdateServer = ({
 				{!hasCheckedUpdate && (
 					<div className="mb-8">
 						<p className="text text-muted-foreground">
-							Check for new releases and update Notploy.
+							Check for new releases and update astron-collection.
 							<br />
 							<br />
 							We recommend checking for updates regularly to ensure you have the
@@ -285,7 +285,7 @@ export const UpdateServer = ({
 								<Link
 									href={
 										updateData?.releaseUrl ??
-										"https://github.com/skygenesisenterprise/notploy/releases"
+										"https://github.com/skygenesisenterprise/astron-collection/releases"
 									}
 									target="_blank"
 									className="text-white underline hover:text-zinc-200"

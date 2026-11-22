@@ -53,7 +53,7 @@ export const AssignNetworks = ({ id, type }: Props) => {
 		service,
 		serverId,
 		networkIds,
-		detachNotployNetwork,
+		detachAstronCollectionNetwork,
 		isolatedNetwork,
 		updateAsync,
 		isUpdating,
@@ -73,9 +73,9 @@ export const AssignNetworks = ({ id, type }: Props) => {
 
 	useEffect(() => {
 		setSelected(networkIds ?? []);
-		setDetached(detachNotployNetwork ?? false);
+		setDetached(detachAstronCollectionNetwork ?? false);
 		setIsolated(isolatedNetwork ?? false);
-	}, [networkIds, detachNotployNetwork, isolatedNetwork]);
+	}, [networkIds, detachAstronCollectionNetwork, isolatedNetwork]);
 
 	const availableNetworks = (networks ?? []).filter(
 		(n) => n.driver === "overlay",
@@ -86,7 +86,7 @@ export const AssignNetworks = ({ id, type }: Props) => {
 	const isDirty =
 		selected.length !== (networkIds?.length ?? 0) ||
 		selected.some((networkId) => !networkIds?.includes(networkId)) ||
-		detached !== detachNotployNetwork ||
+		detached !== detachAstronCollectionNetwork ||
 		(type === "application" && isolated !== isolatedNetwork);
 
 	const toggle = (networkId: string) => {
@@ -101,7 +101,7 @@ export const AssignNetworks = ({ id, type }: Props) => {
 		try {
 			await updateAsync({
 				networkIds: selected,
-				detachNotployNetwork: detached,
+				detachAstronCollectionNetwork: detached,
 				// Only applications can own a dedicated network today.
 				...(type === "application" && { isolatedNetwork: isolated }),
 			});
@@ -132,11 +132,11 @@ export const AssignNetworks = ({ id, type }: Props) => {
 						<div className="space-y-1 pr-1">
 							<div className="flex items-center gap-2">
 								<span className="text-sm font-medium">Isolated network</span>
-								<Badge variant="secondary">{"notploy-iso-<app>"}</Badge>
+								<Badge variant="secondary">{"astron-collection-iso-<app>"}</Badge>
 							</div>
 							<p className="text-sm text-muted-foreground">
 								Give this application its own dedicated overlay network so it is
-								isolated from other services. It still joins notploy-network, so
+								isolated from other services. It still joins astron-collection-network, so
 								its domains keep working through Traefik.
 							</p>
 						</div>
@@ -147,7 +147,7 @@ export const AssignNetworks = ({ id, type }: Props) => {
 				{isolated && detached && (
 					<AlertBlock type="warning">
 						A detached service keeps only its dedicated network, which Traefik
-						cannot reach. Leave notploy-network attached so the domain stays
+						cannot reach. Leave astron-collection-network attached so the domain stays
 						accessible.
 					</AlertBlock>
 				)}
@@ -156,12 +156,12 @@ export const AssignNetworks = ({ id, type }: Props) => {
 					<div className="space-y-1 pr-1">
 						<div className="flex items-center gap-2">
 							<span className="text-sm font-medium">
-								Detach from notploy-network
+								Detach from astron-collection-network
 							</span>
-							<Badge variant="secondary">notploy-network</Badge>
+							<Badge variant="secondary">astron-collection-network</Badge>
 						</div>
 						<p className="text-sm text-muted-foreground">
-							By default the service joins the shared notploy-network. Detach it
+							By default the service joins the shared astron-collection-network. Detach it
 							to keep it reachable only through the networks you attach below.
 						</p>
 					</div>
@@ -170,15 +170,15 @@ export const AssignNetworks = ({ id, type }: Props) => {
 
 				{detached && hasDomains && (
 					<AlertBlock type="warning">
-						Warning: this service has domains. Detaching it from notploy-network
+						Warning: this service has domains. Detaching it from astron-collection-network
 						will break Traefik routing, and its domains will stop working.
 					</AlertBlock>
 				)}
 
 				{detached && !hasDomains && selected.length === 0 && (
 					<AlertBlock type="warning">
-						This service is detached from notploy-network but has no other
-						network attached. It would be unreachable, so notploy-network will
+						This service is detached from astron-collection-network but has no other
+						network attached. It would be unreachable, so astron-collection-network will
 						be kept until you attach a network below.
 					</AlertBlock>
 				)}
@@ -374,7 +374,7 @@ const useServiceNetworks = (id: string, type: ServiceType) => {
 		service,
 		serverId: service?.serverId ?? null,
 		networkIds: service?.networkIds ?? [],
-		detachNotployNetwork: service?.detachNotployNetwork ?? false,
+		detachAstronCollectionNetwork: service?.detachAstronCollectionNetwork ?? false,
 		isolatedNetwork:
 			(service as { isolatedNetwork?: boolean } | undefined)?.isolatedNetwork ??
 			false,
@@ -386,6 +386,6 @@ const useServiceNetworks = (id: string, type: ServiceType) => {
 
 type SavePayload = {
 	networkIds: string[];
-	detachNotployNetwork: boolean;
+	detachAstronCollectionNetwork: boolean;
 	isolatedNetwork?: boolean;
 };

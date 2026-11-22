@@ -124,7 +124,7 @@ export const ServersConsole = ({ serverId }: Props) => {
 	const normalizedSearch = search.trim().toLocaleLowerCase();
 	const localMatches =
 		!normalizedSearch ||
-		"local notploy localhost control plane".includes(normalizedSearch);
+		"local astron-collection localhost control plane".includes(normalizedSearch);
 	const showFilteredLocal =
 		showLocalInstance &&
 		localMatches &&
@@ -300,7 +300,7 @@ export const ServersConsole = ({ serverId }: Props) => {
 				<ConsoleHeader
 					icon={ServerIcon}
 					title="Servers"
-					description="Manage the execution servers Notploy can use to run workloads."
+					description="Manage the execution servers astron-collection can use to run workloads."
 					actions={
 						<>
 							<ConsoleRefresh
@@ -398,7 +398,7 @@ export const ServersConsole = ({ serverId }: Props) => {
 						<ConsoleEmpty
 							icon={ServerIcon}
 							title="No execution servers configured"
-							description="Servers are the machines Notploy connects to run and manage your workloads. Add a server to start managing your infrastructure."
+							description="Servers are the machines astron-collection connects to run and manage your workloads. Add a server to start managing your infrastructure."
 						>
 							{canCreateServer && <HandleServers />}
 						</ConsoleEmpty>
@@ -604,7 +604,7 @@ function LocalExecutionTarget({
 				<div className="min-w-0 space-y-2">
 					<div className="flex flex-wrap items-center gap-2">
 						<ServerIcon className="size-4 text-muted-foreground" aria-hidden />
-						<h2 className="font-semibold">Notploy instance</h2>
+						<h2 className="font-semibold">astron-collection instance</h2>
 						<Badge variant="outline">Local</Badge>
 						<ConnectionBadge status={status} />
 					</div>

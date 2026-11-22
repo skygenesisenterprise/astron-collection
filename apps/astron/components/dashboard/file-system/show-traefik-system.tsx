@@ -37,7 +37,7 @@ export const ShowTraefikSystem = ({ serverId }: Props) => {
 			<div className="space-y-1">
 				<h2 className="font-medium">Traefik file system</h2>
 				<p className="text-sm text-muted-foreground">
-					Manage every file and directory in <code>/etc/notploy/traefik</code>.
+					Manage every file and directory in <code>/etc/astron-collection/traefik</code>.
 				</p>
 			</div>
 
@@ -54,7 +54,7 @@ export const ShowTraefikSystem = ({ serverId }: Props) => {
 				<ConsoleEmpty
 					icon={FolderOpen}
 					title="No configuration files found"
-					description="There are no directories or files in /etc/notploy/traefik on this server yet."
+					description="There are no directories or files in /etc/astron-collection/traefik on this server yet."
 				/>
 			) : directories && directories.length > 0 ? (
 				<div className="flex w-full flex-col gap-4 lg:flex-row lg:gap-10">

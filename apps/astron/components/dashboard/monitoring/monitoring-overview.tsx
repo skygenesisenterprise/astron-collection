@@ -415,8 +415,8 @@ export function MonitoringOverview() {
 				)}
 
 				{workspace.type === "global" && (
-					<section aria-label="Default Notploy instance monitoring">
-						<ContainerFreeMonitoring appName="notploy" />
+					<section aria-label="Default astron-collection instance monitoring">
+						<ContainerFreeMonitoring appName="astron-collection" />
 					</section>
 				)}
 

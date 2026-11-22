@@ -120,7 +120,7 @@ export const UpdateServerIp = ({ children }: Props) => {
 				<DialogHeader>
 					<DialogTitle>Update Server IP</DialogTitle>
 					<DialogDescription>
-						The address Notploy uses to build the URLs of your apps and domains.
+						The address astron-collection uses to build the URLs of your apps and domains.
 						On a private network, declare the LAN address of this machine (for
 						example <code>192.168.1.122</code>) instead of the public IP.
 					</DialogDescription>
@@ -208,7 +208,7 @@ export const UpdateServerIp = ({ children }: Props) => {
 									</FormControl>
 									<FormDescription>
 										Use the LAN address of this machine so internal domains such
-										as <code>gitlab.notploy.lan</code> resolve inside your
+										as <code>gitlab.astron-collection.lan</code> resolve inside your
 										network.
 									</FormDescription>
 									{detectedScope && (

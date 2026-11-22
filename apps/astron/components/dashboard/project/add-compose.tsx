@@ -83,8 +83,8 @@ export const AddCompose = ({ environmentId, projectName }: Props) => {
 
 	const hasServers = servers && servers.length > 0;
 	// Show dropdown logic based on cloud environment
-	// Cloud: show only if there are remote servers (no Notploy option)
-	// Self-hosted: show only if there are remote servers (Notploy is default, hide if no remote servers)
+	// Cloud: show only if there are remote servers (no astron-collection option)
+	// Self-hosted: show only if there are remote servers (astron-collection is default, hide if no remote servers)
 	const shouldShowServerDropdown = hasServers;
 
 	const form = useForm<AddCompose>({
@@ -108,7 +108,7 @@ export const AddCompose = ({ environmentId, projectName }: Props) => {
 			environmentId,
 			composeType: data.composeType,
 			appName: data.appName,
-			serverId: data.serverId === "notploy" ? undefined : data.serverId,
+			serverId: data.serverId === "astron-collection" ? undefined : data.serverId,
 		})
 			.then(async () => {
 				toast.success("Compose Created");
@@ -206,22 +206,22 @@ export const AddCompose = ({ environmentId, projectName }: Props) => {
 										<Select
 											onValueChange={field.onChange}
 											defaultValue={
-												field.value || (showLocalOption ? "notploy" : undefined)
+												field.value || (showLocalOption ? "astron-collection" : undefined)
 											}
 										>
 											<SelectTrigger>
 												<SelectValue
 													placeholder={
-														showLocalOption ? "Notploy" : "Select a Server"
+														showLocalOption ? "astron-collection" : "Select a Server"
 													}
 												/>
 											</SelectTrigger>
 											<SelectContent>
 												<SelectGroup>
 													{showLocalOption && (
-														<SelectItem value="notploy">
+														<SelectItem value="astron-collection">
 															<span className="flex items-center gap-2 justify-between w-full">
-																<span>Notploy</span>
+																<span>astron-collection</span>
 																<span className="text-muted-foreground text-xs self-center">
 																	Default
 																</span>

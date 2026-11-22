@@ -84,7 +84,7 @@ export const ShowHealth = ({ serverId }: Props) => {
 	const buildHealthReport = () => {
 		if (!health) return "";
 		const lines: string[] = [];
-		lines.push("# Notploy server health report");
+		lines.push("# astron-collection server health report");
 		lines.push(`Generated: ${new Date(health.checkedAt).toLocaleString()}`);
 		lines.push(
 			`Window: ${SINCE_HOURS_OPTIONS.find((o) => o.value === sinceHours)?.label ?? `${sinceHours}h`}`,
@@ -177,7 +177,7 @@ export const ShowHealth = ({ serverId }: Props) => {
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement("a");
 		a.href = url;
-		a.download = `notploy-health-report-${new Date().toISOString().replace(/[:.]/g, "-")}.md`;
+		a.download = `astron-collection-health-report-${new Date().toISOString().replace(/[:.]/g, "-")}.md`;
 		a.click();
 		URL.revokeObjectURL(url);
 	};
@@ -363,7 +363,7 @@ export const ShowHealth = ({ serverId }: Props) => {
 								<p className="text-xs text-muted-foreground">
 									IPs assigned to containers vs. the subnet's usable capacity,
 									per network — including reserved networks like{" "}
-									<code>notploy-network</code>. A network stuck near 100% blocks
+									<code>astron-collection-network</code>. A network stuck near 100% blocks
 									new containers from starting even when the host has plenty of
 									other resources free.
 								</p>

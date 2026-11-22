@@ -95,7 +95,7 @@ const formSchema = z
 			"application",
 			"compose",
 			"server",
-			"notploy-server",
+			"astron-collection-server",
 		]),
 		script: z.string(),
 		timezone: z.string().optional(),
@@ -110,7 +110,7 @@ const formSchema = z
 		}
 
 		if (
-			(data.scheduleType === "notploy-server" ||
+			(data.scheduleType === "astron-collection-server" ||
 				data.scheduleType === "server") &&
 			!data.script
 		) {
@@ -137,7 +137,7 @@ const formSchema = z
 interface Props {
 	id?: string;
 	scheduleId?: string;
-	scheduleType?: "application" | "compose" | "server" | "notploy-server";
+	scheduleType?: "application" | "compose" | "server" | "astron-collection-server";
 }
 
 export const ScheduleFormField = <TFieldValues extends FieldValues>({
@@ -306,7 +306,7 @@ export const HandleSchedules = ({ id, scheduleId, scheduleType }: Props) => {
 			...(scheduleType === "server" && {
 				serverId: id || "",
 			}),
-			...(scheduleType === "notploy-server" && {
+			...(scheduleType === "astron-collection-server" && {
 				userId: id || "",
 			}),
 		})
@@ -347,7 +347,7 @@ export const HandleSchedules = ({ id, scheduleId, scheduleType }: Props) => {
 			</DialogTrigger>
 			<DialogContent
 				className={cn(
-					scheduleTypeForm === "notploy-server" || scheduleTypeForm === "server"
+					scheduleTypeForm === "astron-collection-server" || scheduleTypeForm === "server"
 						? "sm:max-w-2xl"
 						: "sm:max-w-lg",
 				)}
@@ -649,7 +649,7 @@ export const HandleSchedules = ({ id, scheduleId, scheduleType }: Props) => {
 							</>
 						)}
 
-						{(scheduleTypeForm === "notploy-server" ||
+						{(scheduleTypeForm === "astron-collection-server" ||
 							scheduleTypeForm === "server") && (
 							<FormField
 								control={form.control}

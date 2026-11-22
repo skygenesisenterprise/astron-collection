@@ -1,13 +1,16 @@
+import { TRPCError } from "@trpc/server";
 import { db } from "@astron-collection/server/db";
 import { IS_CLOUD, sendInvitationEmail } from "@astron-collection/server/index";
-import { TRPCError } from "@trpc/server";
+import { insertAuditLog } from "@astron-collection/server/services/proprietary/audit-log";
 import { and, desc, eq, exists } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { z } from "zod";
 import { audit } from "@/server/api/utils/audit";
 import {
 	assertMemberLimit,
-	assertOrganizationLimit,
+	assertOrganizationQuotaInTransaction,
+	getOrganizationLimitForUser,
+	lockOrganizationCreation,
 } from "@/server/api/utils/plan-limits";
 import {
 	invitation,
@@ -33,46 +36,64 @@ export const organizationRouter = createTRPCRouter({
 				});
 			}
 
-			if (IS_CLOUD) {
-				await assertOrganizationLimit(ctx.user.id);
-			}
+			// The quota is read before the transaction (plan resolution may call the
+			// billing provider) and enforced once the account row is locked, so two
+			// simultaneous creations cannot both pass the same limit.
+			const organizationLimit = IS_CLOUD
+				? await getOrganizationLimitForUser(ctx.user.id)
+				: null;
 
-			const result = await db
-				.insert(organization)
-				.values({
-					...input,
-					slug: nanoid(),
+			// Organization, owner membership and audit entry commit together: an
+			// account never ends up with a workspace it is not a member of, and a
+			// failed creation never leaves an orphan organization behind.
+			return await db.transaction(async (tx) => {
+				await lockOrganizationCreation(tx, ctx.user.id);
+				await assertOrganizationQuotaInTransaction(
+					tx,
+					ctx.user.id,
+					organizationLimit,
+				);
+
+				const [result] = await tx
+					.insert(organization)
+					.values({
+						...input,
+						slug: nanoid(),
+						createdAt: new Date(),
+						ownerId: ctx.user.id,
+					})
+					.returning();
+
+				if (!result) {
+					throw new TRPCError({
+						code: "INTERNAL_SERVER_ERROR",
+						message: "Failed to create organization",
+					});
+				}
+
+				await tx.insert(member).values({
+					organizationId: result.id,
+					role: "owner",
 					createdAt: new Date(),
-					ownerId: ctx.user.id,
-				})
-				.returning()
-				.then((res) => res[0]);
-
-			if (!result) {
-				throw new TRPCError({
-					code: "INTERNAL_SERVER_ERROR",
-					message: "Failed to create organization",
+					userId: ctx.user.id,
 				});
-			}
 
-			// Check if this is the user's first organization
-			const existingMemberships = await db.query.member.findMany({
-				where: eq(member.userId, ctx.user.id),
-			});
+				await insertAuditLog(
+					{
+						organizationId: result.id,
+						userId: ctx.user.id,
+						userEmail: ctx.user.email,
+						userRole: ctx.user.role,
+						action: "create",
+						resourceType: "organization",
+						resourceId: result.id,
+						resourceName: result.name,
+					},
+					tx,
+				);
 
-			await db.insert(member).values({
-				organizationId: result.id,
-				role: "owner",
-				createdAt: new Date(),
-				userId: ctx.user.id,
+				return result;
 			});
-			await audit(ctx, {
-				action: "create",
-				resourceType: "organization",
-				resourceId: result.id,
-				resourceName: result.name,
-			});
-			return result;
 		}),
 	all: protectedProcedure.query(async ({ ctx }) => {
 		const memberResult = await db.query.organization.findMany({
@@ -379,7 +400,7 @@ export const organizationRouter = createTRPCRouter({
 				const host =
 					process.env.NODE_ENV === "development"
 						? "http://localhost:3000"
-						: "https://app.astron-collection.com";
+						: "https://dash.astron-collection.com";
 				const inviteLink = `${host}/invitation?token=${created.id}`;
 
 				const org = await db.query.organization.findFirst({

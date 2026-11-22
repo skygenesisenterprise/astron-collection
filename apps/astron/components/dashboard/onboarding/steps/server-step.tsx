@@ -73,7 +73,7 @@ export const ServerStep = ({ onNext, plainTitle }: Props) => {
 	const hasCreatedKey = useRef(false);
 
 	const cloudSSHKey = sshKeys?.find(
-		(sshKey) => sshKey.name === "notploy-onboarding-ssh-key",
+		(sshKey) => sshKey.name === "astron-collection-onboarding-ssh-key",
 	);
 
 	useEffect(() => {
@@ -83,7 +83,7 @@ export const ServerStep = ({ onNext, plainTitle }: Props) => {
 			try {
 				const keys = await generateSSHKey.mutateAsync({ type: "rsa" });
 				await createSSHKey.mutateAsync({
-					name: "notploy-onboarding-ssh-key",
+					name: "astron-collection-onboarding-ssh-key",
 					description: "Used during onboarding",
 					privateKey: keys.privateKey,
 					publicKey: keys.publicKey,
@@ -112,9 +112,9 @@ export const ServerStep = ({ onNext, plainTitle }: Props) => {
 		api.server.create.useMutation();
 	const checkIsReady = (validation?: {
 		docker?: { enabled?: boolean };
-		isNotployNetworkInstalled?: boolean;
+		isAstronCollectionNetworkInstalled?: boolean;
 	}) =>
-		!!validation?.docker?.enabled && !!validation?.isNotployNetworkInstalled;
+		!!validation?.docker?.enabled && !!validation?.isAstronCollectionNetworkInstalled;
 
 	const {
 		data: validation,
@@ -206,7 +206,7 @@ export const ServerStep = ({ onNext, plainTitle }: Props) => {
 				</span>
 				<h1 className={titleClassName}>Connect a server.</h1>
 				<p className="text-muted-foreground text-lg max-w-md leading-relaxed">
-					Notploy deploys to servers you own. Buy one from any VPS provider
+					astron-collection deploys to servers you own. Buy one from any VPS provider
 					(Hetzner, DigitalOcean, Hostinger...) and paste its IP below.
 				</p>
 				<div className="flex items-start gap-2.5 rounded-lg border p-3 max-w-md">
@@ -214,7 +214,7 @@ export const ServerStep = ({ onNext, plainTitle }: Props) => {
 					<div className="flex flex-col gap-0.5">
 						<span className="text-sm font-medium">Requirements</span>
 						<span className="text-sm text-muted-foreground">
-							To ensure a smooth experience with Notploy, your server should
+							To ensure a smooth experience with astron-collection, your server should
 							have at least 1GB of RAM and 30GB of disk space.
 						</span>
 					</div>
@@ -231,7 +231,7 @@ export const ServerStep = ({ onNext, plainTitle }: Props) => {
 					)}
 					<div className="flex flex-col gap-2 rounded-lg border p-3">
 						<span className="text-xs font-medium text-muted-foreground">
-							1. Run this on your server to authorize Notploy
+							1. Run this on your server to authorize astron-collection
 						</span>
 						<div className="flex items-center gap-2">
 							<code className="flex-1 min-w-0 truncate rounded bg-muted px-2 py-1.5 text-xs">
@@ -318,9 +318,9 @@ export const ServerStep = ({ onNext, plainTitle }: Props) => {
 									pending={!validation?.docker?.enabled && !isReady}
 								/>
 								<StatusRow
-									label="Notploy network created"
-									ok={validation?.isNotployNetworkInstalled}
-									pending={!validation?.isNotployNetworkInstalled && !isReady}
+									label="astron-collection network created"
+									ok={validation?.isAstronCollectionNetworkInstalled}
+									pending={!validation?.isAstronCollectionNetworkInstalled && !isReady}
 								/>
 							</>
 						)}

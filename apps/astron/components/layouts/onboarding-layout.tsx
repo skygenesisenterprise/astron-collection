@@ -19,7 +19,7 @@ export const OnboardingLayout = ({ children }: Props) => {
 					</Link>
 				</Button>
 				<Button variant="ghost" size="icon">
-					<Link href="https://x.com/getastron-collection">
+					<Link href="https://x.com/getastroncollection">
 						<svg
 							stroke="currentColor"
 							fill="currentColor"
@@ -33,7 +33,7 @@ export const OnboardingLayout = ({ children }: Props) => {
 					</Link>
 				</Button>
 				<Button variant="ghost" size="icon">
-					<Link href="https://discord.com/invite/GUkDugVh34">
+					<Link href="https://astron-collection.com/invite/GUkDugVh34">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 48 48"

@@ -15,26 +15,26 @@ import {
 import { api } from "@/utils/api";
 
 const MARKETPLACE_URL =
-	"https://marketplace.visualstudio.com/items?itemName=notploy.notploy";
-const EXTENSION_ID = "notploy.notploy";
+	"https://marketplace.visualstudio.com/items?itemName=astron-collection.astron-collection";
+const EXTENSION_ID = "astron-collection.astron-collection";
 
 const STEPS = [
 	{
 		title: "Install the extension",
 		description:
-			"From a terminal, or search for “Notploy” in the Extensions view.",
+			"From a terminal, or search for “astron-collection” in the Extensions view.",
 		command: `code --install-extension ${EXTENSION_ID}`,
 	},
 	{
 		title: "Add this instance",
 		description:
-			"Run “Notploy: Add Instance” in the Command Palette and paste the address below. Plain HTTP is accepted on localhost and private networks.",
+			"Run “astron-collection: Add Instance” in the Command Palette and paste the address below. Plain HTTP is accepted on localhost and private networks.",
 		command: "", // resolved at render time from the current origin
 	},
 	{
 		title: "Authenticate",
 		description:
-			"Run “Notploy: Login”, then paste one of the keys listed on this page. The extension stores it in VS Code secret storage, never in settings.json.",
+			"Run “astron-collection: Login”, then paste one of the keys listed on this page. The extension stores it in VS Code secret storage, never in settings.json.",
 		command: "", // resolved at render time from the current origin
 	},
 ];
@@ -42,16 +42,16 @@ const STEPS = [
 /**
  * The dashboard half of the VS Code connect flow.
  *
- * Notploy's public API has no OAuth or device-code procedure, so the extension
+ * Astron Collection's public API has no OAuth or device-code procedure, so the extension
  * authenticates exactly like the CLI and the SDK: an API key sent as
  * `x-api-key`. This card is where that key comes from, which makes it the
- * counterpart of the extension's `notploy.instance.add` and `notploy.login`
+ * counterpart of the extension's `astron-collection.instance.add` and `astron-collection.login`
  * commands.
  *
  * Everything here is derived from `document.location.origin`, so the page is
  * served by the very instance the user is looking at. That is what makes the
- * instructions correct for both deployments without branching: Notploy Cloud
- * hands out `https://app.notploy.com`, a self-hosted instance hands out its
+ * instructions correct for both deployments without branching: astron-collection Cloud
+ * hands out `https://dash.astron-collection.com`, a self-hosted instance hands out its
  * own origin, and the extension is identical either way because it only ever
  * talks to the origin it is given.
  */
@@ -90,7 +90,7 @@ export const ShowConnectEditor = () => {
 			<CardContent className="space-y-4 border-t pt-5">
 				<div className="flex items-center gap-2 text-sm text-muted-foreground">
 					<Badge variant="secondary">
-						{isCloud ? "Notploy Cloud" : "Self-hosted"}
+						{isCloud ? "astron-collection Cloud" : "Self-hosted"}
 					</Badge>
 					<span>
 						The extension connects to this instance over the same API as the CLI

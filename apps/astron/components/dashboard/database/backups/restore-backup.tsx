@@ -215,7 +215,7 @@ export const RestoreBackup = ({
 			backupFile: "",
 			databaseName:
 				databaseType === "web-server"
-					? "notploy"
+					? "astron-collection"
 					: databaseType === "libsql"
 						? "iku.db"
 						: "",

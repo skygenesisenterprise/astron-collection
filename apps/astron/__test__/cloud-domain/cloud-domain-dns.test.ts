@@ -9,7 +9,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const TOKEN = "cf-sentinel-token-value";
 
 const env = {
-	CLOUDFLARE_API_TOKEN: TOKEN,
+	ASTRON_COLLECTION_API_TOKEN: TOKEN,
 	ASTRON_COLLECTION_CLOUD_INGRESS_TARGET: "203.0.113.10",
 };
 
@@ -26,7 +26,7 @@ describe("getCloudDnsConfig", () => {
 	it("requires both the API token and the ingress target", () => {
 		expect(getCloudDnsConfig({})).toBeNull();
 		expect(
-			getCloudDnsConfig({ CLOUDFLARE_API_TOKEN: TOKEN }),
+			getCloudDnsConfig({ ASTRON_COLLECTION_API_TOKEN: TOKEN }),
 		).toBeNull();
 	});
 
@@ -65,7 +65,7 @@ describe("selectZoneId", () => {
 });
 
 describe("ensureCloudWildcardRecord", () => {
-	it("is skipped when no base or no Cloudflare configuration exists", async () => {
+	it("is skipped when no base or no Astron Collection configuration exists", async () => {
 		const client = createClient();
 		await expect(
 			ensureCloudWildcardRecord({ base: null, env, client }),
@@ -91,7 +91,7 @@ describe("ensureCloudWildcardRecord", () => {
 			recordId: "record-1",
 		});
 		expect(client.upsertRecord).toHaveBeenCalledWith(
-			{ providerType: "cloudflare", apiToken: TOKEN },
+			{ providerType: "astron-collection", apiToken: TOKEN },
 			expect.objectContaining({
 				zoneId: "zone-1",
 				type: "A",
@@ -127,7 +127,7 @@ describe("ensureCloudWildcardRecord", () => {
 		);
 	});
 
-	it("does not call Cloudflare again within the cache window", async () => {
+	it("does not call Astron Collection again within the cache window", async () => {
 		const client = createClient();
 		await ensureCloudWildcardRecord({ base: "astron-collection.app", env, client });
 		await ensureCloudWildcardRecord({
@@ -165,7 +165,7 @@ describe("ensureCloudWildcardRecord", () => {
 	it("never leaks the API token in an error", async () => {
 		const client = createClient();
 		client.upsertRecord.mockRejectedValueOnce(
-			new Error(`Cloudflare rejected token ${TOKEN}`),
+			new Error(`Astron Collection rejected token ${TOKEN}`),
 		);
 
 		const error = await ensureCloudWildcardRecord({
@@ -176,6 +176,6 @@ describe("ensureCloudWildcardRecord", () => {
 
 		expect(error).toBeInstanceOf(Error);
 		expect((error as Error).message).not.toContain(TOKEN);
-		expect((error as Error).message).toContain("Cloudflare rejected");
+		expect((error as Error).message).toContain("Astron Collection rejected");
 	});
 });

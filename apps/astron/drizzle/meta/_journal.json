@@ -1534,6 +1534,13 @@
       "when": 1792538000000,
       "tag": "0219_security_key_login_request",
       "breakpoints": true
+    },
+    {
+      "idx": 220,
+      "version": "7",
+      "when": 1794700000000,
+      "tag": "0220_member_onboarding_indexes",
+      "breakpoints": true
     }
   ]
 }

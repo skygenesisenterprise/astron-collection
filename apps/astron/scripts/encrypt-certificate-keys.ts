@@ -7,7 +7,7 @@
  * rewritten. This script re-encrypts every existing row in place.
  *
  * Usage:
- *   npx tsx apps/astron-collection/scripts/encrypt-certificate-keys.ts [--dry-run]
+ *   npx tsx apps/astron/scripts/encrypt-certificate-keys.ts [--dry-run]
  *
  * Safe to run more than once: values already prefixed with `enc:v1:` are skipped.
  */

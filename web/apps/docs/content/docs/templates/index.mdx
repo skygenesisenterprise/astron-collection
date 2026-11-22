@@ -4,6 +4,15 @@ description: "Start from a blueprint or an example instead of a blank project."
 ---
 
 import { Card, Cards } from 'fumadocs-ui/components/card';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+<Callout type="warning">
+The Templates gallery inherited from Notploy is **disabled by default**. The
+code is kept in the tree, but the API procedures, the logo route and the
+dashboard entry point are unreachable until `ASTRON_COLLECTION_TEMPLATES_ENABLED`
+and `NEXT_PUBLIC_ASTRON_COLLECTION_TEMPLATES_ENABLED` are both set to `true`.
+Framework examples below are unaffected.
+</Callout>
 
 **Purpose** — Templates give you a working starting point. Instead of configuring an application or Compose stack from scratch, you deploy a blueprint and adapt it, or follow an example that matches your framework.
 

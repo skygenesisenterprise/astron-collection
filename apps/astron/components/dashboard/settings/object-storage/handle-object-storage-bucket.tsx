@@ -266,7 +266,7 @@ export const HandleObjectStorageBucket = ({
 								<FormItem>
 									<FormLabel>Bucket name</FormLabel>
 									<FormControl>
-										<Input placeholder="notploy-backups" {...field} />
+										<Input placeholder="astron-collection-backups" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>

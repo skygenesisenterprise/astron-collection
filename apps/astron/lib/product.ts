@@ -1,6 +1,6 @@
 /**
  * Product the instance runs as, as seen by the UI. Mirrors the server's
- * `Astron CollectionProduct` without importing the server barrel (which is server-only).
+ * `AstronCollectionProduct` without importing the server barrel (which is server-only).
  */
 export type AppProduct = "self" | "cloud" | "console";
 

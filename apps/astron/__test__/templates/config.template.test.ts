@@ -210,7 +210,7 @@ describe("processTemplate", () => {
 				config: {
 					domains: [],
 					env: [
-						'CLOUDFLARE_TUNNEL_TOKEN="<INSERT TOKEN>"',
+						'ASTRON_COLLECTION_TUNNEL_TOKEN="<INSERT TOKEN>"',
 						'ANOTHER_VAR="some value"',
 						"DOMAIN=${domain}",
 					],
@@ -222,7 +222,7 @@ describe("processTemplate", () => {
 			expect(result.envs).toHaveLength(3);
 
 			// Should preserve exact format for static values
-			expect(result.envs[0]).toBe('CLOUDFLARE_TUNNEL_TOKEN="<INSERT TOKEN>"');
+			expect(result.envs[0]).toBe('ASTRON_COLLECTION_TUNNEL_TOKEN="<INSERT TOKEN>"');
 			expect(result.envs[1]).toBe('ANOTHER_VAR="some value"');
 
 			// Should process variables in array items

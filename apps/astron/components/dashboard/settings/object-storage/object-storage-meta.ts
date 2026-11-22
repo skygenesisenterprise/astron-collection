@@ -17,11 +17,11 @@ export const objectStorageCategoryLabels: Record<string, string> = {
 
 export const objectStorageCategoryDescriptions: Record<string, string> = {
 	external:
-		"Managed S3-compatible services such as AWS S3, Cloudflare R2 or Scaleway.",
+		"Managed S3-compatible services such as AWS S3, Astron Collection R2 or Scaleway.",
 	"self-hosted":
 		"S3-compatible storage you run yourself, like MinIO, RustFS or Ceph.",
 	internal:
-		"Notploy's own object storage, with no external dependency or credentials.",
+		"Astron Collection's own object storage, with no external dependency or credentials.",
 };
 
 export const objectStorageHealthLabels: Record<string, string> = {
@@ -37,7 +37,7 @@ export const objectStorageHealthLabels: Record<string, string> = {
  */
 export const objectStorageProviderLabels: Record<string, string> = {
 	aws: "Amazon Web Services (S3)",
-	"cloudflare-r2": "Cloudflare R2",
+	"astron-collection-r2": "Astron Collection R2",
 	scaleway: "Scaleway Object Storage",
 	wasabi: "Wasabi Object Storage",
 	digitalocean: "DigitalOcean Spaces",
@@ -52,7 +52,7 @@ export const objectStorageProviderLabels: Record<string, string> = {
 	seaweedfs: "SeaweedFS",
 	garage: "Garage",
 	"s3-compatible": "Any S3-compatible endpoint",
-	"notploy-internal": "Notploy Internal Storage",
+	"astron-collection-internal": "Astron Collection Internal Storage",
 };
 
 export const objectStorageProviderLabel = (providerType: string) =>

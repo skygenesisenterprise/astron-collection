@@ -74,7 +74,7 @@ const objectStorageFormSchema = z
 	// The internal provider owns its storage and needs no credentials; every
 	// other provider must supply an endpoint and keys.
 	.superRefine((value, ctx) => {
-		if (value.providerType === "notploy-internal") return;
+		if (value.providerType === "astron-collection-internal") return;
 		if (!value.endpoint) {
 			ctx.addIssue({
 				code: "custom",
@@ -184,7 +184,7 @@ export const HandleObjectStorage = ({
 	const providerType = form.watch("providerType");
 	const pathStyle = form.watch("pathStyle");
 	const allowInsecureTls = form.watch("allowInsecureTls");
-	const isInternal = providerType === "notploy-internal";
+	const isInternal = providerType === "astron-collection-internal";
 
 	const providerGroups = useMemo(
 		() =>
@@ -513,14 +513,14 @@ export const HandleObjectStorage = ({
 						{isInternal && (
 							<>
 								<AlertBlock type="info">
-									Notploy keeps these buckets on its own storage path, so no
+									astron-collection keeps these buckets on its own storage path, so no
 									external endpoint or credentials are needed. Ideal for a
 									self-hosted install that wants backups without a third party.
 								</AlertBlock>
 								{textField("rootPath", "Storage root (optional)", {
-									placeholder: "/etc/notploy/object-storage",
+									placeholder: "/etc/astron-collection/object-storage",
 									description:
-										"Leave empty to use the default Notploy storage path.",
+										"Leave empty to use the default astron-collection storage path.",
 								})}
 							</>
 						)}

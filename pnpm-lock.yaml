@@ -372,6 +372,9 @@ importers:
       '@ai-sdk/openai-compatible':
         specifier: ^3.0.80
         version: 3.0.80(zod@4.6.7)
+      '@astron-collection/react':
+        specifier: workspace:*
+        version: link:../../packages/node/packages/react
       '@astron-collection/server':
         specifier: workspace:*
         version: link:../../packages/server
@@ -438,6 +441,9 @@ importers:
       '@openpanel/nextjs':
         specifier: ^1.5.1
         version: 1.5.2(next@16.3.4(@babel/core@7.29.7(supports-color@8.1.1))(@opentelemetry/api@1.10.0)(@types/node@24.19.2)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@phosphor-icons/react':
+        specifier: ^2.1.10
+        version: 2.1.10(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@react-email/components':
         specifier: ^1.0.12
         version: 1.0.12(react-dom@19.2.7(react@19.2.7))(react@19.2.7)

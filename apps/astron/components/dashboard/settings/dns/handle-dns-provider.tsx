@@ -51,7 +51,7 @@ import {
 } from "./dns-provider-meta";
 
 const PROVIDER_TYPES = [
-	"cloudflare",
+	"astron-collection",
 	"route53",
 	"porkbun",
 	"infomaniak",
@@ -73,13 +73,13 @@ const PROVIDER_TYPES = [
 	"coredns",
 	"unbound",
 	"custom",
-	"notploy-internal",
+	"astron-collection-internal",
 ] as const;
 
 type ProviderType = (typeof PROVIDER_TYPES)[number];
 
 const CATEGORY_BY_TYPE: Record<ProviderType, string> = {
-	cloudflare: "managed",
+	astron-collection: "managed",
 	route53: "managed",
 	porkbun: "managed",
 	infomaniak: "managed",
@@ -101,7 +101,7 @@ const CATEGORY_BY_TYPE: Record<ProviderType, string> = {
 	coredns: "self-hosted",
 	unbound: "self-hosted",
 	custom: "managed",
-	"notploy-internal": "internal",
+	"astron-collection-internal": "internal",
 };
 
 const ovhEndpointLabels = {
@@ -182,7 +182,7 @@ type DnsProviderForm = z.infer<typeof DnsProviderSchema>;
 
 const defaultValues: DnsProviderForm = {
 	name: "",
-	providerType: "cloudflare",
+	providerType: "astron-collection",
 	apiToken: "",
 	accessKeyId: "",
 	secretAccessKey: "",
@@ -229,8 +229,8 @@ const optional = (value: string) => (value.trim() ? value.trim() : undefined);
 const buildConfig = (data: DnsProviderForm) => {
 	const zones = parseZones(data.zones);
 	switch (data.providerType) {
-		case "cloudflare":
-			return { providerType: "cloudflare" as const, apiToken: data.apiToken };
+		case "astron-collection":
+			return { providerType: "astron-collection" as const, apiToken: data.apiToken };
 		case "route53":
 			return {
 				providerType: "route53" as const,
@@ -345,9 +345,9 @@ const buildConfig = (data: DnsProviderForm) => {
 				zones,
 				allowInsecureTls: data.allowInsecureTls,
 			};
-		case "notploy-internal":
+		case "astron-collection-internal":
 			return {
-				providerType: "notploy-internal" as const,
+				providerType: "astron-collection-internal" as const,
 				defaultTtl: Number(data.defaultTtl || 300),
 			};
 	}
@@ -618,7 +618,7 @@ export const HandleDnsProvider = ({
 
 	const credentialFields = () => {
 		switch (providerType) {
-			case "cloudflare":
+			case "astron-collection":
 			case "infomaniak":
 			case "hetzner":
 			case "digitalocean":
@@ -627,7 +627,7 @@ export const HandleDnsProvider = ({
 				return textField("apiToken", "API Token", {
 					type: "password",
 					description:
-						"Create a scoped token for the zones Notploy should manage.",
+						"Create a scoped token for the zones astron-collection should manage.",
 				});
 			case "route53":
 				return (
@@ -763,9 +763,9 @@ export const HandleDnsProvider = ({
 			case "bind":
 				return (
 					<>
-						{textField("serverId", "Notploy server", {
+						{textField("serverId", "astron-collection server", {
 							description:
-								"Registered server Notploy connects to over SSH to run nsupdate.",
+								"Registered server astron-collection connects to over SSH to run nsupdate.",
 						})}
 						{textField("serverAddress", "Nameserver address", {
 							placeholder: "dns01.sge.internal",
@@ -800,7 +800,7 @@ export const HandleDnsProvider = ({
 						/>
 						{textField("tsigSecret", "TSIG secret", { type: "password" })}
 						{zonesField(
-							"BIND exposes no zone discovery, so list the zones Notploy may update.",
+							"BIND exposes no zone discovery, so list the zones astron-collection may update.",
 						)}
 					</>
 				);
@@ -826,9 +826,9 @@ export const HandleDnsProvider = ({
 			case "unbound":
 				return (
 					<>
-						{textField("serverId", "Notploy server", {
+						{textField("serverId", "astron-collection server", {
 							description:
-								"Registered server Notploy connects to over SSH to run unbound-control.",
+								"Registered server astron-collection connects to over SSH to run unbound-control.",
 						})}
 						{textField("configPath", "unbound.conf path", {
 							placeholder: "/etc/unbound/unbound.conf",
@@ -844,7 +844,7 @@ export const HandleDnsProvider = ({
 						{textField("baseUrl", "Base URL", {
 							placeholder: "https://dns.example.com/api",
 							description:
-								"Endpoint implementing Notploy's documented DNS adapter contract.",
+								"Endpoint implementing Astron Collection's documented DNS adapter contract.",
 						})}
 						{textField("apiToken", "API Token", { type: "password" })}
 						{zonesField("Optional zones to expose before discovery.")}
@@ -855,11 +855,11 @@ export const HandleDnsProvider = ({
 						)}
 					</>
 				);
-			case "notploy-internal":
+			case "astron-collection-internal":
 				return (
 					<>
 						<AlertBlock type="info">
-							Notploy stores these zones and records itself, so no external
+							astron-collection stores these zones and records itself, so no external
 							DNS dependency is required. Ideal for private networks and
 							internal domains such as <code>sge.lan</code>.
 						</AlertBlock>
@@ -908,7 +908,7 @@ export const HandleDnsProvider = ({
 						{dnsProviderId ? "Update DNS Provider" : "Add DNS Provider"}
 					</DialogTitle>
 					<DialogDescription>
-						Connect a DNS provider so Notploy can create records for your
+						Connect a DNS provider so astron-collection can create records for your
 						domains automatically instead of setting them up by hand.
 					</DialogDescription>
 				</DialogHeader>
@@ -925,7 +925,7 @@ export const HandleDnsProvider = ({
 								<FormItem>
 									<FormLabel>Name</FormLabel>
 									<FormControl>
-										<Input placeholder="prod-cloudflare" {...field} />
+										<Input placeholder="prod-astron-collection" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -973,11 +973,11 @@ export const HandleDnsProvider = ({
 									<FormDescription>
 										{dnsProviderCategoryLabels[CATEGORY_BY_TYPE[providerType]]}
 										{" · "}
-										{providerType === "notploy-internal"
+										{providerType === "astron-collection-internal"
 											? "No external dependency."
 											: providerType === "custom"
 												? "Your own DNS platform."
-												: "Notploy manages records through its API."}
+												: "astron-collection manages records through its API."}
 									</FormDescription>
 									<FormMessage />
 								</FormItem>

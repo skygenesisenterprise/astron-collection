@@ -5,7 +5,13 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
 	test: {
 		include: ["__test__/**/*.test.ts"], // Incluir solo los archivos de test en el directorio __test__
-		exclude: ["**/node_modules/**", "**/dist/**", "**/.docker/**"],
+		exclude: [
+			"**/node_modules/**",
+			"**/dist/**",
+			"**/.docker/**",
+			// These need a real PostgreSQL database (see vitest.postgres.config.ts).
+			"**/*.postgres.test.ts",
+		],
 		pool: "forks",
 		setupFiles: [path.resolve(__dirname, "setup.ts")],
 	},

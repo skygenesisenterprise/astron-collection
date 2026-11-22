@@ -124,7 +124,7 @@ export const AddImport = ({ environmentId, projectName }: Props) => {
 			const result = await previewTemplate({
 				appName: data.appName,
 				base64: data.base64.trim(),
-				serverId: data.serverId === "notploy" ? undefined : data.serverId,
+				serverId: data.serverId === "astron-collection" ? undefined : data.serverId,
 			});
 			setTemplateInfo(result);
 			setPreviewOpen(true);
@@ -143,7 +143,7 @@ export const AddImport = ({ environmentId, projectName }: Props) => {
 				appName: data.appName,
 				environmentId,
 				composeType: "docker-compose",
-				serverId: data.serverId === "notploy" ? undefined : data.serverId,
+				serverId: data.serverId === "astron-collection" ? undefined : data.serverId,
 			});
 			await importCompose({
 				composeId: compose.composeId,
@@ -246,22 +246,22 @@ export const AddImport = ({ environmentId, projectName }: Props) => {
 											<Select
 												onValueChange={field.onChange}
 												defaultValue={
-													field.value || (!isCloud ? "notploy" : undefined)
+													field.value || (!isCloud ? "astron-collection" : undefined)
 												}
 											>
 												<SelectTrigger>
 													<SelectValue
 														placeholder={
-															!isCloud ? "Notploy" : "Select a Server"
+															!isCloud ? "astron-collection" : "Select a Server"
 														}
 													/>
 												</SelectTrigger>
 												<SelectContent>
 													<SelectGroup>
 														{!isCloud && (
-															<SelectItem value="notploy">
+															<SelectItem value="astron-collection">
 																<span className="flex items-center gap-2 justify-between w-full">
-																	<span>Notploy</span>
+																	<span>astron-collection</span>
 																	<span className="text-muted-foreground text-xs self-center">
 																		Default
 																	</span>

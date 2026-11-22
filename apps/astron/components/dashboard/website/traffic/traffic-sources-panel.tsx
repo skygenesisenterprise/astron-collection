@@ -321,7 +321,7 @@ export const TrafficSourcesPanel = ({
 						{`<script defer src="${installEndpoint}/traffic.js"\n        data-property-key="${installKey ?? ""}"\n        data-endpoint="${installEndpoint}"></script>`}
 					</pre>
 					<pre className="overflow-x-auto rounded-md border bg-muted p-3 text-xs">
-						{`// Explicit events (optional)\nwindow.notployTraffic.track("signup_completed");`}
+						{`// Explicit events (optional)\nwindow.astronCollectionTraffic.track("signup_completed");`}
 					</pre>
 					<AlertBlock type="info">
 						The public key identifies the property; it is not a secret. The

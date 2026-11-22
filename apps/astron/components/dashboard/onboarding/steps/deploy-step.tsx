@@ -10,6 +10,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { AlertBlock } from "@/components/shared/alert-block";
 import { Button } from "@/components/ui/button";
+import { TEMPLATES_ENABLED } from "@/lib/templates";
 import { api } from "@/utils/api";
 import { displayFont } from "../font";
 
@@ -244,7 +245,9 @@ export const DeployStep = ({ environmentId, onNext, plainTitle }: Props) => {
 				</p>
 			</div>
 
-			<div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-border rounded-2xl overflow-hidden border">
+			<div
+				className={`grid grid-cols-1 ${TEMPLATES_ENABLED ? "sm:grid-cols-2" : ""} gap-px bg-border rounded-2xl overflow-hidden border`}
+			>
 				<button
 					type="button"
 					onClick={handleNginx}
@@ -269,34 +272,37 @@ export const DeployStep = ({ environmentId, onNext, plainTitle }: Props) => {
 					</span>
 				</button>
 
-				<div className="flex flex-col justify-between gap-8 bg-background p-7">
-					<div>
-						<p className="font-medium">Docker Compose template</p>
-						<p className="text-sm text-muted-foreground mt-1">
-							Popular open source stacks, one click away.
-						</p>
+				{TEMPLATES_ENABLED && (
+					<div className="flex flex-col justify-between gap-8 bg-background p-7">
+						<div>
+							<p className="font-medium">Docker Compose template</p>
+							<p className="text-sm text-muted-foreground mt-1">
+								Popular open source stacks, one click away.
+							</p>
+						</div>
+						<div className="flex flex-col gap-2">
+							{CURATED_TEMPLATES.map((template) => (
+								<Button
+									key={template.id}
+									variant="outline"
+									size="sm"
+									disabled={!!starting}
+									isLoading={starting === template.id}
+									onClick={() => handleTemplate(template.id)}
+									className="justify-start"
+								>
+									{/* biome-ignore lint/performance/noImgElement: dynamic template logo URL, next/image cannot optimize it */}
+									<img
+										src={`/api/templates/${template.id}/${template.logo}`}
+										alt={template.name}
+										className="size-4 object-contain shrink-0"
+									/>
+									{template.name}
+								</Button>
+							))}
+						</div>
 					</div>
-					<div className="flex flex-col gap-2">
-						{CURATED_TEMPLATES.map((template) => (
-							<Button
-								key={template.id}
-								variant="outline"
-								size="sm"
-								disabled={!!starting}
-								isLoading={starting === template.id}
-								onClick={() => handleTemplate(template.id)}
-								className="justify-start"
-							>								{/* biome-ignore lint/performance/noImgElement: dynamic template logo URL, next/image cannot optimize it */}
-								<img
-								src={`/api/templates/${template.id}/${template.logo}`}
-									alt={template.name}
-									className="size-4 object-contain shrink-0"
-								/>
-								{template.name}
-							</Button>
-						))}
-					</div>
-				</div>
+				)}
 			</div>
 		</div>
 	);

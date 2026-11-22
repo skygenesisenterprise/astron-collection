@@ -134,7 +134,7 @@ const StaticHeader = ({ title }: { title: string }) => (
 	<span className="text-xs font-medium text-muted-foreground">{title}</span>
 );
 
-/** Cloudflare-style relative owner name (`@` for the apex). */
+/** Astron Collection-style relative owner name (`@` for the apex). */
 const relativeName = (name: string, zoneName: string) => {
 	if (!zoneName) return name;
 	if (name === zoneName || name === "@") return "@";
@@ -177,7 +177,7 @@ export const ShowDnsRecords = ({ dnsProviderId, zoneId }: Props) => {
 	);
 
 	const zoneName = zones?.find((zone) => zone.id === zoneId)?.name ?? "";
-	const isCloudflare = provider?.providerType === "cloudflare";
+	const isAstronCollection = provider?.providerType === "astron-collection";
 	const canWrite = !!permissions?.dnsProvider.update;
 	const canDelete = !!permissions?.dnsProvider.delete;
 
@@ -300,7 +300,7 @@ export const ShowDnsRecords = ({ dnsProviderId, zoneId }: Props) => {
 					</span>
 				),
 			},
-			...(isCloudflare
+			...(isAstronCollection
 				? [
 						{
 							accessorKey: "proxied",
@@ -428,11 +428,11 @@ export const ShowDnsRecords = ({ dnsProviderId, zoneId }: Props) => {
 				},
 			},
 		],
-		[canWrite, canDelete, deletingId, editing?.id, isCloudflare, zoneName],
+		[canWrite, canDelete, deletingId, editing?.id, isAstronCollection, zoneName],
 	);
 
 	const visibleDisplayColumns = DISPLAY_COLUMNS.filter(
-		(column) => column.id !== "proxied" || isCloudflare,
+		(column) => column.id !== "proxied" || isAstronCollection,
 	);
 
 	const pageCount = Math.max(

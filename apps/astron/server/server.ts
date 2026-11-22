@@ -95,10 +95,31 @@ if (dev && process.env.TURBOPACK !== "1") {
 }
 const app = next({ dev, turbopack: process.env.TURBOPACK === "1" });
 const handle = app.getRequestHandler();
+
+/**
+ * The API container only exposes the backend surface. Next.js pages are owned
+ * exclusively by the `client` service, so a page request received here is
+ * rejected before Next compiles it: that keeps the API from duplicating (and
+ * racing) the dashboard renderer. API routes such as `/api/health`, tRPC,
+ * better-auth and the webhooks keep working.
+ */
+const isApiRoute = (url: string | undefined) =>
+	url === "/api" || url?.startsWith("/api/") === true || url?.startsWith("/api?") === true;
 void app.prepare().then(async () => {
 	try {
 		console.log("Running AstronCollectionVersion: ", packageInfo.version);
 		const server = http.createServer((req, res) => {
+			if (process.env.ASTRON_COLLECTION_ROLE === "api" && !isApiRoute(req.url)) {
+				res.statusCode = 404;
+				res.setHeader("content-type", "application/json; charset=utf-8");
+				res.end(
+					JSON.stringify({
+						error: "Not Found",
+						message: "The dashboard is served by the client service.",
+					}),
+				);
+				return;
+			}
 			if (dev && req.url?.includes("_clientMiddlewareManifest.js")) {
 				const originalSetHeader = res.setHeader.bind(res);
 				res.setHeader = (

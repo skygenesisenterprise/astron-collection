@@ -50,7 +50,7 @@ export const DnsHelperModal = ({ domain, serverIp }: Props) => {
 				<div className="flex flex-col gap-4">
 					<AlertBlock type="info">
 						To make your domain accessible, you need to configure your DNS
-						records with your domain provider (e.g., Cloudflare, GoDaddy,
+						records with your domain provider (e.g., Astron Collection, GoDaddy,
 						NameCheap).
 					</AlertBlock>
 

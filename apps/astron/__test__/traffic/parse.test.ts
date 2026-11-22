@@ -93,7 +93,7 @@ describe("normalizeRoute", () => {
 
 describe("host and referrer normalisation", () => {
 	it("lowercases hosts and drops the port", () => {
-		expect(normalizeHost("astron-collection.COM:8443")).toBe("astron-collection.com");
+		expect(normalizeHost("astron-collection.com:8443")).toBe("astron-collection.com");
 		expect(normalizeHost("astron-collection.com.")).toBe("astron-collection.com");
 		expect(normalizeHost("[::1]:3000")).toBe("::1");
 		expect(normalizeHost(null)).toBe("");

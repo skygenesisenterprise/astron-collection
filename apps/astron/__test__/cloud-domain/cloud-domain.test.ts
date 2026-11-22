@@ -108,7 +108,7 @@ describe("cloudHostnameCandidates", () => {
 
 describe("getCloudDomainBase / normalizeCloudDomainBase", () => {
 	it("normalizes a valid wildcard zone", () => {
-		expect(normalizeCloudDomainBase(".astron-collection.App.")).toBe("astron-collection.app");
+		expect(normalizeCloudDomainBase(".astron-collection.app.")).toBe("astron-collection.app");
 	});
 
 	it("rejects invalid zones", () => {

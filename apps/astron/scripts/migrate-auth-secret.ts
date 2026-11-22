@@ -3,7 +3,7 @@
  * Migration script: re-encrypt 2FA secrets after rotating BETTER_AUTH_SECRET.
  *
  * Usage:
- *   OLD_SECRET=<old_secret> NEW_SECRET=<new_secret> npx tsx apps/astron-collection/scripts/migrate-auth-secret.ts
+ *   OLD_SECRET=<old_secret> NEW_SECRET=<new_secret> npx tsx apps/astron/scripts/migrate-auth-secret.ts
  *
  * Both OLD_SECRET and NEW_SECRET are required.
  * Run this BEFORE restarting Astron Collection with the new secret.
@@ -21,7 +21,7 @@ if (!OLD_SECRET || !NEW_SECRET) {
 		"❌ OLD_SECRET and NEW_SECRET environment variables are required.",
 	);
 	console.error(
-		"   Usage: OLD_SECRET=<old> NEW_SECRET=<new> npx tsx apps/astron-collection/scripts/migrate-auth-secret.ts",
+		"   Usage: OLD_SECRET=<old> NEW_SECRET=<new> npx tsx apps/astron/scripts/migrate-auth-secret.ts",
 	);
 	process.exit(1);
 }

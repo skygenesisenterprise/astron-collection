@@ -1,5 +1,5 @@
-const ONBOARDING_ACTIVE_KEY = "notploy_onboarding_active";
-const ONBOARDING_STATE_KEY = "notploy_onboarding_state";
+const ONBOARDING_ACTIVE_KEY = "astron_collection_onboarding_active";
+const ONBOARDING_STATE_KEY = "astron_collection_onboarding_state";
 
 interface OnboardingState {
 	stepId?: string;

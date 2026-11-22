@@ -23,8 +23,8 @@ export const S3_PROVIDERS: Array<{
 		name: "China Mobile Ecloud Elastic Object Storage (EOS)",
 	},
 	{
-		key: "Cloudflare",
-		name: "Cloudflare R2 Storage",
+		key: "Astron Collection",
+		name: "Astron Collection R2 Storage",
 	},
 	{
 		key: "DigitalOcean",

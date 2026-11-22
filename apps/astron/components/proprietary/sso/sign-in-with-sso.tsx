@@ -1,12 +1,12 @@
 "use client";
 
 import { standardSchemaResolver as zodResolver } from "@hookform/resolvers/standard-schema";
-import { ArrowLeft, Github, Loader2, LogIn } from "lucide-react";
+import { ArrowLeft, Github, Loader2, Lock } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { Button } from "@astron-collection/react";
 import {
 	Form,
 	FormControl,
@@ -95,7 +95,7 @@ export function SignInWithSSO({
 
 			const { data, error } = await authClient.signIn.sso({
 				email: values.email,
-				callbackURL: "/dashboard/home",
+				callbackURL: "/login",
 				errorCallbackURL: "/",
 			});
 			if (error) {
@@ -129,7 +129,7 @@ export function SignInWithSSO({
 				toast.error(error.message ?? "Invalid directory credentials");
 				return;
 			}
-			window.location.href = "/dashboard/home";
+			window.location.href = "/login";
 		} catch (err) {
 			toast.error(
 				err instanceof Error ? err.message : "Failed to sign in with directory",
@@ -145,10 +145,10 @@ export function SignInWithSSO({
 				<Button
 					type="button"
 					variant="outline"
-					className="w-full"
+					className="h-10 w-full justify-center gap-2 rounded-lg text-sm font-medium"
 					onClick={() => setExpanded(true)}
 				>
-					<LogIn className="mr-2 size-4" />
+					<Lock className="size-4" />
 					Sign in with SSO
 				</Button>
 				{!enforce && children}
@@ -227,7 +227,7 @@ export function SignInWithSSO({
 									<div className="flex gap-2">
 										<Input
 											type="email"
-											placeholder="you@astron-collection.com"
+											placeholder="you@company.com"
 											className="flex-1"
 											autoComplete="email"
 											disabled={isPending}

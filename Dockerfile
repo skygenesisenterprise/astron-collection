@@ -5,7 +5,7 @@
 # Built from the repository root: the whole monorepo is one pnpm workspace with
 # a single `pnpm-lock.yaml`, so only the root context is ever used.
 #
-#   docker build -t astron-manager .                      # the platform image (default target)
+#   docker build -t astron-manager .                       # platform image (default target)
 #   docker build --target dev -t astron-manager-dev .      # development image
 #   docker build --target status -t astron-collection-status .
 #   docker buildx build --target platform .
@@ -51,8 +51,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates
 
 # ---------------------------------------------------------------------------
 # Development image (dependencies + sources, never a production build). The
-# `dev` Compose services synchronise apps/astron and packages over this stage's
-# sources, so the dev servers always run the code on the host and hot-reload it.
+# client bind-mounts apps/astron and packages from the host, while the API gets
+# them through Compose's `develop.watch`; both dev servers run the host code.
 # `ASTRON_COLLECTION_ROLE` selects which one the entrypoint starts.
 # ---------------------------------------------------------------------------
 FROM base AS dev
@@ -94,6 +94,10 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # shared image instead of silently ignoring the arg.
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+# Legacy Templates gallery (inherited from Notploy). Off by default; the matching
+# server flag is ASTRON_COLLECTION_TEMPLATES_ENABLED (wired in docker-compose.yml).
+ARG NEXT_PUBLIC_ASTRON_COLLECTION_TEMPLATES_ENABLED=false
+ENV NEXT_PUBLIC_ASTRON_COLLECTION_TEMPLATES_ENABLED=${NEXT_PUBLIC_ASTRON_COLLECTION_TEMPLATES_ENABLED}
 
 # Server bundle (esbuild: dist/server.mjs, dist/migration.mjs, …) and Next build.
 RUN pnpm --filter=./apps/astron run build
@@ -164,7 +168,6 @@ ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]
 #
 #   client role   `.next`, `public`, `next.config.mjs`. `next start` serves the UI
 #                 and rewrites `/api/*` to the API service (API_INTERNAL_URL).
-#                 No DATABASE_URL, no REDIS_URL: it cannot do backend work.
 #   api role      `dist/` (server + migration bundles) and `drizzle/`. tRPC and
 #                 OpenAPI routes, better-auth, WebSockets, BullMQ workers and cron
 #                 jobs. It is the only role that receives database and Redis
@@ -206,7 +209,7 @@ ARG ASTRON_COLLECTION_PRODUCT=self
 ENV ASTRON_COLLECTION_FLAVOR=${ASTRON_COLLECTION_FLAVOR}
 ENV ASTRON_COLLECTION_PRODUCT=${ASTRON_COLLECTION_PRODUCT}
 LABEL org.opencontainers.image.title="astron-manager" \
-      org.opencontainers.image.description="Astron Manager platform — client and API in one image" \
+      org.opencontainers.image.description="Astron Collection platform — client and API in one image" \
       org.opencontainers.image.source="https://github.com/skygenesisenterprise/astron-collection" \
       org.opencontainers.image.version="${ASTRON_COLLECTION_VERSION}" \
       org.opencontainers.image.licenses="Apache-2.0"
@@ -214,7 +217,7 @@ LABEL org.opencontainers.image.title="astron-manager" \
 # Both roles are served by this image; Compose publishes the one the service needs.
 EXPOSE 3000 4000
 
-# Role-aware probe: `client` checks `/`, `api` checks `/api/health`.
+# Role-aware probe: `client` checks `/login`, `api` checks `/api/health`.
 HEALTHCHECK --interval=30s --timeout=10s --start-period=90s --retries=5 \
   CMD ["/usr/local/bin/entrypoint.sh", "healthcheck"]
 

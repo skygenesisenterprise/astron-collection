@@ -63,6 +63,7 @@ import { authClient } from "@/lib/auth-client";
 import { resolveAppEnvironment } from "@/lib/product";
 import { cn } from "@/lib/utils";
 import { api, type RouterOutputs } from "@/utils/api";
+import { useWorkspaceLicense } from "@/utils/hooks/use-workspace-license";
 import { TrialBanner } from "../dashboard/billing/trial-banner";
 import { AddOrganization } from "../dashboard/organization/handle-organization";
 import { GithubIcon } from "../icons/data-tools-icons";
@@ -198,33 +199,6 @@ function LicenseBadge({
 			{meta.label}
 		</Badge>
 	);
-}
-
-/**
- * Resolves the cloud licence tier of the active workspace.
- *
- * Licence tiers are a Cloud concept: self-hosted instances are unlicensed and the
- * Console is an internal operator surface, so both always return `null`. Only the
- * `cloud` product reports a tier (and only there is the subscription queried).
- *
- * Local development has no real subscription, so it defaults to the Enterprise
- * licence: that keeps licence gating from blocking developers. The dev stack is
- * the only place NODE_ENV is not "production" (mirrors
- * `allowUnlicensedDevInstance`); production always resolves the real tier.
- */
-function useWorkspaceLicense(): LicenseTier | null {
-	const { data: product } = api.settings.getProduct.useQuery();
-	const { data: user } = api.user.get.useQuery();
-	const { data: currentPlan } = api.stripe.getCurrentPlan.useQuery(undefined, {
-		enabled: product === "cloud",
-		refetchOnWindowFocus: false,
-	});
-
-	if (product !== "cloud") return null;
-	if (process.env.NODE_ENV !== "production" || user?.user.isEnterpriseCloud) {
-		return "enterprise";
-	}
-	return currentPlan ? "pro" : "free";
 }
 
 function LogoWrapper() {
@@ -785,7 +759,8 @@ export default function Page({ children, pageTitle }: Props) {
 	const router = useRouter();
 	const { data: auth } = api.user.get.useQuery();
 	const { data: permissions } = api.user.getPermissions.useQuery();
-	const { data: astronCollectionVersion } = api.settings.getAstronCollectionVersion.useQuery();
+	const { data: astronCollectionVersion } =
+		api.settings.getAstronCollectionVersion.useQuery();
 	const { data: whitelabeling } = api.whitelabeling.get.useQuery(undefined, {
 		staleTime: 5 * 60 * 1000,
 		refetchOnWindowFocus: false,

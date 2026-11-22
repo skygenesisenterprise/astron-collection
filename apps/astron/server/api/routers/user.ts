@@ -41,6 +41,7 @@ import {
 	createTRPCRouter,
 	protectedProcedure,
 	publicProcedure,
+	templatesProcedure,
 	withPermission,
 } from "../trpc";
 
@@ -857,7 +858,7 @@ export const userRouter = createTRPCRouter({
 			return inviteLink;
 		}),
 
-	getBookmarkedTemplates: protectedProcedure.query(async ({ ctx }) => {
+	getBookmarkedTemplates: templatesProcedure.query(async ({ ctx }) => {
 		const result = await db.query.user.findFirst({
 			where: eq(user.id, ctx.user.id),
 			columns: { bookmarkedTemplates: true },
@@ -866,7 +867,7 @@ export const userRouter = createTRPCRouter({
 		return result?.bookmarkedTemplates ?? [];
 	}),
 
-	toggleTemplateBookmark: protectedProcedure
+	toggleTemplateBookmark: templatesProcedure
 		.input(
 			z.object({
 				templateId: z.string().min(1),

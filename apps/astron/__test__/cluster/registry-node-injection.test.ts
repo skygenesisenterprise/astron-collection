@@ -4,7 +4,7 @@ import { getRegistryTag } from "@astron-collection/server/utils/cluster/upload";
 import { parse, quote } from "shell-quote";
 import { describe, expect, it } from "vitest";
 
-const MARK = `/tmp/astron_collectionregnode_pwned_${process.pid}`;
+const MARK = `/tmp/astron-collectionregnode_pwned_${process.pid}`;
 
 const runsSafely = (command: string) => {
 	if (existsSync(MARK)) rmSync(MARK);

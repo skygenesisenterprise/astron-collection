@@ -99,7 +99,7 @@ export const ShowTraefikActions = ({ serverId }: Props) => {
 						<span>Reload</span>
 					</DropdownMenuItem>
 					<ShowModalLogs
-						appName="notploy-traefik"
+						appName="astron-collection-traefik"
 						serverId={serverId}
 						type="standalone"
 					>

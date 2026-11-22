@@ -211,7 +211,7 @@ export const ShowVaultSecrets = ({ vaultProviderId }: Props) => {
 									environment variable with{" "}
 									{/* biome-ignore lint/suspicious/noTemplateCurlyInString: vault ${{...}} reference syntax shown as documentation, not a JS template */}
 									<code>{"${{vault.<name>.<secret>}}"}</code>. Values are fetched
-									at deploy time and never stored in Notploy.
+									at deploy time and never stored in astron-collection.
 								</CardDescription>
 							</CardHeader>
 						</div>

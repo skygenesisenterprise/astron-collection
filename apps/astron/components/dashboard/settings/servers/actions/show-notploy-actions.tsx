@@ -15,7 +15,7 @@ import { ShowModalLogs } from "../../web-server/show-modal-logs";
 import { TerminalModal } from "../../web-server/terminal-modal";
 import { GPUSupportModal } from "../gpu-support-modal";
 
-export const ShowNotployActions = () => {
+export const ShowAstronCollectionActions = () => {
 	const { mutateAsync: reloadServer, isPending } =
 		api.settings.reloadServer.useMutation();
 
@@ -50,7 +50,7 @@ export const ShowNotployActions = () => {
 					<TerminalModal serverId="local">
 						<span>Terminal</span>
 					</TerminalModal>
-					<ShowModalLogs appName="notploy">
+					<ShowModalLogs appName="astron-collection">
 						<DropdownMenuItem
 							className="cursor-pointer"
 							onSelect={(e) => e.preventDefault()}

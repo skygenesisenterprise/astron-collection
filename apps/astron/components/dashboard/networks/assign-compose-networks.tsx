@@ -39,7 +39,7 @@ interface Props {
 const serviceSchema = z.object({
 	serviceName: z.string(),
 	networkIds: z.array(z.string()),
-	detachNotployNetwork: z.boolean(),
+	detachAstronCollectionNetwork: z.boolean(),
 });
 
 const formSchema = z.object({
@@ -95,7 +95,7 @@ export const AssignComposeNetworks = ({ composeId }: Props) => {
 				return {
 					serviceName,
 					networkIds: config?.networkIds ?? [],
-					detachNotployNetwork: config?.detachNotployNetwork ?? false,
+					detachAstronCollectionNetwork: config?.detachAstronCollectionNetwork ?? false,
 				};
 			}),
 		});
@@ -109,7 +109,7 @@ export const AssignComposeNetworks = ({ composeId }: Props) => {
 	const onSubmit = async (values: FormValues) => {
 		try {
 			const serviceNetworks = values.services.filter(
-				(s) => s.networkIds.length > 0 || s.detachNotployNetwork,
+				(s) => s.networkIds.length > 0 || s.detachAstronCollectionNetwork,
 			);
 			await mutateAsync({
 				composeId,
@@ -131,7 +131,7 @@ export const AssignComposeNetworks = ({ composeId }: Props) => {
 					<CardTitle className="text-xl">Networks</CardTitle>
 					<CardDescription>
 						Attach Docker networks per service and detach it from
-						notploy-network. Takes effect on the next deploy.
+						astron-collection-network. Takes effect on the next deploy.
 					</CardDescription>
 				</div>
 				<Button
@@ -224,13 +224,13 @@ const ServiceRow = ({
 		<div className="flex flex-col gap-3 rounded-lg border p-4">
 			<FormField
 				control={control}
-				name={`services.${index}.detachNotployNetwork`}
+				name={`services.${index}.detachAstronCollectionNetwork`}
 				render={({ field }) => (
 					<FormItem className="flex flex-row items-center justify-between gap-3 space-y-0">
 						<span className="text-sm font-medium">{service}</span>
 						<div className="flex items-center gap-2">
 							<span className="text-xs text-muted-foreground">
-								Detach notploy-network
+								Detach astron-collection-network
 							</span>
 							<FormControl>
 								<Switch

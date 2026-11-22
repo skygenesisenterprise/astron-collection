@@ -1,7 +1,7 @@
 import type { DnsProviderIconKey } from "@/components/icons/dns-provider-icons";
 
 export const dnsProviderLabels: Record<string, string> = {
-	cloudflare: "Cloudflare",
+	astron-collection: "Astron Collection",
 	route53: "AWS Route53",
 	porkbun: "Porkbun",
 	infomaniak: "Infomaniak",
@@ -23,7 +23,7 @@ export const dnsProviderLabels: Record<string, string> = {
 	coredns: "CoreDNS",
 	unbound: "Unbound",
 	custom: "Custom provider",
-	"notploy-internal": "Notploy Internal DNS",
+	"astron-collection-internal": "Astron Collection Internal DNS",
 };
 
 export const dnsProviderCategoryLabels: Record<string, string> = {
@@ -36,7 +36,7 @@ export const dnsProviderCategoryDescriptions: Record<string, string> = {
 	managed: "Hosted DNS services reached through their own API.",
 	"self-hosted":
 		"DNS servers you operate yourself, reached through their management interface.",
-	internal: "Notploy's own internal DNS, with no external dependency.",
+	internal: "Astron Collection's own internal DNS, with no external dependency.",
 };
 
 export const dnsProviderCategoryOrder = [

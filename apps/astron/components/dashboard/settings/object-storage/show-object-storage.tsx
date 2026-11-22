@@ -155,7 +155,7 @@ export const ShowObjectStorage = () => {
 								</span>
 								<span className="max-w-sm text-center text-sm text-muted-foreground">
 									Use <span className="font-medium">Add Storage</span> to
-									connect an external provider such as AWS S3 or Cloudflare R2,
+									connect an external provider such as AWS S3 or Astron Collection R2,
 									or a self-hosted S3-compatible endpoint.
 								</span>
 							</div>

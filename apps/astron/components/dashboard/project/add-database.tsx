@@ -235,8 +235,8 @@ export const AddDatabase = ({ environmentId, projectName }: Props) => {
 
 	const hasServers = servers && servers.length > 0;
 	// Show dropdown logic based on cloud environment
-	// Cloud: show only if there are remote servers (no Notploy option)
-	// Self-hosted: show only if there are remote servers (Notploy is default, hide if no remote servers)
+	// Cloud: show only if there are remote servers (no astron-collection option)
+	// Self-hosted: show only if there are remote servers (astron-collection is default, hide if no remote servers)
 	const shouldShowServerDropdown = hasServers;
 
 	const form = useForm({
@@ -273,7 +273,7 @@ export const AddDatabase = ({ environmentId, projectName }: Props) => {
 			name: data.name,
 			appName: data.appName,
 			dockerImage: defaultDockerImage,
-			serverId: data.serverId === "notploy" ? undefined : data.serverId,
+			serverId: data.serverId === "astron-collection" ? undefined : data.serverId,
 			environmentId,
 			description: data.description,
 		};
@@ -287,7 +287,7 @@ export const AddDatabase = ({ environmentId, projectName }: Props) => {
 				databasePassword: data.databasePassword,
 				databaseUser:
 					data.databaseUser || databasesUserDefaultPlaceholder[data.type],
-				serverId: data.serverId === "notploy" ? null : data.serverId,
+				serverId: data.serverId === "astron-collection" ? null : data.serverId,
 			});
 		} else if (data.type === "mariadb") {
 			promise = mariadbMutation.mutateAsync({
@@ -297,7 +297,7 @@ export const AddDatabase = ({ environmentId, projectName }: Props) => {
 				databaseName: data.databaseName || "mariadb",
 				databaseUser:
 					data.databaseUser || databasesUserDefaultPlaceholder[data.type],
-				serverId: data.serverId === "notploy" ? null : data.serverId,
+				serverId: data.serverId === "astron-collection" ? null : data.serverId,
 			});
 		} else if (data.type === "mongo") {
 			promise = mongoMutation.mutateAsync({
@@ -305,7 +305,7 @@ export const AddDatabase = ({ environmentId, projectName }: Props) => {
 				databasePassword: data.databasePassword,
 				databaseUser:
 					data.databaseUser || databasesUserDefaultPlaceholder[data.type],
-				serverId: data.serverId === "notploy" ? null : data.serverId,
+				serverId: data.serverId === "astron-collection" ? null : data.serverId,
 				replicaSets: data.replicaSets,
 			});
 		} else if (data.type === "mysql") {
@@ -315,7 +315,7 @@ export const AddDatabase = ({ environmentId, projectName }: Props) => {
 				databaseName: data.databaseName || "mysql",
 				databaseUser:
 					data.databaseUser || databasesUserDefaultPlaceholder[data.type],
-				serverId: data.serverId === "notploy" ? null : data.serverId,
+				serverId: data.serverId === "astron-collection" ? null : data.serverId,
 				databaseRootPassword: data.databaseRootPassword || "",
 			});
 		} else if (data.type === "postgres") {
@@ -325,13 +325,13 @@ export const AddDatabase = ({ environmentId, projectName }: Props) => {
 				databaseName: data.databaseName || "postgres",
 				databaseUser:
 					data.databaseUser || databasesUserDefaultPlaceholder[data.type],
-				serverId: data.serverId === "notploy" ? null : data.serverId,
+				serverId: data.serverId === "astron-collection" ? null : data.serverId,
 			});
 		} else if (data.type === "redis") {
 			promise = redisMutation.mutateAsync({
 				...commonParams,
 				databasePassword: data.databasePassword,
-				serverId: data.serverId === "notploy" ? null : data.serverId,
+				serverId: data.serverId === "astron-collection" ? null : data.serverId,
 			});
 		}
 
@@ -474,22 +474,22 @@ export const AddDatabase = ({ environmentId, projectName }: Props) => {
 													onValueChange={field.onChange}
 													defaultValue={
 														field.value ||
-														(showLocalOption ? "notploy" : undefined)
+														(showLocalOption ? "astron-collection" : undefined)
 													}
 												>
 													<SelectTrigger>
 														<SelectValue
 															placeholder={
-																showLocalOption ? "Notploy" : "Select a Server"
+																showLocalOption ? "astron-collection" : "Select a Server"
 															}
 														/>
 													</SelectTrigger>
 													<SelectContent>
 														<SelectGroup>
 															{showLocalOption && (
-																<SelectItem value="notploy">
+																<SelectItem value="astron-collection">
 																	<span className="flex items-center gap-2 justify-between w-full">
-																		<span>Notploy</span>
+																		<span>astron-collection</span>
 																		<span className="text-muted-foreground text-xs self-center">
 																			Default
 																		</span>

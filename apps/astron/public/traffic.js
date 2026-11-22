@@ -19,7 +19,7 @@
  * Sessions: a session ends after 30 minutes without activity.
  * Visitors: the visitor identifier is reset after 180 days.
  * Opt-out: `navigator.doNotTrack === "1"`, `window.globalPrivacyControl`, or
- * `localStorage.astron_collectiontraffic_optout = "1"` disables everything.
+ * `localStorage.astroncollectiontraffic_optout = "1"` disables everything.
  *
  * Public API: `window.astronCollectionTraffic.track("event_name")` and
  * `window.astronCollectionTraffic.pageview()`.
@@ -67,7 +67,7 @@
 
 	let optedOut = false;
 	try {
-		optedOut = window.localStorage.getItem("astron_collectiontraffic_optout") === "1";
+		optedOut = window.localStorage.getItem("astroncollectiontraffic_optout") === "1";
 	} catch {
 		// Storage denied (private mode, cookie policy): stay quiet rather than
 		// degrade into a stateless ping for every page view.
@@ -126,27 +126,27 @@
 
 	const sessionId = () => {
 		const now = Date.now();
-		const stored = readJson("astron_collectiontraffic_session", window.sessionStorage);
+		const stored = readJson("astroncollectiontraffic_session", window.sessionStorage);
 		if (
 			stored &&
 			typeof stored.id === "string" &&
 			typeof stored.at === "number" &&
 			now - stored.at < SESSION_TIMEOUT_MS
 		) {
-			writeJson("astron_collectiontraffic_session", window.sessionStorage, {
+			writeJson("astroncollectiontraffic_session", window.sessionStorage, {
 				id: stored.id,
 				at: now,
 			});
 			return stored.id;
 		}
 		const created = { id: randomId(24), at: now };
-		writeJson("astron_collectiontraffic_session", window.sessionStorage, created);
+		writeJson("astroncollectiontraffic_session", window.sessionStorage, created);
 		return created.id;
 	};
 
 	const visitorId = () => {
 		const now = Date.now();
-		const stored = readJson("astron_collectiontraffic_visitor", window.localStorage);
+		const stored = readJson("astroncollectiontraffic_visitor", window.localStorage);
 		if (
 			stored &&
 			typeof stored.id === "string" &&
@@ -156,7 +156,7 @@
 			return stored.id;
 		}
 		const created = { id: randomId(24), at: now };
-		writeJson("astron_collectiontraffic_visitor", window.localStorage, created);
+		writeJson("astroncollectiontraffic_visitor", window.localStorage, created);
 		return created.id;
 	};
 

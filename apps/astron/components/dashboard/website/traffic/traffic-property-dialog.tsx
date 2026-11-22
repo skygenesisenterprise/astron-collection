@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/select";
 import { api } from "@/utils/api";
 
-const DEFAULT_LOG_PATH = "/etc/notploy/traefik/dynamic/access.log";
+const DEFAULT_LOG_PATH = "/etc/astron-collection/traefik/dynamic/access.log";
 
 /**
  * Declare a watched domain.
@@ -83,7 +83,7 @@ export const TrafficPropertyDialog = () => {
 						<Label htmlFor="traffic-new-domain">Domain</Label>
 						<Input
 							id="traffic-new-domain"
-							placeholder="notploy.com"
+							placeholder="astron-collection.com"
 							value={domain}
 							onChange={(event) => setDomain(event.target.value)}
 						/>

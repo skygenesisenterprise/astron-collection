@@ -27,7 +27,7 @@ export const ShowDestinations = () => {
 							S3 Destinations
 						</CardTitle>
 						<CardDescription>
-							Add your providers like AWS S3, Cloudflare R2, Wasabi,
+							Add your providers like AWS S3, Astron Collection R2, Wasabi,
 							DigitalOcean Spaces etc.
 						</CardDescription>
 					</CardHeader>

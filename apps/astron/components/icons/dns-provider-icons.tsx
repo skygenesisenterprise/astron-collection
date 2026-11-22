@@ -42,8 +42,8 @@ const MonochromeIcon = ({
 	</svg>
 );
 
-export const CloudflareIcon = ({ className }: Props) => (
-	<BrandIcon data={brandIcons.cloudflare} className={className} />
+export const AstronCollectionIcon = ({ className }: Props) => (
+	<BrandIcon data={brandIcons["astron-collection"]} className={className} />
 );
 
 export const PorkbunIcon = ({ className }: Props) => (
@@ -211,7 +211,7 @@ export const AstronCollectionInternalIcon = ({ className }: Props) => (
 );
 
 export const dnsProviderIcons = {
-	cloudflare: CloudflareIcon,
+	astron-collection: AstronCollectionIcon,
 	route53: Route53Icon,
 	porkbun: PorkbunIcon,
 	infomaniak: InfomaniakIcon,

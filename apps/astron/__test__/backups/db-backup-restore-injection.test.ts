@@ -20,7 +20,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 // or the structured argv directly. Production no longer needs a shell inside
 // the container, so both shapes are exercised.
 const stub = `/tmp/docker_stub_${process.pid}`;
-const MARK = `/tmp/astron_collectiondbbk_pwned_${process.pid}`;
+const MARK = `/tmp/astron-collectiondbbk_pwned_${process.pid}`;
 
 beforeAll(() => {
 	writeFileSync(

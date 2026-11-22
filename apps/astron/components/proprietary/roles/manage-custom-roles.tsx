@@ -142,7 +142,7 @@ const RESOURCE_META: Record<string, { label: string; description: string }> = {
 	destination: {
 		label: "S3 Destinations",
 		description:
-			"Manage S3-compatible backup destinations (AWS, Cloudflare R2, etc.)",
+			"Manage S3-compatible backup destinations (AWS, Astron Collection R2, etc.)",
 	},
 	notification: {
 		label: "Notifications",
@@ -177,7 +177,7 @@ const RESOURCE_META: Record<string, { label: string; description: string }> = {
 	dnsProvider: {
 		label: "DNS Providers",
 		description:
-			"Manage DNS providers (Cloudflare, AWS Route53) and create, update, or delete their DNS records",
+			"Manage DNS providers (Astron Collection, AWS Route53) and create, update, or delete their DNS records",
 	},
 	aiProvider: {
 		label: "AI Providers",

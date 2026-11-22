@@ -33,6 +33,7 @@ import { networkProviderRouter } from "./routers/network-provider";
 import { notificationRouter } from "./routers/notification";
 import { objectStorageRouter } from "./routers/object-storage";
 import { observabilityRouter } from "./routers/observability";
+import { onboardingRouter } from "./routers/onboarding";
 import { onionRouter } from "./routers/onion";
 import { operationalEventRouter } from "./routers/operational-event";
 import { organizationRouter } from "./routers/organization";
@@ -106,6 +107,7 @@ export const appRouter = createTRPCRouter({
 	notification: notificationRouter,
 	objectStorage: objectStorageRouter,
 	observability: observabilityRouter,
+	onboarding: onboardingRouter,
 	onion: onionRouter,
 	operationalEvent: operationalEventRouter,
 	port: portRouter,

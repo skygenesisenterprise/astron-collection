@@ -576,7 +576,7 @@ export const AddDomain = ({ id, type, domainId = "", children }: Props) => {
 																		: domainRequirements.scope === "local"
 																			? ".local domain. This hostname resolves over mDNS/Bonjour or your local DNS configuration."
 																			: domainRequirements.scope === "lan"
-																				? "LAN domain. This hostname must resolve to your Notploy server through your local DNS or hosts configuration."
+																				? "LAN domain. This hostname must resolve to your astron-collection server through your local DNS or hosts configuration."
 																				: "Internal domain. Public DNS and Let's Encrypt are not required."}
 																</FormDescription>
 															)}
@@ -618,7 +618,7 @@ export const AddDomain = ({ id, type, domainId = "", children }: Props) => {
 											<div className="flex gap-2">
 												<FormControl>
 													<Input
-														placeholder="api.notploy.com or gitlab.notploy.lan"
+														placeholder="api.astron-collection.com or gitlab.astron-collection.lan"
 														{...field}
 													/>
 												</FormControl>
@@ -667,14 +667,14 @@ export const AddDomain = ({ id, type, domainId = "", children }: Props) => {
 									domainRequirements.scope !== "localhost" &&
 									(internalDns?.available ? (
 										<AlertBlock type="info">
-											<strong>Notploy Internal DNS</strong> will register{" "}
+											<strong>Astron Collection Internal DNS</strong> will register{" "}
 											<code>{host}</code> in the{" "}
 											<code>{deriveInternalDnsZone(host)}</code> zone so it
 											resolves inside your network.
 										</AlertBlock>
 									) : (
 										<AlertBlock type="warning">
-											No Notploy Internal DNS provider is configured, so{" "}
+											No Astron Collection Internal DNS provider is configured, so{" "}
 											<code>{host}</code> will not resolve automatically. Add
 											one in the{" "}
 											<Link

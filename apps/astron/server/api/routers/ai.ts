@@ -45,7 +45,7 @@ import {
 	protectedProcedure,
 	withPermission,
 } from "@/server/api/trpc";
-import { generatePassword } from "@/templates/utils";
+import { generatePassword } from "@astron-collection/server/templates";
 
 const asTrpcError = (error: unknown): TRPCError => {
 	if (error instanceof TRPCError) return error;

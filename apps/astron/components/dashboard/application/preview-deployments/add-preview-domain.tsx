@@ -170,7 +170,7 @@ export const AddPreviewDomain = ({
 											<FormLabel>Host</FormLabel>
 											<div className="flex gap-2">
 												<FormControl>
-													<Input placeholder="api.notploy.com" {...field} />
+													<Input placeholder="api.astron-collection.com" {...field} />
 												</FormControl>
 												<TooltipProvider delayDuration={0}>
 													<Tooltip>

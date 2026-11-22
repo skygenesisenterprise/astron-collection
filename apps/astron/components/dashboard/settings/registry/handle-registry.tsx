@@ -74,7 +74,7 @@ type ProviderType = (typeof PROVIDER_TYPES)[number];
  *
  * Everything provider-specific — the endpoint, the accepted authentication
  * transports, the meaning of the namespace — comes from the server catalogue, so
- * adding a registry to Notploy never means editing this form. Credentials are
+ * adding a registry to astron-collection never means editing this form. Credentials are
  * either written inline or referenced from the Secrets Manager; a referenced
  * secret is resolved server-side, so the Console never has to handle it again.
  */
@@ -578,7 +578,7 @@ export const HandleRegistry = ({ registryId }: Props) => {
 												placeholder={
 													providerType === "ecr"
 														? "AWS"
-														: "robot$library+notploy"
+														: "robot$library+astron-collection"
 												}
 												{...field}
 											/>

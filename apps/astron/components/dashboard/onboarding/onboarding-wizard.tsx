@@ -111,7 +111,7 @@ export const OnboardingWizard = ({ onClose }: Props) => {
 							<div className="flex items-center gap-2.5 text-zinc-50 [&_path]:!fill-white [&_path]:!stroke-white">
 								<Logo className="size-7" />
 								<span className="text-lg font-semibold tracking-tight">
-									Notploy
+									astron-collection
 								</span>
 							</div>
 							{!isLastVisible && (
@@ -192,14 +192,14 @@ export const OnboardingWizard = ({ onClose }: Props) => {
 							)}
 							<div className="flex items-center gap-3 text-zinc-500">
 								<Link
-									href="https://github.com/skygenesisenterprise/notploy"
+									href="https://github.com/skygenesisenterprise/astron-collection"
 									target="_blank"
 									className="hover:text-zinc-200 transition-colors"
 								>
 									<GithubIcon />
 								</Link>
 								<Link
-									href="https://x.com/getnotploy"
+									href="https://x.com/getastroncollection"
 									target="_blank"
 									className="hover:text-zinc-200 transition-colors"
 								>
@@ -215,7 +215,7 @@ export const OnboardingWizard = ({ onClose }: Props) => {
 									</svg>
 								</Link>
 								<Link
-									href="https://discord.com/invite/GUkDugVh34"
+									href="https://astron-collection.com/invite/GUkDugVh34"
 									target="_blank"
 									className="hover:text-zinc-200 transition-colors"
 								>
@@ -277,7 +277,7 @@ export const OnboardingWizard = ({ onClose }: Props) => {
 					<DialogHeader>
 						<DialogTitle>Skip onboarding?</DialogTitle>
 						<DialogDescription>
-							If this is your first time using Notploy, we recommend going
+							If this is your first time using astron-collection, we recommend going
 							through these steps – it only takes a couple of minutes and gives
 							you a feel for how projects, servers, and deployments fit
 							together.

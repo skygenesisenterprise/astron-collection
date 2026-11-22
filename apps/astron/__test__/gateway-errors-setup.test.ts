@@ -69,19 +69,19 @@ describe("getGatewayErrorsImage", () => {
 			dockerWithImage("astron-collection:local"),
 			"server-1",
 			{
-				ASTRON_COLLECTION_IMAGE: "ghcr.io/example/astron-collection",
+				ASTRON_COLLECTION_IMAGE: "ghcr.io/example/astron-manager",
 				ASTRON_COLLECTION_VERSION: "v1.2.3",
 			},
 		);
-		expect(image).toBe("ghcr.io/example/astron-collection:v1.2.3");
+		expect(image).toBe("ghcr.io/example/astron-manager:v1.2.3");
 	});
 
 	test("does not append a tag to an image that already has one", async () => {
 		const image = await getGatewayErrorsImage(
 			dockerWithImage("astron-collection:local"),
 			"server-1",
-			{ ASTRON_COLLECTION_IMAGE: "ghcr.io/example/astron-collection:canary" },
+			{ ASTRON_COLLECTION_IMAGE: "ghcr.io/example/astron-manager:canary" },
 		);
-		expect(image).toBe("ghcr.io/example/astron-collection:canary");
+		expect(image).toBe("ghcr.io/example/astron-manager:canary");
 	});
 });

@@ -351,7 +351,7 @@ export const HandleDestinations = ({ destinationId }: Props) => {
 										<FormLabel>Bucket</FormLabel>
 									</div>
 									<FormControl>
-										<Input placeholder={"notploy-bucket"} {...field} />
+										<Input placeholder={"astron-collection-bucket"} {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>

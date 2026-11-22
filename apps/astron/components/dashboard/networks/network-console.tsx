@@ -90,7 +90,7 @@ const NetworkDetails = ({
 			"none",
 			"ingress",
 			"docker_gwbridge",
-			"notploy-network",
+			"astron-collection-network",
 		].includes(network.name);
 	const networkRecordId = network.networkRecordId;
 	const canDelete =
@@ -138,7 +138,7 @@ const NetworkDetails = ({
 								: network.configOnly
 									? "Configuration-only"
 									: network.networkRecordId
-										? "Managed by Notploy"
+										? "Managed by astron-collection"
 										: "Docker network"}
 						</ConsoleDetailValue>
 						<ConsoleDetailValue label="Internal">
@@ -274,17 +274,17 @@ const NetworkDetails = ({
 				{network.networkRecordId && (
 					<section className="flex flex-wrap items-center justify-between gap-3 rounded-md border p-4">
 						<div className="space-y-1">
-							<h3 className="font-medium">Notploy record</h3>
+							<h3 className="font-medium">astron-collection record</h3>
 							<p className="text-sm text-muted-foreground">
 								{isAvailable
-									? "This network is registered with Notploy."
+									? "This network is registered with astron-collection."
 									: "This record is stale because its Docker network is missing."}
 							</p>
 						</div>
 						{canDelete ? (
 							<DialogAction
 								title="Delete network"
-								description={`Remove "${network.name}" from Docker and Notploy? This action cannot be undone.`}
+								description={`Remove "${network.name}" from Docker and astron-collection? This action cannot be undone.`}
 								onClick={async () => {
 									if (networkRecordId) await onRemove(networkRecordId);
 								}}
@@ -297,7 +297,7 @@ const NetworkDetails = ({
 						) : (
 							<p className="text-sm text-muted-foreground">
 								{!isAvailable
-									? "Use Sync to remove the stale Notploy record."
+									? "Use Sync to remove the stale astron-collection record."
 									: isProtected
 										? "System networks cannot be removed here."
 										: "Disconnect all containers before removing this network."}
@@ -545,7 +545,7 @@ export const NetworkConsole = ({ serverId }: Props) => {
 			<ConsoleHeader
 				icon={Network}
 				title="Networks"
-				description="Manage Docker networks and connectivity across your Notploy infrastructure."
+				description="Manage Docker networks and connectivity across your astron-collection infrastructure."
 				actions={
 					<>
 						<ConsoleRefresh
@@ -631,7 +631,7 @@ export const NetworkConsole = ({ serverId }: Props) => {
 					<ConsoleEmpty
 						icon={Network}
 						title="No Docker networks found"
-						description="Docker returned no networks for this server. Create a network or synchronize existing Docker networks to register them with Notploy."
+						description="Docker returned no networks for this server. Create a network or synchronize existing Docker networks to register them with astron-collection."
 					>
 						<HandleNetwork serverId={serverId} />
 						<SyncNetworks serverId={serverId} />

@@ -36,7 +36,7 @@ import {
 import { api } from "@/utils/api";
 import { type LogLine, parseLogs } from "../docker/logs/utils";
 
-const LOCAL_SERVER = "notploy";
+const LOCAL_SERVER = "astron-collection";
 
 const transferSchema = z.object({
 	targetServerId: z.string().min(1, { message: "Select a target server" }),
@@ -66,7 +66,7 @@ export const TransferService = ({ id, type, serverId }: Props) => {
 
 	const targets = [
 		...(!isCloud && serverId
-			? [{ serverId: LOCAL_SERVER, name: "Notploy Server" }]
+			? [{ serverId: LOCAL_SERVER, name: "astron-collection Server" }]
 			: []),
 		...(servers ?? []).filter((server) => server.serverId !== serverId),
 	];

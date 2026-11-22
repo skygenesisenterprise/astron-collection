@@ -81,8 +81,12 @@ import {
 	myQueue,
 } from "@/server/queues/queueSetup";
 import { cancelDeployment, deploy } from "@/server/utils/deploy";
-import { generatePassword } from "@/templates/utils";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { generatePassword } from "@astron-collection/server/templates";
+import {
+	createTRPCRouter,
+	protectedProcedure,
+	templatesProcedure,
+} from "../trpc";
 import { audit } from "../utils/audit";
 
 export const composeRouter = createTRPCRouter({
@@ -606,7 +610,7 @@ export const composeRouter = createTRPCRouter({
 			});
 			return true;
 		}),
-	deployTemplate: protectedProcedure
+	deployTemplate: templatesProcedure
 		.input(
 			z.object({
 				environmentId: z.string(),
@@ -742,7 +746,7 @@ export const composeRouter = createTRPCRouter({
 			return compose;
 		}),
 
-	templates: protectedProcedure
+	templates: templatesProcedure
 		.input(z.object({ baseUrl: z.string().optional() }))
 		.query(async ({ input }) => {
 			try {
@@ -760,7 +764,7 @@ export const composeRouter = createTRPCRouter({
 			}
 		}),
 
-	getTags: protectedProcedure
+	getTags: templatesProcedure
 		.input(z.object({ baseUrl: z.string().optional() }))
 		.query(async ({ input }) => {
 			try {
@@ -868,7 +872,7 @@ export const composeRouter = createTRPCRouter({
 			return updatedCompose;
 		}),
 
-	processTemplate: protectedProcedure
+	processTemplate: templatesProcedure
 		.input(
 			z.object({
 				base64: z.string(),
@@ -932,7 +936,7 @@ export const composeRouter = createTRPCRouter({
 			}
 		}),
 
-	previewTemplate: protectedProcedure
+	previewTemplate: templatesProcedure
 		.input(
 			z.object({
 				base64: z.string(),
@@ -1002,7 +1006,7 @@ export const composeRouter = createTRPCRouter({
 			}
 		}),
 
-	import: protectedProcedure
+	import: templatesProcedure
 		.input(
 			z.object({
 				base64: z.string(),

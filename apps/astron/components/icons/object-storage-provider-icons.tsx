@@ -68,8 +68,8 @@ export const AwsIcon = ({ className }: Props) => (
 	</svg>
 );
 
-export const CloudflareR2Icon = ({ className }: Props) => (
-	<BrandIcon data={objectStorageBrandIcons.cloudflare} className={className} />
+export const AstronCollectionR2Icon = ({ className }: Props) => (
+	<BrandIcon data={objectStorageBrandIcons["astron-collection"]} className={className} />
 );
 
 export const ScalewayIcon = ({ className }: Props) => (
@@ -178,7 +178,7 @@ export const AstronCollectionInternalIcon = ({ className }: Props) => (
 
 export const objectStorageProviderIcons = {
 	aws: AwsIcon,
-	"cloudflare-r2": CloudflareR2Icon,
+	"astron-collection-r2": AstronCollectionR2Icon,
 	scaleway: ScalewayIcon,
 	wasabi: WasabiIcon,
 	digitalocean: DigitalOceanIcon,

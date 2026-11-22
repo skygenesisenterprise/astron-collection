@@ -8,6 +8,7 @@
  */
 
 // import { getServerAuthSession } from "@/server/auth";
+import { ASTRON_COLLECTION_TEMPLATES_ENABLED } from "@astron-collection/server/constants";
 import { db } from "@astron-collection/server/db";
 import type { statements } from "@astron-collection/server/lib/access-control";
 import {
@@ -192,6 +193,23 @@ export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
 			// session: { ...ctx.session, user: ctx.user },
 		},
 	});
+});
+
+/**
+ * Procedures of the legacy Templates gallery inherited from Notploy.
+ *
+ * The feature is disabled by default. Every template endpoint goes through this
+ * guard, so it is unreachable from the dashboard, the public OpenAPI surface and
+ * the generated MCP tools even though its implementation stays in the tree.
+ */
+export const templatesProcedure = protectedProcedure.use(({ next }) => {
+	if (!ASTRON_COLLECTION_TEMPLATES_ENABLED) {
+		throw new TRPCError({
+			code: "NOT_FOUND",
+			message: "Templates are disabled on this instance.",
+		});
+	}
+	return next();
 });
 
 export const cliProcedure = t.procedure.use(({ ctx, next }) => {

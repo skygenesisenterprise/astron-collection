@@ -69,7 +69,7 @@ export const ToggleDockerCleanup = ({ serverId }: Props) => {
 					</TooltipTrigger>
 					<TooltipContent side="top" className="max-w-sm">
 						<p>
-							When enabled, Notploy automatically runs Docker cleanup once a day
+							When enabled, astron-collection automatically runs Docker cleanup once a day
 							on this server. It removes stopped containers, unused images, and
 							build cache to reclaim disk space. Images used only by on-demand
 							Compose services—such as backup runners, scheduled jobs, or
@@ -81,7 +81,7 @@ export const ToggleDockerCleanup = ({ serverId }: Props) => {
 							Leave this off if you need to retain those images or want to
 							control when cleanup runs. For a custom cleanup schedule, create a{" "}
 							<a
-								href="https://docs.notploy.com/docs/core/schedule-jobs#example-1-automatic-docker-cleanup"
+								href="https://docs.astron-collection.com/docs/core/schedule-jobs#example-1-automatic-docker-cleanup"
 								target="_blank"
 								rel="noopener noreferrer"
 								className="underline text-primary"

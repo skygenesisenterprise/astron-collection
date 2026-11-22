@@ -13,7 +13,7 @@ import { SummaryGrid } from "../shared/summary-grid";
 import { buildSelfHomeModel } from "./self-home-data";
 
 /**
- * Notploy Self — overview of the instance the user administers.
+ * astron-collection Self — overview of the instance the user administers.
  *
  * Sources are all local to the instance: project counts, service state,
  * deployments, servers and operational events. Nothing here depends on a
@@ -27,14 +27,14 @@ export const SelfHome = () => {
 		<HomeShell>
 			<HomeHeader
 				title="Instance overview"
-				description="The state of this self-hosted Notploy instance: what it operates and what needs attention."
+				description="The state of this self-hosted astron-collection instance: what it operates and what needs attention."
 				scope="Self-hosted"
 				scopeDetail="This instance and its own organisation"
 				actions={
 					<>
 						<Button asChild variant="outline" size="sm">
 							<a
-								href="https://docs.notploy.com/docs/core"
+								href="https://docs.astron-collection.com/docs/core"
 								target="_blank"
 								rel="noreferrer"
 							>
@@ -67,7 +67,7 @@ export const SelfHome = () => {
 					</Button>
 					<Button asChild variant="outline">
 						<a
-							href="https://docs.notploy.com/docs/core"
+							href="https://docs.astron-collection.com/docs/core"
 							target="_blank"
 							rel="noreferrer"
 						>

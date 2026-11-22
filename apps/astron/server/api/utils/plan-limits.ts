@@ -1,11 +1,13 @@
+import { TRPCError } from "@trpc/server";
 import { db } from "@astron-collection/server/db";
 import {
 	environments,
 	member,
 	organization,
 	schedules,
+	user,
 } from "@astron-collection/server/db/schema";
-import { TRPCError } from "@trpc/server";
+import { organizationLimitMessage } from "@astron-collection/server/services/onboarding-paths";
 import { eq } from "drizzle-orm";
 import { getCurrentPlan, getCurrentPlanForUser } from "@/server/utils/billing";
 
@@ -73,12 +75,63 @@ const assertLimitForPlan = (
 	}
 };
 
-export const assertOrganizationLimit = async (userId: string) => {
+type Database = typeof db;
+export type DatabaseTransaction = Parameters<
+	Parameters<Database["transaction"]>[0]
+>[0];
+
+/**
+ * Organization quota of an account, or `null` when the plan is unlimited.
+ *
+ * Read outside the creation transaction on purpose: resolving the plan may call
+ * the billing provider, and a network call must not run while a row lock is
+ * held. The value is then enforced inside the transaction.
+ */
+export const getOrganizationLimitForUser = async (
+	userId: string,
+): Promise<number | null> => {
 	const plan = await getCurrentPlanForUser(userId);
-	const organizations = await db.query.organization.findMany({
-		where: eq(organization.ownerId, userId),
-	});
-	assertLimitForPlan(plan, "organization", organizations.length);
+	const limit = PLAN_LIMITS[plan ?? "legacy"].organization;
+	return Number.isFinite(limit) ? limit : null;
+};
+
+/**
+ * Locks the account row for the duration of an organization creation.
+ *
+ * Concurrent creations for the same account queue here, so the quota check and
+ * the inserts below observe each other's committed work.
+ */
+export const lockOrganizationCreation = async (
+	tx: DatabaseTransaction,
+	userId: string,
+) => {
+	await tx
+		.select({ id: user.id })
+		.from(user)
+		.where(eq(user.id, userId))
+		.for("update");
+};
+
+/**
+ * Enforces the plan quota from inside the creation transaction.
+ *
+ * Must run after `lockOrganizationCreation`: the count is then stable until the
+ * transaction ends, so simultaneous creations cannot both consume the same slot.
+ */
+export const assertOrganizationQuotaInTransaction = async (
+	tx: DatabaseTransaction,
+	userId: string,
+	limit: number | null,
+) => {
+	if (limit === null) return;
+
+	const owned = await tx.$count(organization, eq(organization.ownerId, userId));
+	if (owned >= limit) {
+		throw new TRPCError({
+			code: "FORBIDDEN",
+			message: organizationLimitMessage(limit),
+		});
+	}
 };
 
 export const assertMemberLimit = async (organizationId: string) => {

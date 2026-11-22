@@ -5,6 +5,21 @@ import Docker from "dockerode";
 export const IS_CLOUD = process.env.IS_CLOUD === "true";
 
 /**
+ * Legacy Templates gallery inherited from Notploy (https://templates.notploy.com/).
+ *
+ * Disabled by default: the feature stays in the tree but is unreachable through
+ * tRPC, OpenAPI, MCP, the logo route and the dashboard. An operator can opt back
+ * in explicitly with ASTRON_COLLECTION_TEMPLATES_ENABLED=true (also accepts 1/yes).
+ */
+export const ASTRON_COLLECTION_TEMPLATES_ENABLED = [
+	"1",
+	"true",
+	"yes",
+].includes(
+	(process.env.ASTRON_COLLECTION_TEMPLATES_ENABLED ?? "").toLowerCase(),
+);
+
+/**
  * Legacy flavour hint. Kept for compatibility during the migration to the
  * capability model (issue #75 §12); it is never the sole basis for unlocking a
  * protected product.

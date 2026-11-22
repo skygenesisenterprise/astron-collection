@@ -1332,7 +1332,7 @@ export const HandleIdentityProvider = ({
 										<FormLabel>Domains</FormLabel>
 										<FormControl>
 											<Textarea
-												placeholder={"astron-collection.com\nsubsidiary.com"}
+												placeholder={"company.com\nsubsidiary.com"}
 												className="min-h-[56px] font-mono text-xs"
 												{...field}
 											/>

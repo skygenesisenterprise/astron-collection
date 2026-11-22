@@ -282,7 +282,7 @@ export const ContainerFreeMonitoring = ({
 						</MetricUsage>
 					</CardContent>
 				</Card>
-				{appName === "notploy" && (					<Card className="bg-background">
+				{appName === "astron-collection" && (					<Card className="bg-background">
 						<CardContent className="pt-6">
 							<MetricUsage
 								label="Disk Space"
@@ -301,7 +301,7 @@ export const ContainerFreeMonitoring = ({
 					</CardContent>
 					</Card>
 				)}
-				{appName === "notploy" && (
+				{appName === "astron-collection" && (
 					<Card className="bg-background">
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 							<CardTitle className="text-sm font-medium">

@@ -66,7 +66,7 @@ export const WebDomain = () => {
 				const internalDns = result === true ? null : result?.internalDns;
 				if (internalDns?.status === "no-provider") {
 					toast.warning(
-						"Domain saved, but no Notploy Internal DNS provider is configured",
+						"Domain saved, but no Astron Collection Internal DNS provider is configured",
 					);
 				} else if (internalDns?.status === "no-ip") {
 					toast.warning(
@@ -89,8 +89,8 @@ export const WebDomain = () => {
 					Instance URL
 				</h2>
 				<p className="text-sm text-muted-foreground">
-					Configure the hostname of the Notploy control plane. Use a public
-					hostname or an internal/LAN one (e.g. console.notploy.lan).
+					Configure the hostname of the astron-collection control plane. Use a public
+					hostname or an internal/LAN one (e.g. console.astron-collection.lan).
 				</p>
 			</header>
 			<Form {...form}>
@@ -108,12 +108,12 @@ export const WebDomain = () => {
 									<FormControl>
 										<Input
 											className="w-full"
-											placeholder="notploy.example.com"
+											placeholder="astron-collection.example.com"
 											{...field}
 										/>
 									</FormControl>
 									<FormDescription>
-										Public or internal (LAN) hostname used as the Notploy URL in
+										Public or internal (LAN) hostname used as the astron-collection URL in
 										generated callbacks.
 									</FormDescription>
 									<FormMessage />
