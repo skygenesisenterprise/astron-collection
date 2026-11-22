@@ -4,7 +4,6 @@
 	"private": true,
 	"license": "Apache-2.0",
 	"type": "module",
-	"main": "electron/dist/main/index.cjs",
 	"scripts": {
 		"build": "npm run build-server && npm run build-next",
 		"start": "node -r dotenv/config dist/migration.mjs && node -r dotenv/config dist/server.mjs",
@@ -39,15 +38,7 @@
 		"version": "echo $(node -p \"require('./package.json').version\")",
 		"test": "vitest --config __test__/vitest.config.ts",
 		"generate:openapi": "tsx -r dotenv/config scripts/generate-openapi.ts",
-		"reset-onboarding": "tsx -r dotenv/config scripts/reset-onboarding.ts",
-		"desktop:dev": "node electron/scripts/dev.mjs",
-		"desktop:build": "node electron/scripts/build.mjs",
-		"desktop:start": "electron .",
-		"desktop:package": "node electron/scripts/build.mjs && electron-builder --config electron-builder.yml",
-		"desktop:package:dir": "node electron/scripts/build.mjs && electron-builder --config electron-builder.yml --dir",
-		"desktop:typecheck": "tsc --noEmit -p electron/tsconfig.node.json && tsc --noEmit -p electron/tsconfig.renderer.json",
-		"desktop:test": "vitest run --config electron/vitest.config.mts",
-		"desktop:generate:icon": "node electron/scripts/generate-icon.mjs"
+		"reset-onboarding": "tsx -r dotenv/config scripts/reset-onboarding.ts"
 	},
 	"dependencies": {
 		"@ai-sdk/anthropic": "^4.0.91",
